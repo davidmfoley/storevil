@@ -1,0 +1,33 @@
+using NUnit.Framework;
+using Rhino.Mocks;
+using StorEvil.Core;
+
+namespace StorEvil.InPlace
+{
+    [TestFixture]
+    public class mapping_by_regex_to_context_method : InPlaceRunnerSpec<InPlaceRunnerTestContext>
+    {
+        private readonly Scenario TestScenario = new Scenario("test", new[] {ScenarioText});
+        private const string ScenarioText = "Matches a regex with 42";
+
+        [SetUp]
+        public void SetupContext()
+        {
+            var story = new Story("test", "summary", new[] {TestScenario});
+
+            RunStory(story);
+        }
+
+        [Test]
+        public void Notifies_listener_of_success()
+        {
+            ResultListener.AssertWasCalled(x => x.Success(TestScenario, ScenarioText));
+        }
+
+        [Test]
+        public void invokes_method_with_correct_param()
+        {
+            InPlaceRunnerTestContext.RegexMatchParamValue.ShouldEqual(42);
+        }
+    }
+}

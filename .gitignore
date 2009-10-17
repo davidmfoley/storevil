@@ -1,0 +1,6 @@
+*resharper*.*
+_ReSharper*
+*.resharper
+.svn
+bin
+obj

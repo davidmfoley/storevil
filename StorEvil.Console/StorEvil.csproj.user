@@ -1,0 +1,6 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <StartArguments>execute ..\..\pizza.testcontext\bin\debug\pizza.testcontext.dll</StartArguments>
+    <StartWorkingDirectory>C:\projects\storevil3\Pizza.Specifications\Stories</StartWorkingDirectory>
+  </PropertyGroup>
+</Project>

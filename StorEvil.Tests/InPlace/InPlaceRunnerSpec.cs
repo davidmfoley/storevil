@@ -1,0 +1,75 @@
+using System;
+using Rhino.Mocks;
+using StorEvil.Context;
+using StorEvil.Core;
+
+namespace StorEvil.InPlace
+{
+    public class InPlaceRunnerSpec<T>
+    {
+        protected IResultListener ResultListener;
+        protected StoryContext Context;
+
+        protected void RunStory(Story story)
+        {
+            ResultListener = MockRepository.GenerateStub<IResultListener>();
+
+            Context = new StoryContext(typeof(T));
+            new InPlaceRunner(ResultListener, new ScenarioPreprocessor()).HandleStory(story, Context);
+        }
+
+        protected argT Any<argT>()
+        {
+            return Arg<argT>.Is.Anything;
+        }
+    }
+
+    public class InPlaceRunnerTestContext
+    {
+        public static bool WhenSomeActionCalled;
+        public static int? RegexMatchParamValue;
+        public static bool WhenSomeOtherActionCalled;
+
+        public InPlaceRunnerTestContext()
+        {
+            WhenSomeActionCalled = false;
+            RegexMatchParamValue = null;
+        }
+
+        public void WhenSomeAction()
+        {
+            WhenSomeActionCalled = true;
+        }
+
+        public void WhenSomeOtherAction()
+        {
+            WhenSomeOtherActionCalled = true;
+        }
+
+        [ContextRegex("^Matches a regex with ([0-9]+)")]
+        public void RegexMatchWithParam(int param)
+        {
+            RegexMatchParamValue = param;
+        }
+
+        public InPlaceTestSubContext SubContext()
+        {
+            return new InPlaceTestSubContext();
+        }
+
+        public void WhenSomeFailingAction()
+        {
+            throw new Exception("test exception");
+        }
+    }
+
+
+
+    public class InPlaceTestSubContext
+    {
+        public object Property
+        {
+            get { return true; }
+        }
+    }
+}
