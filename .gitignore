@@ -4,3 +4,4 @@ _ReSharper*
 .svn
 bin
 obj
+*.csproj.user
