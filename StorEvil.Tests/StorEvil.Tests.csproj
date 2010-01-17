@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Argument_parsing.cs" />
     <Compile Include="container_tests.cs" />
     <Compile Include="Config\FilesystemConfigReaderTests.cs" />
     <Compile Include="Filtering_stories_by_file_extension.cs" />

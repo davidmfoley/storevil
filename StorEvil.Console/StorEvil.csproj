@@ -8,7 +8,7 @@
     <ProjectGuid>{FBFE96FF-9D88-48DB-80F2-C79840BFDFA2}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>StorEvil</RootNamespace>
+    <RootNamespace>StorEvil.Console</RootNamespace>
     <AssemblyName>StorEvil</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Funq, Version=0.1.226.1, Culture=neutral, PublicKeyToken=e035bc90764f5360, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\Funq.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -46,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArgParser.cs" />
+    <Compile Include="FunqEasyRegistrationHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
