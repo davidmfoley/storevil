@@ -16,7 +16,11 @@ namespace StorEvil
 
         public static ConfigSettings Default()
         {
-            return new ConfigSettings {ScenarioExtensions = new [] {".txt", ".feature", ".story"}, AssemblyLocations = new string[0]};
+            return new ConfigSettings
+                       {
+                           ScenarioExtensions = new [] {".txt", ".feature", ".story"}, 
+                           AssemblyLocations = new string[0]
+                       };
         }
     }
 

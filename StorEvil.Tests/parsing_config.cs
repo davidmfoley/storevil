@@ -42,7 +42,7 @@ Extensions: .scenario, .foo, .bar";
             try
             {
                 ParseConfig("Foo: some fake value");
-            }
+            }   
             catch (BadSettingNameException ex)
             {
                 CaughtException = ex;
@@ -60,7 +60,7 @@ Extensions: .scenario, .foo, .bar";
         {
             CaughtException.SettingName.ShouldEqual("Foo");
         }
-    }
+    }   
 
     public abstract class parsing_config
     {

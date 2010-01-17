@@ -3,4 +3,7 @@
     <StartArguments>execute ..\..\pizza.testcontext\bin\debug\pizza.testcontext.dll</StartArguments>
     <StartWorkingDirectory>C:\projects\storevil3\Pizza.Specifications\Stories</StartWorkingDirectory>
   </PropertyGroup>
+  <PropertyGroup>
+    <ProjectView>ShowAllFiles</ProjectView>
+  </PropertyGroup>
 </Project>
