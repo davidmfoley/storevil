@@ -23,5 +23,6 @@ Grand total should be $4
 Scenario: pizza and beer special should be $6 (failing test)
 When customer orders a beer 
 and orders a slice
-Grand total should be $6
+# uncomment this to see an example of a failure
+# Grand total should be $6
 

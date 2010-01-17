@@ -10,7 +10,7 @@ namespace StorEvil.Config
         private FilesystemConfigReader FilesystemConfigReader;
 
         private IFilesystem FakeFilesystem;
-        private IConfigFileReader FakeParser;
+        private IConfigFileReader FakeFileReader;
 
         private const string FakeConfigFileContents = "foo";
 
@@ -18,37 +18,36 @@ namespace StorEvil.Config
         public void SetupContext()
         {
             FakeFilesystem = MockRepository.GenerateMock<IFilesystem>();
-            FakeParser = MockRepository.GenerateMock<IConfigFileReader>();
+            FakeFileReader = MockRepository.GenerateMock<IConfigFileReader>();
 
-            FilesystemConfigReader = new FilesystemConfigReader(FakeFilesystem, FakeParser);
+            FilesystemConfigReader = new FilesystemConfigReader(FakeFilesystem, FakeFileReader);
         }
 
         [Test]
         public void when_config_present_in_same_folder_uses_it()
         {
-            const string path = "c:\\test\\storevil.config";
+            ConfigFileExistsAt("c:\\test\\storevil.config");
 
-            FileExistsWithTestContents(path);
-
-            var settings = new ConfigSettings();
-            ParserReturnsConfigSettings(settings);
-
-            var result = FilesystemConfigReader.GetConfig("c:\\test\\");
-
-            Assert.That(result, Is.SameAs(settings));
+            ShouldReturnConfigFileWhenCalledFrom("c:\\test\\");
         }
 
         [Test]
         public void when_no_config_present_in_same_folder_searches_up_the_tree()
         {
-            FileExistsWithTestContents("c:\\test\\storevil.config");
-
-            var settings = new ConfigSettings();
-            ParserReturnsConfigSettings(settings);
-
             // note: should make successive calls up the directory structure
             // first \test\foo\bar, then \test\foo, then \test
-            var result = FilesystemConfigReader.GetConfig("c:\\test\\foo\\bar\\");
+
+            ConfigFileExistsAt("c:\\test\\storevil.config");
+            ShouldReturnConfigFileWhenCalledFrom("c:\\test\\foo\\bar\\");
+        }
+
+        private void ShouldReturnConfigFileWhenCalledFrom(string workingDirectory)
+        {
+            var settings = new ConfigSettings();
+
+            ParserReturnsConfigSettings(settings);
+
+            var result = FilesystemConfigReader.GetConfig(workingDirectory);
 
             Assert.That(result, Is.SameAs(settings));
         }
@@ -62,7 +61,7 @@ namespace StorEvil.Config
             Assert.That(result, Is.Not.Null);
         }
 
-        private void FileExistsWithTestContents(string path)
+        private void ConfigFileExistsAt(string path)
         {
             FileExists(path);
             FilesystemReturnsConfigFileContents(path);
@@ -80,7 +79,7 @@ namespace StorEvil.Config
 
         private void ParserReturnsConfigSettings(ConfigSettings settings)
         {
-            FakeParser.Stub(x => x.Read(FakeConfigFileContents)).Return(settings);
+            FakeFileReader.Stub(x => x.Read(FakeConfigFileContents)).Return(settings);
         }
     }
 }

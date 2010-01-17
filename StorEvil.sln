@@ -5,8 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorEvil.Core", "StorEvil\S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorEvil.Tests", "StorEvil.Tests\StorEvil.Tests.csproj", "{43A7C61E-DD5B-4CC9-A05A-02C00789028F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pizza.Specifications", "Pizza.Specifications\Pizza.Specifications.csproj", "{436259FA-036B-466E-A670-F91507C34D0A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorEvil", "StorEvil.Console\StorEvil.csproj", "{FBFE96FF-9D88-48DB-80F2-C79840BFDFA2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pizza.TestContext", "Pizza.TestContext\Pizza.TestContext.csproj", "{8EA2E836-2C94-4013-8D47-64F367AC9580}"
@@ -33,10 +31,6 @@ Global
 		{43A7C61E-DD5B-4CC9-A05A-02C00789028F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43A7C61E-DD5B-4CC9-A05A-02C00789028F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43A7C61E-DD5B-4CC9-A05A-02C00789028F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{436259FA-036B-466E-A670-F91507C34D0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{436259FA-036B-466E-A670-F91507C34D0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{436259FA-036B-466E-A670-F91507C34D0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{436259FA-036B-466E-A670-F91507C34D0A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FBFE96FF-9D88-48DB-80F2-C79840BFDFA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FBFE96FF-9D88-48DB-80F2-C79840BFDFA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBFE96FF-9D88-48DB-80F2-C79840BFDFA2}.Release|Any CPU.ActiveCfg = Release|Any CPU

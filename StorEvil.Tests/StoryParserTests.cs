@@ -24,6 +24,7 @@ namespace StorEvil
 As a user I want to do something
 Scenario: Doing something
 Given some condition
+# this is a comment
 When I take some action
 Then I should expect some result
 ";
@@ -59,14 +60,15 @@ Then I should expect some result
         }
 
         [Test]
-        public void Should_Parse_Scenario_Text()
+        public void Should_Parse_1st_Scenario_Text()
         {
-            var parser = new StoryParser();
+            ((Scenario)Result.Scenarios.First()).Body.First().ShouldEqual("Given some condition");
+        }
 
-            var s = parser.Parse(testSingleStoryText);
-
-            ((Scenario)Result.Scenarios.First()).Body.Count().ShouldEqual(3);
-
+        [Test]
+        public void Should_Ignore_comment_Scenario_Text()
+        {
+            ((Scenario)Result.Scenarios.First()).Body.Any(x=>x.Contains("comment")).ShouldEqual(false);
         }
     }
     [TestFixture]
@@ -183,13 +185,5 @@ Examples:
         }
     }
 
-    [TestFixture]
-    public class Scenario_preprocessing
-    {
-        [Test]
-        public void should_handle_examples()
-        {
-            
-        }
-    }
+   
 }

@@ -14,7 +14,7 @@ namespace StorEvil
         public Story Parse(string storyText)
         {
             var scenarios = new List<IScenario>();
-
+             
             var storyName = new StringBuilder();
 
             var lines = ParseLines(storyText);
@@ -33,7 +33,10 @@ namespace StorEvil
                     currentScenario = new ScenarioBuildingInfo { Name = line.After(":").Trim() };
 
                     ScenarioBuildingInfo scenario = currentScenario;
-                    handler = l => scenario.Lines.Add(l);
+                    handler = l =>  {
+                        if (!IsComment(l))
+                            scenario.Lines.Add(l);
+                    };
                 }
                 else if (IsStartOfExamples(line))
                 {
@@ -68,7 +71,11 @@ namespace StorEvil
             return new Story(Guid.NewGuid().ToString().Trim(), storyName.ToString().Trim(), scenarios);
         }
 
-       
+        private bool IsComment(string s)
+        {
+            return s.Trim().StartsWith("#");
+        }
+
         private bool IsStartOfExamples(string line)
         {
             return line.ToLower().StartsWith("examples:");

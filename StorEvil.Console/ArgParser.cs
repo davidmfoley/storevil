@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Funq;
 using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.InPlace;
@@ -11,21 +12,37 @@ namespace StorEvil.Console
     {
         public IStorEvilJob ParseArguments(string[] args)
         {
+            var container = new Container();
+
+            SetupCommonComponents(container);
+
             var command = args[0];
+            SetupCustomComponents(container, args);
 
+            return container.Resolve<IStorEvilJob>();
+        }
+
+        private void SetupCustomComponents(Container container, string[] args)
+        {
+            var command = args[0];
             if (command == "nunit")
-                return GetNUnitJob(args);
+                container.Register<IStorEvilJob>(x => GetNUnitJob(args));
 
-            if (command == "execute")
-                return GetInPlaceJob(args);
+            else if (command == "execute")
+                container.Register<IStorEvilJob>(x => GetInPlaceJob(args));
 
-            if (command == "help")
-                return new DisplayHelpJob();
+            else if (command == "help")
+                container.Register<IStorEvilJob>(x => new DisplayHelpJob());
 
-            if (command == "setup")
-                return GetSetupJob(args);
+            else if (command == "setup")
+                container.Register<IStorEvilJob>(x => GetSetupJob(args));
+            else
+                container.Register <IStorEvilJob>(x => new DisplayUsageJob());
+        }
 
-            return new DisplayUsageJob();
+        private void SetupCommonComponents(Container container)
+        {
+            
         }
 
         private IStorEvilJob GetSetupJob(string[] args)
@@ -35,7 +52,8 @@ namespace StorEvil.Console
 
         private StorEvilJob GetInPlaceJob(string[] args)
         {
-            string pathToContextDll = args[1];
+            
+            string pathToContextDll = (args.Length > 1) ? args[1] : ;
 
             var mapper = new StoryToContextMapper();
 
