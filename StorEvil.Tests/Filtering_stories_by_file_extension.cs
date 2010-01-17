@@ -53,6 +53,7 @@ namespace StorEvil
             RunTestWithExtensions();
 
             FakeFilesystem.AssertWasCalled(x => x.GetFileText("feature.feature"));
+            FakeFilesystem.AssertWasCalled(x => x.GetFileText("bar.story"));
             FakeFilesystem.AssertWasCalled(x => x.GetFileText("ignore.txt"));
         }
 

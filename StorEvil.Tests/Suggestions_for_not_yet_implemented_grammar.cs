@@ -7,14 +7,14 @@ namespace StorEvil.InPlace
     [TestFixture]
     public class Suggestions_for_not_yet_implemented_grammar
     {
-        private ImplementationHelper Helper = new ImplementationHelper(); 
+        private readonly ImplementationHelper Helper = new ImplementationHelper(); 
 
         [Test]
         public void Should_suggest_box_car_name_for_simple_case()
         {
             var result = Helper.Suggest("an unimplemented method");
             ShouldMatch(result, "an_unimplemented_method");
-        }
+        }   
 
         [Test]
         public void Should_suggest_int_param()
@@ -23,7 +23,7 @@ namespace StorEvil.InPlace
             ShouldMatch(result, "a_user_with_arg0_beers", "int", "arg0");
         }
 
-        [Test]
+        [Test]  
         public void Should_suggest_string_param()
         {
             var result = Helper.Suggest("a user named \"dave\"");

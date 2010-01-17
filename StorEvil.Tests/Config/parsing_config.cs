@@ -33,7 +33,7 @@ Extensions: .scenario, .foo, .bar";
 
     [TestFixture]
     public class parsing_invalid_config_setting : parsing_config
-    {
+    {       
         private BadSettingNameException CaughtException;
 
         [SetUp]

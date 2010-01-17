@@ -28,7 +28,7 @@ namespace StorEvil.Console
             return new DisplayUsageJob();
         }
 
-        private IStorEvilJob GetSetupJob(string[] strings)
+        private IStorEvilJob GetSetupJob(string[] args)
         {
             throw new NotImplementedException();
         }
