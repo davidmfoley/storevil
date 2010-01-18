@@ -78,6 +78,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StoryToContextMappingTests.cs" />
     <Compile Include="Suggestions_for_not_yet_implemented_grammar.cs" />
+    <Compile Include="switch_parsing.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="TestContext.cs" />
     <Compile Include="TestHelper.cs" />

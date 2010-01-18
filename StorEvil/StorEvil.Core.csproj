@@ -58,6 +58,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\SwitchInfo.cs" />
+    <Compile Include="Configuration\SwitchParser.cs" />
     <Compile Include="ContextAttribute.cs" />
     <Compile Include="Context\IMemberMatcher.cs" />
     <Compile Include="Context\MemberNameMatcher.cs" />
