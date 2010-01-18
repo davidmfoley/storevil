@@ -15,8 +15,7 @@ namespace StorEvil.Console
             var container = new Container();
 
             SetupCommonComponents(container);
-
-            var command = args[0];
+    
             SetupCustomComponents(container, args);
 
             return container.Resolve<IStorEvilJob>();
@@ -52,8 +51,7 @@ namespace StorEvil.Console
 
         private StorEvilJob GetInPlaceJob(string[] args)
         {
-            
-            string pathToContextDll = (args.Length > 1) ? args[1] : ;
+            string pathToContextDll = args[1];
 
             var mapper = new StoryToContextMapper();
 
@@ -77,8 +75,8 @@ namespace StorEvil.Console
             ConfigSettings settings = ConfigSettings.Default();
 
             var storyProvider = new FilesystemStoryProvider(storyBasePath, new StoryParser(), new Filesystem(), settings);
+            
             var mapper = new StoryToContextMapper();
-
             mapper.AddAssembly(pathToContextDll);
 
             var handler = new FixtureGenerationStoryHandler(
