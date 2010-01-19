@@ -33,6 +33,9 @@ namespace StorEvil
             if ((actual?? "").ToString().ToLower() == (expected ?? "" ).ToString().ToLower())
                 return;
 
+            if (actual == null)
+                Assert.Fail();
+
             object expectedConverted = ConvertToType(actual.GetType(), expected);
 
             // depending on actual type, parse expected
@@ -71,6 +74,16 @@ namespace StorEvil
 
             for (int i = 0; i < expected.Length; i++)            
                 Assert.AreEqual(collection.ElementAt(i), expected[i]);            
+        }
+
+        public static void ShouldContain(this string actual, string expectedContent)
+        {
+            actual.IndexOf(expectedContent).ShouldBeGreaterThan(-1);
+        }
+
+        public static void ShouldBeGreaterThan<T>(this T actual, T expected) where T : IComparable
+        {
+            Assert.That(actual.CompareTo(expected) > 0);
         }
     }   
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -9,32 +10,20 @@ namespace StorEvil.Core.Configuration
     public class SwitchInfo<T>
     {
         private Action<T, string[]> _action;
-
-        public SwitchInfo(string[] switches)
+        private readonly Func<string[], object> BoolParamTransform = (ignored => true);
+        private readonly Func<string[], object> StringParamTransform = (values => values[0]);
+        private readonly Func<string[], object> CollectionParamTransform = (values => values.Cast<string>().ToArray());
+    
+        public SwitchInfo(string[] names)
         {
-            Switches = switches;
-        }
-                    
-        public void WithAction(Action<T> action)
-        {
-            _action = (settings, ignored2) => action(settings);
+            Names = names;
         }
 
-        public void WithSingleParamAction(Action<T, string> action)
-        {
-            _action = (settings, parameters) => action(settings, parameters.FirstOrDefault());
-        }
-
-        public void WithMultiParamAction(Action<T, string[]> action)
-        {
-            _action = action;
-        }
-
-        public string[] Switches { get; private set; }
+        public string[] Names { get; private set; }
 
         public bool Matches(string s)
         {
-            return Switches.Any(x => x == s);
+            return Names.Any(x => x == s);
         }
 
         public void Execute(T settings, string[] additionalParams)
@@ -42,19 +31,65 @@ namespace StorEvil.Core.Configuration
             _action(settings, additionalParams);
         }
 
-        public void SetsField(Expression<Func<T, bool>> func)
+        public SwitchInfo<T> SetsField(Expression<Func<T, bool>> func)
         {
-            SetFieldFromLambda(func, ignored => true);
+            SetFieldFromLambda(func, BoolParamTransform);
+            return this;
         }
 
-        public void SetsField(Expression<Func<T, string>> func)
-        {   
-            SetFieldFromLambda(func, values => values[0]);
+        public SwitchInfo<T> SetsField(Expression<Func<T, string>> func)
+        {
+            SetFieldFromLambda(func, StringParamTransform);
+            return this;
         }
 
-        public void SetsField(Expression<Func<T, IEnumerable<string>>> func)
+        public SwitchInfo<T> SetsField(Expression<Func<T, IEnumerable<string>>> func)
         {
-            SetFieldFromLambda(func, values => values.Cast<string>().ToArray());
+            SetFieldFromLambda(func, CollectionParamTransform);
+            return this;
+        }
+
+        public SwitchInfo<T> SetsField(MemberInfo member)
+        {
+            var switchToParam = GetSwitchToParamTransformation(member);
+
+            SetFieldFromMemberInfo(member, switchToParam);
+            return this;
+        }
+
+        public SwitchInfo<T> WithDescription(string description)
+        {
+            Description = description;
+
+            return this;
+        }
+
+        public string Description { get; set; }
+
+        private Func<string[], object> GetSwitchToParamTransformation(MemberInfo member)
+        {
+            var propOrFieldType = GetMemberType(member);
+            if (propOrFieldType == typeof (bool))
+                return BoolParamTransform;
+            if (propOrFieldType == typeof(string))
+                return StringParamTransform;
+            if (typeof(IEnumerable).IsAssignableFrom(propOrFieldType))
+                return CollectionParamTransform;
+
+            ThrowBadExpressionException();
+            return null;
+        }
+
+        private Type GetMemberType(MemberInfo member)
+        {
+            if (member is PropertyInfo)
+                return ((PropertyInfo) member).PropertyType;
+
+            if (member is FieldInfo)
+                return ((FieldInfo) member).FieldType;
+
+            ThrowBadExpressionException();
+            return null;
         }
 
         private void SetFieldFromLambda(Expression expression, Func<string[], object> switchToParam)
@@ -62,11 +97,22 @@ namespace StorEvil.Core.Configuration
             var lambdaExpression = expression as LambdaExpression;
 
             var memberExpression = lambdaExpression.Body as MemberExpression;
-            
+
+            SetFieldFromMemberExpression(memberExpression, switchToParam);
+        }
+
+        private void SetFieldFromMemberExpression(MemberExpression memberExpression,
+                                                  Func<string[], object> switchToParam)
+        {
             if (memberExpression == null)
                 ThrowBadExpressionException();
 
             var member = memberExpression.Member;
+            SetFieldFromMemberInfo(member, switchToParam);
+        }
+
+        private void SetFieldFromMemberInfo(MemberInfo member, Func<string[], object> switchToParam)
+        {
             var type = member.DeclaringType;
 
             if (member.MemberType == MemberTypes.Property)
@@ -83,6 +129,21 @@ namespace StorEvil.Core.Configuration
             {
                 ThrowBadExpressionException();
             }
+        }
+
+        public void WithAction(Action<T> action)
+        {
+            _action = (settings, ignored2) => action(settings);
+        }
+
+        public void WithSingleParamAction(Action<T, string> action)
+        {
+            _action = (settings, parameters) => action(settings, parameters.FirstOrDefault());
+        }
+
+        public void WithMultiParamAction(Action<T, string[]> action)
+        {
+            _action = action;
         }
 
         private void ThrowBadExpressionException()

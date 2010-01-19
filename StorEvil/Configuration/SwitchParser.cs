@@ -1,16 +1,63 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Text;
 
 namespace StorEvil.Core.Configuration
 {
     public class SwitchParser<T>
     {
-        private readonly List<SwitchInfo<T>> _switchInfos = new List<SwitchInfo<T>>();
+        public SwitchParser()
+        {
+            var members = typeof (T).GetMembers();
+          
+            foreach (var info in members)
+            {
+                var customSwitchAttrs = info.GetCustomAttributes(typeof (CommandSwitchAttribute), true).Cast<CommandSwitchAttribute>();
+                if (!customSwitchAttrs.Any())
+                    continue;
+
+                var switchNames = GetSwitchNames(info, customSwitchAttrs);
+                var switchInfo = AddSwitch(switchNames).SetsField(info);
+                switchInfo.WithDescription(string.Join("\n",customSwitchAttrs.Select(x => x.Description ?? "").ToArray()));
+            }
+        }
+
+        private string[] GetSwitchNames(MemberInfo member, IEnumerable<CommandSwitchAttribute> customAttrs)
+        {
+            var names = new List<string>();
+            foreach (CommandSwitchAttribute attr in customAttrs)
+                names.AddRange(attr.Names);
+
+            if (names.Count == 0) 
+                names.Add(GetDefaultName(member));
+
+            return names.ToArray();
+        }
+
+        private string GetDefaultName(MemberInfo member)
+        {
+            var name = member.Name;
+            StringBuilder formatted = new StringBuilder( "-");
+
+            foreach (char c in name)
+            {
+                if (c.ToString() == c.ToString().ToUpper())
+                    formatted.Append("-");
+
+                formatted.Append(c.ToString().ToLower());
+            }
+
+            return formatted.ToString();
+        }
+
+        public readonly List<SwitchInfo<T>> Switches = new List<SwitchInfo<T>>();
 
         public SwitchInfo<T> AddSwitch(params string[] switches)
         {
             var switchInfo = new SwitchInfo<T>(switches);
-            _switchInfos.Add(switchInfo);
+            Switches.Add(switchInfo);
             return switchInfo;
         }
 
@@ -23,7 +70,7 @@ namespace StorEvil.Core.Configuration
             foreach (var arg in args)
             {
                 var s = arg;
-                var switchInfo = _switchInfos.FirstOrDefault(x => x.Matches(s));
+                var switchInfo = Switches.FirstOrDefault(x => x.Matches(s));
 
                 if (switchInfo != null)
                 {
@@ -42,5 +89,24 @@ namespace StorEvil.Core.Configuration
             if (currentSwitchInfo != null)
                 currentSwitchInfo.Execute(settings, switchParams.ToArray());
         }
+
+        public string GetUsage()
+        {
+            var switchDescriptions = Switches
+                .Select(sw => "[" + string.Join(" | ", sw.Names) + "]");
+            return string.Join(" ", switchDescriptions.ToArray());
+        }
     }
+
+    public class CommandSwitchAttribute : Attribute
+    {
+        public CommandSwitchAttribute(params string[] names)
+        {
+            Names = names;
+        }
+
+        public IEnumerable<string> Names { get; private set; }
+
+        public string Description { get; set; }
+    }  
 }

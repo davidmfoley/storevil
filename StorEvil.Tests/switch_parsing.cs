@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using StorEvil.Core.Configuration;
 
@@ -47,7 +48,6 @@ namespace StorEvil.Argument_parsing
             public void SetupContext()
             {
                 Parser = new SwitchParser<TestConfigSettings>();
-                
             }
 
             [Test]
@@ -78,13 +78,13 @@ namespace StorEvil.Argument_parsing
                 TestWithParams("-z", "baz1", "baz2", "baz3").Baz.ElementsShouldEqual("baz1", "baz2", "baz3");
             }
 
-            [Test] 
+            [Test]
             public void throws_an_exception_if_passed_a_nonsimple_expression()
             {
                 Expect.ThisToThrow<ArgumentException>(
                     () => Parser
-                        .AddSwitch("--fail")
-                        .SetsField(s => s.Bar.ToUpper()));
+                              .AddSwitch("--fail")
+                              .SetsField(s => s.Bar.ToUpper()));
             }
         }
 
@@ -130,12 +130,74 @@ namespace StorEvil.Argument_parsing
             }
         }
 
+        [TestFixture]
+        public class Printing_switch_usage : switch_parsing
+        {
+            private string Usage;
+
+            [SetUp]
+            public void SetupContext()
+            {
+                Parser = new SwitchParser<TestConfigSettings>();
+                Parser.AddSwitch("--foo", "-f")
+                    .SetsField(x => x.Foo);
+
+                Usage = Parser.GetUsage();
+            }
+
+            [Test]
+            public void Should_print_names_of_args()
+            {
+                Usage.ShouldContain("[--foo | -f]");
+            }
+        }
+
+        [TestFixture]
+        public class Parsing_a_switch_for_a_decorated_property : switch_parsing
+        {
+            [SetUp]
+            public void SetupContext()
+            {
+                Parser = new SwitchParser<TestConfigSettings>();
+
+            }
+
+            [Test]
+            public void should_parse_switch_name()
+            {
+                Parser.Switches.First().Names.ElementsShouldEqual("--decorated-property");
+            }
+
+            [Test]
+            public void should_parse_switch_description()
+            {
+                Parser.Switches.First().Description.ShouldEqual("Decorated property");
+            }
+
+            [Test]
+            public void sets_param_with_default_name()
+            {
+                TestWithParams("--decorated-property", "baz").DecoratedProperty.ShouldEqual("baz");
+            }
+
+            [Test]
+            public void sets_description_from_attribute()
+            {
+                
+            }
+        }
+
         public class TestConfigSettings
         {
             public bool Foo;
 
             public string Bar;
             public string[] Baz;
+
+            [CommandSwitch(Description = "Decorated property")]
+            public string DecoratedProperty { get; set; }
         }
     }
+
+    
 }
