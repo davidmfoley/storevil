@@ -73,4 +73,25 @@ namespace StorEvil
                 Assert.AreEqual(collection.ElementAt(i), expected[i]);            
         }
     }   
+
+    public static class Expect
+    {
+        public static T ThisToThrow<T>(Action action) where T : Exception
+        {
+            try
+            {
+                action();
+                Assert.Fail("Expected exception " + typeof(T).Name + " was not thrown.");
+            }  
+            catch(T ex)
+            {
+                return ex; 
+            }
+            catch(Exception exception)
+            {
+                Assert.Fail("Unexpected exception thrown: expected " + typeof(T).Name + " but caught " + exception.GetType().Name + "\n" + exception.ToString());
+            }
+            return null;
+        }  
+    }
 }

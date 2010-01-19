@@ -1,4 +1,6 @@
+using System;
 using NUnit.Framework;
+using StorEvil.Core.Configuration;
 
 namespace StorEvil.Argument_parsing
 {
@@ -74,6 +76,15 @@ namespace StorEvil.Argument_parsing
             {
                 Parser.AddSwitch("--baz", "-z").SetsField(c => c.Baz);
                 TestWithParams("-z", "baz1", "baz2", "baz3").Baz.ElementsShouldEqual("baz1", "baz2", "baz3");
+            }
+
+            [Test] 
+            public void throws_an_exception_if_passed_a_nonsimple_expression()
+            {
+                Expect.ThisToThrow<ArgumentException>(
+                    () => Parser
+                        .AddSwitch("--fail")
+                        .SetsField(s => s.Bar.ToUpper()));
             }
         }
 

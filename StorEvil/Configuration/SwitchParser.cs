@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace StorEvil
+namespace StorEvil.Core.Configuration
 {
     public class SwitchParser<T>
     {
