@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using StorEvil.Core;
@@ -37,6 +38,9 @@ namespace StorEvil.Context
 
         public StoryContext GetContextForStory(Story story)
         {
+            if (_contextTypes.Count() == 0)
+                throw new ConfigurationException("no context assemblies have been registered");
+
             return new StoryContext(_contextTypes.Union(new[] {typeof (object)}));
         }
     }

@@ -19,12 +19,13 @@ namespace StorEvil.Console
         {
             _configSource = source;
             _settings = source.GetConfig(Directory.GetCurrentDirectory());
+            
             _container = new Container();
         }
 
         public IStorEvilJob ParseArguments(string[] args)
         {
-            SetupCommonComponents(_container);
+            SetupCommonComponents(_container);      
 
             SetupCustomComponents(_container, args);
 
@@ -43,7 +44,15 @@ namespace StorEvil.Console
             container.EasyRegister<ScenarioInterpreter>();
             container.EasyRegister<InterpreterForTypeFactory>();
             container.EasyRegister<ExtensionMethodHandler>();
-            container.EasyRegister<IStoryToContextMapper, StoryToContextMapper>();
+
+            var mapper = new StoryToContextMapper();
+            foreach (var location in _settings.AssemblyLocations)
+            {
+                System.Console.WriteLine(location);
+                mapper.AddAssembly(location);
+            }
+
+            container.Register<IStoryToContextMapper>(mapper);
         }
 
         private void SetupCustomComponents(Container container, string[] args)
@@ -63,9 +72,6 @@ namespace StorEvil.Console
             {
                 container.EasyRegister<IStoryHandler, InPlaceRunner>();
                 container.EasyRegister<IStorEvilJob, StorEvilJob>();
-
-                if (args.Length > 1)
-                    _settings.AssemblyLocations = new[] {args[1]};
                 
                 if (args.Length > 2)
                     _settings.StoryBasePath = args[2];
