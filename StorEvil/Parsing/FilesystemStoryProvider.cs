@@ -22,10 +22,11 @@ namespace StorEvil
         /// <param name="parser">the parser that will parse the text we find in the stories</param>
         /// <param name="filesystem"></param>
         /// <param name="settings"></param>
-        public FilesystemStoryProvider(string basePath, IStoryParser parser, IFilesystem filesystem, ConfigSettings settings)
+        public FilesystemStoryProvider(IStoryParser parser, IFilesystem filesystem, ConfigSettings settings)
         {
             _settings = settings;
-            BasePath = basePath;
+            //_settings = settings;
+            BasePath = settings.StoryBasePath;
             Parser = parser;
             Filesystem = filesystem;
         }

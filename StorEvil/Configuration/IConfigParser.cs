@@ -14,6 +14,8 @@ namespace StorEvil
         public IEnumerable<string> ScenarioExtensions { get; set; }
         public IEnumerable<string> AssemblyLocations { get; set; }
 
+        public string StoryBasePath { get; set; }
+
         public static ConfigSettings Default()
         {
             return new ConfigSettings
@@ -37,7 +39,7 @@ namespace StorEvil
         {
             var contents = _filesystem.GetFileText(filePath);
 
-            IEnumerable<string> lines = GetNonBlankLines(contents);
+            var lines = GetNonBlankLines(contents);
 
             var settings = new ConfigSettings();
 
@@ -47,6 +49,7 @@ namespace StorEvil
                
                 string settingName;
                 string settingValue;
+
                 if (indexOfSeparator > 0)
                 {
                     settingName = line.Substring(0, indexOfSeparator).Trim().ToLowerInvariant();

@@ -27,7 +27,7 @@ namespace StorEvil.Core.Configuration
         private string[] GetSwitchNames(MemberInfo member, IEnumerable<CommandSwitchAttribute> customAttrs)
         {
             var names = new List<string>();
-            foreach (CommandSwitchAttribute attr in customAttrs)
+            foreach (var attr in customAttrs)
                 names.AddRange(attr.Names);
 
             if (names.Count == 0) 

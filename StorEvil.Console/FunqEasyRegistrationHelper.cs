@@ -27,6 +27,11 @@ namespace StorEvil.Console
             container.Register(compiledExpression);
         }
 
+        public static void EasyRegister<implT>(this Container container)
+        {
+            container.EasyRegister<implT, implT>(); 
+        }
+
         private static readonly MethodInfo FunqContainerResolveMethod;
 
         static FunqEasyRegistrationHelper()

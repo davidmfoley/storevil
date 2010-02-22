@@ -159,7 +159,6 @@ namespace StorEvil.Argument_parsing
             public void SetupContext()
             {
                 Parser = new SwitchParser<TestConfigSettings>();
-
             }
 
             [Test]
@@ -178,12 +177,6 @@ namespace StorEvil.Argument_parsing
             public void sets_param_with_default_name()
             {
                 TestWithParams("--decorated-property", "baz").DecoratedProperty.ShouldEqual("baz");
-            }
-
-            [Test]
-            public void sets_description_from_attribute()
-            {
-                
             }
         }
 

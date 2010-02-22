@@ -20,7 +20,8 @@ namespace StorEvil
             Parser = MockRepository.GenerateMock<IStoryParser>();
             FakeFilesystem = MockRepository.GenerateMock<IFilesystem>();
             Settings = new ConfigSettings();
-            Provider = new FilesystemStoryProvider(BasePath, Parser, FakeFilesystem, Settings);
+            Settings.StoryBasePath = BasePath;
+            Provider = new FilesystemStoryProvider(Parser, FakeFilesystem, Settings);
 
             FakeFilesystem.Stub(x => x.GetFilesInFolder(BasePath)).Return(new [] { "ignore.txt", "feature.feature", "bar.story" });            
         }

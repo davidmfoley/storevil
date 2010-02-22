@@ -13,11 +13,8 @@ namespace Pizza.TestContext
         public void When_customer_orders_a_size_pizzaType_pizza(string size, string pizzaType)
         {
             var pizza = new Pizza((PizzaSize)Enum.Parse(typeof(PizzaSize),size, true));
-
             // add toppings for type
-
             _order.Add(pizza);
-
         }
 
         public void When_customer_orders_quantity_size_pizzaType_pizzas(int quantity, string size, string pizzaType)
@@ -32,7 +29,7 @@ namespace Pizza.TestContext
         public void When_customer_orders_quantity_pizzaType_slices_and_a_coke(int quantity, string pizzaType)
         {
             for (int i = 0; i < quantity; i++)
-                _order.Add(new Slice());
+                _order.Add(new Slice());    
 
             _order.Add(new Soda());
         }
@@ -72,16 +69,5 @@ namespace Pizza.TestContext
         }
     }
 
-    public class Beer : IMenuItem
-    {
-        public string Description
-        {
-            get { return "Beer"; }
-        }
-
-        public decimal RetailPrice
-        {
-            get { return 4M; }
-        }
-    }
+   
 }

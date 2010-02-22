@@ -11,7 +11,7 @@ namespace StorEvil.Nunit
     /// 
     /// TODO: this is sort of POC code... needs a 2nd look
     /// </summary>
-    public class NUnitTestMethodGenerator
+    public class    NUnitTestMethodGenerator
     {
         private readonly CSharpMethodInvocationGenerator _invocationGenerator;
         private string _previousSignificantFirstWord;

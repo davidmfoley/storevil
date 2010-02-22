@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Beer.cs" />
     <Compile Include="Model\Discount.cs" />
     <Compile Include="Model\IMenuItem.cs" />
     <Compile Include="Model\Pizza.cs" />

@@ -1,9 +1,7 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
+using Rhino.Mocks;
 using StorEvil.Console;
 
 namespace StorEvil.Argument_parsing
@@ -11,11 +9,16 @@ namespace StorEvil.Argument_parsing
     public class Argument_parsing
     {
         protected ArgParser Parser;
+        protected IConfigSource FakeConfigSource;
 
         [SetUp]
         public void SetupContext()
         {
-            Parser = new ArgParser();
+            FakeConfigSource = MockRepository.GenerateStub<IConfigSource>();
+            var settings = new ConfigSettings { AssemblyLocations = new[] { "foo" } };
+
+            FakeConfigSource.Stub(x => x.GetConfig("")).IgnoreArguments().Return(settings);
+            Parser = new ArgParser(FakeConfigSource);
         }
     }
 
@@ -23,9 +26,18 @@ namespace StorEvil.Argument_parsing
     public class Building_command_from_args : Argument_parsing
     {
         [Test]
-        public void can_create_inplace_job()
+        public void can_create_inplace_job_with_path()
         {
             var result = Parser.ParseArguments(new[] {"execute", Assembly.GetExecutingAssembly().Location});
+            result.ShouldBeOfType<StorEvilJob>();
+            result.ShouldNotBeNull();
+        }
+
+        [Test]
+        public void can_create_inplace_job_with_no_path()
+        {
+            
+            var result = Parser.ParseArguments(new[] { "execute" });
             result.ShouldBeOfType<StorEvilJob>();
             result.ShouldNotBeNull();
         }
@@ -35,10 +47,11 @@ namespace StorEvil.Argument_parsing
         {
             var result =
                 Parser.ParseArguments(new[]
-                                          {
-                                              "nunit", Assembly.GetExecutingAssembly().Location,
-                                              Directory.GetCurrentDirectory(), Path.GetTempFileName()
-                                          });
+                {
+                      "nunit", Assembly.GetExecutingAssembly().Location,
+                      Directory.GetCurrentDirectory(), Path.GetTempFileName()
+                });
+
             result.ShouldBeOfType<StorEvilJob>();
             result.ShouldNotBeNull();
         }
@@ -48,10 +61,11 @@ namespace StorEvil.Argument_parsing
         {
             var result =
                 Parser.ParseArguments(new[]
-                                          {
-                                              "help", Assembly.GetExecutingAssembly().Location,
-                                              Directory.GetCurrentDirectory(), Path.GetTempFileName()
-                                          });
+                {
+                    "help", Assembly.GetExecutingAssembly().Location,
+                    Directory.GetCurrentDirectory(), Path.GetTempFileName()
+                });
+
             result.ShouldBeOfType<DisplayHelpJob>();
             result.ShouldNotBeNull();
         }
@@ -69,6 +83,5 @@ namespace StorEvil.Argument_parsing
             result.ShouldNotBeNull();
         }
     }
-
     
 }

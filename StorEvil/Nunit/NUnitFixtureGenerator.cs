@@ -12,7 +12,7 @@ namespace StorEvil.Nunit
     {
         private readonly IScenarioPreprocessor _preprocessor;
 
-        public NUnitFixtureGenerator(IScenarioPreprocessor preprocessor,NUnitTestMethodGenerator methodGenerator)
+        public NUnitFixtureGenerator(IScenarioPreprocessor preprocessor, NUnitTestMethodGenerator methodGenerator)
         {
             _preprocessor = preprocessor;
             MethodGenerator = methodGenerator;

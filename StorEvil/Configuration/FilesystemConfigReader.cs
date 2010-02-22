@@ -2,7 +2,12 @@ using System.IO;
 
 namespace StorEvil
 {
-    public class FilesystemConfigReader
+    public interface IConfigSource
+    {
+        ConfigSettings GetConfig(string directoryOrFile);
+    }
+
+    public class FilesystemConfigReader : IConfigSource
     {
         private readonly IFilesystem _filesystem;
         private readonly IConfigFileReader _fileReader;
@@ -11,7 +16,6 @@ namespace StorEvil
         {
             _filesystem = filesystem;
             _fileReader = reader;
-
         }
 
         public ConfigSettings GetConfig(string directoryOrFile)

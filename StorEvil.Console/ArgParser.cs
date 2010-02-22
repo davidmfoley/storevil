@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using Funq;
 using StorEvil.Context;
 using StorEvil.Core;
@@ -10,38 +11,66 @@ namespace StorEvil.Console
 {
     public class ArgParser
     {
+        private readonly IConfigSource _configSource;
+        private readonly ConfigSettings _settings;
+        private readonly Container _container;
+
+        public ArgParser(IConfigSource source)
+        {
+            _configSource = source;
+            _settings = source.GetConfig(Directory.GetCurrentDirectory());
+            _container = new Container();
+        }
+
         public IStorEvilJob ParseArguments(string[] args)
         {
-            var container = new Container();
+            SetupCommonComponents(_container);
 
-            SetupCommonComponents(container);
-    
-            SetupCustomComponents(container, args);
+            SetupCustomComponents(_container, args);
 
-            return container.Resolve<IStorEvilJob>();
+            return _container.Resolve<IStorEvilJob>();
+        }
+
+        private void SetupCommonComponents(Container container)
+        {
+            container.Register<ConfigSettings>((c)=>_settings);
+
+            container.EasyRegister<IStoryParser, StoryParser>();
+            container.EasyRegister<IStoryProvider, FilesystemStoryProvider>();
+            container.EasyRegister<IResultListener, ConsoleResultListener>();
+            container.EasyRegister<IFilesystem, Filesystem>();
+            container.EasyRegister<IScenarioPreprocessor, ScenarioPreprocessor>();
+            container.EasyRegister<ScenarioInterpreter>();
+            container.EasyRegister<InterpreterForTypeFactory>();
+            container.EasyRegister<ExtensionMethodHandler>();
+            container.EasyRegister<IStoryToContextMapper, StoryToContextMapper>();
         }
 
         private void SetupCustomComponents(Container container, string[] args)
         {
             var command = args[0];
+
             if (command == "nunit")
-                container.Register<IStorEvilJob>(x => GetNUnitJob(args));
-
+            {
+                container.EasyRegister<IFixtureGenerator, NUnitFixtureGenerator>();
+                container.EasyRegister<NUnitTestMethodGenerator>();
+                container.EasyRegister<CSharpMethodInvocationGenerator>();
+                container.EasyRegister<IStoryHandler, FixtureGenerationStoryHandler>();
+                container.EasyRegister<IStorEvilJob, StorEvilJob>();
+                container.Register<ITestFixtureWriter> (new SingleFileTestFixtureWriter(args[3]));
+            }
             else if (command == "execute")
-                container.Register<IStorEvilJob>(x => GetInPlaceJob(args));
-
+            {
+                container.EasyRegister<IStoryHandler, InPlaceRunner>();
+                container.EasyRegister<IStorEvilJob, StorEvilJob>();
+            }
             else if (command == "help")
                 container.Register<IStorEvilJob>(x => new DisplayHelpJob());
 
             else if (command == "setup")
-                container.Register<IStorEvilJob>(x => GetSetupJob(args));
+                container.Register(x => GetSetupJob(args));
             else
-                container.Register <IStorEvilJob>(x => new DisplayUsageJob());
-        }
-
-        private void SetupCommonComponents(Container container)
-        {
-            
+                container.Register<IStorEvilJob>(x => new DisplayUsageJob());
         }
 
         private IStorEvilJob GetSetupJob(string[] args)
@@ -49,54 +78,19 @@ namespace StorEvil.Console
             throw new NotImplementedException();
         }
 
-        private StorEvilJob GetInPlaceJob(string[] args)
+        private StoryToContextMapper GetMapper(string[] args)
         {
-            string pathToContextDll = args[1];
+            string pathToContextDll;
+
+            if (args.Length > 1)
+                pathToContextDll = args[1];
+            else
+                pathToContextDll = _configSource.GetConfig(Directory.GetCurrentDirectory()).AssemblyLocations.First();
 
             var mapper = new StoryToContextMapper();
 
             mapper.AddAssembly(pathToContextDll);
-
-            var runner = new InPlaceRunner(new ConsoleResultListener(), new ScenarioPreprocessor());
-            var storyBasePath = args.Length > 2 ? args[2] : Directory.GetCurrentDirectory();
-
-            ConfigSettings settings = ConfigSettings.Default();
-            var storyProvider = new FilesystemStoryProvider(storyBasePath, new StoryParser(), new Filesystem(), settings);
-
-            return new StorEvilJob(storyProvider, mapper, runner);
-        }
-
-        private StorEvilJob GetNUnitJob(string[] args)
-        {
-            string pathToContextDll = args[1];
-            string storyBasePath = args[2];
-            string outputFile = args[3];
-
-            ConfigSettings settings = ConfigSettings.Default();
-
-            var storyProvider = new FilesystemStoryProvider(storyBasePath, new StoryParser(), new Filesystem(), settings);
-            
-            var mapper = new StoryToContextMapper();
-            mapper.AddAssembly(pathToContextDll);
-
-            var handler = new FixtureGenerationStoryHandler(
-                BuildFixtureGenerator(),
-                new SingleFileTestFixtureWriter(outputFile));
-
-            return new StorEvilJob(
-                storyProvider,
-                mapper,
-                handler);
-        }
-
-        private NUnitFixtureGenerator BuildFixtureGenerator()
-        {
-            //TODO: cleanup
-            return new NUnitFixtureGenerator(new ScenarioPreprocessor(),
-                                             new NUnitTestMethodGenerator(
-                                                 new CSharpMethodInvocationGenerator(
-                                                     new ScenarioInterpreter(
-                                                         new InterpreterForTypeFactory(new ExtensionMethodHandler())))));
+            return mapper;
         }
     }
 

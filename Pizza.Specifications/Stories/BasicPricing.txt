@@ -14,6 +14,7 @@ Grand Total should be $10
 
 Scenario: 
 When Customer orders a large pizza with 3 toppings
+and a whiskey
 Grand Total should be $21
 
 Scenario: 
@@ -21,5 +22,5 @@ When Customer orders a medium pizza with 3 toppings
 Grand Total should be $16.50
 
 Scenario: 
-When Customer orders a small pizza with 3 toppings
-Grand Total should be $13
+When Customer orders a small pizza with 3 toppings	
+Grand Total should be $13.50	
