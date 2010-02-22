@@ -1,55 +1,22 @@
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 
 namespace StorEvil
 {
-    public class AppConfigFileReader : IConfigFileReader
+    public class ConfigSettings
     {
-        public ConfigSettings Read(string filePath)
-        {
-            var appSettingsSections = new List<AppSettingsSection>
-                                          {
-                                              ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None).AppSettings
-                                          };
+        public IEnumerable<string> ScenarioExtensions { get; set; }
+        public IEnumerable<string> AssemblyLocations { get; set; }
 
-            var map = new ExeConfigurationFileMap
-                          {
-                              LocalUserConfigFilename = filePath
-                          };
+        public string StoryBasePath { get; set; }
 
-            if (filePath != null)
-                appSettingsSections.Add(ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.PerUserRoamingAndLocal).AppSettings);
-     
-            return BuildConfigSettings(appSettingsSections);
-        }
-
-        private ConfigSettings BuildConfigSettings(List<AppSettingsSection> sections)
+        public static ConfigSettings Default()
         {
             return new ConfigSettings
                        {
-                           AssemblyLocations = GetAssemblyLocations(sections),
+                           ScenarioExtensions = new [] {".txt", ".feature", ".story"}, 
+                           AssemblyLocations = new string[0]
                        };
-        }
-
-        public IEnumerable<string> GetAssemblyLocations(List<AppSettingsSection> sections)
-        {
-            var settings = GetAllSettings(sections, "contextAssembly");
-            foreach (var setting in settings)
-            {
-                foreach (var s in setting.Split(','))
-                    yield return s;
-            }
-        }
-
-
-        private IEnumerable<string> GetAllSettings(List<AppSettingsSection> sections, string key)
-        {
-            foreach (var section in sections)
-            {
-                if (section.Settings[key].Key == key)
-                    yield return section.Settings[key].Value;
-            }
         }
     }
 }

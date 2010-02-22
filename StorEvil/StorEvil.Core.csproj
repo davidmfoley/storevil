@@ -58,6 +58,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\ConfigParser.cs" />
+    <Compile Include="Configuration\IConfigParser.cs" />
+    <Compile Include="Configuration\IConfigSource.cs" />
     <Compile Include="Configuration\SwitchInfo.cs" />
     <Compile Include="Configuration\SwitchParser.cs" />
     <Compile Include="ContextAttribute.cs" />
@@ -98,7 +101,7 @@
     <Compile Include="Nunit\TestContextSet.cs" />
     <Compile Include="Context\ParameterMatchWordFilter.cs" />
     <Compile Include="Context\PartialMatch.cs" />
-    <Compile Include="Configuration\IConfigParser.cs" />
+    <Compile Include="Configuration\BadSettingNameException.cs" />
     <Compile Include="Parsing\IFilesystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core\Scenario.cs" />

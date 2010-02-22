@@ -10,7 +10,7 @@ namespace StorEvil.Config
         private FilesystemConfigReader FilesystemConfigReader;
 
         private IFilesystem FakeFilesystem;
-        private IConfigFileReader FakeFileReader;
+        private IConfigParser _fakeParser;
 
         private const string FakeConfigFileContents = "foo";
 
@@ -18,9 +18,9 @@ namespace StorEvil.Config
         public void SetupContext()
         {
             FakeFilesystem = MockRepository.GenerateMock<IFilesystem>();
-            FakeFileReader = MockRepository.GenerateMock<IConfigFileReader>();
+            _fakeParser = MockRepository.GenerateMock<IConfigParser>();
 
-            FilesystemConfigReader = new FilesystemConfigReader(FakeFilesystem, FakeFileReader);
+            FilesystemConfigReader = new FilesystemConfigReader(FakeFilesystem, _fakeParser);
         }
 
         [Test]
@@ -79,7 +79,7 @@ namespace StorEvil.Config
 
         private void ParserReturnsConfigSettings(ConfigSettings settings)
         {
-            FakeFileReader.Stub(x => x.Read(FakeConfigFileContents)).Return(settings);
+            _fakeParser.Stub(x => x.Read(FakeConfigFileContents)).Return(settings);
         }
     }
 }

@@ -2,20 +2,15 @@ using System.IO;
 
 namespace StorEvil
 {
-    public interface IConfigSource
-    {
-        ConfigSettings GetConfig(string directoryOrFile);
-    }
-
     public class FilesystemConfigReader : IConfigSource
     {
         private readonly IFilesystem _filesystem;
-        private readonly IConfigFileReader _fileReader;
+        private readonly IConfigParser _parser;
 
-        public FilesystemConfigReader(IFilesystem filesystem, IConfigFileReader reader)
+        public FilesystemConfigReader(IFilesystem filesystem, IConfigParser reader)
         {
             _filesystem = filesystem;
-            _fileReader = reader;
+            _parser = reader;
         }
 
         public ConfigSettings GetConfig(string directoryOrFile)
@@ -29,7 +24,7 @@ namespace StorEvil
                 if (_filesystem.FileExists(configLocation))
                 {
                     var fileContents = _filesystem.GetFileText(configLocation);
-                    return _fileReader.Read(fileContents);
+                    return _parser.Read(fileContents);
                 }
 
                 var parent = Directory.GetParent(containingDirectory);

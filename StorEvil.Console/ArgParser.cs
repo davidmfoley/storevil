@@ -63,6 +63,14 @@ namespace StorEvil.Console
             {
                 container.EasyRegister<IStoryHandler, InPlaceRunner>();
                 container.EasyRegister<IStorEvilJob, StorEvilJob>();
+
+                if (args.Length > 1)
+                    _settings.AssemblyLocations = new[] {args[1]};
+                
+                if (args.Length > 2)
+                    _settings.StoryBasePath = args[2];
+                else
+                    _settings.StoryBasePath = Directory.GetCurrentDirectory();
             }
             else if (command == "help")
                 container.Register<IStorEvilJob>(x => new DisplayHelpJob());
