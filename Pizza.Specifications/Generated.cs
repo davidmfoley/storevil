@@ -5,61 +5,58 @@ using StorEvil;
 
 
 namespace TestNamespace {
+    using Pizza.TestContext;
     
+
     [TestFixture]
     public class Basic_Pricing_ {
+        [TestFixtureSetUp]
+        public void WriteStoryToConsole() {
+            Console.WriteLine(@"Basic Pricing
+ ");
+        }
         
-        [Test] public void When_customer_orders_a_large_cheese_pizza_Grand_Total_should_be__15_(){
+        [Test] public void When_customer_orders_a_large_cheese_pizza_Grand_Total_should_be__15(){
             var contextPriceCalculatorTestContext = new Pizza.TestContext.PriceCalculatorTestContext();
            Console.WriteLine(@"When customer orders a large cheese pizza");
-
             contextPriceCalculatorTestContext.When_customer_orders_a_size_pizzaType_pizza(@"large", @"cheese");
-           
-            Console.WriteLine(@"Grand Total should be $15");
+           Console.WriteLine(@"Grand Total should be $15");
             contextPriceCalculatorTestContext.Grand_Total.ShouldBe(@"$15");
         }
-        [Test] public void When_customer_orders_a_medium_cheese_pizza_Grand_Total_should_be__12_(){
+        [Test] public void When_customer_orders_a_medium_cheese_pizza_Grand_Total_should_be__12(){
             var contextPriceCalculatorTestContext = new Pizza.TestContext.PriceCalculatorTestContext();
            Console.WriteLine(@"When customer orders a medium cheese pizza");
             contextPriceCalculatorTestContext.When_customer_orders_a_size_pizzaType_pizza(@"medium", @"cheese");
            Console.WriteLine(@"Grand Total should be $12");
             contextPriceCalculatorTestContext.Grand_Total.ShouldBe(@"$12");
         }
-        [Test] public void When_customer_orders_a_small_cheese_pizza_Grand_Total_should_be__10_(){
+        [Test] public void When_customer_orders_a_small_cheese_pizza_Grand_Total_should_be__10(){
             var contextPriceCalculatorTestContext = new Pizza.TestContext.PriceCalculatorTestContext();
            Console.WriteLine(@"When customer orders a small cheese pizza");
             contextPriceCalculatorTestContext.When_customer_orders_a_size_pizzaType_pizza(@"small", @"cheese");
            Console.WriteLine(@"Grand Total should be $10");
             contextPriceCalculatorTestContext.Grand_Total.ShouldBe(@"$10");
         }
-        [Test] public void When_Customer_orders_a_large_pizza_with_3_toppings_Grand_Total_should_be__21_(){
+        [Test] public void When_Customer_orders_a_large_pizza_with_3_toppings_Grand_Total_should_be__21(){
             var contextPriceCalculatorTestContext = new Pizza.TestContext.PriceCalculatorTestContext();
            Console.WriteLine(@"When Customer orders a large pizza with 3 toppings");
-
-
-            contextPriceCalculatorTestContext
-                .When_Customer_Orders_a_size_Pizza(@"large")
-                .With_toppingCount_Toppings(3);
-           
-            Console.WriteLine(@"Grand Total should be $21");
-
-            contextPriceCalculatorTestContext
-                .Grand_Total
-                .ShouldBe(@"$21");
+            contextPriceCalculatorTestContext.When_Customer_Orders_a_size_Pizza(@"large").With_toppingCount_Toppings(3);
+           Console.WriteLine(@"Grand Total should be $21");
+            contextPriceCalculatorTestContext.Grand_Total.ShouldBe(@"$21");
         }
-        [Test] public void When_Customer_orders_a_medium_pizza_with_3_toppings_Grand_Total_should_be__16_50_(){
+        [Test] public void When_Customer_orders_a_medium_pizza_with_3_toppings_Grand_Total_should_be__16_50(){
             var contextPriceCalculatorTestContext = new Pizza.TestContext.PriceCalculatorTestContext();
            Console.WriteLine(@"When Customer orders a medium pizza with 3 toppings");
             contextPriceCalculatorTestContext.When_Customer_Orders_a_size_Pizza(@"medium").With_toppingCount_Toppings(3);
            Console.WriteLine(@"Grand Total should be $16.50");
             contextPriceCalculatorTestContext.Grand_Total.ShouldBe(@"$16.50");
         }
-        [Test] public void When_Customer_orders_a_small_pizza_with_3_toppings_Grand_Total_should_be__13_(){
+        [Test] public void When_Customer_orders_a_small_pizza_with_3_toppings_Grand_Total_should_be__13_50(){
             var contextPriceCalculatorTestContext = new Pizza.TestContext.PriceCalculatorTestContext();
            Console.WriteLine(@"When Customer orders a small pizza with 3 toppings");
             contextPriceCalculatorTestContext.When_Customer_Orders_a_size_Pizza(@"small").With_toppingCount_Toppings(3);
-           Console.WriteLine(@"Grand Total should be $13");
-            contextPriceCalculatorTestContext.Grand_Total.ShouldBe(@"$13");
+           Console.WriteLine(@"Grand Total should be $13.50");
+            contextPriceCalculatorTestContext.Grand_Total.ShouldBe(@"$13.50");
         }
 
     }
@@ -67,9 +64,16 @@ namespace TestNamespace {
 
 
 namespace TestNamespace {
+    using Pizza.TestContext;
     
+
     [TestFixture]
     public class Discounts_ {
+        [TestFixtureSetUp]
+        public void WriteStoryToConsole() {
+            Console.WriteLine(@"Discounts
+ ");
+        }
         
         [Test] public void two_mediums_for_20_bucks_special(){
             var contextPriceCalculatorTestContext = new Pizza.TestContext.PriceCalculatorTestContext();
@@ -112,8 +116,6 @@ namespace TestNamespace {
             contextPriceCalculatorTestContext.When_Customer_Orders_A_Beer();
            Console.WriteLine(@"and orders a slice");
             contextPriceCalculatorTestContext.When_Orders_A_Slice();
-           Console.WriteLine(@"Grand total should be $6");
-            contextPriceCalculatorTestContext.Grand_Total.ShouldBe(@"$6");
         }
 
     }

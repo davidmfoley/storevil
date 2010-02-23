@@ -19,8 +19,7 @@
         {
             System.Console.WriteLine("usage:");
 
-            System.Console.WriteLine(
-                "StorEvil.exe {path to context assembly} {path to story folder} {path to fixture output file}");
+            System.Console.WriteLine("StorEvil.exe {execute|nunit|help}");
         }
     }
 }

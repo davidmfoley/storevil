@@ -19,7 +19,7 @@ namespace StorEvil.Console
         {
             _configSource = source;
             _settings = source.GetConfig(Directory.GetCurrentDirectory());
-            
+            _settings.StoryBasePath = Directory.GetCurrentDirectory();
             _container = new Container();
         }
 
@@ -56,7 +56,7 @@ namespace StorEvil.Console
         }
 
         private void SetupCustomComponents(Container container, string[] args)
-        {
+        {   
             var command = args[0];
 
             if (command == "nunit")
@@ -66,17 +66,13 @@ namespace StorEvil.Console
                 container.EasyRegister<CSharpMethodInvocationGenerator>();
                 container.EasyRegister<IStoryHandler, FixtureGenerationStoryHandler>();
                 container.EasyRegister<IStorEvilJob, StorEvilJob>();
-                container.Register<ITestFixtureWriter> (new SingleFileTestFixtureWriter(args[3]));
+                container.Register<ITestFixtureWriter> (new SingleFileTestFixtureWriter(args[1]));
             }
             else if (command == "execute")
             {
                 container.EasyRegister<IStoryHandler, InPlaceRunner>();
                 container.EasyRegister<IStorEvilJob, StorEvilJob>();
-                
-                if (args.Length > 2)
-                    _settings.StoryBasePath = args[2];
-                else
-                    _settings.StoryBasePath = Directory.GetCurrentDirectory();
+                    
             }
             else if (command == "help")
                 container.Register<IStorEvilJob>(x => new DisplayHelpJob());
