@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using Funq;
 using StorEvil.Context;
@@ -21,8 +20,8 @@ Available commands:
  nunit   - Generates NUnit text fixtures
 
 usage:
-  'storevil {command}          - to execute the command
-  'storevil help {command}'    - for more information about usage of a command";
+  'storevil {command} {switches}  - to execute the command
+  'storevil help {command}'       - for more information about usage of a command";
 
         public ArgParser(IConfigSource source)
         {
@@ -56,16 +55,13 @@ usage:
 
             var mapper = new StoryToContextMapper();
             foreach (var location in _settings.AssemblyLocations)
-            {
                 mapper.AddAssembly(location);
-            }
 
             container.Register<IStoryToContextMapper>(mapper);
         }
 
         private void SetupCustomComponents(Container container, string[] args)
         {
-            
             if (args.Length == 0 || args[0] == "help")
             {
                 SetupHelpJob(args, container);
@@ -83,7 +79,7 @@ usage:
 
         private void SetupHelpJob(string[] args, Container container)
         {
-            if (args.Length <=   1)
+            if (args.Length <= 1)
             {
                 container.Register<IStorEvilJob>(new DisplayHelpJob(StandardHelpText));
                 return;
@@ -101,19 +97,11 @@ usage:
             IJobFactory jobFactory = null;
 
             if (command == "nunit")
-            {
                 jobFactory = new NUnitJobFactory();
-            }
             else if (command == "execute")
-            {
                 jobFactory = new InPlaceJobFactory();
-            }
+            
             return jobFactory;
-        }
-
-        private IStorEvilJob GetSetupJob(string[] args)
-        {
-            throw new NotImplementedException();
         }
     }
 }
