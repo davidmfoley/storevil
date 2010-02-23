@@ -5,6 +5,11 @@ namespace StorEvil
 {
     public class ConfigSettings
     {
+        public ConfigSettings()
+        {
+            AssemblyLocations = new string[0];
+        }
+
         public IEnumerable<string> ScenarioExtensions { get; set; }
         public IEnumerable<string> AssemblyLocations { get; set; }
 

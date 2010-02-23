@@ -15,7 +15,7 @@ namespace StorEvil.Argument_parsing
         public void SetupContext()
         {
             FakeConfigSource = MockRepository.GenerateStub<IConfigSource>();
-            var settings = new ConfigSettings { AssemblyLocations = new[] { "foo" } };
+            var settings = new ConfigSettings { AssemblyLocations = new[] { Assembly.GetExecutingAssembly().Location } };
 
             FakeConfigSource.Stub(x => x.GetConfig("")).IgnoreArguments().Return(settings);
             Parser = new ArgParser(FakeConfigSource);
@@ -36,7 +36,6 @@ namespace StorEvil.Argument_parsing
         [Test]
         public void can_create_inplace_job_with_no_path()
         {
-            
             var result = Parser.ParseArguments(new[] { "execute" });
             result.ShouldBeOfType<StorEvilJob>();
             result.ShouldNotBeNull();

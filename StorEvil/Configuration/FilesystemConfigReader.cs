@@ -17,7 +17,11 @@ namespace StorEvil
 
         public ConfigSettings GetConfig(string directoryOrFile)
         {
-            var containingDirectory = Path.GetFullPath(Path.GetDirectoryName(directoryOrFile));
+            var path =directoryOrFile;
+            if (!path.EndsWith("\\"))
+                path += "\\";  
+
+            var containingDirectory =  Path.GetDirectoryName(Path.GetFullPath(path));
 
             while (containingDirectory.Length > Path.GetPathRoot(containingDirectory).Length)
             {

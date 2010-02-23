@@ -28,7 +28,7 @@ namespace StorEvil.Config
         {
             ConfigFileExistsAt("c:\\test\\storevil.config");
 
-            ShouldReturnConfigFileWhenCalledFrom("c:\\test\\");
+            ShouldReturnConfigFileWhenCalledFrom("c:\\test");
         }
 
         [Test]

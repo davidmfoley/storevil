@@ -71,11 +71,7 @@ Extensions: .scenario, .foo, .bar";
             var fakeFilesystem = MockRepository.GenerateStub<IFilesystem>();
             var parser = new ConfigParser(fakeFilesystem);
 
-            fakeFilesystem
-                .Stub(x => x.GetFileText(TestFileName))
-                .Return(config);
-
-            return parser.Read(TestFileName);
+            return parser.Read(config);
         }
     }
 }

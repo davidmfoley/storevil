@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Configuration;
+using System.Linq;
 using NUnit.Framework;
 using System.Collections.Generic;
 using StorEvil.Context;
@@ -39,17 +40,16 @@ namespace StorEvil
             context.ImplementingTypes.First().ShouldEqual(typeof(TestMappingContext));    
         }
 
-        /// <summary>
-        /// For now, return object if no match and this way at least every test will throw
-        /// </summary>
         [Test]
-        public void Should_Return_Object_If_No_Match()
+        public void Throws_if_no_context_added()
         {
 
             var mapper = new StoryToContextMapper();
-           
-            var context = mapper.GetContextForStory(new Story("unknown type", "totally bogus", new List<IScenario>()));
-            context.ImplementingTypes.First().ShouldEqual(typeof(object));
+
+            Expect.ThisToThrow<ConfigurationException>(() => mapper.GetContextForStory(new Story("unknown type",
+                                                                                                 "totally bogus",
+                                                                                                 new List<IScenario>())));
+
         }
     }
 }
