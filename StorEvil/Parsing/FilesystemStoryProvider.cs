@@ -1,10 +1,7 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using StorEvil.Core;
-using StorEvil.InPlace;
 
 namespace StorEvil
 {
@@ -37,19 +34,31 @@ namespace StorEvil
 
         public IEnumerable<Story> GetStories()
         {
-            Story story;
+            return GetStoriesRecursive(BasePath);
+        }
 
-            foreach (var file in Filesystem.GetFilesInFolder(BasePath))
+        public IEnumerable<Story> GetStoriesRecursive(string path)
+        {
+            Story story;
+            var stories = new List<Story>();
+
+            foreach (var file in Filesystem.GetFilesInFolder(path))
             {
                 if (!ExtensionIsSupportedByCurrentSettings(file))
                     continue;
 
-                if (null == (story = Parser.Parse(Filesystem.GetFileText(file)))) 
+                if (null == (story = Parser.Parse(Filesystem.GetFileText(file))))
                     continue;
-                
+
                 story.Id = Path.GetFileNameWithoutExtension(file);
-                yield return story;
+                stories.Add(story);
             }
+
+            foreach (var subPath in Filesystem.GetSubFolders(path))
+            {
+                stories.AddRange(GetStoriesRecursive(subPath));
+            }
+            return stories;
         }
 
         private bool ExtensionIsSupportedByCurrentSettings(string file)
@@ -61,6 +70,4 @@ namespace StorEvil
             return _settings.ScenarioExtensions.Any(x => extension == x);
         }
     }
-
-   
 }

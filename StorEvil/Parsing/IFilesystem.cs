@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
@@ -9,6 +10,7 @@ namespace StorEvil
         bool FileExists(string filePath);
         string GetFileText(string path);
         IEnumerable<string> GetFilesInFolder(string path);
+        IEnumerable<string> GetSubFolders(string path);
     }
 
     public class Filesystem : IFilesystem
@@ -28,6 +30,9 @@ namespace StorEvil
             return Directory.GetFiles(path);
         }
 
-        
+        public IEnumerable<string> GetSubFolders(string path)
+        {
+            return Directory.GetDirectories(path);
+        }
     }
 }

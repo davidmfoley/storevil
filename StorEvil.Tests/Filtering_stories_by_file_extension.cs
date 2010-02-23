@@ -23,7 +23,8 @@ namespace StorEvil
             Settings.StoryBasePath = BasePath;
             Provider = new FilesystemStoryProvider(Parser, FakeFilesystem, Settings);
 
-            FakeFilesystem.Stub(x => x.GetFilesInFolder(BasePath)).Return(new [] { "ignore.txt", "feature.feature", "bar.story" });            
+            FakeFilesystem.Stub(x => x.GetFilesInFolder(BasePath)).Return(new [] { "ignore.txt", "feature.feature", "bar.story" });
+            FakeFilesystem.Stub(x => x.GetSubFolders(BasePath)).Return(new string[0]);
         }
 
         [Test]

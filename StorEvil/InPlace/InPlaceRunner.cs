@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using NUnit.Framework;
 using StorEvil.Core;
 
 namespace StorEvil.InPlace
@@ -84,11 +85,10 @@ namespace StorEvil.InPlace
                     try
                     {
                         lastResult = _memberInvoker.InvokeMember(info, invocation.ParamValues, context);
-   
                     }
                     catch (Exception ex)
                     {
-                        _listener.ScenarioFailed(scenario, successPart.Trim(), invocation.MatchedText, GetExceptionMessage(ex) + "\r\n" + ex.ToString());
+                        _listener.ScenarioFailed(scenario, successPart.Trim(), invocation.MatchedText, GetExceptionMessage(ex));
                         return;
                     }
                     successPart += invocation.MatchedText + " ";
@@ -98,13 +98,22 @@ namespace StorEvil.InPlace
             }
         }
 
-        private string GetExceptionMessage(Exception ex)
+        private string GetExceptionMessage(Exception exception)
         {
-            if (ex.InnerException != null)
-            {
-                return ex.InnerException.Message;
-            }
-            return ex.Message;
+            Exception ex;
+
+            if (exception.InnerException != null)
+
+                ex = exception.InnerException;
+            else
+                ex = exception;
+
+            var msg = ex.Message;
+
+            if (!(ex is AssertionException))
+                msg += "\r\n" + ex.ToString();  
+            return msg;
+
         }
     }
 }

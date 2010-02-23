@@ -14,7 +14,6 @@ Grand Total should be $10
 
 Scenario: 
 When Customer orders a large pizza with 3 toppings
-and a whiskey
 Grand Total should be $21
 
 Scenario: 
