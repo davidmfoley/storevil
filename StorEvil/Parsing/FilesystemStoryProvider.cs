@@ -10,31 +10,21 @@ namespace StorEvil
     /// </summary>
     public class FilesystemStoryProvider : IStoryProvider
     {
-        private readonly ConfigSettings _settings;
+        private readonly ConfigSettings Settings;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="basePath">the base path for retrieving the stories</param>
-        /// <param name="parser">the parser that will parse the text we find in the stories</param>
-        /// <param name="filesystem"></param>
-        /// <param name="settings"></param>
         public FilesystemStoryProvider(IStoryParser parser, IFilesystem filesystem, ConfigSettings settings)
         {
-            _settings = settings;
-            //_settings = settings;
-            BasePath = settings.StoryBasePath;
+            Settings = settings;
             Parser = parser;
             Filesystem = filesystem;
         }
 
-        public string BasePath { get; set; }
         public IStoryParser Parser { get; set; }
         public IFilesystem Filesystem { get; set; }
 
         public IEnumerable<Story> GetStories()
         {
-            return GetStoriesRecursive(BasePath);
+            return GetStoriesRecursive(Settings.StoryBasePath);
         }
 
         public IEnumerable<Story> GetStoriesRecursive(string path)
@@ -63,11 +53,11 @@ namespace StorEvil
 
         private bool ExtensionIsSupportedByCurrentSettings(string file)
         {
-            if (_settings.ScenarioExtensions == null || ! _settings.ScenarioExtensions.Any())
+            if (Settings.ScenarioExtensions == null || ! Settings.ScenarioExtensions.Any())
                 return true;
 
-            string extension = Path.GetExtension(file);
-            return _settings.ScenarioExtensions.Any(x => extension == x);
+            var extension = Path.GetExtension(file);
+            return Settings.ScenarioExtensions.Any(x => extension == x);
         }
     }
 }
