@@ -117,7 +117,7 @@ usage:
             var helpJobFactory = GetJobFactory(args[1]);
 
             if (helpJobFactory != null)
-                container.Register<IStorEvilJob>(new DisplayHelpJob("Usage for '" + args[1]+ "': \r\n " + helpJobFactory.GetUsage()));
+                container.Register<IStorEvilJob>(new DisplayHelpJob(GetStandardHelpText() + "\r\n\r\nSwitches for '" + args[1]+ "': \r\n\r\n" + helpJobFactory.GetUsage()));
             else
                 container.Register<IStorEvilJob>(new DisplayHelpJob(GetStandardHelpText()));
         }
@@ -125,7 +125,7 @@ usage:
         private string GetStandardHelpText()
         {
 
-            return StandardHelpText + "\r\n\r\nGeneral switches:\r\n" + GetSwitchParser().GetUsage()    ;
+            return StandardHelpText + "\r\n\r\nGeneral switches:\r\n\r\n" + GetSwitchParser().GetUsage()    ;
         }
 
         private IJobFactory GetJobFactory(string command)
