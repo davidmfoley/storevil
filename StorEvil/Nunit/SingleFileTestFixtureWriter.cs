@@ -8,9 +8,11 @@ namespace StorEvil.Nunit
     /// </summary>
     public class SingleFileTestFixtureWriter : ITestFixtureWriter
     {
-        public SingleFileTestFixtureWriter(string targetFilePath)
+        private readonly TestFixtureGenerationSettings _settings;
+
+        public SingleFileTestFixtureWriter(TestFixtureGenerationSettings settings)
         {
-            TargetFilePath = targetFilePath;
+            _settings = settings;
 
             _code.AppendLine("using NUnit.Framework;");
             _code.AppendLine("using System;");
@@ -29,7 +31,12 @@ namespace StorEvil.Nunit
         public void Finished()
         {
             // write to target file
-            File.WriteAllText(TargetFilePath, _code.ToString());
+            File.WriteAllText(_settings.TargetFilePath, _code.ToString());
         }
+    }
+
+    public class TestFixtureGenerationSettings
+    {
+        public string TargetFilePath { get; set; }
     }
 }

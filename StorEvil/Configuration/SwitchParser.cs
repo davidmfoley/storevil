@@ -39,7 +39,7 @@ namespace StorEvil.Core.Configuration
         private string GetDefaultName(MemberInfo member)
         {
             var name = member.Name;
-            StringBuilder formatted = new StringBuilder( "-");
+            var formatted = new StringBuilder( "-");
 
             foreach (char c in name)
             {
@@ -93,8 +93,8 @@ namespace StorEvil.Core.Configuration
         public string GetUsage()
         {
             var switchDescriptions = Switches
-                .Select(sw => "[" + string.Join(" | ", sw.Names) + "]");
-            return string.Join(" ", switchDescriptions.ToArray());
+                .Select(sw => "[" + string.Join(" | ", sw.Names) + "] " + sw.Description);
+            return string.Join("\r\n", switchDescriptions.ToArray());
         }
     }
 

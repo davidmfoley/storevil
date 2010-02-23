@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using StorEvil.Core;
 
@@ -30,7 +30,7 @@ namespace StorEvil
             if (actual == expected)
                 return;
 
-            if ((actual?? "").ToString().ToLower() == (expected ?? "" ).ToString().ToLower())
+            if ((actual ?? "").ToString().ToLower() == (expected ?? "").ToString().ToLower())
                 return;
 
             if (actual == null)
@@ -65,15 +65,15 @@ namespace StorEvil
 
         public static void ShouldBeOfType<T>(this object actual)
         {
-            Assert.IsInstanceOfType(typeof(T), actual);
+            Assert.IsInstanceOfType(typeof (T), actual);
         }
 
         public static void ElementsShouldEqual<T>(this IEnumerable<T> collection, params T[] expected)
         {
             Assert.AreEqual(expected.Length, collection.Count());
 
-            for (int i = 0; i < expected.Length; i++)            
-                Assert.AreEqual(collection.ElementAt(i), expected[i]);            
+            for (int i = 0; i < expected.Length; i++)
+                Assert.AreEqual(collection.ElementAt(i), expected[i]);
         }
 
         public static void ShouldContain(this string actual, string expectedContent)
@@ -85,7 +85,13 @@ namespace StorEvil
         {
             Assert.That(actual.CompareTo(expected) > 0);
         }
-    }   
+
+        public static void ShouldMatch(this string actual, string regex)
+        {
+            bool isMatch = Regex.IsMatch(actual, regex);
+            Assert.IsTrue(isMatch, "Expected '" + actual + "' to match pattern: '" + regex + "'");
+        }
+    }
 
     public static class Expect
     {
@@ -94,17 +100,18 @@ namespace StorEvil
             try
             {
                 action();
-                Assert.Fail("Expected exception " + typeof(T).Name + " was not thrown.");
-            }  
-            catch(T ex)
-            {
-                return ex; 
+                Assert.Fail("Expected exception " + typeof (T).Name + " was not thrown.");
             }
-            catch(Exception exception)
+            catch (T ex)
             {
-                Assert.Fail("Unexpected exception thrown: expected " + typeof(T).Name + " but caught " + exception.GetType().Name + "\n" + exception.ToString());
+                return ex;
+            }
+            catch (Exception exception)
+            {
+                Assert.Fail("Unexpected exception thrown: expected " + typeof (T).Name + " but caught " +
+                            exception.GetType().Name + "\n" + exception);
             }
             return null;
-        }  
+        }
     }
 }

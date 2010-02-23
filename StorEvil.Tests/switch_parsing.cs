@@ -140,7 +140,8 @@ namespace StorEvil.Argument_parsing
             {
                 Parser = new SwitchParser<TestConfigSettings>();
                 Parser.AddSwitch("--foo", "-f")
-                    .SetsField(x => x.Foo);
+                    .SetsField(x => x.Foo)
+                    .WithDescription("FooDescription");
 
                 Usage = Parser.GetUsage();
             }
@@ -148,7 +149,7 @@ namespace StorEvil.Argument_parsing
             [Test]
             public void Should_print_names_of_args()
             {
-                Usage.ShouldContain("[--foo | -f]");
+                Usage.ShouldMatch(@"\[\-\-foo \| \-f\].+FooDescription");
             }
         }
 

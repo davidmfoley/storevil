@@ -1,11 +1,9 @@
 using System;
 using System.IO;
-using System.Linq;
 using Funq;
 using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.InPlace;
-using StorEvil.Nunit;
 
 namespace StorEvil.Console
 {
@@ -14,6 +12,17 @@ namespace StorEvil.Console
         private readonly IConfigSource _configSource;
         private readonly ConfigSettings _settings;
         private readonly Container _container;
+        private const string StandardHelpText = @"
+StorEvil is a natural language BDD framework and runner.
+  
+Available commands:
+
+ execute - Executes the specs in the console
+ nunit   - Generates NUnit text fixtures
+
+usage:
+  'storevil {command}          - to execute the command
+  'storevil help {command}'    - for more information about usage of a command";
 
         public ArgParser(IConfigSource source)
         {
@@ -25,7 +34,7 @@ namespace StorEvil.Console
 
         public IStorEvilJob ParseArguments(string[] args)
         {
-            SetupCommonComponents(_container);      
+            SetupCommonComponents(_container);
 
             SetupCustomComponents(_container, args);
 
@@ -34,7 +43,7 @@ namespace StorEvil.Console
 
         private void SetupCommonComponents(Container container)
         {
-            container.Register<ConfigSettings>((c)=>_settings);
+            container.Register(_settings);
 
             container.EasyRegister<IStoryParser, StoryParser>();
             container.EasyRegister<IStoryProvider, FilesystemStoryProvider>();
@@ -48,7 +57,6 @@ namespace StorEvil.Console
             var mapper = new StoryToContextMapper();
             foreach (var location in _settings.AssemblyLocations)
             {
-                System.Console.WriteLine(location);
                 mapper.AddAssembly(location);
             }
 
@@ -56,57 +64,54 @@ namespace StorEvil.Console
         }
 
         private void SetupCustomComponents(Container container, string[] args)
-        {   
+        {
+            
+            if (args.Length == 0 || args[0] == "help")
+            {
+                SetupHelpJob(args, container);
+                return;
+            }
+
             var command = args[0];
+
+            var jobFactory = GetJobFactory(command);
+            if (jobFactory == null)
+                SetupHelpJob(args, container);  
+            else
+                jobFactory.SetupContainer(container, args);
+        }
+
+        private void SetupHelpJob(string[] args, Container container)
+        {
+            if (args.Length <=   1)
+            {
+                container.Register<IStorEvilJob>(new DisplayHelpJob(StandardHelpText));
+                return;
+            }
+            var helpJobFactory = GetJobFactory(args[1]);
+
+            if (helpJobFactory != null)
+                container.Register<IStorEvilJob>(new DisplayHelpJob("Usage for '" + args[1]+ "': \r\n " + helpJobFactory.GetUsage()));
+            else
+                container.Register<IStorEvilJob>(new DisplayHelpJob(StandardHelpText));
+        }
+
+        private IJobFactory GetJobFactory(string command)
+        {
+            IJobFactory jobFactory = null;
 
             if (command == "nunit")
             {
-                container.EasyRegister<IFixtureGenerator, NUnitFixtureGenerator>();
-                container.EasyRegister<NUnitTestMethodGenerator>();
-                container.EasyRegister<CSharpMethodInvocationGenerator>();
-                container.EasyRegister<IStoryHandler, FixtureGenerationStoryHandler>();
-                container.EasyRegister<IStorEvilJob, StorEvilJob>();
-                container.Register<ITestFixtureWriter> (new SingleFileTestFixtureWriter(args[1]));
+                jobFactory = new NUnitJobFactory();
             }
             else if (command == "execute")
             {
-                container.EasyRegister<IStoryHandler, InPlaceRunner>();
-                container.EasyRegister<IStorEvilJob, StorEvilJob>();
-                    
+                jobFactory = new InPlaceJobFactory();
             }
-            else if (command == "help")
-                container.Register<IStorEvilJob>(x => new DisplayHelpJob());
-
-            else if (command == "setup")
-                container.Register(x => GetSetupJob(args));
-            else
-                container.Register<IStorEvilJob>(x => new DisplayUsageJob());
+            return jobFactory;
         }
 
         private IStorEvilJob GetSetupJob(string[] args)
-        {
-            throw new NotImplementedException();
-        }
-
-        private StoryToContextMapper GetMapper(string[] args)
-        {
-            string pathToContextDll;
-
-            if (args.Length > 1)
-                pathToContextDll = args[1];
-            else
-                pathToContextDll = _configSource.GetConfig(Directory.GetCurrentDirectory()).AssemblyLocations.First();
-
-            var mapper = new StoryToContextMapper();
-
-            mapper.AddAssembly(pathToContextDll);
-            return mapper;
-        }
-    }
-
-    public class DisplayHelpJob : IStorEvilJob
-    {
-        public void Run()
         {
             throw new NotImplementedException();
         }
