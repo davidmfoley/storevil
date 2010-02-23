@@ -1,5 +1,3 @@
-using System;
-
 namespace StorEvil
 {
     /// <summary>
@@ -10,22 +8,21 @@ namespace StorEvil
         public IStoryProvider StoryProvider { get; set; }
         public IStoryToContextMapper StoryToContextMapper { get; set; }
         public IStoryHandler Handler { get; set; }
-     
+
         public StorEvilJob(
-            IStoryProvider storyProvider, 
+            IStoryProvider storyProvider,
             IStoryToContextMapper storyToContextMapper,
             IStoryHandler handler)
-            
+
         {
             StoryProvider = storyProvider;
             StoryToContextMapper = storyToContextMapper;
             Handler = handler;
-
         }
 
         public void Run()
         {
-            foreach(var story in StoryProvider.GetStories())
+            foreach (var story in StoryProvider.GetStories())
             {
                 var context = StoryToContextMapper.GetContextForStory(story);
 

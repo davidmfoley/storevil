@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using StorEvil.Context;
@@ -11,10 +10,11 @@ namespace StorEvil.Core
     {
         private readonly Type _type;
         private readonly InterpreterForTypeFactory _factory;
-        readonly List<IMemberMatcher> _memberMatchers = new List<IMemberMatcher>();
+        private readonly List<IMemberMatcher> _memberMatchers = new List<IMemberMatcher>();
         private static readonly ParameterConverter _parameterConverter = new ParameterConverter();
 
-        public ScenarioInterpreterForType(Type type, ExtensionMethodHandler extensionMethodHandler, InterpreterForTypeFactory factory)
+        public ScenarioInterpreterForType(Type type, ExtensionMethodHandler extensionMethodHandler,
+                                          InterpreterForTypeFactory factory)
         {
             _type = type;
             _factory = factory;
@@ -22,14 +22,11 @@ namespace StorEvil.Core
             const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public;
 
             foreach (MemberInfo member in _type.GetMembers(flags))
-            {
                 AddMatchers(member);
-            }
+
             // extension methods
             foreach (var methodInfo in extensionMethodHandler.GetExtensionMethodsFor(_type))
-            {
                 _memberMatchers.Add(new MemberNameMatcher(methodInfo));
-            }
         }
 
         private void AddMatchers(MemberInfo member)
@@ -38,9 +35,7 @@ namespace StorEvil.Core
 
             var regexAttrs = member.GetCustomAttributes(typeof (ContextRegexAttribute), true);
             foreach (var regexAttr in regexAttrs.Cast<ContextRegexAttribute>())
-            {
                 _memberMatchers.Add(new RegexMatcher(regexAttr.Pattern, member));
-            }
         }
 
         public InvocationChain GetChain(string line)
@@ -48,13 +43,13 @@ namespace StorEvil.Core
             var partialMatches = new List<PartialMatch>();
             foreach (var member in _memberMatchers)
             {
-                NameMatch currentMatch = member.GetMatch(line);
+                var currentMatch = member.GetMatch(line);
 
                 if (currentMatch is ExactMatch)
-                    return new InvocationChain { Invocations = new[] { BuildInvocation(member.MemberInfo, currentMatch) } };
+                    return new InvocationChain {Invocations = new[] {BuildInvocation(member.MemberInfo, currentMatch)}};
 
                 if (currentMatch is PartialMatch)
-                    partialMatches.Add((PartialMatch)currentMatch);
+                    partialMatches.Add((PartialMatch) currentMatch);
             }
 
             return GetPartialMatchChain(line, partialMatches);
@@ -66,7 +61,11 @@ namespace StorEvil.Core
             {
                 var partialChain = new InvocationChain(BuildInvocation(partialMatch.MemberInfo, partialMatch));
 
-                InvocationChain chain = TryToRecursivelyExtendPartialMatch(partialChain, line.Substring(partialChain.Invocations.Last().MatchedText.Length).Trim(), partialMatch);
+                InvocationChain chain = TryToRecursivelyExtendPartialMatch(partialChain,
+                                                                           line.Substring(
+                                                                               partialChain.Invocations.Last().
+                                                                                   MatchedText.Length).Trim(),
+                                                                           partialMatch);
 
                 if (chain != null)
                     return chain;
@@ -77,12 +76,14 @@ namespace StorEvil.Core
         private Invocation BuildInvocation(MemberInfo memberInfo, NameMatch currentMatch)
         {
             if (memberInfo is MethodInfo)
-                return new Invocation(memberInfo, BuildParamValues((MethodInfo)memberInfo, currentMatch.ParamValues), currentMatch.MatchedText);
+                return new Invocation(memberInfo, BuildParamValues((MethodInfo) memberInfo, currentMatch.ParamValues),
+                                      currentMatch.MatchedText);
 
             return new Invocation(memberInfo, new string[0], currentMatch.MatchedText);
         }
 
-        private InvocationChain TryToRecursivelyExtendPartialMatch(InvocationChain chain, string remainingLine, PartialMatch partial)
+        private InvocationChain TryToRecursivelyExtendPartialMatch(InvocationChain chain, string remainingLine,
+                                                                   PartialMatch partial)
         {
             var chainedMapper = _factory.GetInterpreterForType(partial.TerminatingType);
             var childChain = chainedMapper.GetChain(remainingLine);
@@ -106,7 +107,6 @@ namespace StorEvil.Core
                 else
                     throw new ArgumentException("Could not resolve parameter " + parameters[i].Name);
             }
-
         }
 
         private static object ConvertParam(string s, Type t)
@@ -114,6 +114,4 @@ namespace StorEvil.Core
             return _parameterConverter.Convert(s, t);
         }
     }
-
-   
 }

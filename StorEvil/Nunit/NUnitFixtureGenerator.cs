@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Text;
 using StorEvil.Core;
-using StorEvil.InPlace;
 
 namespace StorEvil.Nunit
 {

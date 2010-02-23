@@ -175,8 +175,6 @@ Examples:
         public void should_have_correct_number_of_Examples()
         {
             Outline().Examples.Count().ShouldEqual(2);
-
-
         }
 
         private ScenarioOutline Outline()

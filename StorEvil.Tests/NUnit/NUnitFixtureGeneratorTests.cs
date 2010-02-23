@@ -4,7 +4,6 @@ using System.Reflection;
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Core;
-using StorEvil.InPlace;
 using StorEvil.Nunit;
 
 namespace StorEvil.NUnit

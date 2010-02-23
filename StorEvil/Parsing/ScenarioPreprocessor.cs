@@ -1,25 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using StorEvil.Core;
 
-namespace StorEvil.InPlace
+namespace StorEvil.Core
 {
-    public interface IScenarioPreprocessor
-    {
-        IEnumerable<Scenario> Preprocess(IScenario scenario);
-    }
-
     public class ScenarioPreprocessor : IScenarioPreprocessor
     {
         public IEnumerable<Scenario> Preprocess(IScenario scenario)
         {
             if (scenario is ScenarioOutline)
-                 return PreprocessExamples((ScenarioOutline)scenario);
+                return PreprocessExamples((ScenarioOutline)scenario);
                 
-           
             if (scenario is Scenario)
                 return new[]{ (Scenario)scenario};
+
             throw new ArgumentOutOfRangeException("");
         }
 
@@ -29,7 +23,6 @@ namespace StorEvil.InPlace
             foreach (var example in outline.Examples)
             {
                 yield return new Scenario(scenario.Name, PreprocessLines(scenario.Body, outline.FieldNames, example));
-                
             }
         }
 

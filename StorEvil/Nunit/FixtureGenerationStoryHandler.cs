@@ -1,7 +1,6 @@
 using StorEvil.Core;
-using StorEvil.Nunit;
 
-namespace StorEvil
+namespace StorEvil.Nunit
 {
     public class FixtureGenerationStoryHandler : IStoryHandler
     {

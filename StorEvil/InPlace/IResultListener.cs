@@ -19,41 +19,36 @@ namespace StorEvil.InPlace
     {
         public void StoryStarting(Story story)
         {
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("\r\n STORY: \r\n" + story.Summary);
-            Console.ResetColor();
+            ColorWrite(ConsoleColor.White, "\r\n" + "\r\nSTORY: \r\n" + story.Summary);
         }
 
         public void ScenarioStarting(Scenario scenario)
         {
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("\r\n" + scenario.Name);
-            Console.ResetColor();
+            ColorWrite(ConsoleColor.White, "\r\n" + scenario.Name);
         }
 
         public void ScenarioFailed(Scenario scenario, string successPart, string failedPart, string message)
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write(successPart);
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write(" " + failedPart + "\r\nFAILED\r\n" );
-            Console.WriteLine(message + "\r\n");
-            Console.ResetColor();
+            ColorWrite(ConsoleColor.Yellow, successPart);
+            ColorWrite(ConsoleColor.Red, " " + failedPart + "\r\nFAILED\r\n", message + "\r\n");
         }
 
         public void CouldNotInterpret(Scenario scenario, string line)
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine(line + " -- Could not interpret");
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine(new ImplementationHelper().Suggest(line));
-            Console.ResetColor();
+            ColorWrite(ConsoleColor.Yellow, line + " -- Could not interpret");
+            ColorWrite(ConsoleColor.Gray, new ImplementationHelper().Suggest(line));
         }
 
         public void Success(Scenario scenario, string line)
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine(line);
+            ColorWrite(ConsoleColor.Green, line);
+        }
+
+        private static void ColorWrite(ConsoleColor color, params string[] lines)
+        {
+            Console.ForegroundColor = color;
+            foreach (var s in lines)
+                Console.WriteLine(s);
             Console.ResetColor();
         }
     }
