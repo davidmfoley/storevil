@@ -1,7 +1,9 @@
+using System;
 using System.IO;
 using Funq;
 using StorEvil.Context;
 using StorEvil.Core;
+using StorEvil.Core.Configuration;
 using StorEvil.InPlace;
 
 namespace StorEvil.Console
@@ -9,7 +11,7 @@ namespace StorEvil.Console
     public class ArgParser
     {
         private readonly IConfigSource _configSource;
-        private readonly ConfigSettings _settings;
+        private ConfigSettings _settings;
         private readonly Container _container;
         private const string StandardHelpText = @"
 StorEvil is a natural language BDD framework and runner.
@@ -26,15 +28,14 @@ usage:
         public ArgParser(IConfigSource source)
         {
             _configSource = source;
-            _settings = source.GetConfig(Directory.GetCurrentDirectory());
-            _settings.StoryBasePath = Directory.GetCurrentDirectory();
+          
             _container = new Container();
         }
 
         public IStorEvilJob ParseArguments(string[] args)
         {
+            ParseCommonConfigSettings(_container, args);
             SetupCommonComponents(_container);
-
             SetupCustomComponents(_container, args);
 
             return _container.Resolve<IStorEvilJob>();
@@ -42,8 +43,9 @@ usage:
 
         private void SetupCommonComponents(Container container)
         {
-            container.Register(_settings);
+            
 
+           
             container.EasyRegister<IStoryParser, StoryParser>();
             container.EasyRegister<IStoryProvider, FilesystemStoryProvider>();
             container.EasyRegister<IResultListener, ConsoleResultListener>();
@@ -59,6 +61,34 @@ usage:
 
             container.Register<IStoryToContextMapper>(mapper);
         }
+
+        private void ParseCommonConfigSettings(Container container, string[] args)
+        {
+            SwitchParser<ConfigSettings> switchParser = GetSwitchParser();
+
+            _settings = _configSource.GetConfig(Directory.GetCurrentDirectory());
+            
+            _settings.StoryBasePath = Directory.GetCurrentDirectory();
+
+            switchParser.Parse(args, _settings);
+
+            container.Register(_settings);
+        }
+
+        private SwitchParser<ConfigSettings> GetSwitchParser()
+        {
+            var switchParser = new SwitchParser<ConfigSettings>();
+
+            switchParser
+                .AddSwitch("--story-path", "-p")
+                .SetsField(s => s.StoryBasePath)
+                .WithDescription("Sets the base path used when searching for story files.\r\nIf not set, the current working directory is assumed.");
+
+            switchParser.AddSwitch("--assemblies", "-a")
+                .SetsField(s => s.AssemblyLocations)
+                .WithDescription("Sets the location (relative to current path) of the context assemblies used to parse the stories.");
+            return switchParser;
+        }   
 
         private void SetupCustomComponents(Container container, string[] args)
         {
@@ -81,7 +111,7 @@ usage:
         {
             if (args.Length <= 1)
             {
-                container.Register<IStorEvilJob>(new DisplayHelpJob(StandardHelpText));
+                container.Register<IStorEvilJob>(new DisplayHelpJob(GetStandardHelpText()));
                 return;
             }
             var helpJobFactory = GetJobFactory(args[1]);
@@ -89,7 +119,13 @@ usage:
             if (helpJobFactory != null)
                 container.Register<IStorEvilJob>(new DisplayHelpJob("Usage for '" + args[1]+ "': \r\n " + helpJobFactory.GetUsage()));
             else
-                container.Register<IStorEvilJob>(new DisplayHelpJob(StandardHelpText));
+                container.Register<IStorEvilJob>(new DisplayHelpJob(GetStandardHelpText()));
+        }
+
+        private string GetStandardHelpText()
+        {
+
+            return StandardHelpText + "\r\n\r\nGeneral switches:\r\n" + GetSwitchParser().GetUsage()    ;
         }
 
         private IJobFactory GetJobFactory(string command)

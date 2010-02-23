@@ -23,6 +23,8 @@ namespace StorEvil.Console
                 .AddSwitch("--destination", "-d")
                 .SetsField(x => x.TargetFilePath)
                 .WithDescription("path to the file that will hold the generated test fixture code");
+
+
         }
     }
 }

@@ -78,7 +78,7 @@ namespace StorEvil.Argument_parsing
                                               "foobar", Assembly.GetExecutingAssembly().Location,
                                               Directory.GetCurrentDirectory(), Path.GetTempFileName()
                                           });
-            result.ShouldBeOfType<DisplayUsageJob>();
+            result.ShouldBeOfType<DisplayHelpJob>();
             result.ShouldNotBeNull();
         }
     }
