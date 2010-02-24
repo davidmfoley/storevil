@@ -22,8 +22,6 @@ namespace StorEvil.Resharper
             return null;
         }
 
-        
-
         public RemoteTaskRunnerInfo GetTaskRunnerInfo()
         {
             return new RemoteTaskRunnerInfo(typeof (StorEvilTaskRunner));
@@ -118,7 +116,6 @@ namespace StorEvil.Resharper
 
         public void ExploreExternal(UnitTestElementConsumer consumer)
         {
-
         }
 
         // Provides Reflection-like metadata of a physical assembly, called at startup (if the
@@ -126,13 +123,14 @@ namespace StorEvil.Resharper
         // the tests that will actually get executed, as opposed to ExploreFile, which is about
         // identifying tests as they are being written, and finding their location in the source
         // code.
-          public void ExploreAssembly(IMetadataAssembly assembly, IProject project, UnitTestElementConsumer consumer)
+        public void ExploreAssembly(IMetadataAssembly assembly, IProject project, UnitTestElementConsumer consumer)
         {
             var parent = new StorEvilUnitTestElement(this, null, project, "AssemblyFoo");
 
             consumer(parent);
             consumer(new StorEvilUnitTestElement(this, parent, project, "Bar1"));
             consumer(new StorEvilUnitTestElement(this, parent, project, "Bar2"));
+ 
         }
 
         // Called from a refresh of the Unit Test Explorer

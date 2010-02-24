@@ -9,13 +9,15 @@ namespace StorEvil.Resharper
     public class StorEvilUnitTestElement : UnitTestElement
     {
         private readonly IProject _project;
-        private string _title;
+        private readonly string _title;
         private readonly UnitTestNamespace _namespace = new UnitTestNamespace("namespace.foo");
 
         public StorEvilUnitTestElement(StorEvilTestProvider provider, UnitTestElement parent, IProject project,  string title) : base(provider, parent)
         {
             _project = project;
             _title = title;
+
+            _namespace = new UnitTestNamespace( project.Name + ".namespace");
         }
 
         public override IProject GetProject()
