@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorEvil.Core", "StorEvil\StorEvil.Core.csproj", "{B86235CA-045F-4222-997C-A65E966C6F9B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorEvil", "StorEvil.Console\StorEvil.csproj", "{FBFE96FF-9D88-48DB-80F2-C79840BFDFA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pizza.TestContext", "Pizza.TestContext\Pizza.TestContext.csproj", "{8EA2E836-2C94-4013-8D47-64F367AC9580}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FBFE96FF-9D88-48DB-80F2-C79840BFDFA2} = {FBFE96FF-9D88-48DB-80F2-C79840BFDFA2}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E2466D60-852A-45F5-A5AB-2EE1CE77B606}"
+	ProjectSection(SolutionItems) = preProject
+		run_pizza_specs.bat = run_pizza_specs.bat
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pizza.Specifications", "Pizza.Specifications\Pizza.Specifications.csproj", "{436259FA-036B-466E-A670-F91507C34D0A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pizza", "Pizza", "{82706E3A-101E-4C9D-94C5-84C718288AC0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{E270F1DD-A1CB-45D7-9AB3-3F250DE22509}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B86235CA-045F-4222-997C-A65E966C6F9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B86235CA-045F-4222-997C-A65E966C6F9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B86235CA-045F-4222-997C-A65E966C6F9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B86235CA-045F-4222-997C-A65E966C6F9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBFE96FF-9D88-48DB-80F2-C79840BFDFA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBFE96FF-9D88-48DB-80F2-C79840BFDFA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBFE96FF-9D88-48DB-80F2-C79840BFDFA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBFE96FF-9D88-48DB-80F2-C79840BFDFA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EA2E836-2C94-4013-8D47-64F367AC9580}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EA2E836-2C94-4013-8D47-64F367AC9580}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EA2E836-2C94-4013-8D47-64F367AC9580}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EA2E836-2C94-4013-8D47-64F367AC9580}.Release|Any CPU.Build.0 = Release|Any CPU
+		{436259FA-036B-466E-A670-F91507C34D0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{436259FA-036B-466E-A670-F91507C34D0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{436259FA-036B-466E-A670-F91507C34D0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{436259FA-036B-466E-A670-F91507C34D0A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{436259FA-036B-466E-A670-F91507C34D0A} = {82706E3A-101E-4C9D-94C5-84C718288AC0}
+		{8EA2E836-2C94-4013-8D47-64F367AC9580} = {82706E3A-101E-4C9D-94C5-84C718288AC0}
+		{E2466D60-852A-45F5-A5AB-2EE1CE77B606} = {82706E3A-101E-4C9D-94C5-84C718288AC0}
+		{FBFE96FF-9D88-48DB-80F2-C79840BFDFA2} = {E270F1DD-A1CB-45D7-9AB3-3F250DE22509}
+		{B86235CA-045F-4222-997C-A65E966C6F9B} = {E270F1DD-A1CB-45D7-9AB3-3F250DE22509}
+	EndGlobalSection
+EndGlobal

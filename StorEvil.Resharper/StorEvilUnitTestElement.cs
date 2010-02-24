@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
@@ -8,17 +9,19 @@ namespace StorEvil.Resharper
 {
     public class StorEvilUnitTestElement : UnitTestElement
     {
+        private readonly IProject _project;
         private string _title;
-        private UnitTestNamespace _namespace = new UnitTestNamespace("");
+        private readonly UnitTestNamespace _namespace = new UnitTestNamespace("");
 
-        public StorEvilUnitTestElement(StorEvilTestProvider provider, UnitTestElement parent) : base(provider, parent)
+        public StorEvilUnitTestElement(StorEvilTestProvider provider, UnitTestElement parent, IProject project,  string title) : base(provider, parent)
         {
-           
+            _project = project;
+            _title = title;
         }
 
         public override IProject GetProject()
         {
-            return null;
+            return _project;
         }
 
         public override string GetTitle()

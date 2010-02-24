@@ -24,12 +24,11 @@ namespace StorEvil.Resharper
 
         public void ExploreExternal(UnitTestElementConsumer consumer)
         {
-            
         }
 
         public RemoteTaskRunnerInfo GetTaskRunnerInfo()
         {
-            return new RemoteTaskRunnerInfo(typeof(StorEvilTaskRunner));
+            return new RemoteTaskRunnerInfo(typeof (StorEvilTaskRunner));
         }
 
         public string Serialize(UnitTestElement element)
@@ -79,7 +78,6 @@ namespace StorEvil.Resharper
         // I don't know what you can do with UnitTestSession
         public void ProfferConfiguration(TaskExecutorConfiguration configuration, UnitTestSession session)
         {
-         
         }
 
         public string ID
@@ -104,7 +102,6 @@ namespace StorEvil.Resharper
 
         public void Present(UnitTestElement element, IPresentableItem item, TreeModelNode node, PresentationState state)
         {
-           
         }
 
         public bool IsUnitTestStuff(IDeclaredElement element)
@@ -119,7 +116,6 @@ namespace StorEvil.Resharper
 
         public void ExploreFile(IFile psiFile, UnitTestElementLocationConsumer consumer, CheckForInterrupt interrupted)
         {
-            
         }
 
         // Provides Reflection-like metadata of a physical assembly, called at startup (if the
@@ -141,14 +137,17 @@ namespace StorEvil.Resharper
         // just explore all the types
         public void ExploreAssembly(IMetadataAssembly assembly, IProject project, UnitTestElementConsumer consumer)
         {
-            
+            consumer(new StorEvilUnitTestElement(this, null, project, "Foo"));
         }
-        
+
         // Called from a refresh of the Unit Test Explorer
         // Allows us to explore the solution, without going into the projects
         public void ExploreSolution(ISolution solution, UnitTestElementConsumer consumer)
         {
-            var element = new StorEvilUnitTestElement(this,  null);
+            var projects = solution.GetAllProjects();
+            var asList = new List<IProject>(projects);
+
+            var element = new StorEvilUnitTestElement(this, null, asList[0], "Bar");
             consumer(element);
         }
     }
