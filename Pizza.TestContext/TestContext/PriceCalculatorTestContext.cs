@@ -50,7 +50,7 @@ namespace Pizza.TestContext
         {
             _order.Add(new Slice());
         }
-
+         
         private static PizzaSize ParsePizzaSize(string size)
         {
             return (PizzaSize)Enum.Parse(typeof(PizzaSize), size, true);

@@ -99,6 +99,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StorEvilDeclaredElement.cs" />
     <Compile Include="StorEvilTaskRunner.cs" />
     <Compile Include="StorEvilTestProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

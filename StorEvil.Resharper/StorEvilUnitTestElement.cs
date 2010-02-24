@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
@@ -11,7 +10,7 @@ namespace StorEvil.Resharper
     {
         private readonly IProject _project;
         private string _title;
-        private readonly UnitTestNamespace _namespace = new UnitTestNamespace("");
+        private readonly UnitTestNamespace _namespace = new UnitTestNamespace("namespace.foo");
 
         public StorEvilUnitTestElement(StorEvilTestProvider provider, UnitTestElement parent, IProject project,  string title) : base(provider, parent)
         {
@@ -31,7 +30,7 @@ namespace StorEvil.Resharper
 
         public override string GetTypeClrName()
         {
-            return "";
+            return "TypeClrName";
         }
 
         public override UnitTestNamespace GetNamespace()
@@ -64,12 +63,12 @@ namespace StorEvil.Resharper
 
         public override IDeclaredElement GetDeclaredElement()
         {
-            return null;
+            return new StorEvilDeclaredElement();
         }
 
         public override string GetKind()
         {
-            return "";
+            return "Kind";
         }
     }
 }
