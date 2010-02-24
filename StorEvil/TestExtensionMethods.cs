@@ -15,7 +15,7 @@ namespace StorEvil
     /// blah should equal 12
     /// 
     /// will translate (if mapped) to:
-    /// _context.Blah().ShoulEqual("12");
+    /// _context.Blah().ShouldEqual("12");
     /// 
     /// note that the type conversion is handled here (also incomplete)
     /// need a better way to do this
