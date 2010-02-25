@@ -70,6 +70,7 @@
     <Compile Include="InPlace\When_scenario_maps_to_context_method_action_that_fails.cs" />
     <Compile Include="InPlace\When_scenario_maps_to_context_method_action_that_succeeds.cs" />
     <Compile Include="JobTests.cs" />
+    <Compile Include="MemberNameMatcherTests.cs" />
     <Compile Include="NUnit\NUnitFixtureGeneratorTests.cs" />
     <Compile Include="Config\parsing_config.cs" />
     <Compile Include="parsing_parameter_types.cs" />

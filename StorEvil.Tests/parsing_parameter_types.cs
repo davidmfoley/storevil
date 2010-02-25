@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using NUnit.Framework;
 using StorEvil.Core;
 
@@ -41,6 +38,20 @@ namespace StorEvil
             result.ShouldEqual(42m);
         }
 
+        private enum TestValues
+        {
+            Foo,
+            Bar,
+            FooBar
+        }
+
+        [Test]
+        public void should_convert_enum_to_correct_value()
+        {
+            var result = Converter.Convert("foo", typeof(TestValues));
+            result.ShouldBeOfType<TestValues>();
+            result.ShouldEqual(TestValues.Foo);
+        }
     }
 
     

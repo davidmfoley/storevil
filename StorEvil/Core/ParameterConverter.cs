@@ -29,7 +29,15 @@ namespace StorEvil.Core
             if (_typeConverters.ContainsKey(type))
                 return _typeConverters[type].ConvertParamValue(paramValue);
 
+            if (type.IsEnum)
+                return ParseEnumValue(paramValue, type);
+
             return paramValue;
+        }
+
+        private static object ParseEnumValue(string value, Type type)
+        {
+            return Enum.Parse(type, value, true);
         }
     }
 

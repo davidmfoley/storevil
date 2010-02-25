@@ -71,6 +71,8 @@ Then I should expect some result
             ((Scenario)Result.Scenarios.First()).Body.Any(x=>x.Contains("comment")).ShouldEqual(false);
         }
     }
+
+
     [TestFixture]
     public class parsing_multi_story_text
     {
@@ -182,6 +184,4 @@ Examples:
             return (Result.Scenarios.First() as ScenarioOutline);
         }
     }
-
-   
 }

@@ -49,7 +49,6 @@ namespace StorEvil
             Expect.ThisToThrow<ConfigurationException>(() => mapper.GetContextForStory(new Story("unknown type",
                                                                                                  "totally bogus",
                                                                                                  new List<IScenario>())));
-
         }
     }
 }

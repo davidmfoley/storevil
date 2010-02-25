@@ -44,4 +44,6 @@ namespace StorEvil.InPlace
             InPlaceRunnerTestContext.WhenSomeOtherActionCalled.ShouldEqual(true);
         }
     }
+
+    
 }
