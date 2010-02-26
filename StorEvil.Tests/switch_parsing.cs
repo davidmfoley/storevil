@@ -107,6 +107,30 @@ namespace StorEvil.Argument_parsing
         }
 
         [TestFixture]
+        public class Parsing_an_enum_switch : switch_parsing
+        {
+            [SetUp]
+            public void SetupContext()
+            {
+                Parser = new SwitchParser<TestConfigSettings>();
+
+                Parser.AddSwitch("--enum", "-e").SetsEnumField(x => x.EnumTest);
+            }
+
+            [Test]
+            public void sets_param_with_foo()
+            {
+                TestWithParams("-e", "foo").EnumTest.ShouldEqual(TestConfigEnum.Foo);
+            }
+
+            [Test]
+            public void sets_param_with_foobar()
+            {
+                TestWithParams("-e", "foobar").EnumTest.ShouldEqual(TestConfigEnum.FooBar);
+            }
+        }
+
+        [TestFixture]
         public class Parsing_a_switch_with_multiple_parameters : switch_parsing
         {
             private TestConfigSettings Result;
@@ -188,10 +212,15 @@ namespace StorEvil.Argument_parsing
             public string Bar;
             public string[] Baz;
 
+            public TestConfigEnum EnumTest;
+
             [CommandSwitch(Description = "Decorated property")]
             public string DecoratedProperty { get; set; }
         }
     }
 
-    
+    public enum TestConfigEnum
+    {
+        Foo, Bar, FooBar
+    }
 }

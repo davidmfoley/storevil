@@ -13,7 +13,7 @@ namespace StorEvil.Core.Configuration
         private readonly Func<string[], object> BoolParamTransform = (ignored => true);
         private readonly Func<string[], object> StringParamTransform = (values => values[0]);
         private readonly Func<string[], object> CollectionParamTransform = (values => values.Cast<string>().ToArray());
-    
+          
         public SwitchInfo(string[] names)
         {
             Names = names;
@@ -47,6 +47,24 @@ namespace StorEvil.Core.Configuration
         {
             SetFieldFromLambda(func, CollectionParamTransform);
             return this;
+        }
+
+        public void SetsEnumField<enumT>(Expression<Func<T, enumT>> func)
+        {
+            var t = typeof (enumT);
+
+            if (t.IsEnum)
+            {
+                SetFieldFromLambda(func, values =>
+                                             {
+                                                var foo = Enum.Parse(t, values[0], true);
+                                                 return foo;
+                                             });
+            }
+            else
+            {
+                throw new ApplicationException("Can't parse switch with type:" + t.Name);
+            }
         }
 
         public SwitchInfo<T> SetsField(MemberInfo member)
@@ -150,5 +168,7 @@ namespace StorEvil.Core.Configuration
         {
             throw new ArgumentException("Only simple property and field expressions are supported.");
         }
+
+       
     }
 }

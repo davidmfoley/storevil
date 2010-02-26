@@ -32,7 +32,10 @@ namespace StorEvil.InPlace
             {
                 _listener.ScenarioStarting(scenario);
 
-                ExecuteScenario(scenario, context.GetScenarioContext());
+                using (ScenarioContext scenarioContext = context.GetScenarioContext())
+                {
+                    ExecuteScenario(scenario, scenarioContext);
+                }
             }
         }
 

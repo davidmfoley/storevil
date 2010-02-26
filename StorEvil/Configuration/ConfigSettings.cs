@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -14,6 +15,14 @@ namespace StorEvil
         public IEnumerable<string> AssemblyLocations { get; set; }
 
         public string StoryBasePath { get; set; }
+
+        public string OutputFile  { get; set; }
+
+        public string OutputFileFormat { get; set; }
+
+        public bool Quiet { get; set; }
+
+        public string ConsoleMode { get; set; }
 
         public static ConfigSettings Default()
         {
