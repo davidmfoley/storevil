@@ -64,9 +64,11 @@
     <Compile Include="Configuration\SwitchInfo.cs" />
     <Compile Include="Configuration\switchParser.cs" />
     <Compile Include="ContextAttribute.cs" />
+    <Compile Include="Context\ContextMemberNameSplitter.cs" />
     <Compile Include="Context\IMemberMatcher.cs" />
-    <Compile Include="Context\MemberNameMatcher.cs" />
+    <Compile Include="Context\PropertyOrFieldNameMatcher.cs" />
     <Compile Include="Context\ExactMatch.cs" />
+    <Compile Include="Context\MethodNameMatcher.cs" />
     <Compile Include="Context\ParameterValueFormatter.cs" />
     <Compile Include="Context\RegexMatcher.cs" />
     <Compile Include="Core\ExtensionMethodHandler.cs" />

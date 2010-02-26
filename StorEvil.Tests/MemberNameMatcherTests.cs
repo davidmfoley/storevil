@@ -13,14 +13,14 @@ namespace StorEvil
     }
 
     [TestFixture]
-    public class MemberNameMatcherTests
+    public class MethodNameMatcherTests
     {
         private NameMatch FoundMatch;
 
         [SetUp]
         public void SetupContext()
         {
-            var matcher = new MemberNameMatcher(GetMethod<EnumTestContext>("Test_parsing_of_enumValue"));
+            var matcher = new MethodNameMatcher(GetMethod<EnumTestContext>("Test_parsing_of_enumValue"));
             FoundMatch = matcher.GetMatch("Test parsing of foo");
         }
         [Test]
@@ -35,7 +35,7 @@ namespace StorEvil
             FoundMatch.ParamValues["enumValue"].ShouldEqual(MatchingTest.Foo);
         }
 
-        private MemberInfo GetMethod<T>(string name)
+        private static MethodInfo GetMethod<T>(string name)
         {
             return typeof(T).GetMethod(name);
         }

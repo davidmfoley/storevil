@@ -25,14 +25,32 @@ namespace StorEvil.Core
                 AddMatchers(member);
 
             // extension methods
+            AddMatchersForExtensionMethods(extensionMethodHandler);
+        }
+
+        private void AddMatchersForExtensionMethods(ExtensionMethodHandler extensionMethodHandler)
+        {
             foreach (var methodInfo in extensionMethodHandler.GetExtensionMethodsFor(_type))
-                _memberMatchers.Add(new MemberNameMatcher(methodInfo));
+                _memberMatchers.Add(new MethodNameMatcher(methodInfo));
         }
 
         private void AddMatchers(MemberInfo member)
         {
-            _memberMatchers.Add(new MemberNameMatcher(member));
+            _memberMatchers.Add(GetMemberMatcher(member));
 
+            AddRegexMatchersIfAttributePresent(member);
+        }
+
+        private IMemberMatcher GetMemberMatcher(MemberInfo member)
+        {
+            if (member is MethodInfo)
+                return new MethodNameMatcher((MethodInfo)member);
+            else
+                return new PropertyOrFieldNameMatcher(member);
+        }
+
+        private void AddRegexMatchersIfAttributePresent(MemberInfo member)
+        {
             var regexAttrs = member.GetCustomAttributes(typeof (ContextRegexAttribute), true);
             foreach (var regexAttr in regexAttrs.Cast<ContextRegexAttribute>())
                 _memberMatchers.Add(new RegexMatcher(regexAttr.Pattern, member));
