@@ -4,7 +4,6 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Funq;
 using NUnit.Framework;
-using StorEvil.Console;
 
 namespace StorEvil
 {
@@ -46,6 +45,8 @@ namespace StorEvil
             var bar = baz.Bar as Bar;
             Assert.AreSame(bar.Foo, testFoo);
         }
+
+     
     }
 
     public interface IFoo { }

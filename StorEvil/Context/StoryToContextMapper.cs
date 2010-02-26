@@ -11,7 +11,7 @@ namespace StorEvil.Context
     {
         private readonly List<Type> _contextTypes = new List<Type>();
 
-        public void AddContext<T>() where T : class, new()
+        public void AddContext<T>() where T : class
         {
             AddContext(typeof (T));
         }

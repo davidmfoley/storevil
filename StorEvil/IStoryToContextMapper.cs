@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Funq;
 using StorEvil.Core;
 
 namespace StorEvil
@@ -31,8 +33,11 @@ namespace StorEvil
 
     public class ScenarioContext : IDisposable
     {
+        private readonly Container _container = new Container();
+
         public ScenarioContext(IEnumerable<Type> implementingTypes)
         {
+            
             ImplementingTypes = implementingTypes;
         }
 
@@ -45,7 +50,7 @@ namespace StorEvil
             try
             {
                 if (!_cache.ContainsKey(type))
-                    _cache.Add(type, Activator.CreateInstance(type));
+                    _cache.Add(type, CreateContextObject(type));
 
                 return _cache[type];
             }
@@ -53,6 +58,19 @@ namespace StorEvil
             {
                 return null;
             }
+        }
+
+        private object CreateContextObject(Type type)
+        {
+            var constructor = type
+                .GetConstructors()
+                .OrderBy(x => x.GetParameters().Length)
+                .Where(ctor => !ctor.IsStatic)
+                .Last();
+
+            var parameters = constructor.GetParameters().Select(x=>GetContext(x.ParameterType));
+
+            return Activator.CreateInstance(type, parameters.ToArray(), null);
         }
 
         public void SetContext(object context)

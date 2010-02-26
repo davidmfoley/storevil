@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Funq;
 
-namespace StorEvil.Console
+namespace StorEvil
 {
     /// <summary>
     /// Funq helper for easy registration.
@@ -31,6 +31,7 @@ namespace StorEvil.Console
         {
             container.EasyRegister<implT, implT>(); 
         }
+
 
         private static readonly MethodInfo FunqContainerResolveMethod;
 

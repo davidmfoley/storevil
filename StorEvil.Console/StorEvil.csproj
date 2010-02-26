@@ -51,7 +51,6 @@
   <ItemGroup>
     <Compile Include="ArgParser.cs" />
     <Compile Include="DisplayHelpJob.cs" />
-    <Compile Include="FunqEasyRegistrationHelper.cs" />
     <Compile Include="IJobFactory.cs" />
     <Compile Include="InPlaceJobFactory.cs" />
     <Compile Include="InPlaceSettings.cs" />

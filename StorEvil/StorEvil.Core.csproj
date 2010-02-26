@@ -75,6 +75,7 @@
     <Compile Include="Core\InterpreterForTypeFactory.cs" />
     <Compile Include="Core\ParameterConverter.cs" />
     <Compile Include="Core\ScenarioInterpreterForType.cs" />
+    <Compile Include="FunqEasyRegistrationHelper.cs" />
     <Compile Include="Nunit\FixtureGenerationStoryHandler.cs" />
     <Compile Include="InPlace\ContextFactory.cs" />
     <Compile Include="InPlace\InPlaceRunner.cs" />
