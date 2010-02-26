@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Linq;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -51,15 +52,27 @@ namespace StorEvil
                                                                                                  new List<IScenario>())));
         }
 
-        [Test]
-        public void Context_classes_are_reused_within_one_scenario()
+       
+    }
+
+    [TestFixture]
+    public class Context_lifetime_rules
+    {
+        private StoryContext StoryContext;
+
+        [SetUp]
+        public void SetupContext()
         {
             var mapper = new StoryToContextMapper();
             mapper.AddContext<TestMappingContext>();
+            mapper.AddContext<DependentMappingContext>();
+            StoryContext = mapper.GetContextForStory(new Story("", "", new IScenario[] { }));
+        }
 
-            var storyContext = mapper.GetContextForStory(new Story("", "", new IScenario[] { }));
-
-            var context = storyContext.GetScenarioContext();
+        [Test]
+        public void Context_classes_are_reused_within_one_scenario()
+        {
+            var context = StoryContext.GetScenarioContext();
 
             var context1 = context.GetContext(typeof(TestMappingContext));
             var context2 = context.GetContext(typeof(TestMappingContext));
@@ -70,15 +83,36 @@ namespace StorEvil
         [Test]
         public void Context_classes_for_different_scenarios_are_different_objects()
         {
-            var mapper = new StoryToContextMapper();
-            mapper.AddContext<TestMappingContext>();
-
-            var storyContext = mapper.GetContextForStory(new Story("", "", new IScenario[] {}));
-
-            var context1 = storyContext.GetScenarioContext().GetContext(typeof (TestMappingContext));
-            var context2 = storyContext.GetScenarioContext().GetContext(typeof (TestMappingContext));
+            var context1 = StoryContext.GetScenarioContext().GetContext(typeof(TestMappingContext));
+            var context2 = StoryContext.GetScenarioContext().GetContext(typeof(TestMappingContext));
 
             Assert.That(context1, Is.Not.SameAs(context2));
         }
+
+        [Test]
+        public void Disposable_context_classes_are_disposed_at_the_end_of_the_scenario()
+        {
+            DisposableMappingContext d;
+            using (var context = StoryContext.GetScenarioContext())
+            {
+                d = (DisposableMappingContext)context.GetContext(typeof(DisposableMappingContext));
+            }
+            d.WasDisposed.ShouldEqual(true);
+        }
+    }
+
+    public class DisposableMappingContext : IDisposable
+    {
+        
+        public bool WasDisposed;
+
+        public void Dispose()
+        {
+            WasDisposed = true;
+        }
+    }
+
+    public class DependentMappingContext
+    {
     }
 }

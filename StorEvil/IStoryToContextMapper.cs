@@ -29,7 +29,7 @@ namespace StorEvil
         }
     }
 
-    public class ScenarioContext
+    public class ScenarioContext : IDisposable
     {
         public ScenarioContext(IEnumerable<Type> implementingTypes)
         {
@@ -58,6 +58,15 @@ namespace StorEvil
         public void SetContext(object context)
         {
             _cache[context.GetType()] = context;
+        }
+
+        public void Dispose()
+        {
+            foreach (var context in _cache.Values)
+            {
+                if (context is IDisposable)
+                    ((IDisposable)context).Dispose();
+            }
         }
     }
 }

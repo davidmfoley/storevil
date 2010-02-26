@@ -45,13 +45,6 @@ namespace StorEvil.InPlace
         private static object ConvertParameter(Type type, object val)
         {
             return Convert.ChangeType(val, type);
-
-            if (type == typeof(bool))
-            {
-                return val.ToString().ToLower() == "true";
-            }
-
-            return val;
         }
         private static bool IsExtensionMethod(MemberInfo info)
         {

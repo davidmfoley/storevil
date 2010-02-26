@@ -96,6 +96,20 @@ namespace StorEvil.NUnit
         }
 
         [Test]
+        public void Created_Test_Should_Dispose_Context()
+        {
+            // injecting parameters
+            var s = new Scenario("test", new[] { "foo" });
+            var story = new Story("test", "foo", new[] { s });
+
+            var context = new TestDisposableContext();
+
+            CreateAndCallTestMethods<TestDisposableContext>(story, context);
+
+            context.WasDisposed.ShouldEqual(true);
+        }
+
+        [Test]
         public void Created_Test_Should_Parse_DateTime()
         {
             // injecting parameters
@@ -184,6 +198,8 @@ namespace StorEvil.NUnit
             CreateAndCallTestMethods<TestContext>(story, context);
         }
 
+        
+
         private void CreateAndCallTestMethods<T>(Story story, object context)
         {
             var generator = GetNUnitGenerator();
@@ -200,13 +216,13 @@ namespace {0} {{
     
     [TestFixture]
     public class {1} {{
-        public TestContext _context;      
+        public {2} _context;      
         {3}
     }}
 }}";
             string formattedCode = string.Format(
-                format, GetType().Namespace, "TestClass", "TestContext",
-                code.Replace("new StorEvil.TestContext()", "_context"));
+                format, GetType().Namespace, "TestClass", typeof(T).FullName,
+                code.Replace("new " + typeof(T).FullName + "()", "_context"));
 
             Assembly a = TestHelper.CreateAssembly(formattedCode);
 
@@ -237,5 +253,17 @@ namespace {0} {{
             var fieldInfo = fixture.GetType().GetField("_context");
             fieldInfo.SetValue(fixture, context);
         }
+    }
+
+    public class TestDisposableContext : IDisposable
+    {
+        public void Dispose()
+        {
+            WasDisposed = true;
+        }
+
+        public void Foo() {}
+
+        public bool WasDisposed { get; set; }
     }
 }

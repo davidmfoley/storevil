@@ -2,7 +2,7 @@ using System;
 
 namespace StorEvil
 {
-    public class TestContext
+    public class TestContext : IDisposable
     {
         public TestSubContext SubContext
         {
@@ -43,6 +43,11 @@ namespace StorEvil
 
         public virtual void Then_Something_Should_Happen()
         {
+        }
+
+        public void Dispose()
+        {
+            
         }
     }
 

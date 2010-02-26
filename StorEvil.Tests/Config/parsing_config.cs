@@ -66,8 +66,6 @@ Extensions: .scenario, .foo, .bar";
     {
         protected ConfigSettings ParseConfig(string config)
         {
-            const string TestFileName = "C:\\foo\\bar\\storevil.config";
-
             var fakeFilesystem = MockRepository.GenerateStub<IFilesystem>();
             var parser = new ConfigParser(fakeFilesystem);
 

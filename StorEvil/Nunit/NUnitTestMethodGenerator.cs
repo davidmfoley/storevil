@@ -54,12 +54,23 @@ namespace StorEvil.Nunit
                 codeBuilder.AppendLine(functionLine.Code);
             }
 
+           AppendDisposeCalls(codeBuilder,contexts);
+
             string declarations = BuildContextDeclarations(contexts);
             var name = BuildMethodName(scenario);
 
             var body = BuildTestBody(codeBuilder, name, declarations);
 
             return new NUnitTest(name, body, contexts);
+        }
+
+        private void AppendDisposeCalls(StringBuilder codeBuilder, TestContextSet contexts)
+        {
+            foreach (var context in contexts.Where(c=> c.Type.GetInterfaces().Contains(typeof(IDisposable))))
+            {
+                codeBuilder.AppendLine("            " + context.Name + ".Dispose();");
+            }
+            
         }
 
         private IEnumerable<string> GenerateLineVariations(string line)
