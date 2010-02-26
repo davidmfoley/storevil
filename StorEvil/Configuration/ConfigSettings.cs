@@ -4,6 +4,9 @@ using System.IO;
 
 namespace StorEvil
 {
+
+    public enum ConsoleMode { Color, NoColor }
+
     public class ConfigSettings
     {
         public ConfigSettings()
@@ -22,7 +25,7 @@ namespace StorEvil
 
         public bool Quiet { get; set; }
 
-        public string ConsoleMode { get; set; }
+        public ConsoleMode ConsoleMode { get; set; }
 
         public static ConfigSettings Default()
         {

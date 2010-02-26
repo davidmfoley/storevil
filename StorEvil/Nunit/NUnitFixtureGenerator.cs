@@ -68,8 +68,8 @@ namespace {0} {{
                 }
             }
             var namespaces = contextSet.GroupBy(x => x.Type.Namespace).Select(y => y.Key);
-        
-            var usingStatements = namespaces.Select(x => string.Format("using {0};", x));
+
+            var usingStatements = new[] {""}; // namespaces.Select(x => string.Format("using {0};", x));
             var usings = string.Join("\r\n", usingStatements.ToArray());
 
             var writeStoryToConsole = "Console.WriteLine(@\"" + story.Summary.Replace("\"", "\"\"") + "\r\n"  + " \");";

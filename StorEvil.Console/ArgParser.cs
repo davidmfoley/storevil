@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
 using Funq;
 using StorEvil.Context;
@@ -42,11 +44,22 @@ usage:
             return _container.Resolve<IStorEvilJob>();
         }
 
+        private void ParseCommonConfigSettings(Container container, string[] args)
+        {
+            SwitchParser<ConfigSettings> switchParser = new CommonSwitchParser();
+
+            _settings = _configSource.GetConfig(Directory.GetCurrentDirectory());
+            _settings.StoryBasePath = Directory.GetCurrentDirectory();
+            switchParser.Parse(args, _settings);
+
+            container.Register(_settings);
+        }
+
         private void SetupCommonComponents(Container container)
         {
             container.EasyRegister<IStoryParser, StoryParser>();
             container.EasyRegister<IStoryProvider, FilesystemStoryProvider>();
-            container.EasyRegister<IResultListener, ConsoleResultListener>();
+            container.Register(GetResultListener());
             container.EasyRegister<IFilesystem, Filesystem>();
             container.EasyRegister<IScenarioPreprocessor, ScenarioPreprocessor>();
             container.EasyRegister<ScenarioInterpreter>();
@@ -54,6 +67,21 @@ usage:
             container.EasyRegister<ExtensionMethodHandler>();
 
             container.Register<IStoryToContextMapper>(GetStoryToContextMapper());
+        }
+
+        private IResultListener GetResultListener()
+        {
+            var compositeListener = new CompositeListener();
+
+            if (!_settings.Quiet)
+            {
+                compositeListener.AddListener(new ConsoleResultListener
+                                                  {
+                                                      ColorEnabled = _settings.ConsoleMode == ConsoleMode.Color
+                                                  });
+            }
+
+            return compositeListener;
         }
 
         private StoryToContextMapper GetStoryToContextMapper()
@@ -64,18 +92,7 @@ usage:
             return mapper;
         }
 
-        private void ParseCommonConfigSettings(Container container, string[] args)
-        {
-            SwitchParser<ConfigSettings> switchParser = new CommonSwitchParser();
-
-            _settings = _configSource.GetConfig(Directory.GetCurrentDirectory());
-
-            _settings.StoryBasePath = Directory.GetCurrentDirectory();
-
-            switchParser.Parse(args, _settings);
-
-            container.Register(_settings);
-        }
+      
 
         private void SetupCustomComponents(Container container, string[] args)
         {
@@ -129,6 +146,59 @@ usage:
         }
     }
 
+    internal class CompositeListener : IResultListener
+    {
+        private List<IResultListener> _listeners = new List<IResultListener>();
+
+        public void AddListener(IResultListener listener)
+        {
+            _listeners.Add(listener);
+        }
+
+        private void AllListeners(Action<IResultListener> action)
+        {
+            foreach (var listener in _listeners)
+            {
+                action(listener);
+            }
+        }
+
+        public void StoryStarting(Story story)
+        {
+            AllListeners(x => x.StoryStarting(story));
+        }
+
+        public void ScenarioStarting(Scenario scenario)
+        {
+            AllListeners(x => x.ScenarioStarting(scenario));
+        }
+
+        public void ScenarioFailed(Scenario scenario, string successPart, string failedPart, string message)
+        {
+            AllListeners(x => x.ScenarioFailed(scenario, successPart, failedPart, message));
+        }
+
+        public void CouldNotInterpret(Scenario scenario, string line)
+        {
+            AllListeners(x=>x.CouldNotInterpret(scenario, line));
+        }
+
+        public void Success(Scenario scenario, string line)
+        {
+            AllListeners(x=>x.Success(scenario, line));
+        }
+
+        public void ScenarioSucceeded(Scenario scenario)
+        {
+            AllListeners(x=>x.ScenarioSucceeded(scenario));
+        }
+
+        public void Finished()
+        {
+            AllListeners(x=>x.Finished());
+        }
+    }
+
     internal class CommonSwitchParser : SwitchParser<ConfigSettings>
     {
         public CommonSwitchParser()
@@ -145,19 +215,15 @@ usage:
 
             AddSwitch("--output-file", "-o")
                 .SetsField(s => s.OutputFile)
-                .WithDescription("If set, storevil will output to the named file.");
+                .WithDescription("NOT IMPLEMENTED YET! If set, storevil will output to the specified file.");
 
             AddSwitch("--output-file-format", "-f")
                 .SetsField(s => s.OutputFileFormat)
-                .WithDescription("Sets the format of output to the file specified by output-file");
+                .WithDescription("NOT IMPLEMENTED YET! Sets the format of output to the file specified by --output-file (text, xml, html)");
 
             AddSwitch("--console-mode", "-c")
-                .SetsField(s => s.ConsoleMode)
-                .WithDescription("Sets the format of output to the console");
-
-            AddSwitch("--quiet", "-q")
-                .SetsField(s => s.Quiet)
-                .WithDescription("If set, suppresses output to the console.");
+                .SetsEnumField(s => s.ConsoleMode)
+                .WithDescription("Sets the format of output to the console (color, nocolor, quiet)");
         }
     }
 }

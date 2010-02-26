@@ -32,7 +32,7 @@ namespace StorEvil.InPlace
             {
                 _listener.ScenarioStarting(scenario);
 
-                using (ScenarioContext scenarioContext = context.GetScenarioContext())
+                using (var scenarioContext = context.GetScenarioContext())
                 {
                     ExecuteScenario(scenario, scenarioContext);
                 }
@@ -42,12 +42,8 @@ namespace StorEvil.InPlace
         private IEnumerable<Scenario> GetScenarios(Story story)
         {
             foreach (var scenario in story.Scenarios)
-            {
                 foreach (var s in _preprocessor.Preprocess(scenario))
-                {
                     yield return s;
-                }
-            }
         }
 
         public void Finished()
@@ -61,21 +57,28 @@ namespace StorEvil.InPlace
 
             foreach (var line in scenario.Body)
             {
-                InvocationChain chain = GetMatchingChain(storyContext, line);
-
-                if (chain == null)
-                {
-                    _listener.CouldNotInterpret(scenario, line);
+                if (!ExecuteLine(scenario, storyContext, line))
                     return;
-                }
-
-                if (!ExecuteChain(scenario, storyContext, chain))
-                    return;
-
-                _listener.Success(scenario, line);
             }
 
             _listener.ScenarioSucceeded(scenario);
+        }
+
+        private bool ExecuteLine(Scenario scenario, ScenarioContext storyContext, string line)
+        {
+            InvocationChain chain = GetMatchingChain(storyContext, line);
+
+            if (chain == null)
+            {
+                _listener.CouldNotInterpret(scenario, line);
+                return false;
+            }
+
+            if (!ExecuteChain(scenario, storyContext, chain))
+                return false;
+
+            _listener.Success(scenario, line);
+            return true;
         }
 
         private bool ExecuteChain(Scenario scenario, ScenarioContext storyContext, InvocationChain chain)

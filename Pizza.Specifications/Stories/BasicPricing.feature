@@ -22,4 +22,4 @@ Grand Total should be $16.50
 
 Scenario: 
 When Customer orders a small pizza with 3 toppings	
-Grand Total should be $13.50	
+Grand Total should be $13.00	

@@ -55,13 +55,19 @@ namespace StorEvil.InPlace
             
         }
 
-        private static void ColorWrite(ConsoleColor color, params string[] lines)
+        private void ColorWrite(ConsoleColor color, params string[] lines)
         {
-            Console.ForegroundColor = color;
+            if (ColorEnabled)
+                Console.ForegroundColor = color;
+
             foreach (var s in lines)
                 Console.WriteLine(s);
-            Console.ResetColor();
+
+            if (ColorEnabled)
+                Console.ResetColor();
         }
+
+        public bool ColorEnabled { get; set; }
     }
 
     public class ImplementationHelper

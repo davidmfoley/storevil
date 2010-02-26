@@ -5,7 +5,6 @@ using StorEvil;
 
 
 namespace TestNamespace {
-    using Pizza.TestContext;
     
 
     [TestFixture]
@@ -64,7 +63,7 @@ namespace TestNamespace {
 
 
 namespace TestNamespace {
-    using Pizza.TestContext;
+   
     
 
     [TestFixture]

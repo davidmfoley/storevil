@@ -49,7 +49,7 @@ namespace StorEvil.Core.Configuration
             return this;
         }
 
-        public void SetsEnumField<enumT>(Expression<Func<T, enumT>> func)
+        public SwitchInfo<T> SetsEnumField<enumT>(Expression<Func<T, enumT>> func)
         {
             var t = typeof (enumT);
 
@@ -65,6 +65,8 @@ namespace StorEvil.Core.Configuration
             {
                 throw new ApplicationException("Can't parse switch with type:" + t.Name);
             }
+
+            return this;
         }
 
         public SwitchInfo<T> SetsField(MemberInfo member)
