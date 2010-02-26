@@ -66,6 +66,7 @@
     <Compile Include="InPlace\executing_outlines_with_example_tables.cs" />
     <Compile Include="InPlace\InPlaceRunnerSpec.cs" />
     <Compile Include="InPlace\mapping_by_regex_to_context_method.cs" />
+    <Compile Include="InPlace\When_finished.cs" />
     <Compile Include="InPlace\When_scenario_does_not_map.cs" />
     <Compile Include="InPlace\When_scenario_maps_to_context_method_action_that_fails.cs" />
     <Compile Include="InPlace\When_scenario_maps_to_context_method_action_that_succeeds.cs" />

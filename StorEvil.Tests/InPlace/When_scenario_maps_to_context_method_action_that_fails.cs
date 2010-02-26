@@ -23,6 +23,12 @@ namespace StorEvil.InPlace
         {
             ResultListener.AssertWasCalled(x => x.ScenarioFailed(Any<Scenario>(), Any<string>(), Any<string>(), Any<string>()));
         }
+
+        [Test]
+        public void Does_not_Notify_listener_of_scenario_success()
+        {
+            ResultListener.AssertWasNotCalled(x => x.ScenarioSucceeded(TestScenario));
+        }
     }
 
     [TestFixture]

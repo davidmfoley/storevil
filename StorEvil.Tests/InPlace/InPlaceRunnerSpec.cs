@@ -9,13 +9,15 @@ namespace StorEvil.InPlace
     {
         protected IResultListener ResultListener;
         protected StoryContext Context;
+        protected InPlaceRunner Runner;
 
         protected void RunStory(Story story)
         {
             ResultListener = MockRepository.GenerateStub<IResultListener>();
 
             Context = new StoryContext(typeof(T));
-            new InPlaceRunner(ResultListener, new ScenarioPreprocessor()).HandleStory(story, Context);
+            Runner = new InPlaceRunner(ResultListener, new ScenarioPreprocessor());
+            Runner.HandleStory(story, Context);
         }
 
         protected argT Any<argT>()
@@ -62,8 +64,6 @@ namespace StorEvil.InPlace
             throw new Exception("test exception");
         }
     }
-
-
 
     public class InPlaceTestSubContext
     {

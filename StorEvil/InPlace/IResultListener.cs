@@ -12,7 +12,8 @@ namespace StorEvil.InPlace
         void ScenarioFailed(Scenario scenario, string successPart, string failedPart, string message);
         void CouldNotInterpret(Scenario scenario, string line);
         void Success(Scenario scenario, string line);
-
+        void ScenarioSucceeded(Scenario scenario);
+        void Finished();
     }
 
     public class ConsoleResultListener : IResultListener
@@ -42,6 +43,16 @@ namespace StorEvil.InPlace
         public void Success(Scenario scenario, string line)
         {
             ColorWrite(ConsoleColor.Green, line);
+        }
+
+        public void ScenarioSucceeded(Scenario scenario)
+        {
+            
+        }
+
+        public void Finished()
+        {
+            
         }
 
         private static void ColorWrite(ConsoleColor color, params string[] lines)

@@ -19,9 +19,15 @@ namespace StorEvil.InPlace
         }
 
         [Test]
-        public void Notifies_listener_of_success()
+        public void Notifies_listener_of_line_success()
         {
             ResultListener.AssertWasCalled(x => x.Success(TestScenario, ScenarioText));
+        }
+
+        [Test]
+        public void Notifies_listener_of_scenario_success()
+        {
+            ResultListener.AssertWasCalled(x => x.ScenarioSucceeded(TestScenario));
         }
 
         [Test]

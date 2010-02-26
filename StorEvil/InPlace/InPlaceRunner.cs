@@ -14,6 +14,8 @@ namespace StorEvil.InPlace
         private readonly MemberInvoker _memberInvoker;
 
         private readonly IScenarioPreprocessor _preprocessor;
+        private string _lastSignificantFirstWord;
+        private object _lastResult;
 
         public InPlaceRunner(IResultListener listener, IScenarioPreprocessor preprocessor)
         {
@@ -47,73 +49,91 @@ namespace StorEvil.InPlace
 
         public void Finished()
         {
-            
+            _listener.Finished();
         }
 
         private void ExecuteScenario(Scenario scenario, ScenarioContext storyContext)
         {
-            string lastSignificantFirstWord = null;
+            _lastSignificantFirstWord = null;
+
             foreach (var line in scenario.Body)
             {
-
-                var chain = _scenarioInterpreter.GetChain(storyContext, line);
+                InvocationChain chain = GetMatchingChain(storyContext, line);
 
                 if (chain == null)
                 {
-                    if ((line.FirstWord().ToLower() == "and"))
-                        chain = _scenarioInterpreter.GetChain(storyContext, line.ReplaceFirstWord(lastSignificantFirstWord));
-
-                    if (chain == null)
-                    {
-                        _listener.CouldNotInterpret(scenario, line);
-                        return;
-                    }
+                    _listener.CouldNotInterpret(scenario, line);
+                    return;
                 }
 
-                if (!(line.FirstWord().ToLower() == "and"))
-                    lastSignificantFirstWord = line.FirstWord();
+                if (!ExecuteChain(scenario, storyContext, chain))
+                    return;
 
-                object lastResult = null;
-                string successPart = "";
-                foreach (var invocation in chain.Invocations)
-                {
-                    MemberInfo info = invocation.MemberInfo;
-                    var declaringType = info.DeclaringType;
-
-                    var context = lastResult ?? storyContext.GetContext(declaringType);
-
-                    try
-                    {
-                        lastResult = _memberInvoker.InvokeMember(info, invocation.ParamValues, context);
-                    }
-                    catch (Exception ex)
-                    {
-                        _listener.ScenarioFailed(scenario, successPart.Trim(), invocation.MatchedText, GetExceptionMessage(ex));
-                        return;
-                    }
-                    successPart += invocation.MatchedText + " ";
-                }
-                // for now
                 _listener.Success(scenario, line);
             }
+
+            _listener.ScenarioSucceeded(scenario);
         }
 
-        private string GetExceptionMessage(Exception exception)
+        private bool ExecuteChain(Scenario scenario, ScenarioContext storyContext, InvocationChain chain)
         {
-            Exception ex;
+            string successPart = "";
+            _lastResult = null;
+            foreach (var invocation in chain.Invocations)
+            {
+                try
+                {
+                    InvokeContextMember(storyContext, invocation);
+                    successPart += invocation.MatchedText + " ";
+                }
+                catch (Exception ex)
+                {
+                    _listener.ScenarioFailed(scenario, successPart.Trim(), invocation.MatchedText,
+                                             GetExceptionMessage(ex));
+                    return false;
+                }
+            }
 
-            if (exception.InnerException != null)
+            return true;
+        }
 
-                ex = exception.InnerException;
-            else
-                ex = exception;
+        private void InvokeContextMember(ScenarioContext storyContext, Invocation invocation)
+        {
+            MemberInfo info = invocation.MemberInfo;
+            var declaringType = info.DeclaringType;
+            var context = _lastResult ?? storyContext.GetContext(declaringType);
+            _lastResult = _memberInvoker.InvokeMember(info, invocation.ParamValues, context);
+        }
 
-            var msg = ex.Message;
+        private InvocationChain GetMatchingChain(ScenarioContext storyContext, string line)
+        {
+            var chain = _scenarioInterpreter.GetChain(storyContext, line);
 
-            if (!(ex is AssertionException))
-                msg += "\r\n" + ex.ToString();  
-            return msg;
+            bool firstWordIsAnd = (line.FirstWord().ToLower() == "and");
 
+            bool canReplaceFirstWord = (chain == null && firstWordIsAnd && _lastSignificantFirstWord != null);
+
+            if (canReplaceFirstWord)
+                chain = ReplaceFirstWithLastSignificantWord(storyContext, line);
+
+            if (chain != null && !firstWordIsAnd)
+                _lastSignificantFirstWord = line.FirstWord();
+
+            return chain;
+        }
+
+        private InvocationChain ReplaceFirstWithLastSignificantWord(ScenarioContext storyContext, string line)
+        {
+            return _scenarioInterpreter.GetChain(storyContext, line.ReplaceFirstWord(_lastSignificantFirstWord));
+        }
+
+        private static string GetExceptionMessage(Exception exception)
+        {
+            var ex = exception.InnerException ?? exception;
+
+            var noStackTrace = ex is AssertionException;
+
+            return noStackTrace ? ex.Message : ex.Message + "\r\n" + ex;
         }
     }
 }

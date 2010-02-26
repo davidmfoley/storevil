@@ -13,8 +13,7 @@ namespace StorEvil.Core
 
         public string Summary { get; private set; }
 
-
-        public Story(string id,  string summary, IEnumerable<IScenario> scenarios)
+        public Story(string id, string summary, IEnumerable<IScenario> scenarios)
         {
             Summary = summary;
             Id = id;
