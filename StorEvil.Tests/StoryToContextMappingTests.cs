@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using System.Collections.Generic;
+using NUnit.Framework.SyntaxHelpers;
 using StorEvil.Context;
 using StorEvil.Core;
 
@@ -32,7 +33,6 @@ namespace StorEvil
         [Test]
         public void Should_Register_Assembly_Types()
         {
-
             var mapper = new StoryToContextMapper();
             mapper.AddAssembly(GetType().Assembly);
 
@@ -49,6 +49,36 @@ namespace StorEvil
             Expect.ThisToThrow<ConfigurationException>(() => mapper.GetContextForStory(new Story("unknown type",
                                                                                                  "totally bogus",
                                                                                                  new List<IScenario>())));
+        }
+
+        [Test]
+        public void Context_classes_are_reused_within_one_scenario()
+        {
+            var mapper = new StoryToContextMapper();
+            mapper.AddContext<TestMappingContext>();
+
+            var storyContext = mapper.GetContextForStory(new Story("", "", new IScenario[] { }));
+
+            var context = storyContext.GetScenarioContext();
+
+            var context1 = context.GetContext(typeof(TestMappingContext));
+            var context2 = context.GetContext(typeof(TestMappingContext));
+
+            Assert.That(context1, Is.SameAs(context2));
+        }
+
+        [Test]
+        public void Context_classes_for_different_scenarios_are_different_objects()
+        {
+            var mapper = new StoryToContextMapper();
+            mapper.AddContext<TestMappingContext>();
+
+            var storyContext = mapper.GetContextForStory(new Story("", "", new IScenario[] {}));
+
+            var context1 = storyContext.GetScenarioContext().GetContext(typeof (TestMappingContext));
+            var context2 = storyContext.GetScenarioContext().GetContext(typeof (TestMappingContext));
+
+            Assert.That(context1, Is.Not.SameAs(context2));
         }
     }
 }

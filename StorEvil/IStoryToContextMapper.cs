@@ -21,15 +21,11 @@ namespace StorEvil
             ImplementingTypes = types;
         }
 
-        public IEnumerable<Type> ImplementingTypes {get;set;}
-
-      
-
-       
+        public IEnumerable<Type> ImplementingTypes { get; set; }
 
         public ScenarioContext GetScenarioContext()
         {
-            return  new ScenarioContext(ImplementingTypes);
+            return new ScenarioContext(ImplementingTypes);
         }
     }
 
@@ -58,6 +54,7 @@ namespace StorEvil
                 return null;
             }
         }
+
         public void SetContext(object context)
         {
             _cache[context.GetType()] = context;
