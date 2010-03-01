@@ -9,7 +9,7 @@ using StorEvil.Core;
 
 namespace StorEvil
 {
-    [Context("context test")]
+    [StorEvil.Context]
     public class TestMappingContext
     {
     }
@@ -127,6 +127,8 @@ namespace StorEvil
             
             Assert.That(dependent.DependsOn, Is.SameAs(dependedOn));
         }
+
+        
     }
 
     public class DisposableMappingContext : IDisposable

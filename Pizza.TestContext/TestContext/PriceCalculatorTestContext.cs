@@ -5,7 +5,7 @@ using StorEvil;
 
 namespace Pizza.TestContext
 {
-    [Context("Basic Pricing", "Discounts")]
+    [StorEvil.Context]
     public class PriceCalculatorTestContext
     {
         readonly Order _order = new Order();

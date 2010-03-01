@@ -22,6 +22,11 @@ namespace StorEvil.Context
             private set;
         }
 
+        public IEnumerable<NameMatch> GetMatches(string line)
+        {
+            return new[] { GetMatch(line) };  
+        }
+
         public NameMatch GetMatch(string line)
         {
             var result = _regex.Match(line);
@@ -46,9 +51,8 @@ namespace StorEvil.Context
 
             int i = 1;
             foreach (var parameter in methodInfo.GetParameters())
-            {
                 parameters.Add(parameter.Name, result.Groups[i++]);
-            }
+
             return parameters;
         }
 

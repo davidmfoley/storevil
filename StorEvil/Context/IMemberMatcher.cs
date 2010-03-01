@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace StorEvil.Context
@@ -7,6 +8,7 @@ namespace StorEvil.Context
     {
         NameMatch GetMatch(string line);
         MemberInfo MemberInfo { get; }
+        IEnumerable<NameMatch> GetMatches(string line);
     }
 
     public class ContextRegexAttribute : Attribute

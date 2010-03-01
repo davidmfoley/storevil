@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -13,6 +14,10 @@ namespace StorEvil.Context
     {
         private readonly List<WordFilter> _wordFilters = new List<WordFilter>();
         public MemberInfo MemberInfo { get; set; }
+        public IEnumerable<NameMatch> GetMatches(string line)
+        {
+            return new[] { GetMatch(line) };  
+        }
 
         private readonly ContextMemberNameSplitter _nameSplitter = new ContextMemberNameSplitter();
         private readonly ScenarioLineParser _scenarioLineParser = new ScenarioLineParser();

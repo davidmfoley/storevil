@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -25,6 +26,11 @@ namespace StorEvil.Context
         public MemberInfo MemberInfo
         {
             get { return _methodInfo; }
+        }
+
+        public IEnumerable<NameMatch> GetMatches(string line)
+        {
+            return new[] {GetMatch(line)};            
         }
 
         private void BuildMethodWordFilters()

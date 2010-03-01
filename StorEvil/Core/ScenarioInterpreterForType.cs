@@ -61,13 +61,14 @@ namespace StorEvil.Core
             var partialMatches = new List<PartialMatch>();
             foreach (var member in _memberMatchers)
             {
-                var currentMatch = member.GetMatch(line);
+                foreach (var currentMatch in member.GetMatches(line))
+                {
+                    if (currentMatch is ExactMatch)
+                        return new InvocationChain { Invocations = new[] { BuildInvocation(member.MemberInfo, currentMatch) } };
 
-                if (currentMatch is ExactMatch)
-                    return new InvocationChain {Invocations = new[] {BuildInvocation(member.MemberInfo, currentMatch)}};
-
-                if (currentMatch is PartialMatch)
-                    partialMatches.Add((PartialMatch) currentMatch);
+                    if (currentMatch is PartialMatch)
+                        partialMatches.Add((PartialMatch)currentMatch);
+                }
             }
 
             return GetPartialMatchChain(line, partialMatches);

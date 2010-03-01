@@ -31,11 +31,13 @@ namespace StorEvil.InPlace
         public static bool WhenSomeActionCalled;
         public static int? RegexMatchParamValue;
         public static bool WhenSomeOtherActionCalled;
+        public static string MultiWordParam;
 
         public InPlaceRunnerTestContext()
         {
             WhenSomeActionCalled = false;
             RegexMatchParamValue = null;
+            MultiWordParam = null;
         }
 
         public void WhenSomeAction()
@@ -54,6 +56,10 @@ namespace StorEvil.InPlace
             RegexMatchParamValue = param;
         }
 
+        public void test_param_with_multiple_words([MultipleWords] string param)
+        {
+            MultiWordParam = param;
+        }
         public InPlaceTestSubContext SubContext()
         {
             return new InPlaceTestSubContext();
@@ -64,6 +70,8 @@ namespace StorEvil.InPlace
             throw new Exception("test exception");
         }
     }
+
+   
 
     public class InPlaceTestSubContext
     {
