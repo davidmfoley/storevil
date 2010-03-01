@@ -112,6 +112,7 @@ namespace StorEvil.Resharper
 
         public void ExploreFile(IFile psiFile, UnitTestElementLocationConsumer consumer, CheckForInterrupt interrupted)
         {
+            
         }
 
         public void ExploreExternal(UnitTestElementConsumer consumer)
@@ -125,12 +126,11 @@ namespace StorEvil.Resharper
         // code.
         public void ExploreAssembly(IMetadataAssembly assembly, IProject project, UnitTestElementConsumer consumer)
         {
-            var parent = new StorEvilUnitTestElement(this, null, project, "AssemblyFoo");
+            var parent = new StorEvilUnitTestElement(this, null, project, project.Name + ".AssemblyFoo");
 
-            consumer(parent);
-            consumer(new StorEvilUnitTestElement(this, parent, project, "Bar1"));
-            consumer(new StorEvilUnitTestElement(this, parent, project, "Bar2"));
- 
+            //consumer(parent);
+            //consumer(new StorEvilUnitTestElement(this, parent, project, project.Name + ".Bar1"));
+            //consumer(new StorEvilUnitTestElement(this, parent, project, project.Name + ".Bar2"));
         }
 
         // Called from a refresh of the Unit Test Explorer
@@ -138,13 +138,30 @@ namespace StorEvil.Resharper
         public void ExploreSolution(ISolution solution, UnitTestElementConsumer consumer)
         {
             var projects = solution.GetAllProjects();
-            var asList = new List<IProject>(projects);
-            var project = asList[0];
-            var parent = new StorEvilUnitTestElement(this, null, project, "SolutionFoo");
 
-            consumer(parent);
-            consumer(new StorEvilUnitTestElement(this, parent, project, "Bar1"));
-            consumer(new StorEvilUnitTestElement(this, parent, project, "Bar2"));
+            var reader = new FilesystemConfigReader(new Filesystem(), new ConfigParser(new Filesystem()));
+
+            foreach (var project in projects)
+            {
+                if (project.ProjectFile != null)
+                {
+                    var location = project.ProjectFile.ParentFolder.Location;
+
+                    if (!string.IsNullOrEmpty(location.FullPath))
+                    {
+                        var config = reader.GetConfig(location.FullPath);
+
+                        if (config != null)
+                        {
+                            var parent = new StorEvilUnitTestElement(this, null, project, project.Name + " Tests");
+
+                            consumer(parent);
+                            //consumer(new StorEvilUnitTestElement(this, parent, project, project.Name + ".Foo"));
+                            //consumer(new StorEvilUnitTestElement(this, parent, project, project.Name + ".Bar"));
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -32,7 +32,7 @@ namespace StorEvil.Resharper
 
         public override string GetTypeClrName()
         {
-            return "TypeClrName";
+            return _project.Name + "." + _title;
         }
 
         public override UnitTestNamespace GetNamespace()
@@ -70,7 +70,7 @@ namespace StorEvil.Resharper
 
         public override string GetKind()
         {
-            return "Kind";
+            return "StorEvilKind";
         }
     }
 }
