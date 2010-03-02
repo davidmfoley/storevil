@@ -68,7 +68,29 @@ namespace StorEvil
                 }
             }
 
+            FixEmptyScenarioNames(scenarios);
+
             return new Story(Guid.NewGuid().ToString().Trim(), storyName.ToString().Trim(), scenarios);
+        }
+
+        private void FixEmptyScenarioNames(List<IScenario> scenarios)
+        {
+            foreach (var scenario in scenarios)
+            {
+                if (string.IsNullOrEmpty(scenario.Name))
+                {
+                    if (scenario is Scenario)
+                    {
+                        var s = scenario as Scenario;
+                        s.Name = string.Join("\r\n" , s.Body.ToArray());
+                    }
+                    else
+                    {
+                        var s = scenario as ScenarioOutline;
+                        s.Name = string.Join("\r\n", s.Scenario.Body.ToArray());
+                    }
+                }
+            }
         }
 
         private bool IsComment(string s)

@@ -13,7 +13,6 @@ namespace StorEvil.Core
         public Scenario(string name, IEnumerable<string> body, IEnumerable<IEnumerable<string>> examples) 
            
         {
-
             Name = name;
             Body = body;
           

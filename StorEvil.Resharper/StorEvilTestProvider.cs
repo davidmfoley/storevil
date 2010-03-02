@@ -172,7 +172,7 @@ namespace StorEvil.Resharper
 
                 if (!string.IsNullOrEmpty(location.FullPath))
                 {
-                    var parent = new StorEvilUnitTestElement(this, null, project, project.Name + ".AssemblyFoo");
+                    var parent = new StorEvilProjectElement(this, null, project, project.Name);
 
                     //consumer(parent);
 
@@ -186,12 +186,12 @@ namespace StorEvil.Resharper
                         {
                             string title = story.Id;
 
-                            var storyElement = new StorEvilUnitTestElement(this, null, project, title );
+                            var storyElement = new StorEvilStoryElement(this, null, project, title);
                             consumer(storyElement);
 
                             foreach (var scenario in story.Scenarios)
                             {
-                                consumer(new StorEvilUnitTestElement(this, storyElement, project, scenario.Name));
+                                consumer(new StorEvilScenarioElement(this, storyElement, project, scenario.Name));
                             }
                         }
                     }
