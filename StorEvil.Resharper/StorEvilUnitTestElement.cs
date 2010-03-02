@@ -19,28 +19,11 @@ namespace StorEvil.Resharper
         {
             _project = project;
             var parentInfo = parent != null ? parent.GetNamespace().NamespaceName + "." : "";
-            _title = parentInfo + project.Name + "." + title;
+            _title = title;
 
             _namespace = new UnitTestNamespace( project.Name + ".namespaceYo");
         }
-        public override string GetHighlighterAttributeId()
-        {
-            return base.GetHighlighterAttributeId();
-        }
-
-        public override ProjectEnvironment? GetProjectEnvironment()
-        {
-            return base.GetProjectEnvironment();
-        }
-
-        public override bool Trackable
-        {
-            get
-            {
-                return base.Trackable;
-            }
-        }
-
+    
         public override IProject GetProject()
         {
             return _project;

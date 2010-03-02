@@ -106,7 +106,11 @@ namespace StorEvil.Resharper
 
         public void Present(UnitTestElement element, IPresentableItem item, TreeModelNode node, PresentationState state)
         {
-            Console.WriteLine("Present");
+            var testElement = element as StorEvilUnitTestElement;
+            if (testElement == null)
+                return;
+
+            item.RichText = element.ShortName;
         }
 
         public bool IsUnitTestStuff(IDeclaredElement element)
@@ -170,7 +174,7 @@ namespace StorEvil.Resharper
                 {
                     var parent = new StorEvilUnitTestElement(this, null, project, project.Name + ".AssemblyFoo");
 
-                    consumer(parent);
+                    //consumer(parent);
 
                     var config = reader.GetConfig(location.FullPath);
                     if (config != null && config.StoryBasePath != null)
@@ -180,9 +184,15 @@ namespace StorEvil.Resharper
 
                         foreach (var story in stories)
                         {
-                            string title = project.Name + story.Id + " " + Guid.NewGuid();
+                            string title = story.Id;
 
-                            consumer(new StorEvilUnitTestElement(this, null, project, project.Name + " - " + title + " - StorEvil"));
+                            var storyElement = new StorEvilUnitTestElement(this, null, project, title );
+                            consumer(storyElement);
+
+                            foreach (var scenario in story.Scenarios)
+                            {
+                                consumer(new StorEvilUnitTestElement(this, storyElement, project, scenario.Name));
+                            }
                         }
                     }
                 }

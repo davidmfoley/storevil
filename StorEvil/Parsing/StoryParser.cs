@@ -60,7 +60,7 @@ namespace StorEvil
                     var count = currentScenario.RowData.First().Count() - 1;
                     var fieldNames = currentScenario.RowData.First().Take(count);
                     var examples = currentScenario.RowData.Skip(1).Select(x=>x.Take(count));
-                    scenarios.Add(new ScenarioOutline(new Scenario(currentScenario.Name, currentScenario.Lines), fieldNames, examples));
+                    scenarios.Add(new ScenarioOutline(currentScenario.Name, new Scenario(currentScenario.Name, currentScenario.Lines), fieldNames, examples));
                 }
                 else
                 {

@@ -25,8 +25,9 @@ namespace StorEvil.Core
 
     public class ScenarioOutline : IScenario   
     {
-        public ScenarioOutline(Scenario scenario, IEnumerable<string> fieldNames, IEnumerable<IEnumerable<string>> examples)
+        public ScenarioOutline(string name, Scenario scenario, IEnumerable<string> fieldNames, IEnumerable<IEnumerable<string>> examples)
         {
+            Name = name;
             Scenario = scenario;
             FieldNames = fieldNames;
             Examples = examples;
@@ -36,9 +37,13 @@ namespace StorEvil.Core
         public IEnumerable<IEnumerable<string>> Examples { get; set; }
 
         public IEnumerable<string> FieldNames { get; set; }
+
+        public string Name { get; set; }
     }
 
     public interface IScenario
     {
+         string Name { get; }
+        
     }
 }
