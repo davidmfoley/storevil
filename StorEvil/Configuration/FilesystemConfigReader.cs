@@ -29,11 +29,8 @@ namespace StorEvil
 
                 var configLocation = Path.Combine(containingDirectory, "storevil.config");
 
-                Console.WriteLine("FCR: checking " + configLocation);
-
                 if (_filesystem.FileExists(configLocation))
                 {
-                    Console.WriteLine("FCR: exists" + configLocation);
                     var fileContents = _filesystem.GetFileText(configLocation);
                     var config = _parser.Read(fileContents);
                     FixUpPaths(Path.GetDirectoryName(configLocation), config);
