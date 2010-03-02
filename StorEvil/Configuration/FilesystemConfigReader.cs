@@ -17,18 +17,23 @@ namespace StorEvil
 
         public ConfigSettings GetConfig(string directoryOrFile)
         {
+            Console.WriteLine("FCR:" + directoryOrFile);
             var path = directoryOrFile;
             if (!path.EndsWith("\\"))
-                path += "\\";  
+                path += "\\";
 
-            var containingDirectory =  Path.GetDirectoryName(Path.GetFullPath(path));
+            var containingDirectory = path; // Path.GetDirectoryName(Path.GetFullPath(path));
 
             while (containingDirectory.Length > Path.GetPathRoot(containingDirectory).Length)
             {
+
                 var configLocation = Path.Combine(containingDirectory, "storevil.config");
+
+                Console.WriteLine("FCR: checking " + configLocation);
 
                 if (_filesystem.FileExists(configLocation))
                 {
+                    Console.WriteLine("FCR: exists" + configLocation);
                     var fileContents = _filesystem.GetFileText(configLocation);
                     var config = _parser.Read(fileContents);
                     FixUpPaths(Path.GetDirectoryName(configLocation), config);

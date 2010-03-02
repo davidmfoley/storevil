@@ -1,6 +1,7 @@
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using StorEvil.Parsing;
 
 namespace StorEvil
 {
@@ -11,7 +12,7 @@ namespace StorEvil
         private IStoryParser Parser;
         private IFilesystem FakeFilesystem;
 
-        private FilesystemStoryProvider Provider;
+        private FilesystemStoryReader Reader;
         private ConfigSettings Settings;
 
         [SetUp]
@@ -19,9 +20,8 @@ namespace StorEvil
         {
             Parser = MockRepository.GenerateMock<IStoryParser>();
             FakeFilesystem = MockRepository.GenerateMock<IFilesystem>();
-            Settings = new ConfigSettings();
-            Settings.StoryBasePath = BasePath;
-            Provider = new FilesystemStoryProvider(Parser, FakeFilesystem, Settings);
+            Settings = new ConfigSettings {StoryBasePath = BasePath};
+            Reader = new FilesystemStoryReader(FakeFilesystem, Settings);
 
             FakeFilesystem.Stub(x => x.GetFilesInFolder(BasePath)).Return(new [] { "ignore.txt", "feature.feature", "bar.story" });
             FakeFilesystem.Stub(x => x.GetSubFolders(BasePath)).Return(new string[0]);
@@ -38,7 +38,7 @@ namespace StorEvil
         private void RunTestWithExtensions(params string[] extensionsSettings)
         {
             Settings.ScenarioExtensions = extensionsSettings;
-            Provider.GetStories().ToArray();
+            Reader.GetStoryInfos().ToArray();
         }
 
         [Test]

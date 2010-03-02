@@ -1,9 +1,13 @@
+using System;
 using System.Collections.Generic;
+using System.Xml;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Tree;
+using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.Text;
+using StorEvil.Core;
 
 namespace StorEvil.Resharper
 {
@@ -12,7 +16,7 @@ namespace StorEvil.Resharper
         protected readonly IProject Project;
         private readonly string _title;
 
-        public StorEvilUnitTestElement(IUnitTestProvider provider, UnitTestElement parent, IProject project,
+        protected StorEvilUnitTestElement(IUnitTestProvider provider, UnitTestElement parent, IProject project,
                                        string title) : base(provider, parent)
         {
             Project = project;
@@ -41,7 +45,7 @@ namespace StorEvil.Resharper
 
         public override string GetKind()
         {
-            return "StorEvilKind";
+            return "StorEvil";
         }
 
         public override string ShortName
@@ -82,17 +86,24 @@ namespace StorEvil.Resharper
         {
             return null;
         }
+
+        public virtual IList<UnitTestTask> GetTaskSequence()
+        {
+            return new List<UnitTestTask>();
+        }
     }
 
     public class StorEvilScenarioElement : StorEvilUnitTestElement
     {
-        private readonly UnitTestNamespace _namespace = new UnitTestNamespace("namespace.foo");
+        private readonly UnitTestNamespace _namespace;
+        private readonly IScenario _scenario;
 
         public StorEvilScenarioElement(StorEvilTestProvider provider, UnitTestElement parent, IProject project,
-                                       string title)
+                                       string title, IScenario scenario)
             : base(provider, parent, project, title)
         {
-            _namespace = new UnitTestNamespace(project.Name + ".namespaceYo");
+            _namespace = new UnitTestNamespace(project.Name);
+            _scenario = scenario;
         }
 
         public override UnitTestNamespace GetNamespace()
@@ -102,7 +113,7 @@ namespace StorEvil.Resharper
 
         public override bool Equals(object obj)
         {
-            if (obj is StorEvilUnitTestElement)
+            if (obj is StorEvilScenarioElement)
             {
                 var testElement = (StorEvilUnitTestElement) obj;
                 return testElement.GetNamespace().NamespaceName == _namespace.NamespaceName &&
@@ -110,6 +121,38 @@ namespace StorEvil.Resharper
             }
 
             return false;
+        }
+
+        public override IList<UnitTestTask> GetTaskSequence()
+        {
+            return new List<UnitTestTask>() { new UnitTestTask(this, new RunScenarioTask(_scenario))};
+        }
+    }
+
+    public class RunScenarioTask : RemoteTask
+    {
+        public IScenario Scenario { get; set; }
+        private readonly StorEvilScenarioElement _element;
+
+        public RunScenarioTask()
+            : base("StorEvil")
+        {
+        }
+
+        public RunScenarioTask(XmlElement element) : base(element)
+        {
+            
+        }
+
+        public override void SaveXml(XmlElement element)
+        {
+            base.SaveXml(element);
+          
+        }
+
+        public RunScenarioTask(IScenario scenario) : base("StorEvil")
+        {
+            Scenario = scenario;
         }
     }
 

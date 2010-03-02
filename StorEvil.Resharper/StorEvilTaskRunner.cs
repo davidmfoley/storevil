@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using JetBrains.ReSharper.TaskRunnerFramework;
 
 namespace StorEvil.Resharper
@@ -7,6 +8,7 @@ namespace StorEvil.Resharper
         public StorEvilTaskRunner(IRemoteTaskServer server)
             : base(server)
         {
+            Debug.WriteLine("started runner");
         }
 
         // Called to prepare this task. Shouldn't throw
@@ -16,7 +18,7 @@ namespace StorEvil.Resharper
         // called recursively. It is up to Start to call TaskFinished(Skipped) for the current node 
         public override TaskResult Start(TaskExecutionNode node)
         {
-            return TaskResult.Skipped;
+            return TaskResult.Success;
         }
 
         // Called to run the task, unless we implement RecursiveRemoteTaskRunner, in which case it won't
@@ -35,12 +37,34 @@ namespace StorEvil.Resharper
         // Should not throw
         public override TaskResult Finish(TaskExecutionNode node)
         {
-            return TaskResult.Skipped;
+            return TaskResult.Success;
         }
 
         // Called to handle all the nodes ourselves
         public override void ExecuteRecursive(TaskExecutionNode node)
         {
+            if (node.RemoteTask is RunScenarioTask)
+                ExecuteScenario(node);
+
+            if (node.Children == null)
+                return;
+
+            foreach (TaskExecutionNode childNode in node.Children)
+                ExecuteRecursive(childNode);
+        }
+
+        private static bool fail;
+
+        private void ExecuteScenario(TaskExecutionNode scenarioNode)
+        {
+            fail = false; //! fail;
+
+            var remoteTask = scenarioNode.RemoteTask;
+            Server.TaskStarting(remoteTask);
+
+            var scenario = ((RunScenarioTask) remoteTask).Scenario;
+
+            Server.TaskFinished(remoteTask, scenario.Name, fail ? TaskResult.Exception : TaskResult.Success);
         }
 
         public override void ConfigureAppDomain(TaskAppDomainConfiguration configuration)

@@ -6,6 +6,7 @@ using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Core.Configuration;
 using StorEvil.InPlace;
+using StorEvil.Parsing;
 
 namespace StorEvil.Console
 {
@@ -58,7 +59,8 @@ usage:
         private void SetupCommonComponents(Container container)
         {
             container.EasyRegister<IStoryParser, StoryParser>();
-            container.EasyRegister<IStoryProvider, FilesystemStoryProvider>();
+            container.EasyRegister<IStoryProvider, StoryProvider>();
+            container.EasyRegister<IStoryReader, FilesystemStoryReader>();
             container.Register(GetResultListener());
             container.EasyRegister<IFilesystem, Filesystem>();
             container.EasyRegister<IScenarioPreprocessor, ScenarioPreprocessor>();

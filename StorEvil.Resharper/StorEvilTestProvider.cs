@@ -14,6 +14,7 @@ using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.UnitTestFramework.UI;
 using JetBrains.TreeModels;
 using JetBrains.UI.TreeView;
+using StorEvil.Parsing;
 
 namespace StorEvil.Resharper
 {
@@ -63,6 +64,11 @@ namespace StorEvil.Resharper
         // nunit and mstest providers work. 
         public IList<UnitTestTask> GetTaskSequence(UnitTestElement element, IList<UnitTestElement> explicitElements)
         {
+            if (element is StorEvilUnitTestElement)
+            {
+                return ((StorEvilUnitTestElement)element).GetTaskSequence();
+            }
+
             return new List<UnitTestTask>();
         }
 
@@ -146,21 +152,12 @@ namespace StorEvil.Resharper
         public void ExploreAssembly(IMetadataAssembly assembly, IProject project, UnitTestElementConsumer consumer)
         {
             ReadLockCookie.Execute(() => { AddProject(project, consumer); });
-            //var parent = new StorEvilUnitTestElement(this, null, project, project.Name + ".AssemblyFoo");
-
-            //consumer(parent);
-            //consumer(new StorEvilUnitTestElement(this, parent, project, project.Name + ".Bar1"));
-            //consumer(new StorEvilUnitTestElement(this, parent, project, project.Name + ".Bar2"));
         }
 
         // Called from a refresh of the Unit Test Explorer
         // Allows us to explore the solution, without going into the projects
         public void ExploreSolution(ISolution solution, UnitTestElementConsumer consumer)
         {
-            Debug.WriteLine("ExploreSolution " + solution.Name);
-            //var projects = solution.GetAllProjects();
-
-           
         }
 
         private void AddProject(IProject project, UnitTestElementConsumer consumer)
@@ -179,8 +176,11 @@ namespace StorEvil.Resharper
                     var config = reader.GetConfig(location.FullPath);
                     if (config != null && config.StoryBasePath != null)
                     {
+                        var filesystemStoryReader = new FilesystemStoryReader(new Filesystem(), config);
+                        var storyProvider = new StoryProvider(filesystemStoryReader, new StoryParser());
+
                         var stories =
-                            new FilesystemStoryProvider(new StoryParser(), new Filesystem(), config).GetStories();
+                            storyProvider.GetStories();
 
                         foreach (var story in stories)
                         {
@@ -191,7 +191,7 @@ namespace StorEvil.Resharper
 
                             foreach (var scenario in story.Scenarios)
                             {
-                                consumer(new StorEvilScenarioElement(this, storyElement, project, scenario.Name));
+                                consumer(new StorEvilScenarioElement(this, storyElement, project, scenario.Name, scenario));
                             }
                         }
                     }
