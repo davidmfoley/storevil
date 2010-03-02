@@ -1,4 +1,6 @@
-﻿namespace StorEvil.Console
+﻿using StorEvil.Configuration;
+
+namespace StorEvil.Console
 {
     internal class Program
     {

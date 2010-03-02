@@ -1,14 +1,26 @@
 using NUnit.Framework;
 using Rhino.Mocks;
+using StorEvil.Core;
 
 namespace StorEvil.InPlace
 {
-    public class When_finished : InPlaceRunnerSpec<InPlaceRunnerTestContext>
+    [TestFixture]
+    public class When_finished_running_all_stories
     {
+        private IResultListener ResultListener;
+
+        [SetUp]
+        public void SetupContext()
+        {
+            ResultListener = MockRepository.GenerateStub<IResultListener>();
+            
+            var inPlaceRunner = new InPlaceRunner(ResultListener, new ScenarioPreprocessor());
+            inPlaceRunner.Finished();
+        }
         [Test]
         public void notifies_result_listener()
         {
-            Runner.Finished();
+
             ResultListener.AssertWasCalled(x => x.Finished());
         }
     }

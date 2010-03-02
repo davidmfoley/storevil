@@ -14,6 +14,7 @@ using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.UnitTestFramework.UI;
 using JetBrains.TreeModels;
 using JetBrains.UI.TreeView;
+using StorEvil.Configuration;
 using StorEvil.Parsing;
 
 namespace StorEvil.Resharper

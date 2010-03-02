@@ -31,7 +31,7 @@ namespace StorEvil.InPlace
         }
     }
 
-    [TestFixture]
+    [TestFixture, Ignore("Multi-word aparams not yet supported")]
     public class matching_a_multi_word_param : InPlaceRunnerSpec<InPlaceRunnerTestContext>
     {
         private readonly Scenario TestScenario = new Scenario("multi-word test", new[] { ScenarioText });
