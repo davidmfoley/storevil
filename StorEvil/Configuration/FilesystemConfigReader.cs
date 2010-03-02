@@ -17,7 +17,7 @@ namespace StorEvil
 
         public ConfigSettings GetConfig(string directoryOrFile)
         {
-            var path =directoryOrFile;
+            var path = directoryOrFile;
             if (!path.EndsWith("\\"))
                 path += "\\";  
 
@@ -32,6 +32,8 @@ namespace StorEvil
                     var fileContents = _filesystem.GetFileText(configLocation);
                     var config = _parser.Read(fileContents);
                     FixUpPaths(Path.GetDirectoryName(configLocation), config);
+                    if (config.StoryBasePath == null)
+                        config.StoryBasePath = path;
                     return config;  
                 }
 

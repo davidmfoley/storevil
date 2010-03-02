@@ -1,8 +1,11 @@
 using System.Collections.Generic;
+using JetBrains.Application;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
+using JetBrains.ReSharper.Psi.Caches;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.UnitTestExplorer;
+using JetBrains.ReSharper.UnitTestFramework;
 
 namespace StorEvil.Resharper
 {
@@ -15,9 +18,27 @@ namespace StorEvil.Resharper
         public StorEvilUnitTestElement(StorEvilTestProvider provider, UnitTestElement parent, IProject project,  string title) : base(provider, parent)
         {
             _project = project;
-            _title = title;
+            var parentInfo = parent != null ? parent.GetNamespace().NamespaceName + "." : "";
+            _title = parentInfo + project.Name + "." + title;
 
-            _namespace = new UnitTestNamespace( project.Name + ".namespace");
+            _namespace = new UnitTestNamespace( project.Name + ".namespaceYo");
+        }
+        public override string GetHighlighterAttributeId()
+        {
+            return base.GetHighlighterAttributeId();
+        }
+
+        public override ProjectEnvironment? GetProjectEnvironment()
+        {
+            return base.GetProjectEnvironment();
+        }
+
+        public override bool Trackable
+        {
+            get
+            {
+                return base.Trackable;
+            }
         }
 
         public override IProject GetProject()
@@ -55,7 +76,7 @@ namespace StorEvil.Resharper
                 {
                     IFile file = declaration.GetContainingFile();
                     if (file != null)
-                        locations.Add(new UnitTestElementLocation(file.ProjectFile, declaration.GetNameRange(),
+                        locations.Add(new UnitTestElementLocation(file.ProjectFile, declaration.GetDocumentRange().TextRange,
                                                                   declaration.GetDocumentRange().TextRange));
                 }
                 return new UnitTestElementDisposition(locations, this);
@@ -65,12 +86,56 @@ namespace StorEvil.Resharper
 
         public override IDeclaredElement GetDeclaredElement()
         {
-            return new StorEvilDeclaredElement();
+            return null;
+        }
+
+
+        protected ITypeElement GetDeclaredType()
+        {
+            return null;
+
+            //var project = GetProject();
+            //if (project == null)
+            //    return null;
+
+            //var manager = PsiManager.GetInstance(project.GetSolution());
+
+            //var modules = PsiModuleManager.GetInstance(projectEnvoy.Solution).GetPsiModules(project);
+            //var projectModule = modules.Count > 0 ? modules[0] : null;
+
+            //using (ReadLockCookie.Create())
+            //{
+            //    var scope = DeclarationsScopeFactory.ModuleScope(projectModule, false);
+            //    var cache = manager.GetDeclarationsCache(scope, true);
+            //    return cache.GetTypeElementByCLRName(typeName);
+            //}
         }
 
         public override string GetKind()
         {
             return "StorEvilKind";
+        }
+
+        public override string ShortName
+        {
+            get { return _title; }
+        }
+            
+        public override bool Matches(string filter, JetBrains.Text.IdentifierMatcher matcher)
+        {
+            return true;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is StorEvilUnitTestElement)
+            {
+                var testElement = (StorEvilUnitTestElement)obj;
+                return testElement._namespace.NamespaceName == this._namespace.NamespaceName && testElement._title == this._title;
+            }
+
+            return false;
+
         }
     }
 }

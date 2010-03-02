@@ -1,5 +1,6 @@
 *resharper*.*
 _ReSharper*
+*.ReSharper.user
 *.resharper
 .svn
 bin

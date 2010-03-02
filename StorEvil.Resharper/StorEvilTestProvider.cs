@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using JetBrains.Application;
 using JetBrains.CommonControls;
@@ -9,6 +10,8 @@ using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.UnitTestExplorer;
+using JetBrains.ReSharper.UnitTestFramework;
+using JetBrains.ReSharper.UnitTestFramework.UI;
 using JetBrains.TreeModels;
 using JetBrains.UI.TreeView;
 
@@ -34,11 +37,11 @@ namespace StorEvil.Resharper
 
         // This method gets called to generate the tasks that the remote runner will execute
         // When we run all the tests in a class (by e.g. clicking the menu in the margin marker)
-        // this method is called with a class element and the list of explicit elements contains
+        // this method is called with a class element (UnitTestElement) and the list of explicit elements contains
         // one item - the class. We should add all tasks required to prepare to run this class
         // (e.g. loading the assembly and loading the class via reflection - but NOT running the
         // test methods)
-        // It is then subsequently called with all method elements, and with the same list (that
+        // It is then subsequently called with all method elements (UNitTestElements), and with the same list (that
         // only has the class as an explicit element). We should return a new sequence of tasks
         // that would allow running the test methods. This will probably be a superset of the class
         // sequence of tasks (e.g. load the assembly, load the class via reflection and a task
@@ -65,7 +68,7 @@ namespace StorEvil.Resharper
 
         public int CompareUnitTestElements(UnitTestElement x, UnitTestElement y)
         {
-            return 0;
+            return -1;
         }
 
         // Allows us to affect the configuration of a test run, specifying where to start running
@@ -96,8 +99,14 @@ namespace StorEvil.Resharper
             throw new NotImplementedException();
         }
 
+        public bool IsElementOfKind(UnitTestElement element, UnitTestElementKind elementKind)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Present(UnitTestElement element, IPresentableItem item, TreeModelNode node, PresentationState state)
         {
+            Console.WriteLine("Present");
         }
 
         public bool IsUnitTestStuff(IDeclaredElement element)
@@ -110,13 +119,19 @@ namespace StorEvil.Resharper
             return false;
         }
 
+        public bool IsElementOfKind(IDeclaredElement declaredElement, UnitTestElementKind elementKind)
+        {
+            return false;
+        }
+
         public void ExploreFile(IFile psiFile, UnitTestElementLocationConsumer consumer, CheckForInterrupt interrupted)
         {
-            
+            Debug.WriteLine("ExploreFile " + psiFile.ProjectFile.Location);
         }
 
         public void ExploreExternal(UnitTestElementConsumer consumer)
         {
+            Debug.WriteLine("ExploreExternal");
         }
 
         // Provides Reflection-like metadata of a physical assembly, called at startup (if the
@@ -126,7 +141,8 @@ namespace StorEvil.Resharper
         // code.
         public void ExploreAssembly(IMetadataAssembly assembly, IProject project, UnitTestElementConsumer consumer)
         {
-            var parent = new StorEvilUnitTestElement(this, null, project, project.Name + ".AssemblyFoo");
+            ReadLockCookie.Execute(() => { AddProject(project, consumer); });
+            //var parent = new StorEvilUnitTestElement(this, null, project, project.Name + ".AssemblyFoo");
 
             //consumer(parent);
             //consumer(new StorEvilUnitTestElement(this, parent, project, project.Name + ".Bar1"));
@@ -137,27 +153,36 @@ namespace StorEvil.Resharper
         // Allows us to explore the solution, without going into the projects
         public void ExploreSolution(ISolution solution, UnitTestElementConsumer consumer)
         {
-            var projects = solution.GetAllProjects();
+            Debug.WriteLine("ExploreSolution " + solution.Name);
+            //var projects = solution.GetAllProjects();
 
+           
+        }
+
+        private void AddProject(IProject project, UnitTestElementConsumer consumer)
+        {
             var reader = new FilesystemConfigReader(new Filesystem(), new ConfigParser(new Filesystem()));
-
-            foreach (var project in projects)
+            if (project.ProjectFile != null)
             {
-                if (project.ProjectFile != null)
+                var location = project.ProjectFile.ParentFolder.Location;
+
+                if (!string.IsNullOrEmpty(location.FullPath))
                 {
-                    var location = project.ProjectFile.ParentFolder.Location;
+                    var parent = new StorEvilUnitTestElement(this, null, project, project.Name + ".AssemblyFoo");
 
-                    if (!string.IsNullOrEmpty(location.FullPath))
+                    consumer(parent);
+
+                    var config = reader.GetConfig(location.FullPath);
+                    if (config != null && config.StoryBasePath != null)
                     {
-                        var config = reader.GetConfig(location.FullPath);
+                        var stories =
+                            new FilesystemStoryProvider(new StoryParser(), new Filesystem(), config).GetStories();
 
-                        if (config != null)
+                        foreach (var story in stories)
                         {
-                            var parent = new StorEvilUnitTestElement(this, null, project, project.Name + " Tests");
+                            string title = project.Name + story.Id + " " + Guid.NewGuid();
 
-                            consumer(parent);
-                            //consumer(new StorEvilUnitTestElement(this, parent, project, project.Name + ".Foo"));
-                            //consumer(new StorEvilUnitTestElement(this, parent, project, project.Name + ".Bar"));
+                            consumer(new StorEvilUnitTestElement(this, null, project, project.Name + " - " + title + " - StorEvil"));
                         }
                     }
                 }

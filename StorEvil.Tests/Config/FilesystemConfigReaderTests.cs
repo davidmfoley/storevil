@@ -53,6 +53,23 @@ namespace StorEvil.Config
         }
 
         [Test]
+        public void sets_story_base_path_to_current_directory_if_not_specified()
+        {
+            // note: should make successive calls up the directory structure
+            // first \test\foo\bar, then \test\foo, then \test
+
+            string workingDirectory = "c:\\test\\foo\\";
+            ConfigFileExistsAt(workingDirectory + "storevil.config");
+            var settings = new ConfigSettings();
+
+            ParserReturnsConfigSettings(settings);
+
+            var result = FilesystemConfigReader.GetConfig(workingDirectory);
+
+            result.StoryBasePath.ShouldEqual(workingDirectory);
+        }
+
+        [Test]
         public void when_no_config_present_in_tree_returns_default()
         {
             const string path = "c:\\test\\storevil.config";
