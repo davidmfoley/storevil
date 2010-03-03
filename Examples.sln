@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorEvil.Core", "StorEvil\StorEvil.Core.csproj", "{B86235CA-045F-4222-997C-A65E966C6F9B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorEvil.Core", "Core\StorEvil\StorEvil.Core.csproj", "{B86235CA-045F-4222-997C-A65E966C6F9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorEvil", "StorEvil.Console\StorEvil.csproj", "{FBFE96FF-9D88-48DB-80F2-C79840BFDFA2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorEvil", "Core\StorEvil.Console\StorEvil.csproj", "{FBFE96FF-9D88-48DB-80F2-C79840BFDFA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pizza.TestContext", "Pizza.TestContext\Pizza.TestContext.csproj", "{8EA2E836-2C94-4013-8D47-64F367AC9580}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pizza.TestContext", "Examples\Pizza.TestContext\Pizza.TestContext.csproj", "{8EA2E836-2C94-4013-8D47-64F367AC9580}"
 	ProjectSection(ProjectDependencies) = postProject
 		{FBFE96FF-9D88-48DB-80F2-C79840BFDFA2} = {FBFE96FF-9D88-48DB-80F2-C79840BFDFA2}
 	EndProjectSection
@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		run_pizza_specs.bat = run_pizza_specs.bat
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pizza.Specifications", "Pizza.Specifications\Pizza.Specifications.csproj", "{436259FA-036B-466E-A670-F91507C34D0A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pizza.Specifications", "Examples\Pizza.Specifications\Pizza.Specifications.csproj", "{436259FA-036B-466E-A670-F91507C34D0A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pizza", "Pizza", "{82706E3A-101E-4C9D-94C5-84C718288AC0}"
 EndProject
