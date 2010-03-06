@@ -76,6 +76,7 @@
     <Compile Include="Core\ParameterConverter.cs" />
     <Compile Include="Core\ScenarioInterpreterForType.cs" />
     <Compile Include="FunqEasyRegistrationHelper.cs" />
+    <Compile Include="ResultListeners\ConsoleResultListener.cs" />
     <Compile Include="MultipleWordsAttribute.cs" />
     <Compile Include="Nunit\FixtureGenerationStoryHandler.cs" />
     <Compile Include="InPlace\ContextFactory.cs" />
@@ -113,6 +114,8 @@
     <Compile Include="Core\Scenario.cs" />
     <Compile Include="Core\ScenarioInterpreter.cs" />
     <Compile Include="Nunit\SingleFileTestFixtureWriter.cs" />
+    <Compile Include="ResultListeners\IFileWriter.cs" />
+    <Compile Include="ResultListeners\XmlReportListener.cs" />
     <Compile Include="StorEvilJob.cs" />
     <Compile Include="Core\Story.cs" />
     <Compile Include="Parsing\StoryParser.cs" />

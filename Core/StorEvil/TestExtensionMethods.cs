@@ -100,7 +100,6 @@ namespace StorEvil
             try
             {
                 action();
-                Assert.Fail("Expected exception " + typeof (T).Name + " was not thrown.");
             }
             catch (T ex)
             {
@@ -111,6 +110,7 @@ namespace StorEvil
                 Assert.Fail("Unexpected exception thrown: expected " + typeof (T).Name + " but caught " +
                             exception.GetType().Name + "\n" + exception);
             }
+            Assert.Fail("Expected exception " + typeof(T).Name + " was not thrown.");
             return null;
         }
     }

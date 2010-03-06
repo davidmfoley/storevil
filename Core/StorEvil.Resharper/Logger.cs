@@ -9,6 +9,11 @@ namespace StorEvil.Resharper
 
         public static void Log(string msg)
         {
+            Console.WriteLine(msg);
+
+            if (!EnableLogging)
+                return;
+
             using (var stream = File.AppendText("C:\\storevil.log"))
             {
                 if (DateTime.Now > _lastLogTime.AddSeconds(2))
@@ -20,10 +25,12 @@ namespace StorEvil.Resharper
 
                 stream.WriteLine(msg);
 
-                Console.WriteLine(msg);
+                
 
                 _lastLogTime = DateTime.Now;
             }
         }
+
+        protected static bool EnableLogging { get; set; }
     }
 }

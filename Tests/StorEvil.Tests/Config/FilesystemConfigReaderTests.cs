@@ -75,8 +75,7 @@ namespace StorEvil.Config
         {
             const string path = "c:\\test\\storevil.config";
 
-            var result = FilesystemConfigReader.GetConfig(path);
-            Assert.That(result, Is.Not.Null);
+            Expect.ThisToThrow<ConfigNotFoundException>(() => FilesystemConfigReader.GetConfig(path));
         }
 
         private void ConfigFileExistsAt(string path)

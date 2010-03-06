@@ -14,6 +14,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorEvil", "Core\StorEvil.Console\StorEvil.csproj", "{FBFE96FF-9D88-48DB-80F2-C79840BFDFA2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{5E256EA4-5E05-4735-9937-2B8B1A8DC6AF}"
+	ProjectSection(SolutionItems) = preProject
+		default.build = default.build
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,9 +45,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{F6BDC77F-FB15-46A2-89B9-9E66E89DE62D} = {806BC5DE-65B6-4202-8B64-28D4137EAA60}
 		{B86235CA-045F-4222-997C-A65E966C6F9B} = {806BC5DE-65B6-4202-8B64-28D4137EAA60}
 		{FBFE96FF-9D88-48DB-80F2-C79840BFDFA2} = {806BC5DE-65B6-4202-8B64-28D4137EAA60}
-		{F6BDC77F-FB15-46A2-89B9-9E66E89DE62D} = {806BC5DE-65B6-4202-8B64-28D4137EAA60}
 		{43A7C61E-DD5B-4CC9-A05A-02C00789028F} = {963A6FE4-67D6-484D-AC34-A58F8ACD1265}
 	EndGlobalSection
 EndGlobal
