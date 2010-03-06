@@ -235,7 +235,7 @@ usage:
                 .SetsField(s => s.OutputFileFormat)
                 .WithDescription(
                     "Sets the format of output to the file specified by --output-file (ONLY xml is supported so far)\r\n" +
-                    "If nothing is specified, the output file location will be: storevil-output.{format}");
+                    "If nothing is specified, the output file location will be: storevil.output.{format}");
 
             AddSwitch("--console-mode", "-c")
                 .SetsEnumField(s => s.ConsoleMode)  
