@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using StorEvil.Core;
 using StorEvil.Interpreter;
+using StorEvil.Interpreter.ParameterConverters;
 
 namespace StorEvil
 {
