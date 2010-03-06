@@ -10,16 +10,23 @@ namespace StorEvil.Context
         public IEnumerable<string> SplitMemberName(string name)
         {
             if (name.Contains("_"))
-            {
-                foreach (var s in name.Split('_'))
-                    yield return s;
-            }
-            else
-            {
-                foreach (Match m in SplitMemberNameRegex.Matches(name))
-                    if (!string.IsNullOrEmpty(m.Value))
-                        yield return m.Value;
-            }
+                return SplitAtUnderscores(name);
+
+            return SplitOnCamelCaseBoundaries(name);
+        }
+
+        private static IEnumerable<string> SplitOnCamelCaseBoundaries(string name)
+        {
+            var matches = SplitMemberNameRegex.Matches(name);
+
+            foreach (Match m in matches)
+                if (!string.IsNullOrEmpty(m.Value))
+                    yield return m.Value;
+        }
+
+        private static IEnumerable<string> SplitAtUnderscores(string name)
+        {
+            return name.Split('_');
         }
     }
 }
