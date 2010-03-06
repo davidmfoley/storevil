@@ -64,13 +64,14 @@
     <Compile Include="Configuration\SwitchInfo.cs" />
     <Compile Include="Configuration\switchParser.cs" />
     <Compile Include="ContextAttribute.cs" />
-    <Compile Include="Context\ContextMemberNameSplitter.cs" />
-    <Compile Include="Context\IMemberMatcher.cs" />
-    <Compile Include="Context\PropertyOrFieldNameMatcher.cs" />
-    <Compile Include="Context\ExactMatch.cs" />
-    <Compile Include="Context\MethodNameMatcher.cs" />
-    <Compile Include="Context\ParameterValueFormatter.cs" />
-    <Compile Include="Context\RegexMatcher.cs" />
+    <Compile Include="Context\Matchers\ContextMemberNameSplitter.cs" />
+    <Compile Include="ContextRegexAttribute.cs" />
+    <Compile Include="Context\Matchers\IMemberMatcher.cs" />
+    <Compile Include="Context\Matchers\PropertyOrFieldNameMatcher.cs" />
+    <Compile Include="Context\Matches\ExactMatch.cs" />
+    <Compile Include="Context\Matchers\MethodNameMatcher.cs" />
+    <Compile Include="Nunit\ParameterValueFormatter.cs" />
+    <Compile Include="Context\Matchers\RegexMatcher.cs" />
     <Compile Include="Core\ExtensionMethodHandler.cs" />
     <Compile Include="Core\InterpreterForTypeFactory.cs" />
     <Compile Include="Core\ParameterConverter.cs" />
@@ -78,7 +79,7 @@
     <Compile Include="Utility\FunqEasyRegistrationHelper.cs" />
     <Compile Include="ResultListeners\CompositeListener.cs" />
     <Compile Include="ResultListeners\ConsoleResultListener.cs" />
-    <Compile Include="Context\MultipleWordsAttribute.cs" />
+    <Compile Include="MultipleWordsAttribute.cs" />
     <Compile Include="Nunit\FixtureGenerationStoryHandler.cs" />
     <Compile Include="InPlace\InPlaceRunner.cs" />
     <Compile Include="InPlace\IResultListener.cs" />
@@ -101,13 +102,13 @@
     <Compile Include="Nunit\IFixtureGenerator.cs" />
     <Compile Include="Nunit\ITestFixtureWriter.cs" />
     <Compile Include="Nunit\CSharpMethodInvocationGenerator.cs" />
-    <Compile Include="Context\NameMatch.cs" />
+    <Compile Include="Context\Matches\NameMatch.cs" />
     <Compile Include="Nunit\NUnitTest.cs" />
     <Compile Include="Nunit\ScenarioLineImplementation.cs" />
     <Compile Include="Nunit\TestContextField.cs" />
     <Compile Include="Nunit\TestContextSet.cs" />
-    <Compile Include="Context\ParameterMatchWordFilter.cs" />
-    <Compile Include="Context\PartialMatch.cs" />
+    <Compile Include="Context\WordFilters\ParameterMatchWordFilter.cs" />
+    <Compile Include="Context\Matches\PartialMatch.cs" />
     <Compile Include="Configuration\BadSettingNameException.cs" />
     <Compile Include="Infrastructure\IFilesystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -123,8 +124,8 @@
     <Compile Include="Utility\StringUtility.cs" />
     <Compile Include="Utility\TestExtensionMethods.cs" />
     <Compile Include="Nunit\NUnitTestMethodGenerator.cs" />
-    <Compile Include="Context\TextMatchWordFilter.cs" />
-    <Compile Include="Context\WordFilter.cs" />
+    <Compile Include="Context\WordFilters\TextMatchWordFilter.cs" />
+    <Compile Include="Context\WordFilters\WordFilter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
