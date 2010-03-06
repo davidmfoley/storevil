@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using NUnit.Framework;
-using StorEvil.Core.Configuration;
+using StorEvil.Configuration;
 
 namespace StorEvil.Argument_parsing
 {

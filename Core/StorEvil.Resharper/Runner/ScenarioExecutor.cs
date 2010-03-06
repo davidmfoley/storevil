@@ -1,5 +1,6 @@
 using System;
 using JetBrains.ReSharper.TaskRunnerFramework;
+using StorEvil.Configuration;
 using StorEvil.Core;
 using StorEvil.InPlace;
 

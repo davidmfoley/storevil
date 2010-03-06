@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using Rhino.Mocks;
+using StorEvil.Configuration;
 
 namespace StorEvil.Config
 {

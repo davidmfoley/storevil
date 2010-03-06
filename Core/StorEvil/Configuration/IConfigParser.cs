@@ -1,4 +1,4 @@
-namespace StorEvil
+namespace StorEvil.Configuration
 {
     public interface IConfigParser
     {

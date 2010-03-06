@@ -1,5 +1,5 @@
 using Funq;
-using StorEvil.Core.Configuration;
+using StorEvil.Configuration;
 using StorEvil.InPlace;
 
 namespace StorEvil.Console

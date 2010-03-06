@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using StorEvil.Configuration;
 using StorEvil.Core;
 
 namespace StorEvil.Parsing

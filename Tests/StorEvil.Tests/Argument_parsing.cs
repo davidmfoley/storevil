@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 using Rhino.Mocks;
+using StorEvil.Configuration;
 using StorEvil.Console;
 using StorEvil.InPlace;
 using StorEvil.ResultListeners;

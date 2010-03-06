@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Linq;
 
@@ -20,13 +19,11 @@ namespace StorEvil.Configuration
             var path = directoryOrFile.ToLower();
             if (!path.EndsWith("\\"))
                 path = path + "\\";
-                
 
             var containingDirectory = path; // Path.GetDirectoryName(Path.GetFullPath(path));
 
             while (containingDirectory.Length > Path.GetPathRoot(containingDirectory).Length)
             {
-
                 var configLocation = Path.Combine(containingDirectory, "storevil.config");
 
                 if (_filesystem.FileExists(configLocation))
@@ -36,14 +33,14 @@ namespace StorEvil.Configuration
                     FixUpPaths(Path.GetDirectoryName(configLocation), config);
                     if (config.StoryBasePath == null)
                         config.StoryBasePath = path;
-                    return config;  
+                    return config;
                 }
 
                 var parent = Directory.GetParent(containingDirectory);
                 if (parent == null)
                     return ConfigSettings.Default();
 
-                containingDirectory = parent.FullName;                
+                containingDirectory = parent.FullName;
             }
 
             return ConfigSettings.Default();
@@ -57,7 +54,7 @@ namespace StorEvil.Configuration
         private string FixUpPath(string basePath, string path)
         {
             if (Path.IsPathRooted(path))
-                return path;    
+                return path;
             return Path.Combine(basePath, path);
         }
     }

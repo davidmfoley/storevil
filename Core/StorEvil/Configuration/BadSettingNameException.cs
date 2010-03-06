@@ -1,6 +1,6 @@
 using System;
 
-namespace StorEvil
+namespace StorEvil.Configuration
 {
     public class BadSettingNameException : Exception
     {

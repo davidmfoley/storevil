@@ -1,6 +1,6 @@
 using Funq;
+using StorEvil.Configuration;
 using StorEvil.Core;
-using StorEvil.Core.Configuration;
 using StorEvil.Nunit;
 
 namespace StorEvil.Console

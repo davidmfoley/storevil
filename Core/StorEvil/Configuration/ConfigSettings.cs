@@ -1,11 +1,12 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
 
-namespace StorEvil
+namespace StorEvil.Configuration
 {
-
-    public enum ConsoleMode { Color, NoColor }
+    public enum ConsoleMode
+    {
+        Color,
+        NoColor
+    }
 
     public class ConfigSettings
     {
@@ -19,7 +20,7 @@ namespace StorEvil
 
         public string StoryBasePath { get; set; }
 
-        public string OutputFile  { get; set; }
+        public string OutputFile { get; set; }
 
         public string OutputFileFormat { get; set; }
 
@@ -31,7 +32,7 @@ namespace StorEvil
         {
             return new ConfigSettings
                        {
-                           ScenarioExtensions = new string[0] , 
+                           ScenarioExtensions = new string[0],
                            AssemblyLocations = new string[0]
                        };
         }

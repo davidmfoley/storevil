@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace StorEvil.Core.Configuration
+namespace StorEvil.Configuration
 {
     public class SwitchInfo<T>
     {
@@ -13,7 +13,7 @@ namespace StorEvil.Core.Configuration
         private readonly Func<string[], object> BoolParamTransform = (ignored => true);
         private readonly Func<string[], object> StringParamTransform = (values => values[0]);
         private readonly Func<string[], object> CollectionParamTransform = (values => values.Cast<string>().ToArray());
-          
+
         public SwitchInfo(string[] names)
         {
             Names = names;
@@ -57,7 +57,7 @@ namespace StorEvil.Core.Configuration
             {
                 SetFieldFromLambda(func, values =>
                                              {
-                                                var foo = Enum.Parse(t, values[0], true);
+                                                 var foo = Enum.Parse(t, values[0], true);
                                                  return foo;
                                              });
             }
@@ -91,9 +91,9 @@ namespace StorEvil.Core.Configuration
             var propOrFieldType = GetMemberType(member);
             if (propOrFieldType == typeof (bool))
                 return BoolParamTransform;
-            if (propOrFieldType == typeof(string))
+            if (propOrFieldType == typeof (string))
                 return StringParamTransform;
-            if (typeof(IEnumerable).IsAssignableFrom(propOrFieldType))
+            if (typeof (IEnumerable).IsAssignableFrom(propOrFieldType))
                 return CollectionParamTransform;
 
             ThrowBadExpressionException();
@@ -170,7 +170,5 @@ namespace StorEvil.Core.Configuration
         {
             throw new ArgumentException("Only simple property and field expressions are supported.");
         }
-
-       
     }
 }

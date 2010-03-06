@@ -4,23 +4,25 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace StorEvil.Core.Configuration
+namespace StorEvil.Configuration
 {
     public class SwitchParser<T>
     {
         public SwitchParser()
         {
             var members = typeof (T).GetMembers();
-          
+
             foreach (var info in members)
             {
-                var customSwitchAttrs = info.GetCustomAttributes(typeof (CommandSwitchAttribute), true).Cast<CommandSwitchAttribute>();
+                var customSwitchAttrs =
+                    info.GetCustomAttributes(typeof (CommandSwitchAttribute), true).Cast<CommandSwitchAttribute>();
                 if (!customSwitchAttrs.Any())
                     continue;
 
                 var switchNames = GetSwitchNames(info, customSwitchAttrs);
                 var switchInfo = AddSwitch(switchNames).SetsField(info);
-                switchInfo.WithDescription(string.Join("\n",customSwitchAttrs.Select(x => x.Description ?? "").ToArray()));
+                switchInfo.WithDescription(string.Join("\n",
+                                                       customSwitchAttrs.Select(x => x.Description ?? "").ToArray()));
             }
         }
 
@@ -30,7 +32,7 @@ namespace StorEvil.Core.Configuration
             foreach (var attr in customAttrs)
                 names.AddRange(attr.Names);
 
-            if (names.Count == 0) 
+            if (names.Count == 0)
                 names.Add(GetDefaultName(member));
 
             return names.ToArray();
@@ -39,7 +41,7 @@ namespace StorEvil.Core.Configuration
         private string GetDefaultName(MemberInfo member)
         {
             var name = member.Name;
-            var formatted = new StringBuilder( "-");
+            var formatted = new StringBuilder("-");
 
             foreach (char c in name)
             {
@@ -108,5 +110,5 @@ namespace StorEvil.Core.Configuration
         public IEnumerable<string> Names { get; private set; }
 
         public string Description { get; set; }
-    }  
+    }
 }
