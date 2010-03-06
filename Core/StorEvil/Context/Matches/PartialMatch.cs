@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace StorEvil.Context
+namespace StorEvil.Context.Matches
 {
     /// <summary>
     /// Represents a partial match, which occurs when all of a member's words match 
@@ -21,20 +21,20 @@ namespace StorEvil.Context
         public string RemainingText { get; set; }
         public MemberInfo MemberInfo;
 
-        public PartialMatch(MemberInfo memberInfo,Dictionary<string, object> paramValues, string matchedText, string remainingText) : base(paramValues, matchedText)
+        public PartialMatch(MemberInfo memberInfo, Dictionary<string, object> paramValues, string matchedText,
+                            string remainingText) : base(paramValues, matchedText)
         {
             RemainingText = remainingText;
             MemberInfo = memberInfo;
 
             if (MemberInfo is MethodInfo)
-                TerminatingType = ((MethodInfo)MemberInfo).ReturnType;
+                TerminatingType = ((MethodInfo) MemberInfo).ReturnType;
             else if (MemberInfo is PropertyInfo)
-                TerminatingType = ((PropertyInfo)MemberInfo).PropertyType;
+                TerminatingType = ((PropertyInfo) MemberInfo).PropertyType;
             else if (MemberInfo is FieldInfo)
-                TerminatingType = ((FieldInfo)MemberInfo).FieldType;
+                TerminatingType = ((FieldInfo) MemberInfo).FieldType;
         }
 
-      
         /// <summary>
         /// The type returned, used to chain member invocations.
         /// </summary>

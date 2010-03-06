@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace StorEvil.Context
+namespace StorEvil.Context.WordFilters
 {
     /// <summary>
     /// word filter that matches parameters

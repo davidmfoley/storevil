@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using StorEvil.Context.Matches;
+using StorEvil.Context.WordFilters;
 using StorEvil.Nunit;
 
-namespace StorEvil.Context
+namespace StorEvil.Context.Matchers
 {
     /// <summary>
     /// Matches the reflected name of a Property or Field on a context class

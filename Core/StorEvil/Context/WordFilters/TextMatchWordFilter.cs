@@ -1,4 +1,4 @@
-namespace StorEvil.Context
+namespace StorEvil.Context.WordFilters
 {
     public class TextMatchWordFilter : WordFilter
     {

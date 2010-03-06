@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace StorEvil.Context
+namespace StorEvil.Context.Matchers
 {
     internal class ContextMemberNameSplitter
     {
@@ -9,13 +9,12 @@ namespace StorEvil.Context
 
         public IEnumerable<string> SplitMemberName(string name)
         {
-            if (name.Contains("_"))
-                return SplitAtUnderscores(name);
-
-            return SplitOnCamelCaseBoundaries(name);
+            return name.Contains("_") ? 
+                SplitAtUnderscores(name) : 
+                SplitAtCamelCaseBoundaries(name);
         }
 
-        private static IEnumerable<string> SplitOnCamelCaseBoundaries(string name)
+        private static IEnumerable<string> SplitAtCamelCaseBoundaries(string name)
         {
             var matches = SplitMemberNameRegex.Matches(name);
 

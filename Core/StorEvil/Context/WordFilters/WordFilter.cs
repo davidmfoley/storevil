@@ -1,4 +1,4 @@
-namespace StorEvil.Context
+namespace StorEvil.Context.WordFilters
 {
     public interface WordFilter
     {

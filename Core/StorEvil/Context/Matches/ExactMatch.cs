@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace StorEvil.Context
+namespace StorEvil.Context.Matches
 {
     /// <summary>
     /// This is returned when the terms in the scenario line match exactly (word-for-word) with

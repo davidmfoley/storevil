@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace StorEvil.Context
+namespace StorEvil.Context.Matches
 {
     /// <summary>
     /// When we resolve a line of a scenario to a context object, 

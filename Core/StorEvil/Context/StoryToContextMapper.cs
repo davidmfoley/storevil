@@ -23,11 +23,16 @@ namespace StorEvil.Context
 
         public void AddAssembly(Assembly a)
         {
-            foreach (var t in a.GetTypes())
-            {
-                if (t.GetCustomAttributes(typeof (ContextAttribute), true).Any())
-                    AddContext(t);
-            }
+            var allTypesInAssembly = a.GetTypes();
+            var storEvilContexts = allTypesInAssembly.Where(TypeHasContextAttrbiute);
+
+            foreach (var t in storEvilContexts)            
+                AddContext(t);
+        }
+
+        private static bool TypeHasContextAttrbiute(Type t)
+        {
+            return t.GetCustomAttributes(typeof (ContextAttribute), true).Any();
         }
 
         public void AddAssembly(string pathToAssembly)
