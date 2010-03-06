@@ -14,42 +14,30 @@ namespace StorEvil.Parsing
         public Story Parse(string storyText, string id)
         {
             var storyId = id ?? Guid.NewGuid().ToString().Trim();
-
             var scenarios = new List<IScenario>();
-
             var storyName = new StringBuilder();
-
             var lines = ParseLines(storyText);
 
             Action<string> handler = x => storyName.Append(x + " ");
 
             ScenarioBuildingInfo currentScenario = null;
-            var scenarioCount = 0;
+           
 
             foreach (var line in lines)
             {
                 if (IsScenarioOutlineHeader(line) || IsScenarioHeader(line))
                 {
                     if (currentScenario != null)
-                        scenarios.Add(new Scenario(storyId + "-" + (scenarioCount++), currentScenario.Name,
+                        scenarios.Add(new Scenario(storyId + "-" + (scenarios.Count), currentScenario.Name,
                                                    currentScenario.Lines));
 
                     currentScenario = new ScenarioBuildingInfo {Name = line.After(":").Trim()};
 
-                    ScenarioBuildingInfo scenario = currentScenario;
-                    handler = l =>
-                                  {
-                                      if (!IsComment(l))
-                                          scenario.Lines.Add(l);
-                                  };
+                    handler = GetScenarioLineHandler(currentScenario);
                 }
                 else if (IsStartOfExamples(line))
                 {
-                    handler = l =>
-                                  {
-                                      if (currentScenario != null && l.StartsWith("|"))
-                                          currentScenario.RowData.Add(l.Split('|').Skip(1));
-                                  };
+                    handler = GetScenarioExampleRowHandler(currentScenario);
                 }
                 else
                 {
@@ -64,13 +52,13 @@ namespace StorEvil.Parsing
                     var count = currentScenario.RowData.First().Count() - 1;
                     var fieldNames = currentScenario.RowData.First().Take(count);
                     var examples = currentScenario.RowData.Skip(1).Select(x => x.Take(count));
-                    scenarios.Add(new ScenarioOutline(storyId + "- outline -" + scenarioCount, currentScenario.Name,
-                                                      new Scenario(storyId + "-" + scenarioCount, currentScenario.Name,
+                    scenarios.Add(new ScenarioOutline(storyId + "- outline -" + scenarios.Count, currentScenario.Name,
+                                                      new Scenario(storyId + "-" + scenarios.Count, currentScenario.Name,
                                                                    currentScenario.Lines), fieldNames, examples));
                 }
                 else
                 {
-                    scenarios.Add(new Scenario(storyId + "-" + scenarioCount, currentScenario.Name,
+                    scenarios.Add(new Scenario(storyId + "-" + scenarios.Count, currentScenario.Name,
                                                currentScenario.Lines));
                 }
             }
@@ -78,6 +66,30 @@ namespace StorEvil.Parsing
             FixEmptyScenarioNames(scenarios);
 
             return new Story(storyId, storyName.ToString().Trim(), scenarios);
+        }
+
+        private Action<string> GetScenarioLineHandler(ScenarioBuildingInfo currentScenario)
+        {
+            Action<string> handler;
+            var scenario = currentScenario;
+            handler = l =>
+                          {
+                              if (!IsComment(l))
+                                  scenario.Lines.Add(l);
+                          };
+            return handler;
+        }
+
+        private Action<string> GetScenarioExampleRowHandler(ScenarioBuildingInfo currentScenario)
+        {
+            Action<string> handler;
+            var scenario = currentScenario;
+            handler = l =>
+                          {
+                              if (scenario != null && l.StartsWith("|"))
+                                  scenario.RowData.Add(l.Split('|').Skip(1));
+                          };
+            return handler;
         }
 
         private void FixEmptyScenarioNames(List<IScenario> scenarios)
@@ -92,7 +104,7 @@ namespace StorEvil.Parsing
                     var s = scenario as Scenario;
                     s.Name = string.Join("\r\n", s.Body.ToArray());
                 }
-                else
+                else if (scenario is ScenarioOutline)
                 {
                     var s = scenario as ScenarioOutline;
                     s.Name = string.Join("\r\n", s.Scenario.Body.ToArray());
@@ -100,12 +112,12 @@ namespace StorEvil.Parsing
             }
         }
 
-        private bool IsComment(string s)
+        private static bool IsComment(string s)
         {
             return s.Trim().StartsWith("#");
         }
 
-        private bool IsStartOfExamples(string line)
+        private static bool IsStartOfExamples(string line)
         {
             return line.ToLower().StartsWith("examples:");
         }
@@ -122,19 +134,14 @@ namespace StorEvil.Parsing
 
         private static IEnumerable<string> ParseLines(string text)
         {
-            foreach (string line in text.Split(new[] {'\n', '\r'}))
-            {
-                var s = line.Trim();
-                if (s.Length > 0)
-                    yield return s.Trim();
-            }
+            return text.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
         }
-    }
 
-    public class ScenarioBuildingInfo
-    {
-        public string Name;
-        public List<string> Lines = new List<string>();
-        public List<IEnumerable<string>> RowData = new List<IEnumerable<string>>();
+        internal class ScenarioBuildingInfo
+        {
+            public string Name;
+            public List<string> Lines = new List<string>();
+            public List<IEnumerable<string>> RowData = new List<IEnumerable<string>>();
+        }
     }
 }

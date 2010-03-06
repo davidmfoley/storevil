@@ -21,7 +21,7 @@ namespace StorEvil.Parsing
         private IEnumerable<Scenario> PreprocessExamples(ScenarioOutline outline)
         {
             var scenario = outline.Scenario;
-            int count = 0;
+            var count = 0;
             foreach (var example in outline.Examples)
             {
                 yield return
@@ -37,7 +37,7 @@ namespace StorEvil.Parsing
             {
                 var processed = line;
 
-                for (int fieldIndex = 0; fieldIndex < fieldNames.ToArray().Length; fieldIndex++)
+                for (var fieldIndex = 0; fieldIndex < fieldNames.ToArray().Length; fieldIndex++)
                 {
                     var name = fieldNames.ToArray()[fieldIndex];
                     processed = processed.Replace("<" + name + ">", example.ElementAtOrDefault(fieldIndex));
