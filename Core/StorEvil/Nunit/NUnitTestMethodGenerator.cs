@@ -12,7 +12,7 @@ namespace StorEvil.Nunit
     /// 
     /// TODO: this is sort of POC code... needs a 2nd look
     /// </summary>
-    public class    NUnitTestMethodGenerator
+    public class NUnitTestMethodGenerator
     {
         private readonly CSharpMethodInvocationGenerator _invocationGenerator;
         private string _previousSignificantFirstWord;
@@ -20,8 +20,11 @@ namespace StorEvil.Nunit
         public NUnitTestMethodGenerator()
         {
             //TODO
-            _invocationGenerator = new CSharpMethodInvocationGenerator(new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())));
+            _invocationGenerator =
+                new CSharpMethodInvocationGenerator(
+                    new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())));
         }
+
         public NUnitTestMethodGenerator(CSharpMethodInvocationGenerator invocationGenerator)
         {
             _invocationGenerator = invocationGenerator;
@@ -47,7 +50,8 @@ namespace StorEvil.Nunit
 
                 if (functionLine == null)
                 {
-                    codeBuilder.AppendLine(@"            Assert.Fail(@""Error parsing scenario - Could not interpret '" + line + "'\");");
+                    codeBuilder.AppendLine(
+                        @"            Assert.Fail(@""Error parsing scenario - Could not interpret '" + line + "'\");");
                     break;
                 }
 
@@ -55,7 +59,7 @@ namespace StorEvil.Nunit
                 codeBuilder.AppendLine(functionLine.Code);
             }
 
-           AppendDisposeCalls(codeBuilder,contexts);
+            AppendDisposeCalls(codeBuilder, contexts);
 
             string declarations = BuildContextDeclarations(contexts);
             var name = BuildMethodName(scenario);
@@ -67,21 +71,20 @@ namespace StorEvil.Nunit
 
         private void AppendDisposeCalls(StringBuilder codeBuilder, TestContextSet contexts)
         {
-            foreach (var context in contexts.Where(c=> c.Type.GetInterfaces().Contains(typeof(IDisposable))))
+            foreach (var context in contexts.Where(c => c.Type.GetInterfaces().Contains(typeof (IDisposable))))
             {
                 codeBuilder.AppendLine("            " + context.Name + ".Dispose();");
             }
-            
         }
 
         private IEnumerable<string> GenerateLineVariations(string line)
-        {         
+        {
             var firstWordIsAnd = FirstWordIsAnd(line);
             if (!firstWordIsAnd)
                 _previousSignificantFirstWord = GetFirstWord(line);
 
             yield return line;
-            
+
             if (firstWordIsAnd && _previousSignificantFirstWord != null)
                 yield return _previousSignificantFirstWord + line.Substring(line.IndexOf(" "));
         }
@@ -108,7 +111,8 @@ namespace StorEvil.Nunit
 
         private static string BuildContextDeclarations(IEnumerable<TestContextField> contexts)
         {
-            var declarationLines = contexts.Select(x => string.Format("            var {0} = new {1}();", x.Name, x.Type.FullName));
+            var declarationLines =
+                contexts.Select(x => string.Format("            var {0} = new {1}();", x.Name, x.Type.FullName));
             return string.Join("\r\n", declarationLines.ToArray());
         }
 
@@ -134,7 +138,6 @@ namespace StorEvil.Nunit
 
         private static string StripNonNameCharacters(string baseName)
         {
-
             var name = new StringBuilder();
 
             foreach (char c in baseName.Replace("_", " ").Trim())
@@ -143,10 +146,7 @@ namespace StorEvil.Nunit
                     name.Append(c);
                 else
                     name.Append("_");
-
             }
-
-
 
             return name.ToString();
         }
@@ -172,7 +172,7 @@ namespace StorEvil.Nunit
         private ScenarioLineImplementation BuildCodeFromScenarioLine(string line, StoryContext storyContext)
         {
             var scenarioContext = storyContext.GetScenarioContext();
-             Type chosenType = null;
+            Type chosenType = null;
             string invocation = null;
             foreach (var type in storyContext.ImplementingTypes)
             {
@@ -186,7 +186,8 @@ namespace StorEvil.Nunit
             if (chosenType == null)
                 return null;
 
-            return new ScenarioLineImplementation("            context" + chosenType.Name + invocation + ";", chosenType, "context" + chosenType.Name);
+            return new ScenarioLineImplementation("            context" + chosenType.Name + invocation + ";", chosenType,
+                                                  "context" + chosenType.Name);
         }
     }
 }

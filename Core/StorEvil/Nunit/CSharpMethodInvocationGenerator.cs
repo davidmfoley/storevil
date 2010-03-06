@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using StorEvil.Context;
-using StorEvil.Core;
 using StorEvil.Interpreter;
 
 namespace StorEvil.Nunit
@@ -34,18 +32,19 @@ namespace StorEvil.Nunit
 
         private static string ConvertInvocationChainToCSharpCode(InvocationChain matchingChain)
         {
-            Func<string, Invocation, string> aggregator = (codeSoFar, invocation) => codeSoFar + BuildInvocation(invocation.MemberInfo, invocation.ParamValues);
+            Func<string, Invocation, string> aggregator =
+                (codeSoFar, invocation) => codeSoFar + BuildInvocation(invocation.MemberInfo, invocation.ParamValues);
 
             return matchingChain.Invocations
                 .Aggregate("", aggregator);
         }
 
-        private static string  BuildInvocation(MemberInfo memberInfo, IEnumerable<object> paramValues)
+        private static string BuildInvocation(MemberInfo memberInfo, IEnumerable<object> paramValues)
         {
             if (memberInfo is MethodInfo)
             {
                 return BuildMethodInvocation((MethodInfo) memberInfo, paramValues);
-            }    
+            }
             if (memberInfo is PropertyInfo)
             {
                 return BuildPropertyInvocation((PropertyInfo) memberInfo);
@@ -74,12 +73,11 @@ namespace StorEvil.Nunit
             ParameterInfo[] infos = member.GetParameters();
             for (int i = 0; i < paramValues.Count(); i++)
             {
-                
                 parameters[i] = ParameterValueFormatter.GetParamString(infos[i].ParameterType,
                                                                        paramValues.ElementAt(i).ToString());
             }
-           
-            return string.Format(".{0}({1})", member.Name, String.Join(", ", parameters)); 
+
+            return string.Format(".{0}({1})", member.Name, String.Join(", ", parameters));
         }
 
         public CSharpMethodInvocationGenerator ForType(Type type)

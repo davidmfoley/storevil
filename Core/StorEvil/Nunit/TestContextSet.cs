@@ -8,7 +8,7 @@ namespace StorEvil.Nunit
     {
         public void Add(TestContextField field)
         {
-            if (_contexts.Any(x=>x.Name == field.Name))
+            if (_contexts.Any(x => x.Name == field.Name))
                 return;
 
             _contexts.Add(field);
@@ -23,6 +23,7 @@ namespace StorEvil.Nunit
         }
 
         private readonly List<TestContextField> _contexts = new List<TestContextField>();
+
         public IEnumerator<TestContextField> GetEnumerator()
         {
             return _contexts.GetEnumerator();
@@ -32,7 +33,5 @@ namespace StorEvil.Nunit
         {
             return _contexts.GetEnumerator();
         }
-
-
     }
 }

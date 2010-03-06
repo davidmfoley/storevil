@@ -7,7 +7,7 @@ namespace StorEvil.Nunit
     /// <summary>
     /// Generates NUnit fixtures
     /// </summary>
-    public class NUnitFixtureGenerator :  IFixtureGenerator
+    public class NUnitFixtureGenerator : IFixtureGenerator
     {
         private readonly IScenarioPreprocessor _preprocessor;
 
@@ -19,7 +19,7 @@ namespace StorEvil.Nunit
 
         public NUnitTestMethodGenerator MethodGenerator { get; set; }
 
-        const string FixtureFormat =
+        private const string FixtureFormat =
             @"
 
 namespace {0} {{
@@ -36,7 +36,7 @@ namespace {0} {{
 {3}
     }}
 }}";
-        
+
         private static string GetFixtureName(Story story)
         {
             var storyName = new StringBuilder();
@@ -53,7 +53,7 @@ namespace {0} {{
         }
 
         public string GenerateFixture(Story story, StoryContext context)
-        {   
+        {
             var tests = new StringBuilder();
 
             var contextSet = new TestContextSet();
@@ -67,15 +67,13 @@ namespace {0} {{
                     contextSet.AddRange(test.ContextTypes);
                 }
             }
-            var namespaces = contextSet.GroupBy(x => x.Type.Namespace).Select(y => y.Key);
 
             var usingStatements = new[] {""}; // namespaces.Select(x => string.Format("using {0};", x));
             var usings = string.Join("\r\n", usingStatements.ToArray());
 
-            var writeStoryToConsole = "Console.WriteLine(@\"" + story.Summary.Replace("\"", "\"\"") + "\r\n"  + " \");";
+            var writeStoryToConsole = "Console.WriteLine(@\"" + story.Summary.Replace("\"", "\"\"") + "\r\n" + " \");";
             var ns = "TestNamespace";
-            return string.Format(FixtureFormat, ns, usings, GetFixtureName(story),  tests, writeStoryToConsole );
-
+            return string.Format(FixtureFormat, ns, usings, GetFixtureName(story), tests, writeStoryToConsole);
         }
     }
 }

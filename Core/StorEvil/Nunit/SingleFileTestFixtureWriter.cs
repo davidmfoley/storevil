@@ -20,7 +20,7 @@ namespace StorEvil.Nunit
         }
 
         public string TargetFilePath { get; set; }
-        readonly StringBuilder _code = new StringBuilder();
+        private readonly StringBuilder _code = new StringBuilder();
 
         public void WriteFixture(string storyId, string sourceCode)
         {

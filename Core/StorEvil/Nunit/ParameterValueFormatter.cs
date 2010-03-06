@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace StorEvil.Context
+namespace StorEvil.Nunit
 {
     internal class ParameterValueFormatter
     {
