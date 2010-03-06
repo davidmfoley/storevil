@@ -76,7 +76,7 @@
     <Compile Include="Config\parsing_config.cs" />
     <Compile Include="parsing_parameter_types.cs" />
     <Compile Include="RegexMatcherTests.cs" />
-    <Compile Include="Reports\Class1.cs" />
+    <Compile Include="Reports\XmlReportListener_Specs.cs" />
     <Compile Include="Reports\FakeFileWriter.cs" />
     <Compile Include="Reports\XmlTestExtensions.cs" />
     <Compile Include="StoryParserTests.cs" />

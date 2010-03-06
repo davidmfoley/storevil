@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Xml;
@@ -59,7 +58,6 @@ namespace StorEvil.Reports.XmlReportListener_Specs
         }
 
         protected abstract void DoTestSetup(XmlReportListener writer);
-        
     }
 
     [TestFixture]
@@ -73,7 +71,7 @@ namespace StorEvil.Reports.XmlReportListener_Specs
 
         [Test]
         public void Generates_valid_xml()
-        {         
+        {
             Result.ShouldBeValidXml();
         }
 
@@ -88,8 +86,6 @@ namespace StorEvil.Reports.XmlReportListener_Specs
         {
             FirstStoryElement().GetAttribute("Id").ShouldEqual("id");
         }
-
-       
 
         [Test]
         public void Story_node_has_summary()
@@ -110,13 +106,12 @@ namespace StorEvil.Reports.XmlReportListener_Specs
         protected override void DoTestSetup(XmlReportListener writer)
         {
             Scenario testScenario = new Scenario("scenarioId", "scenarioName", new[] {"line1", "line2"});
-            Writer.StoryStarting(new Story("id", "summary", new IScenario[]{testScenario}));
+            Writer.StoryStarting(new Story("id", "summary", new IScenario[] {testScenario}));
             Writer.ScenarioStarting(testScenario);
             Writer.Success(testScenario, "line1");
             Writer.Success(testScenario, "line2");
             Writer.ScenarioSucceeded(testScenario);
             Writer.Finished();
-            
         }
 
         [Test]
@@ -130,8 +125,6 @@ namespace StorEvil.Reports.XmlReportListener_Specs
         {
             StoryElements().Count().ShouldEqual(1);
         }
-
-       
 
         [Test]
         public void Story_is_marked_successful()
@@ -150,7 +143,7 @@ namespace StorEvil.Reports.XmlReportListener_Specs
         {
             FirstScenarioElement().GetAttribute("Status").ShouldEqual("Success");
         }
-     
+
         [Test]
         public void line_elements_exist_in_scenario_text()
         {
@@ -163,8 +156,6 @@ namespace StorEvil.Reports.XmlReportListener_Specs
             CheckStatus(GetFirstScenarioLines().First(), "Success");
             CheckStatus(GetFirstScenarioLines().Last(), "Success");
         }
-
-        
     }
 
     [TestFixture]
@@ -172,11 +163,11 @@ namespace StorEvil.Reports.XmlReportListener_Specs
     {
         protected override void DoTestSetup(XmlReportListener writer)
         {
-            var testScenario = new Scenario("scenarioId", "scenarioName", new[] { "line1", "line2" });
-            Writer.StoryStarting(new Story("id", "summary", new IScenario[] { testScenario }));
+            var testScenario = new Scenario("scenarioId", "scenarioName", new[] {"line1", "line2"});
+            Writer.StoryStarting(new Story("id", "summary", new IScenario[] {testScenario}));
             Writer.ScenarioStarting(testScenario);
             Writer.Success(testScenario, "line1");
-            Writer.ScenarioFailed(testScenario,"successPart", "failedPart", "failureMessage");            
+            Writer.ScenarioFailed(testScenario, "successPart", "failedPart", "failureMessage");
             Writer.Finished();
         }
 
@@ -223,18 +214,18 @@ namespace StorEvil.Reports.XmlReportListener_Specs
     {
         protected override void DoTestSetup(XmlReportListener writer)
         {
-            var sucessScenario = new Scenario("successId", "successName", new[] { "successLine" });
-            var failureScenario = new Scenario("failureId", "failureName", new[] { "failureLine" });
+            var sucessScenario = new Scenario("successId", "successName", new[] {"successLine"});
+            var failureScenario = new Scenario("failureId", "failureName", new[] {"failureLine"});
 
-            Writer.StoryStarting(new Story("id", "summary", new IScenario[] { sucessScenario, failureScenario  }));
-            
+            Writer.StoryStarting(new Story("id", "summary", new IScenario[] {sucessScenario, failureScenario}));
+
             Writer.ScenarioStarting(sucessScenario);
             Writer.Success(sucessScenario, "line1");
             Writer.ScenarioSucceeded(sucessScenario);
 
             Writer.ScenarioStarting(failureScenario);
-            Writer.ScenarioFailed(failureScenario, "foo", "bar", "failed" );
-  
+            Writer.ScenarioFailed(failureScenario, "foo", "bar", "failed");
+
             Writer.Finished();
         }
 
@@ -249,6 +240,7 @@ namespace StorEvil.Reports.XmlReportListener_Specs
         {
             StoryElements().Count().ShouldEqual(1);
         }
+
         [Test]
         public void Story_has_two_scenarios()
         {
@@ -271,24 +263,25 @@ namespace StorEvil.Reports.XmlReportListener_Specs
         public void Second_scenario_is_marked_as_unsuccessful()
         {
             CheckStatus(AllScenarioElements().Last(), "Failure");
-        }      
+        }
     }
+
     [TestFixture]
     public class Writing_xml_for_multiple_stories : Xml_reports
     {
         protected override void DoTestSetup(XmlReportListener writer)
         {
-            var sucessScenario = new Scenario("successId", "successName", new[] { "successLine" });
-            
-            Writer.StoryStarting(new Story("id", "summary", new IScenario[] { sucessScenario}));
+            var sucessScenario = new Scenario("successId", "successName", new[] {"successLine"});
+
+            Writer.StoryStarting(new Story("id", "summary", new IScenario[] {sucessScenario}));
 
             Writer.ScenarioStarting(sucessScenario);
             Writer.Success(sucessScenario, "line1");
             Writer.ScenarioSucceeded(sucessScenario);
 
-            var failureScenario = new Scenario("failureId", "failureName", new[] { "failureLine" });
+            var failureScenario = new Scenario("failureId", "failureName", new[] {"failureLine"});
 
-            Writer.StoryStarting(new Story("id", "summary", new IScenario[] { failureScenario }));
+            Writer.StoryStarting(new Story("id", "summary", new IScenario[] {failureScenario}));
 
             Writer.ScenarioStarting(failureScenario);
             Writer.ScenarioFailed(failureScenario, "foo", "bar", "failed");
@@ -307,7 +300,7 @@ namespace StorEvil.Reports.XmlReportListener_Specs
         {
             StoryElements().Count().ShouldEqual(2);
         }
-        
+
         [Test]
         public void First_story_is_marked_as_successful()
         {
@@ -331,5 +324,67 @@ namespace StorEvil.Reports.XmlReportListener_Specs
         {
             CheckStatus(AllScenarioElements().Last(), "Failure");
         }
-    } 
+    }
+
+    [TestFixture]
+    public class Writing_xml_when_line_is_not_interpreted : Xml_reports
+    {
+        protected override void DoTestSetup(XmlReportListener writer)
+        {
+            var line = "!<%&>/>\"'line1";
+            var scenario = new Scenario("<successId&>\"'", "<successName>%&\"'", new[] {line});
+
+            Writer.StoryStarting(new Story("id", "summary", new IScenario[] {scenario}));
+
+            Writer.ScenarioStarting(scenario);
+
+            Writer.Success(scenario, line);
+            Writer.CouldNotInterpret(scenario, line);
+
+            Writer.Finished();
+        }
+
+        [Test]
+        public void Should_be_valid_xml()
+        {
+            Result.ShouldBeValidXml();
+        }
+
+        [Test]
+        public void Scenario_should_have_NotUnderstood_status()
+        {
+            CheckStatus(FirstScenarioElement(), "NotUnderstood");
+        }
+
+        [Test]
+        public void Last_line_should_have_NotUnderstood_status()
+        {
+            CheckStatus(FirstScenarioElement().FindElements("./Line").Last(), "NotUnderstood");
+        }
+    }
+
+    [TestFixture]
+    public class Writing_xml_when_special_characters_are_present : Xml_reports
+    {
+        protected override void DoTestSetup(XmlReportListener writer)
+        {
+            var line = "!<%&>/>\"'line1";
+            var sucessScenario = new Scenario("<successId&>\"'", "<successName>%&\"'", new[] {line});
+
+            Writer.StoryStarting(new Story("id", "summary", new IScenario[] {sucessScenario}));
+
+            Writer.ScenarioStarting(sucessScenario);
+
+            Writer.Success(sucessScenario, line);
+            Writer.ScenarioFailed(sucessScenario, line, line, line);
+
+            Writer.Finished();
+        }
+
+        [Test]
+        public void Should_be_valid_xml()
+        {
+            Result.ShouldBeValidXml();
+        }
+    }
 }

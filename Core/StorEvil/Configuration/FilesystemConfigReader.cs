@@ -17,14 +17,15 @@ namespace StorEvil.Configuration
 
         public ConfigSettings GetConfig(string directoryOrFile)
         {
-            var path = directoryOrFile;
-            if (!path.EndsWith("\\"))
-                path += "\\";
+            var path = directoryOrFile.ToLower();
+            if (!path.EndsWith("storevil.config"))
+                path += "\\storevil.config";
 
             var containingDirectory = path; // Path.GetDirectoryName(Path.GetFullPath(path));
 
             while (containingDirectory.Length > Path.GetPathRoot(containingDirectory).Length)
             {
+
                 var configLocation = Path.Combine(containingDirectory, "storevil.config");
 
                 if (_filesystem.FileExists(configLocation))
@@ -39,12 +40,12 @@ namespace StorEvil.Configuration
 
                 var parent = Directory.GetParent(containingDirectory);
                 if (parent == null)
-                    throw new ConfigNotFoundException(path);
+                    return ConfigSettings.Default();
 
                 containingDirectory = parent.FullName;                
             }
 
-            throw new ConfigNotFoundException(path);
+            return ConfigSettings.Default();
         }
 
         private void FixUpPaths(string basePath, ConfigSettings settings)
@@ -57,25 +58,6 @@ namespace StorEvil.Configuration
             if (Path.IsPathRooted(path))
                 return path;    
             return Path.Combine(basePath, path);
-        }
-    }
-
-    public class ConfigNotFoundException : Exception
-    {
-        public string PathSearched { get; set; }
-
-        public ConfigNotFoundException(string pathSearched)
-        {
-            PathSearched = pathSearched;
-        }
-
-        public override string Message
-        {
-            get
-            {
-                const string message = "Could not find a configuration file in {0} or any parent directories.";
-                return string.Format(message, PathSearched);
-            }
         }
     }
 }

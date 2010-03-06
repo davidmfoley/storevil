@@ -1,8 +1,10 @@
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Console;
+using StorEvil.InPlace;
 
 namespace StorEvil.Argument_parsing
 {
@@ -80,6 +82,21 @@ namespace StorEvil.Argument_parsing
                                           });
             result.ShouldBeOfType<DisplayHelpJob>();
             result.ShouldNotBeNull();
+        }
+
+        [Test]
+        public void when_xml_output_is_chosen_creates_an_xml_listener()
+        {
+            var result =
+                Parser.ParseArguments(new[]
+                                          {
+                                             "execute",  "-o", "foo.xml", "-f", "xml"
+                                          });
+
+            var composite = Parser.Container.Resolve<IResultListener>() as CompositeListener;
+            var xmlListener = composite.Listeners.OfType<XmlReportListener>().FirstOrDefault();
+            xmlListener.ShouldNotBeNull();
+
         }
     }
     

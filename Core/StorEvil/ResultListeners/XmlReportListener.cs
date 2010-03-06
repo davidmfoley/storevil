@@ -1,5 +1,4 @@
-using System;
-using System.Collections.Generic;
+using System.Xml;
 using StorEvil.Core;
 using StorEvil.ResultListeners;
 
@@ -7,80 +6,100 @@ namespace StorEvil.InPlace
 {
     public class XmlReportListener : IResultListener
     {
+        public class StatusNames
+        {
+            public const string Success = "Success";
+            public const string Failure = "Failure";
+            public const string NotUnderstood = "NotUnderstood";
+        }
+
+        public class XmlNames
+        {
+            public const string Id = "Id";
+            public const string Summary = "Summary";
+            public const string Status = "Status";
+
+            public const string Story = "Story";
+            public const string Scenario = "Scenario";
+            public const string Line = "Line";
+            public const string DocumentElement = "TestResults";
+        }
+
         private readonly IFileWriter _fileWriter;
+
+        private readonly XmlDocument _doc;
+        private XmlElement _currentStoryElement;
+        private XmlElement _currentScenarioElement;
 
         public XmlReportListener(IFileWriter fileWriter)
         {
             _fileWriter = fileWriter;
+            _doc = new XmlDocument();
+            _doc.LoadXml("<" + XmlNames.DocumentElement + "/>");
         }
 
         public void StoryStarting(Story story)
         {
-            if (_currentStoryStatus != null)
-                WriteCurrentStory();
-
-            _currentStoryStatus = "Success";
-            _scenarios = new List<string>();
-        }
-
-        private void WriteCurrentStory()
-        {
-            _stories.Add("<Story Id=\"id\" Summary=\"summary\" Status=\"" + _currentStoryStatus + "\">" + string.Join("\r\n", _scenarios.ToArray()) + "</Story>");
-
+            _currentStoryElement = _doc.CreateElement(XmlNames.Story);
+            _currentStoryElement.SetAttribute(XmlNames.Id, story.Id);
+            _currentStoryElement.SetAttribute(XmlNames.Summary, story.Summary);
+            SetStatus(_currentStoryElement, StatusNames.Success);
+            _doc.DocumentElement.AppendChild(_currentStoryElement);
         }
 
         public void ScenarioStarting(Scenario scenario)
         {
-            _currentScenario = "";
+            _currentScenarioElement = _doc.CreateElement(XmlNames.Scenario);
+            _currentStoryElement.AppendChild(_currentScenarioElement);
         }
 
         public void ScenarioFailed(Scenario scenario, string successPart, string failedPart, string message)
         {
-            _currentScenario += LineMarkup(successPart, "Success");
-            _currentScenario += LineMarkup(failedPart, "Failure");
+            AddLineToCurrentScenario(successPart, StatusNames.Success);
+            AddLineToCurrentScenario(failedPart, StatusNames.Failure);
 
-            AddScenarioMarkup("Failure");
-            _currentStoryStatus = "Failure";
+            SetStatus(_currentScenarioElement, StatusNames.Failure);
+            SetStatus(_currentStoryElement, StatusNames.Failure);
+        }
+
+        private void AddLineToCurrentScenario(string successPart, string success)
+        {
+            _currentScenarioElement.AppendChild(GetLineElement(successPart, success));
+        }
+
+        private XmlNode GetLineElement(string line, string status)
+        {
+            var el = _doc.CreateElement(XmlNames.Line);
+            SetStatus(el, status);
+            el.InnerText = line;
+            return el;
+        }
+
+        private static void SetStatus(XmlElement element, string status)
+        {
+            element.SetAttribute(XmlNames.Status, status);
         }
 
         public void CouldNotInterpret(Scenario scenario, string line)
         {
-            throw new NotImplementedException();
+            AddLineToCurrentScenario(line, StatusNames.NotUnderstood);
+            SetStatus(_currentScenarioElement, StatusNames.NotUnderstood);
+            SetStatus(_currentStoryElement, StatusNames.Failure);
         }
 
         public void Success(Scenario scenario, string line)
         {
-            _currentScenario += LineMarkup(line, "Success");
-
-        }
-
-        private string LineMarkup(string line, string status)
-        {
-            return "<Line Status=\"" + status + "\">" + line + "</Line>\r\n";
+            AddLineToCurrentScenario(line, StatusNames.Success);
         }
 
         public void ScenarioSucceeded(Scenario scenario)
         {
-            AddScenarioMarkup("Success");
-            
+            SetStatus(_currentScenarioElement, StatusNames.Success);
         }
-
-        private void AddScenarioMarkup(string status)
-        {
-            _scenarios.Add("<Scenario Status=\"" + status + "\">" + _currentScenario+ "</Scenario>");
-            _currentScenario = "";
-        }
-
-        private string _currentScenario = "";
-        private string _currentStoryStatus;
-        private List<string> _scenarios = new List<string>();
-        private List<string> _stories = new List<string>();
 
         public void Finished()
         {
-            WriteCurrentStory();
-            _fileWriter.Write("<TestResults>" + string.Join("\r\n", _stories.ToArray())  + "</TestResults>");
-               
+            _fileWriter.Write(_doc.OuterXml);
         }
     }
 }

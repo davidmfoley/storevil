@@ -7,6 +7,7 @@ using StorEvil.Core;
 using StorEvil.Core.Configuration;
 using StorEvil.InPlace;
 using StorEvil.Parsing;
+using StorEvil.ResultListeners;
 
 namespace StorEvil.Console
 {
@@ -14,7 +15,7 @@ namespace StorEvil.Console
     {
         private readonly IConfigSource _configSource;
         private ConfigSettings _settings;
-        private readonly Container _container;
+        public Container Container { get; private set; }
 
         private const string StandardHelpText =
             @"
@@ -33,16 +34,16 @@ usage:
         {
             _configSource = source;
 
-            _container = new Container();
+            Container = new Container();
         }
 
         public IStorEvilJob ParseArguments(string[] args)
         {
-            ParseCommonConfigSettings(_container, args);
-            SetupCommonComponents(_container);
-            SetupCustomComponents(_container, args);
+            ParseCommonConfigSettings(Container, args);
+            SetupCommonComponents(Container);
+            SetupCustomComponents(Container, args);
 
-            return _container.Resolve<IStorEvilJob>();
+            return Container.Resolve<IStorEvilJob>();
         }
 
         private void ParseCommonConfigSettings(Container container, string[] args)
@@ -82,8 +83,19 @@ usage:
                                                       ColorEnabled = _settings.ConsoleMode == ConsoleMode.Color
                                                   });
             }
+            if (!string.IsNullOrEmpty(_settings.OutputFileFormat))
+            {        
+                string outputFile;
+                if (!string.IsNullOrEmpty(_settings.OutputFile))
+                    outputFile = _settings.OutputFile;
+                else
+                    outputFile = "storevil-output." + _settings.OutputFileFormat.ToLower();
 
-           
+                if (_settings.OutputFileFormat.ToLower() == "xml")
+                {
+                    compositeListener.AddListener(new XmlReportListener(new FileWriter(outputFile, true)));
+                }
+            }
 
             return compositeListener;
         }
@@ -95,8 +107,6 @@ usage:
                 mapper.AddAssembly(location);
             return mapper;
         }
-
-      
 
         private void SetupCustomComponents(Container container, string[] args)
         {
@@ -150,18 +160,18 @@ usage:
         }
     }
 
-    internal class CompositeListener : IResultListener
+    public class CompositeListener : IResultListener
     {
-        private List<IResultListener> _listeners = new List<IResultListener>();
+        public List<IResultListener> Listeners = new List<IResultListener>();
 
         public void AddListener(IResultListener listener)
         {
-            _listeners.Add(listener);
+            Listeners.Add(listener);
         }
 
         private void AllListeners(Action<IResultListener> action)
         {
-            foreach (var listener in _listeners)
+            foreach (var listener in Listeners)
             {
                 action(listener);
             }
@@ -184,22 +194,22 @@ usage:
 
         public void CouldNotInterpret(Scenario scenario, string line)
         {
-            AllListeners(x=>x.CouldNotInterpret(scenario, line));
+            AllListeners(x => x.CouldNotInterpret(scenario, line));
         }
 
         public void Success(Scenario scenario, string line)
         {
-            AllListeners(x=>x.Success(scenario, line));
+            AllListeners(x => x.Success(scenario, line));
         }
 
         public void ScenarioSucceeded(Scenario scenario)
         {
-            AllListeners(x=>x.ScenarioSucceeded(scenario));
+            AllListeners(x => x.ScenarioSucceeded(scenario));
         }
 
         public void Finished()
         {
-            AllListeners(x=>x.Finished());
+            AllListeners(x => x.Finished());
         }
     }
 
@@ -210,23 +220,25 @@ usage:
             AddSwitch("--story-path", "-p")
                 .SetsField(s => s.StoryBasePath)
                 .WithDescription(
-                "Sets the base path used when searching for story files.\r\nIf not set, the current working directory is assumed.");
+                    "Sets the base path used when searching for story files.\r\nIf not set, the current working directory is assumed.");
 
             AddSwitch("--assemblies", "-a")
                 .SetsField(s => s.AssemblyLocations)
                 .WithDescription(
-                "Sets the location (relative to current path) of the context assemblies used to parse the stories.");
+                    "Sets the location (relative to current path) of the context assemblies used to parse the stories.");
 
             AddSwitch("--output-file", "-o")
                 .SetsField(s => s.OutputFile)
-                .WithDescription("NOT IMPLEMENTED YET! If set, storevil will output to the specified file.");
+                .WithDescription("If set, storevil will output to the specified file.");
 
             AddSwitch("--output-file-format", "-f")
                 .SetsField(s => s.OutputFileFormat)
-                .WithDescription("NOT IMPLEMENTED YET! Sets the format of output to the file specified by --output-file (text, xml, html)");
+                .WithDescription(
+                    "Sets the format of output to the file specified by --output-file (ONLY xml is supported so far)\r\n" +
+                    "If nothing is specified, the output file location will be: storevil-output.{format}");
 
             AddSwitch("--console-mode", "-c")
-                .SetsEnumField(s => s.ConsoleMode)
+                .SetsEnumField(s => s.ConsoleMode)  
                 .WithDescription("Sets the format of output to the console (color, nocolor, quiet)");
         }
     }
