@@ -8,3 +8,4 @@ obj
 *.csproj.user
 *.suo
 Lib/JetBrains
+storevil.output.*
