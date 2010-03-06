@@ -5,6 +5,7 @@ using System.Reflection;
 using StorEvil.Context.Matches;
 using StorEvil.Context.WordFilters;
 using StorEvil.Nunit;
+using StorEvil.Parsing;
 
 namespace StorEvil.Context.Matchers
 {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using StorEvil.Core;
 
-namespace StorEvil
+namespace StorEvil.Parsing
 {
     /// <summary>
     /// Parses stories... this code is a bit ugly and needs looking into
@@ -14,9 +14,9 @@ namespace StorEvil
         public Story Parse(string storyText, string id)
         {
             var storyId = id ?? Guid.NewGuid().ToString().Trim();
-   
+
             var scenarios = new List<IScenario>();
-             
+
             var storyName = new StringBuilder();
 
             var lines = ParseLines(storyText);
@@ -31,15 +31,17 @@ namespace StorEvil
                 if (IsScenarioOutlineHeader(line) || IsScenarioHeader(line))
                 {
                     if (currentScenario != null)
-                        scenarios.Add(new Scenario(storyId + "-" + (scenarioCount++), currentScenario.Name, currentScenario.Lines));
+                        scenarios.Add(new Scenario(storyId + "-" + (scenarioCount++), currentScenario.Name,
+                                                   currentScenario.Lines));
 
-                    currentScenario = new ScenarioBuildingInfo { Name = line.After(":").Trim() };
+                    currentScenario = new ScenarioBuildingInfo {Name = line.After(":").Trim()};
 
                     ScenarioBuildingInfo scenario = currentScenario;
-                    handler = l =>  {
-                        if (!IsComment(l))
-                            scenario.Lines.Add(l);
-                    };
+                    handler = l =>
+                                  {
+                                      if (!IsComment(l))
+                                          scenario.Lines.Add(l);
+                                  };
                 }
                 else if (IsStartOfExamples(line))
                 {
@@ -53,7 +55,6 @@ namespace StorEvil
                 {
                     handler(line.Trim());
                 }
-
             }
 
             if (currentScenario != null)
@@ -62,12 +63,15 @@ namespace StorEvil
                 {
                     var count = currentScenario.RowData.First().Count() - 1;
                     var fieldNames = currentScenario.RowData.First().Take(count);
-                    var examples = currentScenario.RowData.Skip(1).Select(x=>x.Take(count));
-                    scenarios.Add(new ScenarioOutline(storyId + "- outline -" + scenarioCount, currentScenario.Name, new Scenario(storyId + "-" + scenarioCount, currentScenario.Name, currentScenario.Lines), fieldNames, examples));
+                    var examples = currentScenario.RowData.Skip(1).Select(x => x.Take(count));
+                    scenarios.Add(new ScenarioOutline(storyId + "- outline -" + scenarioCount, currentScenario.Name,
+                                                      new Scenario(storyId + "-" + scenarioCount, currentScenario.Name,
+                                                                   currentScenario.Lines), fieldNames, examples));
                 }
                 else
                 {
-                    scenarios.Add(new Scenario(storyId + "-" + scenarioCount, currentScenario.Name, currentScenario.Lines));
+                    scenarios.Add(new Scenario(storyId + "-" + scenarioCount, currentScenario.Name,
+                                               currentScenario.Lines));
                 }
             }
 
@@ -80,13 +84,13 @@ namespace StorEvil
         {
             foreach (var scenario in scenarios)
             {
-                if (!string.IsNullOrEmpty(scenario.Name)) 
+                if (!string.IsNullOrEmpty(scenario.Name))
                     continue;
 
                 if (scenario is Scenario)
                 {
                     var s = scenario as Scenario;
-                    s.Name = string.Join("\r\n" , s.Body.ToArray());
+                    s.Name = string.Join("\r\n", s.Body.ToArray());
                 }
                 else
                 {
@@ -116,10 +120,9 @@ namespace StorEvil
             return line.ToLower().StartsWith("scenario outline:");
         }
 
-
         private static IEnumerable<string> ParseLines(string text)
         {
-            foreach (string line in text.Split(new[] { '\n', '\r' }))
+            foreach (string line in text.Split(new[] {'\n', '\r'}))
             {
                 var s = line.Trim();
                 if (s.Length > 0)
@@ -134,6 +137,4 @@ namespace StorEvil
         public List<string> Lines = new List<string>();
         public List<IEnumerable<string>> RowData = new List<IEnumerable<string>>();
     }
-
-    
 }

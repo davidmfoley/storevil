@@ -3,6 +3,7 @@ using JetBrains.ReSharper.TaskRunnerFramework;
 using StorEvil.Configuration;
 using StorEvil.Core;
 using StorEvil.InPlace;
+using StorEvil.Parsing;
 
 namespace StorEvil.Resharper
 {

@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Core;
 using StorEvil.Nunit;
+using StorEvil.Parsing;
 
 namespace StorEvil.NUnit
 {

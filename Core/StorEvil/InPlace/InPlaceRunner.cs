@@ -4,6 +4,7 @@ using System.Reflection;
 using NUnit.Framework;
 using StorEvil.Core;
 using StorEvil.Interpreter;
+using StorEvil.Parsing;
 
 namespace StorEvil.InPlace
 {

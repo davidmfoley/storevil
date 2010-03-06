@@ -1,6 +1,7 @@
-﻿using System.Linq;
+using System.Linq;
 using NUnit.Framework;
 using StorEvil.Core;
+using StorEvil.Parsing;
 
 namespace StorEvil
 {

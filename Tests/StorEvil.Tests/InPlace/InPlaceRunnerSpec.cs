@@ -2,6 +2,7 @@ using System;
 using Rhino.Mocks;
 using StorEvil.Context;
 using StorEvil.Core;
+using StorEvil.Parsing;
 
 namespace StorEvil.InPlace
 {

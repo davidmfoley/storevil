@@ -56,7 +56,6 @@ namespace StorEvil.Parsing
         public IStoryParser Parser { get; set; }
         public IFilesystem Filesystem { get; set; }
 
-
         public IEnumerable<StoryInfo> GetStoryInfos()
         {
             return GetStoryInfos(Settings.StoryBasePath);

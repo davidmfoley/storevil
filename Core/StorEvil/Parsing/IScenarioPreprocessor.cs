@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using StorEvil.Core;
 
-namespace StorEvil.Core
+namespace StorEvil.Parsing
 {
     public interface IScenarioPreprocessor
     {

@@ -1,33 +1,37 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using StorEvil.Core;
 
-namespace StorEvil.Core
+namespace StorEvil.Parsing
 {
     public class ScenarioPreprocessor : IScenarioPreprocessor
     {
         public IEnumerable<Scenario> Preprocess(IScenario scenario)
         {
             if (scenario is ScenarioOutline)
-                return PreprocessExamples((ScenarioOutline)scenario);
-                
+                return PreprocessExamples((ScenarioOutline) scenario);
+
             if (scenario is Scenario)
-                return new[]{ (Scenario)scenario};
+                return new[] {(Scenario) scenario};
 
             throw new ArgumentOutOfRangeException("");
         }
 
-        private IEnumerable<Scenario> PreprocessExamples(ScenarioOutline outline   )
+        private IEnumerable<Scenario> PreprocessExamples(ScenarioOutline outline)
         {
             var scenario = outline.Scenario;
             int count = 0;
             foreach (var example in outline.Examples)
             {
-                yield return new Scenario(outline.Id + (count++) ,scenario.Name, PreprocessLines(scenario.Body, outline.FieldNames, example));
+                yield return
+                    new Scenario(outline.Id + (count++), scenario.Name,
+                                 PreprocessLines(scenario.Body, outline.FieldNames, example));
             }
         }
 
-        private IEnumerable<string> PreprocessLines(IEnumerable<string> lines, IEnumerable<string> fieldNames, IEnumerable<string> example)
+        private IEnumerable<string> PreprocessLines(IEnumerable<string> lines, IEnumerable<string> fieldNames,
+                                                    IEnumerable<string> example)
         {
             foreach (var line in lines)
             {

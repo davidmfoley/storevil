@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace StorEvil.Nunit
+namespace StorEvil.Parsing
 {
-    public class ScenarioLineParser 
+    public class ScenarioLineParser
     {
-        static readonly Regex ExtractWords = new Regex(@"[A-Za-z0-9\$@\./]+");
+        private static readonly Regex ExtractWords = new Regex(@"[A-Za-z0-9\$@\./]+");
+
         public List<string> ExtractWordsFromScenarioLine(string line)
         {
             var words = new List<String>();
