@@ -7,8 +7,8 @@ namespace StorEvil.Parsing
 {
     public class StoryProvider : IStoryProvider
     {
-        private IStoryReader _reader;
-        private IStoryParser _parser;
+        private readonly IStoryReader _reader;
+        private readonly IStoryParser _parser;
 
         public StoryProvider(IStoryReader reader, IStoryParser parser)
         {

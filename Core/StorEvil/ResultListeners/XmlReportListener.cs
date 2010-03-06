@@ -1,8 +1,8 @@
 using System.Xml;
 using StorEvil.Core;
-using StorEvil.ResultListeners;
+using StorEvil.InPlace;
 
-namespace StorEvil.InPlace
+namespace StorEvil.ResultListeners
 {
     public class XmlReportListener : IResultListener
     {

@@ -111,6 +111,7 @@ namespace StorEvil
                             exception.GetType().Name + "\n" + exception);
             }
             Assert.Fail("Expected exception " + typeof(T).Name + " was not thrown.");
+
             return null;
         }
     }

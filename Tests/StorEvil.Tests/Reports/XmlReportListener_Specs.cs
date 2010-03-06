@@ -5,6 +5,7 @@ using System.Xml;
 using NUnit.Framework;
 using StorEvil.Core;
 using StorEvil.InPlace;
+using StorEvil.ResultListeners;
 
 namespace StorEvil.Reports.XmlReportListener_Specs
 {

@@ -1,5 +1,3 @@
-﻿using System;
-
 namespace StorEvil.Nunit
 {
     public interface ITestFixtureWriter

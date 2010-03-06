@@ -66,8 +66,7 @@ Extensions: .scenario, .foo, .bar";
     {
         protected ConfigSettings ParseConfig(string config)
         {
-            var fakeFilesystem = MockRepository.GenerateStub<IFilesystem>();
-            var parser = new ConfigParser(fakeFilesystem);
+            var parser = new ConfigParser();
 
             return parser.Read(config);
         }

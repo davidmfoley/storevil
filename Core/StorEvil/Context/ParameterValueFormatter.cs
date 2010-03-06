@@ -13,8 +13,8 @@ namespace StorEvil.Context
         static ParameterValueFormatter()
         {
             _typeToStringMap.Add(typeof (string), ValueToString);
-            _typeToStringMap.Add(typeof (decimal), x => StringUtility.StripNonNumericFormatting(x));
-            _typeToStringMap.Add(typeof (int), x => StringUtility.StripNonNumericFormatting(x));
+            _typeToStringMap.Add(typeof (decimal), x => x.StripNonNumericFormatting());
+            _typeToStringMap.Add(typeof (int), x => x.StripNonNumericFormatting());
 
             _typeToStringMap.Add(typeof (object), GuessFormatting);
         }

@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArgParser.cs" />
+    <Compile Include="CommonSwitchParser.cs" />
     <Compile Include="DisplayHelpJob.cs" />
     <Compile Include="IJobFactory.cs" />
     <Compile Include="InPlaceJobFactory.cs" />

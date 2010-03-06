@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using StorEvil.Context;
+using StorEvil.Core;
 
-namespace StorEvil.Core
+namespace StorEvil.Nunit
 {
     /// <summary>
     /// Handles mapping 
@@ -20,11 +21,6 @@ namespace StorEvil.Core
             _interpreter = interpreter;
         }
 
-        /// <summary>
-        /// Maps a line of a scenario to invocations of methods on the test context object
-        /// </summary>
-        /// <param name="words"></param>
-        /// <returns></returns>
         public string MapMethod(ScenarioContext scenarioContext, string line)
         {
             var matchingChain = _interpreter.GetChain(scenarioContext, line);
@@ -37,11 +33,10 @@ namespace StorEvil.Core
 
         private static string ConvertInvocationChainToCSharpCode(InvocationChain matchingChain)
         {
-            string code = "";
-            foreach (Invocation invocation in matchingChain.Invocations)
-                code += BuildInvocation(invocation.MemberInfo, invocation.ParamValues);
+            Func<string, Invocation, string> aggregator = (codeSoFar, invocation) => codeSoFar + BuildInvocation(invocation.MemberInfo, invocation.ParamValues);
 
-            return code;
+            return matchingChain.Invocations
+                .Aggregate("", aggregator);
         }
 
         private static string  BuildInvocation(MemberInfo memberInfo, IEnumerable<object> paramValues)
@@ -82,6 +77,7 @@ namespace StorEvil.Core
                 parameters[i] = ParameterValueFormatter.GetParamString(infos[i].ParameterType,
                                                                        paramValues.ElementAt(i).ToString());
             }
+           
             return string.Format(".{0}({1})", member.Name, String.Join(", ", parameters)); 
         }
 

@@ -80,18 +80,18 @@ namespace StorEvil
         {
             foreach (var scenario in scenarios)
             {
-                if (string.IsNullOrEmpty(scenario.Name))
+                if (!string.IsNullOrEmpty(scenario.Name)) 
+                    continue;
+
+                if (scenario is Scenario)
                 {
-                    if (scenario is Scenario)
-                    {
-                        var s = scenario as Scenario;
-                        s.Name = string.Join("\r\n" , s.Body.ToArray());
-                    }
-                    else
-                    {
-                        var s = scenario as ScenarioOutline;
-                        s.Name = string.Join("\r\n", s.Scenario.Body.ToArray());
-                    }
+                    var s = scenario as Scenario;
+                    s.Name = string.Join("\r\n" , s.Body.ToArray());
+                }
+                else
+                {
+                    var s = scenario as ScenarioOutline;
+                    s.Name = string.Join("\r\n", s.Scenario.Body.ToArray());
                 }
             }
         }

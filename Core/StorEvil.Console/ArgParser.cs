@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
 using Funq;
 using StorEvil.Context;
@@ -157,89 +155,6 @@ usage:
                 jobFactory = new InPlaceJobFactory();
 
             return jobFactory;
-        }
-    }
-
-    public class CompositeListener : IResultListener
-    {
-        public List<IResultListener> Listeners = new List<IResultListener>();
-
-        public void AddListener(IResultListener listener)
-        {
-            Listeners.Add(listener);
-        }
-
-        private void AllListeners(Action<IResultListener> action)
-        {
-            foreach (var listener in Listeners)
-            {
-                action(listener);
-            }
-        }
-
-        public void StoryStarting(Story story)
-        {
-            AllListeners(x => x.StoryStarting(story));
-        }
-
-        public void ScenarioStarting(Scenario scenario)
-        {
-            AllListeners(x => x.ScenarioStarting(scenario));
-        }
-
-        public void ScenarioFailed(Scenario scenario, string successPart, string failedPart, string message)
-        {
-            AllListeners(x => x.ScenarioFailed(scenario, successPart, failedPart, message));
-        }
-
-        public void CouldNotInterpret(Scenario scenario, string line)
-        {
-            AllListeners(x => x.CouldNotInterpret(scenario, line));
-        }
-
-        public void Success(Scenario scenario, string line)
-        {
-            AllListeners(x => x.Success(scenario, line));
-        }
-
-        public void ScenarioSucceeded(Scenario scenario)
-        {
-            AllListeners(x => x.ScenarioSucceeded(scenario));
-        }
-
-        public void Finished()
-        {
-            AllListeners(x => x.Finished());
-        }
-    }
-
-    internal class CommonSwitchParser : SwitchParser<ConfigSettings>
-    {
-        public CommonSwitchParser()
-        {
-            AddSwitch("--story-path", "-p")
-                .SetsField(s => s.StoryBasePath)
-                .WithDescription(
-                    "Sets the base path used when searching for story files.\r\nIf not set, the current working directory is assumed.");
-
-            AddSwitch("--assemblies", "-a")
-                .SetsField(s => s.AssemblyLocations)
-                .WithDescription(
-                    "Sets the location (relative to current path) of the context assemblies used to parse the stories.");
-
-            AddSwitch("--output-file", "-o")
-                .SetsField(s => s.OutputFile)
-                .WithDescription("If set, storevil will output to the specified file.");
-
-            AddSwitch("--output-file-format", "-f")
-                .SetsField(s => s.OutputFileFormat)
-                .WithDescription(
-                    "Sets the format of output to the file specified by --output-file (ONLY xml is supported so far)\r\n" +
-                    "If nothing is specified, the output file location will be: storevil.output.{format}");
-
-            AddSwitch("--console-mode", "-c")
-                .SetsEnumField(s => s.ConsoleMode)  
-                .WithDescription("Sets the format of output to the console (color, nocolor, quiet)");
         }
     }
 }

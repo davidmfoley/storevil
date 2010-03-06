@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace StorEvil.Core
@@ -12,12 +13,13 @@ namespace StorEvil.Core
         }
         private static void AddExtensionMethods(Type type)
         {
-            foreach (var methodInfo in type.GetMethods(BindingFlags.Public | BindingFlags.Static))
+            var publicStaticMethods = type.GetMethods(BindingFlags.Public | BindingFlags.Static);
+            var extensionMethods = publicStaticMethods.Where(methodInfo => methodInfo.IsStatic & methodInfo.GetParameters().Length > 0 );
+
+            foreach (var methodInfo in
+                extensionMethods)
             {
-                if (methodInfo.IsStatic & methodInfo.GetParameters().Length > 0)
-                {
-                    _allExtensionMethods.Add(methodInfo);
-                }
+                _allExtensionMethods.Add(methodInfo);
             }
         }
 
@@ -26,15 +28,9 @@ namespace StorEvil.Core
         public IEnumerable<MethodInfo> GetExtensionMethodsFor(Type _type)
         {
             // for now, just local
+            return _allExtensionMethods.Where(m => m.GetParameters()[0].ParameterType.IsAssignableFrom(_type));
 
-            foreach (var methodInfo in _allExtensionMethods)
-            {
-                var parameterType = methodInfo.GetParameters()[0].ParameterType;
-                if (parameterType.IsAssignableFrom(_type))
-                {
-                    yield return methodInfo;
-                }
-            }
+        
         }
 
     }

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-    
+
 namespace StorEvil.InPlace
 {
     public class MemberInvoker
@@ -14,7 +14,7 @@ namespace StorEvil.InPlace
                 var methodParameters = ConvertParameters(info as MethodInfo, parameters);
                 if (IsExtensionMethod(info))
                 {
-                    methodParameters = new object[] { context }.Union(methodParameters.ToArray());
+                    methodParameters = new[] { context }.Union(methodParameters.ToArray());
                     //context = null;
                 }
                 return (info as MethodInfo).Invoke(context, methodParameters.ToArray());

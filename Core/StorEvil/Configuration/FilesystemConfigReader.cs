@@ -18,8 +18,9 @@ namespace StorEvil.Configuration
         public ConfigSettings GetConfig(string directoryOrFile)
         {
             var path = directoryOrFile.ToLower();
-            if (!path.EndsWith("storevil.config"))
-                path += "\\storevil.config";
+            if (!path.EndsWith("\\"))
+                path = path + "\\";
+                
 
             var containingDirectory = path; // Path.GetDirectoryName(Path.GetFullPath(path));
 

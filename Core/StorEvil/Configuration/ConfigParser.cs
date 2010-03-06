@@ -5,13 +5,7 @@ namespace StorEvil
 {
     public class ConfigParser : IConfigParser
     {
-        private readonly IFilesystem _filesystem;
-
-        public ConfigParser(IFilesystem filesystem)
-        {
-            _filesystem = filesystem;
-        }
-
+        
         public ConfigSettings Read(string contents)
         {       
             var lines = GetNonBlankLines(contents);

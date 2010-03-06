@@ -3,9 +3,9 @@ using System.Text;
 
 namespace StorEvil
 {
-    internal class StringUtility
+    internal static class StringUtility
     {
-        public static string StripNonNumericFormatting(string s)
+        public static string StripNonNumericFormatting(this string s)
         {
             var sb = new StringBuilder();
             foreach (char c in s)

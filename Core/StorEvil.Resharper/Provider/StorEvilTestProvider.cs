@@ -157,7 +157,7 @@ namespace StorEvil.Resharper
 
         private void AddProject(IProject project, UnitTestElementConsumer consumer)
         {
-            var reader = new FilesystemConfigReader(new Filesystem(), new ConfigParser(new Filesystem()));
+            var reader = new FilesystemConfigReader(new Filesystem(), new ConfigParser());
 
             AddStoriesForProject(project, reader, consumer);
         }

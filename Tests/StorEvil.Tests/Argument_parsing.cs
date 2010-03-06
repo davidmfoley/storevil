@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Console;
 using StorEvil.InPlace;
+using StorEvil.ResultListeners;
 
 namespace StorEvil.Argument_parsing
 {

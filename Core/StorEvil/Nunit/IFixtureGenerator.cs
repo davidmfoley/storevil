@@ -1,4 +1,3 @@
-﻿using System;
 using StorEvil.Core;
 
 namespace StorEvil.Nunit

@@ -21,7 +21,7 @@ namespace StorEvil.InPlace
         {
             var pieces = s.Split().Where(p=>p.Trim() != "");
 
-            List<string> argTypes = new List<string>();
+            var argTypes = new List<string>();
             var method = pieces.First();
           
             foreach (var piece in pieces.Skip(1))

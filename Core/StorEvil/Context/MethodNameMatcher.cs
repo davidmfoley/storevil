@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -30,7 +29,7 @@ namespace StorEvil.Context
 
         public IEnumerable<NameMatch> GetMatches(string line)
         {
-            return new[] {GetMatch(line)};            
+            return new[] { GetMatch(line) };
         }
 
         private void BuildMethodWordFilters()
@@ -44,22 +43,16 @@ namespace StorEvil.Context
             AppendUnmatchedParameters(parameterInfos, paramNameMap);
         }
 
-        private void AppendUnmatchedParameters(ParameterInfo[] parameterInfos,  Dictionary<string, ParameterInfo> paramNameMap)
+        private void AppendUnmatchedParameters(ParameterInfo[] parameterInfos, Dictionary<string, ParameterInfo> paramNameMap)
         {
-            // any additional parameters 
-            // (that do not match pieces of the method name) 
-            // are appended
-            foreach (var parameter in parameterInfos)
-                if (paramNameMap.ContainsKey(parameter.Name))
-                    _wordFilters.Add(new ParameterMatchWordFilter(parameter));
+            var unmatchedParameters = parameterInfos.Where(p => paramNameMap.ContainsKey(p.Name));
+            var wordFilters = unmatchedParameters.Select(p => new ParameterMatchWordFilter(p)).Cast<WordFilter>();
+            _wordFilters.AddRange(wordFilters);
         }
 
         private Dictionary<string, ParameterInfo> GetParameterNameToInfoMap(ParameterInfo[] parameterInfos)
         {
-            var paramNameMap = new Dictionary<string, ParameterInfo>();
-            foreach (var parameter in parameterInfos)
-                paramNameMap.Add(parameter.Name, parameter);
-            return paramNameMap;
+            return parameterInfos.ToDictionary(parameter => parameter.Name);
         }
 
         private static ParameterInfo[] GetMethodParameterInfos(MethodInfo methodInfo)
@@ -69,6 +62,7 @@ namespace StorEvil.Context
             // if static (extension), trim the first param...
             if (methodInfo.IsStatic)
                 parameterInfos = parameterInfos.Skip(1).ToArray();
+
             return parameterInfos;
         }
 
@@ -96,7 +90,7 @@ namespace StorEvil.Context
         public NameMatch GetMatch(string line)
         {
             var words = _scenarioLineParser.ExtractWordsFromScenarioLine(line);
-           
+
             // can't match if not enough words to fill us up
             if (words.Count < _wordFilters.Count)
                 return null;
@@ -136,9 +130,7 @@ namespace StorEvil.Context
 
         private bool CanBeAPartialMatch()
         {
-            return ((MethodInfo) MemberInfo).ReturnType != null;
+            return ((MethodInfo)MemberInfo).ReturnType != null;
         }
-
-       
     }
 }

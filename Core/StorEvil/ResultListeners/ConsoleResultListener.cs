@@ -1,7 +1,8 @@
 using System;
 using StorEvil.Core;
+using StorEvil.InPlace;
 
-namespace StorEvil.InPlace
+namespace StorEvil.ResultListeners
 {
     public class ConsoleResultListener : IResultListener
     {

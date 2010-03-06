@@ -59,11 +59,8 @@ namespace StorEvil.Context
 
         private bool WordFiltersMatch(IList<string> words)
         {
-            for (int i = 0; i < _wordFilters.Count; i++)
-                if (!_wordFilters[i].IsMatch(words[i]))
-                    return false;
-
-            return true;
+            Func<WordFilter, int, bool> matchesWordAtIndex = (t, i) => !t.IsMatch(words[i]);
+            return !_wordFilters.Where(matchesWordAtIndex).Any();
         }
 
         readonly Dictionary<string, object> _noParams = new Dictionary<string, object>();

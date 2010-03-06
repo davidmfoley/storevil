@@ -109,7 +109,9 @@ namespace StorEvil.Core
             if (childChain == null)
                 return null;
 
-            return new InvocationChain(chain.Invocations.Union(childChain.Invocations).ToArray());
+            var union = chain.Invocations.Union(childChain.Invocations);
+
+            return new InvocationChain(union.ToArray());
         }
 
         private static IEnumerable<object> BuildParamValues(MethodBase member, Dictionary<string, object> paramValues)
@@ -119,12 +121,12 @@ namespace StorEvil.Core
             if (member.IsStatic)
                 parameters = parameters.Skip(1).ToArray();
 
-            for (int i = 0; i < parameters.Length; i++)
+            foreach (ParameterInfo parameterInfo in parameters)
             {
-                if (paramValues.ContainsKey(parameters[i].Name))
-                    yield return ConvertParam(paramValues[parameters[i].Name].ToString(), parameters[i].ParameterType);
+                if (paramValues.ContainsKey(parameterInfo.Name))
+                    yield return ConvertParam(paramValues[parameterInfo.Name].ToString(), parameterInfo.ParameterType);
                 else
-                    throw new ArgumentException("Could not resolve parameter " + parameters[i].Name);
+                    throw new ArgumentException("Could not resolve parameter " + parameterInfo.Name);
             }
         }
 
