@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace StorEvil.Core
+namespace StorEvil.Interpreter
 {
     public class InvocationChain
     {

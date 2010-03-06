@@ -2,6 +2,7 @@ using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using Rhino.Mocks;
 using StorEvil.Configuration;
+using StorEvil.Infrastructure;
 
 namespace StorEvil.Config
 {

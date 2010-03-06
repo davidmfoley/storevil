@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace StorEvil.Core
+namespace StorEvil.Interpreter
 {
     public class ExtensionMethodHandler
     {
@@ -11,10 +11,12 @@ namespace StorEvil.Core
         {
             AddExtensionMethods(typeof (TestExtensionMethods));
         }
+
         private static void AddExtensionMethods(Type type)
         {
             var publicStaticMethods = type.GetMethods(BindingFlags.Public | BindingFlags.Static);
-            var extensionMethods = publicStaticMethods.Where(methodInfo => methodInfo.IsStatic & methodInfo.GetParameters().Length > 0 );
+            var extensionMethods =
+                publicStaticMethods.Where(methodInfo => methodInfo.IsStatic & methodInfo.GetParameters().Length > 0);
 
             foreach (var methodInfo in
                 extensionMethods)
@@ -29,9 +31,6 @@ namespace StorEvil.Core
         {
             // for now, just local
             return _allExtensionMethods.Where(m => m.GetParameters()[0].ParameterType.IsAssignableFrom(_type));
-
-        
         }
-
     }
 }

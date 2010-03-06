@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using StorEvil.Context;
 using StorEvil.Context.Matchers;
 using StorEvil.Context.Matches;
 
-namespace StorEvil.Core
+namespace StorEvil.Interpreter
 {
     public class ScenarioInterpreterForType
     {
@@ -43,12 +42,12 @@ namespace StorEvil.Core
             AddRegexMatchersIfAttributePresent(member);
         }
 
-        private IMemberMatcher GetMemberMatcher(MemberInfo member)
+        private static IMemberMatcher GetMemberMatcher(MemberInfo member)
         {
             if (member is MethodInfo)
-                return new MethodNameMatcher((MethodInfo)member);
-            else
-                return new PropertyOrFieldNameMatcher(member);
+                return new MethodNameMatcher((MethodInfo) member);
+            
+            return new PropertyOrFieldNameMatcher(member);
         }
 
         private void AddRegexMatchersIfAttributePresent(MemberInfo member)
@@ -66,27 +65,22 @@ namespace StorEvil.Core
                 foreach (var currentMatch in member.GetMatches(line))
                 {
                     if (currentMatch is ExactMatch)
-                        return new InvocationChain { Invocations = new[] { BuildInvocation(member.MemberInfo, currentMatch) } };
+                        return new InvocationChain
+                                   {Invocations = new[] {BuildInvocation(member.MemberInfo, currentMatch)}};
 
                     if (currentMatch is PartialMatch)
-                        partialMatches.Add((PartialMatch)currentMatch);
+                        partialMatches.Add((PartialMatch) currentMatch);
                 }
             }
 
             return GetPartialMatchChain(line, partialMatches);
         }
 
-        private InvocationChain GetPartialMatchChain(string line, List<PartialMatch> partialMatches)
+        private InvocationChain GetPartialMatchChain(string line, IEnumerable<PartialMatch> partialMatches)
         {
             foreach (var partialMatch in partialMatches)
             {
-                var partialChain = new InvocationChain(BuildInvocation(partialMatch.MemberInfo, partialMatch));
-
-                InvocationChain chain = TryToRecursivelyExtendPartialMatch(partialChain,
-                                                                           line.Substring(
-                                                                               partialChain.Invocations.Last().
-                                                                                   MatchedText.Length).Trim(),
-                                                                           partialMatch);
+                InvocationChain chain = GetChainFromPartialMatch(partialMatch, line);
 
                 if (chain != null)
                     return chain;
@@ -94,7 +88,17 @@ namespace StorEvil.Core
             return null;
         }
 
-        private Invocation BuildInvocation(MemberInfo memberInfo, NameMatch currentMatch)
+        private InvocationChain GetChainFromPartialMatch(PartialMatch partialMatch, string line)
+        {
+            var partialChain = new InvocationChain(BuildInvocation(partialMatch.MemberInfo, partialMatch));
+
+            var matchedText = partialChain.Invocations.Last().MatchedText;
+            var remainingLine = line.Substring(matchedText.Length).Trim();
+
+            return TryToRecursivelyExtendPartialMatch(partialChain, remainingLine, partialMatch);
+        }
+
+        private static Invocation BuildInvocation(MemberInfo memberInfo, NameMatch currentMatch)
         {
             if (memberInfo is MethodInfo)
                 return new Invocation(memberInfo, BuildParamValues((MethodInfo) memberInfo, currentMatch.ParamValues),

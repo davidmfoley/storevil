@@ -1,5 +1,6 @@
 using System.Xml;
 using StorEvil.Core;
+using StorEvil.Infrastructure;
 using StorEvil.InPlace;
 
 namespace StorEvil.ResultListeners

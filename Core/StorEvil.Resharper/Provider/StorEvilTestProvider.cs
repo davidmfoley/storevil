@@ -16,6 +16,7 @@ using JetBrains.TreeModels;
 using JetBrains.UI.TreeView;
 using StorEvil.Configuration;
 using StorEvil.Core;
+using StorEvil.Infrastructure;
 using StorEvil.Parsing;
 
 namespace StorEvil.Resharper

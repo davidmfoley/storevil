@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using StorEvil.Core;
 
-namespace StorEvil.Core
+namespace StorEvil.Interpreter
 {
     public class InterpreterForTypeFactory
     {

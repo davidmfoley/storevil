@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace StorEvil.Core
+namespace StorEvil.Interpreter
 {
     public class Invocation
     {

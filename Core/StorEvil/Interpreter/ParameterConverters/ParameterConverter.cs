@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace StorEvil.Core
+namespace StorEvil.Interpreter
 {
     public class ParameterConverter
     {
@@ -41,7 +41,7 @@ namespace StorEvil.Core
         }
     }
 
-     public class StorevilDecimalConverter : IStorevilConverter
+    public class StorevilDecimalConverter : IStorevilConverter
     {
         public object ConvertParamValue(string val)
         {
@@ -64,7 +64,7 @@ namespace StorEvil.Core
 
     internal class SimpleConverter<T> : IStorevilConverter
     {
-        private Func<string, object> _convertFunc;
+        private readonly Func<string, object> _convertFunc;
 
         public SimpleConverter(Func<string, object> func)
         {

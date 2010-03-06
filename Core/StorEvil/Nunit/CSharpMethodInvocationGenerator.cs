@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using StorEvil.Context;
 using StorEvil.Core;
+using StorEvil.Interpreter;
 
 namespace StorEvil.Nunit
 {

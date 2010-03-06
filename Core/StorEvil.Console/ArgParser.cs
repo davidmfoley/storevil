@@ -3,7 +3,9 @@ using Funq;
 using StorEvil.Configuration;
 using StorEvil.Context;
 using StorEvil.Core;
+using StorEvil.Infrastructure;
 using StorEvil.InPlace;
+using StorEvil.Interpreter;
 using StorEvil.Parsing;
 using StorEvil.ResultListeners;
 

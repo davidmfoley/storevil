@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Context;
 using StorEvil.Core;
+using StorEvil.Interpreter;
 using StorEvil.Nunit;
 
 namespace StorEvil.NUnit

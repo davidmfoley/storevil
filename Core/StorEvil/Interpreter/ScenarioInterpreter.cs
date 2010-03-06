@@ -1,4 +1,4 @@
-namespace StorEvil.Core
+namespace StorEvil.Interpreter
 {
     public class ScenarioInterpreter
     {

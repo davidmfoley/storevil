@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using StorEvil.Core;
+using StorEvil.Interpreter;
 
 namespace StorEvil
 {
