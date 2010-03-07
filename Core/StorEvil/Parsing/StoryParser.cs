@@ -6,9 +6,6 @@ using StorEvil.Core;
 
 namespace StorEvil.Parsing
 {
-    /// <summary>
-    /// Parses stories... this code is a bit ugly and needs looking into
-    /// </summary>
     public class StoryParser : IStoryParser
     {
         public Story Parse(string storyText, string id)
@@ -19,17 +16,44 @@ namespace StorEvil.Parsing
             var lines = ParseLines(storyText);
 
             Action<string> handler = x => storyName.Append(x + " ");
-
             ScenarioBuildingInfo currentScenario = null;
-           
+
+            Action addScenarioOutline = () =>
+                                            {
+                                                var count = currentScenario.RowData.First().Count() - 1;
+                                                var fieldNames = currentScenario.RowData.First().Take(count);
+                                                var examples =
+                                                    currentScenario.RowData.Skip(1).Select(x => x.Take(count));
+                                                scenarios.Add(
+                                                    new ScenarioOutline(storyId + "- outline -" + scenarios.Count,
+                                                                        currentScenario.Name,
+                                                                        new Scenario(storyId + "-" + scenarios.Count,
+                                                                                     currentScenario.Name,
+                                                                                     currentScenario.Lines), fieldNames,
+                                                                        examples));
+                                            };
+
+            Action addScenario = () => scenarios.Add(new Scenario(storyId + "-" + scenarios.Count,
+                                                                  currentScenario.Name,
+                                                                  currentScenario.Lines));
+
+            Action addScenarioOrOutline = () =>
+                                              {
+                                                  if (currentScenario != null)
+                                                  {
+                                                      if (currentScenario.RowData != null &&
+                                                          currentScenario.RowData.Count() > 0)
+                                                          addScenarioOutline();
+                                                      else
+                                                          addScenario();
+                                                  }
+                                              };
 
             foreach (var line in lines)
             {
                 if (IsScenarioOutlineHeader(line) || IsScenarioHeader(line))
                 {
-                    if (currentScenario != null)
-                        scenarios.Add(new Scenario(storyId + "-" + (scenarios.Count), currentScenario.Name,
-                                                   currentScenario.Lines));
+                    addScenarioOrOutline();
 
                     currentScenario = new ScenarioBuildingInfo {Name = line.After(":").Trim()};
 
@@ -45,23 +69,7 @@ namespace StorEvil.Parsing
                 }
             }
 
-            if (currentScenario != null)
-            {
-                if (currentScenario.RowData != null && currentScenario.RowData.Count() > 0)
-                {
-                    var count = currentScenario.RowData.First().Count() - 1;
-                    var fieldNames = currentScenario.RowData.First().Take(count);
-                    var examples = currentScenario.RowData.Skip(1).Select(x => x.Take(count));
-                    scenarios.Add(new ScenarioOutline(storyId + "- outline -" + scenarios.Count, currentScenario.Name,
-                                                      new Scenario(storyId + "-" + scenarios.Count, currentScenario.Name,
-                                                                   currentScenario.Lines), fieldNames, examples));
-                }
-                else
-                {
-                    scenarios.Add(new Scenario(storyId + "-" + scenarios.Count, currentScenario.Name,
-                                               currentScenario.Lines));
-                }
-            }
+            addScenarioOrOutline();
 
             FixEmptyScenarioNames(scenarios);
 

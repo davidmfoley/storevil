@@ -57,7 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Argument_parsing.cs" />
+    <Compile Include="Console\Argument_parsing.cs" />
     <Compile Include="container_tests.cs" />
     <Compile Include="Config\FilesystemConfigReaderTests.cs" />
     <Compile Include="Filtering_stories_by_file_extension.cs" />
@@ -79,11 +79,11 @@
     <Compile Include="Reports\XmlReportListener_Specs.cs" />
     <Compile Include="Reports\FakeFileWriter.cs" />
     <Compile Include="Reports\XmlTestExtensions.cs" />
-    <Compile Include="StoryParserTests.cs" />
+    <Compile Include="Parsing\StoryParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StoryToContextMappingTests.cs" />
     <Compile Include="Suggestions_for_not_yet_implemented_grammar.cs" />
-    <Compile Include="switch_parsing.cs" />
+    <Compile Include="Console\switch_parsing.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="TestContext.cs" />
     <Compile Include="TestHelper.cs" />
