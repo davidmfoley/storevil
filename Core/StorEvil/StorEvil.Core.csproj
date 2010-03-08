@@ -82,6 +82,7 @@
     <Compile Include="Interpreter\InterpreterForTypeFactory.cs" />
     <Compile Include="Interpreter\ParameterConverters\ParameterConverter.cs" />
     <Compile Include="Interpreter\ScenarioInterpreterForType.cs" />
+    <Compile Include="ResultListeners\GatheringResultListener.cs" />
     <Compile Include="Utility\FunqEasyRegistrationHelper.cs" />
     <Compile Include="ResultListeners\CompositeListener.cs" />
     <Compile Include="ResultListeners\ConsoleResultListener.cs" />
