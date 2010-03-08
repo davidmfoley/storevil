@@ -10,113 +10,161 @@ namespace StorEvil.Parsing
     {
         public Story Parse(string storyText, string id)
         {
-            var storyId = id ?? Guid.NewGuid().ToString().Trim();
-            var scenarios = new List<IScenario>();
-            var storyName = new StringBuilder();
-            var lines = ParseLines(storyText);
+            var storyParsingJob = new StoryParsingJob();
+            return storyParsingJob.Parse(storyText, id);
+        }
+    }
 
-            Action<string> handler = x => storyName.Append(x + " ");
-            ScenarioBuildingInfo currentScenario = null;
+    /// <summary>
+    /// Parses a story.
+    /// Instantiated newly for each story.
+    /// (holds the state that is kept as the parsing process runs to construct a story)
+    /// </summary>
+    public class StoryParsingJob
+    {
+        private readonly List<IScenario> scenarios = new List<IScenario>();
+        private readonly StringBuilder _storyName = new StringBuilder();
+        private ScenarioBuildingInfo _currentScenario;
+        private string _storyId;
 
-            Action addScenarioOutline = () =>
-                                            {
-                                                var count = currentScenario.RowData.First().Count() - 1;
-                                                var fieldNames = currentScenario.RowData.First().Take(count);
-                                                var examples =
-                                                    currentScenario.RowData.Skip(1).Select(x => x.Take(count));
-                                                scenarios.Add(
-                                                    new ScenarioOutline(storyId + "- outline -" + scenarios.Count,
-                                                                        currentScenario.Name,
-                                                                        new Scenario(storyId + "-" + scenarios.Count,
-                                                                                     currentScenario.Name,
-                                                                                     currentScenario.Lines), fieldNames,
-                                                                        examples));
-                                            };
+        private Action<string> _currentLineHandler;
 
-            Action addScenario = () => scenarios.Add(new Scenario(storyId + "-" + scenarios.Count,
-                                                                  currentScenario.Name,
-                                                                  currentScenario.Lines));
+        public Story Parse(string storyText, string storyId)
+        {
+            InitializeParsing(storyId);
 
-            Action addScenarioOrOutline = () =>
-                                              {
-                                                  if (currentScenario != null)
-                                                  {
-                                                      if (currentScenario.RowData != null &&
-                                                          currentScenario.RowData.Count() > 0)
-                                                          addScenarioOutline();
-                                                      else
-                                                          addScenario();
-                                                  }
-                                              };
+            foreach (var line in ParseLines(storyText))
+                HandleStoryTextLine(line);
 
-            foreach (var line in lines)
+            AddScenarioOrOutlineIfExists();
+
+            FixEmptyScenarioNames();
+
+            return GetStory();
+        }
+
+        private void InitializeParsing(string storyId)
+        {
+            _storyId = storyId;
+            _currentLineHandler = AppendToStoryName;
+        }       
+
+        private void HandleStoryTextLine(string line)
+        {
+            if (IsNewScenarioOrOutline(line))
             {
-                if (IsScenarioOutlineHeader(line) || IsScenarioHeader(line))
-                {
-                    addScenarioOrOutline();
-
-                    currentScenario = new ScenarioBuildingInfo {Name = line.After(":").Trim()};
-
-                    handler = GetScenarioLineHandler(currentScenario);
-                }
-                else if (IsStartOfExamples(line))
-                {
-                    handler = GetScenarioExampleRowHandler(currentScenario);
-                }
-                else
-                {
-                    handler(line.Trim());
-                }
+                InitializeNewScenario(line);
+                return;
             }
 
-            addScenarioOrOutline();
-
-            FixEmptyScenarioNames(scenarios);
-
-            return new Story(storyId, storyName.ToString().Trim(), scenarios);
-        }
-
-        private Action<string> GetScenarioLineHandler(ScenarioBuildingInfo currentScenario)
-        {
-            Action<string> handler;
-            var scenario = currentScenario;
-            handler = l =>
-                          {
-                              if (!IsComment(l))
-                                  scenario.Lines.Add(l);
-                          };
-            return handler;
-        }
-
-        private Action<string> GetScenarioExampleRowHandler(ScenarioBuildingInfo currentScenario)
-        {
-            Action<string> handler;
-            var scenario = currentScenario;
-            handler = l =>
-                          {
-                              if (scenario != null && l.StartsWith("|"))
-                                  scenario.RowData.Add(l.Split('|').Skip(1));
-                          };
-            return handler;
-        }
-
-        private void FixEmptyScenarioNames(List<IScenario> scenarios)
-        {
-            foreach (var scenario in scenarios)
+            if (IsStartOfExamples(line))
             {
-                if (!string.IsNullOrEmpty(scenario.Name))
-                    continue;
+                _currentLineHandler = HandleScenarioExampleRow;
+                return;
+            }
 
-                if (scenario is Scenario)
-                {
-                    var s = scenario as Scenario;
-                    s.Name = string.Join("\r\n", s.Body.ToArray());
-                }
-                else if (scenario is ScenarioOutline)
-                {
-                    var s = scenario as ScenarioOutline;
-                    s.Name = string.Join("\r\n", s.Scenario.Body.ToArray());
-                }
+            _currentLineHandler(line.Trim());
+        }
+
+        private Story GetStory()
+        {
+            return new Story(_storyId, _storyName.ToString().Trim(), scenarios);
+        }
+
+        private static bool IsNewScenarioOrOutline(string line)
+        {
+            return IsScenarioOutlineHeader(line) || IsScenarioHeader(line);
+        }
+
+        private void InitializeNewScenario(string line)
+        {
+            AddScenarioOrOutlineIfExists();
+
+            _currentScenario = new ScenarioBuildingInfo {Name = line.After(":").Trim()};
+            _currentLineHandler = HandleScenarioLine;
+        }
+
+        private void AppendToStoryName(string line)
+        {
+            _storyName.Append(line + " ");
+        }
+
+        private void AddScenarioOutline()
+        {
+            var innerScenario = BuildScenario();
+
+            var count = _currentScenario.RowData.First().Count() - 1;
+            var fieldNames = _currentScenario.RowData.First().Take(count);
+            var examples =
+                _currentScenario.RowData.Skip(1).Select(x => x.Take(count));
+
+            var scenarioOutline = new ScenarioOutline(_storyId + "- outline -" + scenarios.Count,
+                                                      _currentScenario.Name,
+                                                      innerScenario,
+                                                      fieldNames,
+                                                      examples);
+            scenarios.Add(
+                scenarioOutline);
+        }
+
+        private Scenario BuildScenario()
+        {
+            return new Scenario(_storyId + "-" + scenarios.Count,
+                                _currentScenario.Name,
+                                _currentScenario.Lines);
+        }
+
+        private void AddScenarioOrOutlineIfExists()
+        {
+            if (_currentScenario == null)
+                return;
+
+            if (CurrentScenarioIsOutline())
+                AddScenarioOutline();
+            else
+                AddScenario();
+        }
+
+        private bool CurrentScenarioIsOutline()
+        {
+            return _currentScenario.RowData != null &&
+                   _currentScenario.RowData.Count() > 0;
+        }
+
+        private void AddScenario()
+        {
+            scenarios.Add(BuildScenario());
+        }
+
+        private void HandleScenarioLine(string line)
+        {
+            if (!IsComment(line))
+                _currentScenario.Lines.Add(line);
+        }
+
+        private void HandleScenarioExampleRow(string line)
+        {
+            if (_currentScenario != null && line.StartsWith("|"))
+                _currentScenario.RowData.Add(line.Split('|').Skip(1));
+        }
+
+        private void FixEmptyScenarioNames()
+        {
+            foreach (var scenario in scenarios.Where(scenario => string.IsNullOrEmpty(scenario.Name)))
+                SetScenarioNameToDefault(scenario);
+        }
+
+        private static void SetScenarioNameToDefault(IScenario scenario)
+        {
+            if (scenario is Scenario)
+            {
+                var s = scenario as Scenario;
+                s.Name = string.Join("\r\n", s.Body.ToArray());
+            }
+            else if (scenario is ScenarioOutline)
+            {
+                var s = scenario as ScenarioOutline;
+                s.Name = string.Join("\r\n", s.Scenario.Body.ToArray());
             }
         }
 
@@ -140,16 +188,16 @@ namespace StorEvil.Parsing
             return line.ToLower().StartsWith("scenario outline:");
         }
 
-        private static IEnumerable<string> ParseLines(string text)
-        {
-            return text.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
-        }
-
         internal class ScenarioBuildingInfo
         {
             public string Name;
             public List<string> Lines = new List<string>();
             public List<IEnumerable<string>> RowData = new List<IEnumerable<string>>();
+        }
+
+        private static IEnumerable<string> ParseLines(string text)
+        {
+            return text.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
         }
     }
 }
