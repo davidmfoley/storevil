@@ -91,6 +91,11 @@ namespace StorEvil.ResultListeners
             _stories.Add(storyResult);
         }
 
+        public bool HasAnyStories()
+        {
+            return _stories.Any();
+        }
+
         public bool HasAnyScenarios(ScenarioStatus scenarioStatus)
         {
             return _stories.Any(s => s.HasAnyScenarios(scenarioStatus));

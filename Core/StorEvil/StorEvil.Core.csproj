@@ -39,6 +39,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\TestLibrary\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="Spark, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7f8549eed921a12c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\Spark\Spark.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core">
@@ -83,6 +87,7 @@
     <Compile Include="Interpreter\ParameterConverters\ParameterConverter.cs" />
     <Compile Include="Interpreter\ScenarioInterpreterForType.cs" />
     <Compile Include="ResultListeners\GatheringResultListener.cs" />
+    <Compile Include="ResultListeners\HtmlReportGenerator.cs" />
     <Compile Include="Utility\FunqEasyRegistrationHelper.cs" />
     <Compile Include="ResultListeners\CompositeListener.cs" />
     <Compile Include="ResultListeners\ConsoleResultListener.cs" />

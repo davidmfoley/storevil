@@ -82,6 +82,7 @@
     <Compile Include="parsing_parameter_types.cs" />
     <Compile Include="RegexMatcherTests.cs" />
     <Compile Include="Reports\GatheringResultListener_Specs.cs" />
+    <Compile Include="Reports\HTML_Reports.cs" />
     <Compile Include="Reports\XmlReportListener_Specs.cs" />
     <Compile Include="Reports\FakeFileWriter.cs" />
     <Compile Include="Reports\XmlTestExtensions.cs" />
