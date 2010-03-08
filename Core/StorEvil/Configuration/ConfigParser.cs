@@ -5,7 +5,6 @@ namespace StorEvil.Configuration
 {
     public class ConfigParser : IConfigParser
     {
-        
         public ConfigSettings Read(string contents)
         {       
             var lines = GetNonBlankLines(contents);
@@ -22,7 +21,7 @@ namespace StorEvil.Configuration
                 if (indexOfSeparator > 0)
                 {
                     settingName = line.Substring(0, indexOfSeparator).Trim().ToLowerInvariant();
-                    settingValue = line.Substring(indexOfSeparator + 1);
+                    settingValue = line.Substring(indexOfSeparator + 1).Trim();
                 }
                 else
                 {
@@ -30,19 +29,30 @@ namespace StorEvil.Configuration
                     settingValue = "";
                 }       
                 
-                ApplySettingValue(settings, settingName, settingValue);
+                if (!ApplySettingValue(settings, settingName, settingValue))
+                {
+                    throw new BadSettingNameException( settingName, line);
+                }
             }
             return settings;
         }
 
-        private static void ApplySettingValue(ConfigSettings settings, string settingName, string settingValue)
+        private static bool ApplySettingValue(ConfigSettings settings, string settingName, string settingValue)
         {
             if (settingName == "assemblies")
                 settings.AssemblyLocations = SplitSettingValue(settingValue);
             else if (settingName == "extensions")
                 settings.ScenarioExtensions = SplitSettingValue(settingValue);
+            else if (settingName == "outputfile")
+                settings.OutputFile = settingValue;
+            else if (settingName == "outputfileformat")
+                settings.OutputFileFormat = settingValue;
+            else if (settingName == "outputfiletemplate")
+                settings.OutputFileTemplate = settingValue;
             else
-                throw new BadSettingNameException(settingName);
+                return false;
+
+            return true;
         }
 
         private static IEnumerable<string> SplitSettingValue(string value)

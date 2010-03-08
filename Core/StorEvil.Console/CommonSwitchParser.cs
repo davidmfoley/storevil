@@ -23,8 +23,15 @@ namespace StorEvil.Console
             AddSwitch("--output-file-format", "-f")
                 .SetsField(s => s.OutputFileFormat)
                 .WithDescription(
-                    "Sets the format of output to the file specified by --output-file (ONLY xml is supported so far)\r\n" +
-                    "If nothing is specified, the output file location will be: storevil.output.{format}");
+                    "Sets the format of output to the file specified by --output-file (xml, spark)\r\n" +
+                    "If nothing is specified, the output file location will be: storevil.output.{format}\r\n" +
+                    "If the file format is spark, you can set the template with the --output-file-template switch.");
+
+            AddSwitch("--output-file-template", "-t")
+                .SetsField(s => s.OutputFileTemplate)
+                .WithDescription(
+                    "Only valid if spark format is chosen.\r\n" +
+                    "Sets the path to the spark template that will be used to build the output.");
 
             AddSwitch("--console-mode", "-c")
                 .SetsEnumField(s => s.ConsoleMode)  

@@ -1,13 +1,12 @@
+using System;
 using System.IO;
 using Funq;
 using StorEvil.Configuration;
 using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Infrastructure;
-using StorEvil.InPlace;
 using StorEvil.Interpreter;
 using StorEvil.Parsing;
-using StorEvil.ResultListeners;
 
 namespace StorEvil.Console
 {
@@ -15,6 +14,7 @@ namespace StorEvil.Console
     {
         private readonly IConfigSource _configSource;
         private ConfigSettings _settings;
+
         public Container Container { get; private set; }
 
         private const string StandardHelpText =
@@ -25,6 +25,7 @@ Available commands:
 
  execute - Executes the specs in the console
  nunit   - Generates NUnit text fixtures
+ init    - Initializes configuration  and templates for a StorEvil project
 
 usage:
   'storevil {command} {switches}  - to execute the command
@@ -35,6 +36,7 @@ usage:
             _configSource = source;
 
             Container = new Container();
+            
         }
 
         public IStorEvilJob ParseArguments(string[] args)
@@ -59,10 +61,11 @@ usage:
 
         private void SetupCommonComponents(Container container)
         {
+            var listenerBuilder = new ListenerBuilder(_settings);
             container.EasyRegister<IStoryParser, StoryParser>();
             container.EasyRegister<IStoryProvider, StoryProvider>();
             container.EasyRegister<IStoryReader, FilesystemStoryReader>();
-            container.Register(GetResultListener());
+            container.Register(listenerBuilder.GetResultListener());
             container.EasyRegister<IFilesystem, Filesystem>();
             container.EasyRegister<IScenarioPreprocessor, ScenarioPreprocessor>();
             container.EasyRegister<ScenarioInterpreter>();
@@ -72,33 +75,7 @@ usage:
             container.Register<IStoryToContextMapper>(GetStoryToContextMapper());
         }
 
-        private IResultListener GetResultListener()
-        {
-            var compositeListener = new CompositeListener();
 
-            if (!_settings.Quiet)
-            {
-                compositeListener.AddListener(new ConsoleResultListener
-                                                  {
-                                                      ColorEnabled = _settings.ConsoleMode == ConsoleMode.Color
-                                                  });
-            }
-            if (!string.IsNullOrEmpty(_settings.OutputFileFormat))
-            {        
-                string outputFile;
-                if (!string.IsNullOrEmpty(_settings.OutputFile))
-                    outputFile = _settings.OutputFile;
-                else
-                    outputFile = "storevil-output." + _settings.OutputFileFormat.ToLower();
-
-                if (_settings.OutputFileFormat.ToLower() == "xml")
-                {
-                    compositeListener.AddListener(new XmlReportListener(new FileWriter(outputFile, true)));
-                }
-            }
-
-            return compositeListener;
-        }
 
         private StoryToContextMapper GetStoryToContextMapper()
         {
@@ -155,8 +132,24 @@ usage:
                 jobFactory = new NUnitJobFactory();
             else if (command == "execute")
                 jobFactory = new InPlaceJobFactory();
+            else if (command == "init")
+                jobFactory = new InitJobFactory();
 
             return jobFactory;
+        }
+    }
+
+    internal class InitJobFactory : IJobFactory
+    {
+        public string GetUsage()
+        {
+            return "initializes a storevil.config file";
+        }
+
+        public void SetupContainer(Container container, string[] args)
+        {
+            container.EasyRegister<IStorEvilJob, InitJob>();
+            
         }
     }
 }

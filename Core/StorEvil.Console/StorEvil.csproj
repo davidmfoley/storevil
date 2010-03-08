@@ -36,6 +36,7 @@
       <HintPath>..\Lib\Funq.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -53,9 +54,11 @@
     <Compile Include="CommonSwitchParser.cs" />
     <Compile Include="DisplayHelpJob.cs" />
     <Compile Include="IJobFactory.cs" />
+    <Compile Include="InitJob.cs" />
     <Compile Include="InPlaceJobFactory.cs" />
     <Compile Include="InPlaceSettings.cs" />
     <Compile Include="JobFactory.cs" />
+    <Compile Include="ListenerBuilder.cs" />
     <Compile Include="NUnitJobFactory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

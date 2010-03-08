@@ -1,0 +1,84 @@
+<html>
+    <head>
+		<style type='text/css'>	
+		body {
+			background: #ddd;
+			font-family: "Lucida Grande",  Verdana, lucida, helvetica, sans-serif;
+			font-size:16px;
+			color: black;			
+		}
+		
+		div  {
+			padding:5x;
+			
+		}
+		
+		h1, h2, h3 {
+			padding:5px;
+		}
+		
+		.story {			
+			background: #eee;
+			padding:5px 5px 5px 15px;
+		}
+		.scenario {	
+			background: #fff;
+			padding:5px 5px 5px 15px;
+		}
+		
+		.scenario-failure	{
+			background-color:#f55;
+		}
+	
+		.scenario-success	{
+			background-color:#5f5;
+		}
+		.scenario-pending	{
+			background-color:yellow;
+		}
+		
+		.line-failure	{
+			color:red;
+			float:left;
+		}
+		
+		.line-success	{
+			color:green;
+
+		}
+		
+		.line-pending	{
+			color:yellow;
+
+		}
+		.failure-message {
+			background-color:#f55;
+			clear:both;
+		
+		}
+	</style>
+    </head>
+    <body>
+        <h1>StorEvil Run Report</h1>
+        <div class="no-stories-found" if="!Model.HasAnyStories()">
+            No stories were found.
+        </div>
+        <div class="stories-wrapper" if="Model.HasAnyStories()">
+            <div class="story" each="var story in Model.Stories">    
+                <h2>${story.Summary}</h2> 
+				<div class="scenario" each="var scenario in story.Scenarios">
+					<h3 class="scenario-${scenario.Status.ToString().ToLower()}">${scenario.Name} - ${scenario.Status.ToString()}</h3>
+					<for each="var line in scenario.Lines">
+						<div class="line-${line.Status.ToString().ToLower()}">
+							${line.Text}<br/>
+						</div>
+					</for>
+					
+					<div class="failure-message" if="!string.IsNullOrEmpty(scenario.FailureMessage)">
+						${scenario.FailureMessage}
+					</div>
+				</div>
+            </div>
+        </div>
+    </body>
+</html>
