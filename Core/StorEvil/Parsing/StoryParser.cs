@@ -107,7 +107,7 @@ namespace StorEvil.Parsing
 
         private void AppendToStoryName(string line)
         {
-            _storyName.Append(line + " ");
+            _storyName.Append(line + "\r\n");
         }
 
         private void AddScenarioOutline()
