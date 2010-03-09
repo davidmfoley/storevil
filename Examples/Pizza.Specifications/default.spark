@@ -4,7 +4,7 @@
 		body {
 			background: #ddd;
 			font-family: Interstate, "Lucida Grande",  Verdana, Arial, helvetica, sans-serif;
-			font-size:16px;
+			font-size:13px;
 			color: black;			
 		}
 		
@@ -15,6 +15,7 @@
 		
 		h1, h2, h3 {
 			padding:5px;
+			margin:0px;
 		}
 		
 		.story {			
@@ -32,14 +33,14 @@
 			padding:10px 10px 5px 10px;
 		}
 		.scenario-failed, .summary-failed	{
-			background-color:#f55;
+			background-color:#f99;
 		}
 	
 		.scenario-passed,.summary-passed	{
-			background-color:#5f5;
+			background-color:#8d8;
 		}
 		.scenario-pending,.summary-pending	{
-			background-color:yellow;
+			background-color:#fd7;
 		}
 		
 		.line-failed	{
