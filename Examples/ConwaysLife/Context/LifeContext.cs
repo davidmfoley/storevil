@@ -15,14 +15,12 @@ namespace ConwaysLife.Context
             _board = new LifeBoard(TransformTableToBooleans(table));
         }
 
-        private bool[][] TransformTableToBooleans(string[][] table)
+        private static bool[][] TransformTableToBooleans(string[][] table)
         {
-            bool[][] booleanTable = new bool[table.Length][];
+            var booleanTable = new bool[table.Length][];
+
             for (int i = 0; i < table.Length; i++)
-            {
-                var row = table[i];
-                booleanTable[i] = row.Select(x => x.Trim() == "x").ToArray();
-            }
+                booleanTable[i] = table[i].Select(x => x.Trim() == "x").ToArray();
 
             return booleanTable;
         }
@@ -33,19 +31,24 @@ namespace ConwaysLife.Context
         }
 
         public void Then_I_should_see_the_following_board(string[][] expectedCellStates)
-        {
-            var actual = _board.GetBoard();
+        {          
             var expected = TransformTableToBooleans(expectedCellStates);
 
-            actual.Length.ShouldEqual(expected.Length);
-            _board.ColumnCount.ShouldEqual(expected[0].Length);
+            AssertSameDimensionsAsCurrent(expected);
+            AssertSameContentsAsCurrent(expected);
+        }
 
-            for (int row = 0; row < expected.Length; row++)
-            {
-                actual[row].Length.ShouldEqual(expected[row].Length);
-                for (int column = 0; column < expected[row].Length; column++)
+        private void AssertSameContentsAsCurrent(bool[][] expected)
+        {
+            for (int row = 0; row < +_board.RowCount; row++)
+                for (int column = 0; column < _board.ColumnCount; column++)
                     AssertCellMatches(expected, row, column);
-            }
+        }
+
+        private void AssertSameDimensionsAsCurrent(bool[][] expected)
+        {
+            _board.RowCount.ShouldEqual(expected.Length);
+            _board.ColumnCount.ShouldEqual(expected[0].Length);
         }
 
         private void AssertCellMatches(bool[][] expected, int row, int column)
@@ -57,12 +60,7 @@ namespace ConwaysLife.Context
         private void ThrowMismatchedCellException( bool[][] expected, int row, int column)
         {
             const string messageFormat = "Mismatch at Row {0}, Column {1}\r\nExpected: {2} but was: {3}";
-            var message = string.Format(messageFormat, row, column, expected[row][column],
-                                        _board.CellIsAlive(row, column));
-
-            var actualRows = _board.GetBoard().Select(a => "| " + string.Join(" | ", a.Select(cell => cell ? "x" : ".").ToArray()) + " |");
-            message += "\r\n" + string.Join("\r\n", actualRows.ToArray());
-
+            var message = string.Format(messageFormat, row, column, expected[row][column], _board.CellIsAlive(row, column));
             throw new Exception(message);
         }
 

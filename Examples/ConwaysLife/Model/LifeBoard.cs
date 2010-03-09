@@ -49,12 +49,10 @@ namespace ConwaysLife.Model
 
         private bool CalculateCell(int row, int col)
         {
-            var neighbors = GetNeighbors(row, col);
-            var liveNeighbors = neighbors.Count(n => n);
+            var aliveNeighborCount = GetNeighbors(row, col).Count(n => n);
+            var cellIsAliveInCurrentGeneration = CellIsAlive(row, col);
 
-            var cellIsAlive = CellIsAlive(row, col);
-
-            return ShouldLiveInNextGeneration(cellIsAlive, liveNeighbors);
+            return ShouldLiveInNextGeneration(cellIsAliveInCurrentGeneration, aliveNeighborCount);
         }
 
         private static bool ShouldLiveInNextGeneration(bool cellIsAlive, int liveNeighbors)
