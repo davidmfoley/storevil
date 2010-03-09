@@ -35,6 +35,38 @@ namespace StorEvil.Context.Matchers
             return new[] {GetMatch(line)};
         }
 
+        /// <summary>
+        /// Determine whether this member is a full or partial match 
+        /// (or no match) for the set of words that is passed in 
+        /// </summary>
+        /// <param name="line">a set of words that is part of a scenario</param>
+        /// <returns></returns>
+        public NameMatch GetMatch(string line)
+        {
+            var words = _scenarioLineParser.ExtractWordsFromScenarioLine(line);
+
+            // can't match if not enough words to fill us up
+            if (words.Count < _wordFilters.Count)
+                return null;
+
+            var paramValues = new Dictionary<string, object>();
+
+            // check each word for a match
+            for (int i = 0; i < _wordFilters.Count; i++)
+            {
+                if (!_wordFilters[i].IsMatch(words[i]))
+                    return null;
+
+                // if this is a parameter, add to our hash so we can resolve the (string) value later
+                var paramFilter = _wordFilters[i] as ParameterMatchWordFilter;
+
+                if (paramFilter != null)
+                    paramValues.Add(paramFilter.ParameterName, words[i]);
+            }
+
+            return BuildNameMatch(words, paramValues);
+        }
+
         private void BuildMethodWordFilters()
         {
             var parameterInfos = GetMethodParameterInfos(_methodInfo);
@@ -85,37 +117,7 @@ namespace StorEvil.Context.Matchers
             paramNameMap.Remove(word);
         }
 
-        /// <summary>
-        /// Determine whether this member is a full or partial match 
-        /// (or no match) for the set of words that is passed in 
-        /// </summary>
-        /// <param name="line">a set of words that is part of a scenario</param>
-        /// <returns></returns>
-        public NameMatch GetMatch(string line)
-        {
-            var words = _scenarioLineParser.ExtractWordsFromScenarioLine(line);
-
-            // can't match if not enough words to fill us up
-            if (words.Count < _wordFilters.Count)
-                return null;
-
-            var paramValues = new Dictionary<string, object>();
-
-            // check each word for a match
-            for (int i = 0; i < _wordFilters.Count; i++)
-            {
-                if (!_wordFilters[i].IsMatch(words[i]))
-                    return null;
-
-                // if this is a parameter, add to our hash so we can resolve the (string) value later
-                var paramFilter = _wordFilters[i] as ParameterMatchWordFilter;
-
-                if (paramFilter != null)
-                    paramValues.Add(paramFilter.ParameterName, words[i]);
-            }
-
-            return BuildNameMatch(words, paramValues);
-        }
+       
 
         private NameMatch BuildNameMatch(IEnumerable<string> words, Dictionary<string, object> paramValues)
         {

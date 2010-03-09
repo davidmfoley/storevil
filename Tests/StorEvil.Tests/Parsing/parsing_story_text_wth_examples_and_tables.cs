@@ -6,6 +6,40 @@ using StorEvil.Parsing;
 namespace StorEvil.Parsing_story_text
 {
     [TestFixture]
+    public class Parsing_tables_of_data_in_a_scenario
+    {
+        private Story Result;
+        private const string testOutlineTableStoryText = @"
+Scenario that has a table of data.
+Scenario: Doing something
+Given the following data:
+|1|2|3|
+|4|5|6|
+|7|8|9|
+|10|11|12|
+";
+
+        [SetUp]
+        public void SetupContext()
+        {
+            Result = new StoryParser().Parse(testOutlineTableStoryText, null);
+        }
+
+        [Test]
+        public void Parses_table()
+        {
+            var scenario = Result.Scenarios.First() as Scenario;
+
+            scenario.Body.First().ShouldContain(
+@"|1|2|3|
+|4|5|6|
+|7|8|9|
+|10|11|12|");
+        }
+
+    }
+
+    [TestFixture]
     public class parsing_story_text_wth_examples_and_tables
     {
         private Story Result;

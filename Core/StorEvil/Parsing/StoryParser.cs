@@ -63,7 +63,23 @@ namespace StorEvil.Parsing
                 return;
             }
 
+            if(IsTableRow(line) && !_currentScenario.IsOutline)
+            {
+                if (_currentScenario != null  && _currentScenario.Lines.Count > 0)
+                {
+                    var last = _currentScenario.Lines.Last();
+                    _currentScenario.Lines = _currentScenario.Lines.GetRange(0, _currentScenario.Lines.Count() - 1);
+                    _currentScenario.Lines.Add(last + "\r\n" + line);
+                    return;
+                }
+            }
+
             _currentLineHandler(line.Trim());
+        }
+
+        private static bool IsTableRow(string line)
+        {
+            return line.StartsWith("|");
         }
 
         private Story GetStory()
@@ -80,7 +96,12 @@ namespace StorEvil.Parsing
         {
             AddScenarioOrOutlineIfExists();
 
-            _currentScenario = new ScenarioBuildingInfo {Name = line.After(":").Trim()};
+            _currentScenario = new ScenarioBuildingInfo
+                                   {
+                                       Name = line.After(":").Trim(),
+                                       IsOutline = IsScenarioOutlineHeader(line)
+                                   };
+
             _currentLineHandler = HandleScenarioLine;
         }
 
@@ -193,11 +214,12 @@ namespace StorEvil.Parsing
             public string Name;
             public List<string> Lines = new List<string>();
             public List<IEnumerable<string>> RowData = new List<IEnumerable<string>>();
+            public bool IsOutline;
         }
 
         private static IEnumerable<string> ParseLines(string text)
         {
-            return text.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
+            return text.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries).Select(l=>l.Trim());
         }
     }
 }
