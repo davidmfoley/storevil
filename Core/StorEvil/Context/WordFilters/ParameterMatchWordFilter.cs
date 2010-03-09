@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 
 namespace StorEvil.Context.WordFilters
@@ -19,9 +20,23 @@ namespace StorEvil.Context.WordFilters
             get { return _paramInfo.Name; }
         }
 
+        public bool IsTable { get
+        {
+            return _paramInfo.ParameterType.IsAssignableFrom(typeof (string[][]));
+        }
+        }
+
         public bool IsMatch(string s)
         {
+            if (IsTableString(s))
+                return this.IsTable;
+
             return true;
+        }
+
+        private bool IsTableString(string paramValue)
+        {
+            return paramValue.StartsWith("|");
         }
     }
 }

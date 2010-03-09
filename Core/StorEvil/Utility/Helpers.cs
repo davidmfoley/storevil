@@ -4,6 +4,11 @@ namespace StorEvil
 {
     static class Helpers
     {
+        public static string Until(this string s, string find)
+        {
+            return s.Substring(0, s.IndexOf(find) - 1);
+        }
+
         public static string After(this string s, string find)
         {
             return s.Substring(s.IndexOf(find) + 1);

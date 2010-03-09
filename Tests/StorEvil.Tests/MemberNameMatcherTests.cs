@@ -1,11 +1,9 @@
-using System;
 using System.Reflection;
 using NUnit.Framework;
-using StorEvil.Context;
 using StorEvil.Context.Matchers;
 using StorEvil.Context.Matches;
 
-namespace StorEvil
+namespace StorEvil.Method_name_matching
 {
     public enum MatchingTest
     {
@@ -14,21 +12,36 @@ namespace StorEvil
         FooBar
     }
 
+    public class MethodMatcherTestHelper
+    {
+        public static MethodInfo GetMethod<T>(string name)
+        {
+            return typeof (T).GetMethod(name);
+        }
+
+        public static MethodNameMatcher GetMatcher<T>(string methodName)
+        {
+            return new MethodNameMatcher(GetMethod<T>(methodName));
+        }
+    }
+
     [TestFixture]
-    public class MethodNameMatcherTests
+    public class Enum_values
     {
         private NameMatch FoundMatch;
 
         [SetUp]
         public void SetupContext()
         {
-            var matcher = new MethodNameMatcher(GetMethod<EnumTestContext>("Test_parsing_of_enumValue"));
+            var matcher = MethodMatcherTestHelper.GetMatcher<EnumTestContext>("Test_parsing_of_enumValue");
+
             FoundMatch = matcher.GetMatch("Test parsing of foo");
         }
+
         [Test]
         public void Should_be_exact_match()
         {
-           FoundMatch.ShouldBeOfType<ExactMatch>();
+            FoundMatch.ShouldBeOfType<ExactMatch>();
         }
 
         [Test]
@@ -37,18 +50,39 @@ namespace StorEvil
             FoundMatch.ParamValues["enumValue"].ShouldEqual(MatchingTest.Foo);
         }
 
-        private static MethodInfo GetMethod<T>(string name)
+        public class EnumTestContext
         {
-            return typeof(T).GetMethod(name);
+            private MatchingTest? EnumValue;
+
+            public void Test_parsing_of_enumValue(MatchingTest enumValue)
+            {
+                EnumValue = enumValue;
+            }
         }
     }
 
-    public class EnumTestContext
+    public class Parsing_tables
     {
-        MatchingTest? EnumValue = null;
-        public void Test_parsing_of_enumValue(MatchingTest enumValue)
+        [SetUp]
+        public void SetupContext()
         {
-            EnumValue = enumValue;
+            var matcher = MethodMatcherTestHelper.GetMatcher<Table_matching_test_context>("method_takes_a_table");
+            Match = matcher.GetMatch("Method takes a table\r\n|1|2|\r\n|3|4|\r\n|5|6|");
+        }
+
+        protected NameMatch Match { get; set; }
+
+        [Test]
+        public void should_parse_table()
+        {
+            Match.ParamValues["values"].ShouldEqual("|1|2|\r\n|3|4|\r\n|5|6|");
+        }
+
+        private class Table_matching_test_context
+        {
+            public void method_takes_a_table(string[][] values)
+            {
+            }
         }
     }
 }

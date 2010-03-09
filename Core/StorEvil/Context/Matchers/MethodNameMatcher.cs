@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using StorEvil.Context.Matches;
 using StorEvil.Context.WordFilters;
-using StorEvil.Nunit;
 using StorEvil.Parsing;
 
 namespace StorEvil.Context.Matchers
@@ -116,8 +115,6 @@ namespace StorEvil.Context.Matchers
             _wordFilters.Add(new ParameterMatchWordFilter(paramNameMap[word]));
             paramNameMap.Remove(word);
         }
-
-       
 
         private NameMatch BuildNameMatch(IEnumerable<string> words, Dictionary<string, object> paramValues)
         {
