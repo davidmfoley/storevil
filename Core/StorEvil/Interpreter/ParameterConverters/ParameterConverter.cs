@@ -12,6 +12,7 @@ namespace StorEvil.Interpreter.ParameterConverters
         {
             AddConverter<int>(x => int.Parse(ConvertHelper.StripNonNumeric(x)));
             AddConverter<decimal>(new StorevilDecimalConverter());
+            AddConverter<string[][]>(new StorEvilTableConverter());
         }
 
         private static void AddConverter<T>(IStorevilConverter converter)
@@ -38,6 +39,20 @@ namespace StorEvil.Interpreter.ParameterConverters
         private static object ParseEnumValue(string value, Type type)
         {
             return Enum.Parse(type, value, true);
+        }
+    }
+
+    public class StorEvilTableConverter : IStorevilConverter
+    {
+        public object ConvertParamValue(string val)
+        {
+            var table = new List<string[]>();
+            var rows = val.Split(new[] {"\r\n"}, StringSplitOptions.None);
+
+            foreach (var row in rows)
+                table.Add(row.Split(new[] {'|'}, StringSplitOptions.RemoveEmptyEntries));
+
+            return table.ToArray();            
         }
     }
 }

@@ -6,12 +6,12 @@ namespace StorEvil
     {
         public static string Until(this string s, string find)
         {
-            return s.Substring(0, s.IndexOf(find) - 1);
+            return s.Substring(0, s.IndexOf(find));
         }
 
         public static string After(this string s, string find)
         {
-            return s.Substring(s.IndexOf(find) + 1);
+            return s.Substring(s.IndexOf(find) + find.Length);
         }
 
         public static string FirstWord(this string s)

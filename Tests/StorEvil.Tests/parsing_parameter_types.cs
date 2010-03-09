@@ -40,6 +40,17 @@ namespace StorEvil
             result.ShouldEqual(42m);
         }
 
+        [Test]
+        public void should_convert_table_to_string_array()
+        {
+            var result = Converter.Convert("|a1|a2|\r\n|b1|b2|", typeof(string[][])) as string[][];
+            result.ShouldNotBeNull();
+            result[0][0].ShouldBe("a1");
+            result[0][1].ShouldBe("a2");
+            result[1][0].ShouldBe("b1");
+            result[1][1].ShouldBe("b2");
+        }
+
         private enum TestValues
         {
             Foo,
