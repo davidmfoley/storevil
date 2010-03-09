@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Context\Class1.cs" />
+    <Compile Include="Context\LifeContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -54,6 +54,12 @@
     <None Include="Stories\multiple_cells.feature" />
     <None Include="Stories\multiple_generations.feature" />
     <None Include="Stories\static_structures.feature" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\StorEvil\StorEvil.Core.csproj">
+      <Project>{B86235CA-045F-4222-997C-A65E966C6F9B}</Project>
+      <Name>StorEvil.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

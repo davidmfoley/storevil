@@ -30,6 +30,13 @@ namespace StorEvil.InPlace
             ShouldMatch(result, "a_user_named_arg0", "string", "arg0");
         }
 
+        [Test]
+        public void Should_suggest_string_array_array_param_for_table_of_data()
+        {
+            var result = Helper.Suggest("Given the following\r\n|1|2|\r\n|3|4|");
+            ShouldMatch(result, "Given_the_following", "string[][]", "tableData");
+        }
+
         private void ShouldMatch(string code,  string name, params string[] additionalStrings)
         {
             Regex r = new Regex(name +"\\(.*" + string.Join(".*", additionalStrings) + ".*\\).*{.*}" , RegexOptions.Singleline);

@@ -19,6 +19,11 @@ namespace StorEvil.InPlace
     {
         public string Suggest(string s)
         {
+            var hasTable = (s.Contains("\r\n|"));
+            if (hasTable)
+            {
+                s = s.Until("\r\n");
+            }
             var pieces = s.Split().Where(p=>p.Trim() != "");
 
             var argTypes = new List<string>();
@@ -48,6 +53,10 @@ namespace StorEvil.InPlace
             {
                 argText += ", " + argType + " arg" + currentArgIndex;
             }
+
+            if (hasTable)
+                argText += ", string[][] tableData";
+
             argText += " ";
               var code = "public void " + method + "(" + argText.Substring(1).Trim() + ") { }";
             return code;
