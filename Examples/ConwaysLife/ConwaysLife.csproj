@@ -45,10 +45,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\LifeBoard.cs" />
     <Compile Include="Context\LifeContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="default.spark" />
+    <None Include="storevil.config" />
     <None Include="Stories\dead_cell.feature" />
     <None Include="Stories\live_cell.feature" />
     <None Include="Stories\multiple_cells.feature" />

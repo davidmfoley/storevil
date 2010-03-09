@@ -159,7 +159,7 @@ namespace StorEvil.Parsing
 
         private void HandleScenarioLine(string line)
         {
-            if (!IsComment(line))
+            if (!IsComment(line) && line.Trim().Length > 0)
                 _currentScenario.Lines.Add(line);
         }
 
