@@ -3,6 +3,10 @@ using System.Linq;
 
 namespace ConwaysLife.Model
 {
+    /// <summary>
+    /// This implements the basic rules to Conway's game of Life.
+    /// (this is the system-under-test)
+    /// </summary>
     public class LifeBoard
     {
         private bool[][] _table;

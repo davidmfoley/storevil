@@ -5,6 +5,9 @@ using StorEvil;
 
 namespace ConwaysLife.Context
 {
+    /// <summary>
+    /// This is the context that is used by StorEvil to interpret the plain-text specs in the Stories folder.
+    /// </summary>
     [Context]
     public class LifeContext
     {

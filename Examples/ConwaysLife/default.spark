@@ -66,7 +66,7 @@
 	</style>
     </head>
     <body>
-        <h1>StorEvil Run Report</h1>
+        <h1>StorEvil Example: Conway's Game of Life</h1>
 		<div class="summary">
 			<div class="summary-passed" if="Model.PassedScenarios.Count > 0">
 				${Model.PassedScenarios.Count} Passed
@@ -83,7 +83,7 @@
         </div>		
         <div class="stories-wrapper" if="Model.HasAnyStories()">
             <div class="story" each="var story in Model.Stories">    
-                <h2>${story.Summary.Replace("\r\n", "<br/>")}</h2> 
+                <h3>${story.Summary.Replace("\r\n", "<br/>")}</h2> 
 				<div class="summary">
 					<div class="summary-passed" if="story.PassedScenarios.Count > 0">
 						${story.PassedScenarios.Count} Passed
