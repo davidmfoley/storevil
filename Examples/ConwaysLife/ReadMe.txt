@@ -14,7 +14,13 @@ In order to run these:
   storevil execute -o ConwaysLife.storevil.output.html
 
 Either of these commands will execute the game of life scenarios in the console. 
-The second one will additionally generate an HTML report.
+The second one will additionally generate an HTML report. You can customized the report by editing the default.spark file in this folder.
+
+The configuration file storevil.config has the settings that drive StorEvil.
+You can also run the following commands to get more information:
+
+  storevil help
+  storevil help execute
 
 Thanks to Corey Haines for creating these steps.
    
