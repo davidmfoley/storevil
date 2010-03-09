@@ -64,6 +64,7 @@
     <Compile Include="InPlace\Chaining_results.cs" />
     <Compile Include="InPlace\Chaining_results_that_should_result_in_Failure.cs" />
     <Compile Include="InPlace\executing_outlines_with_example_tables.cs" />
+    <Compile Include="InPlace\executing_scenario_with_table.cs" />
     <Compile Include="InPlace\InPlaceRunnerSpec.cs" />
     <Compile Include="InPlace\mapping_by_regex_to_context_method.cs" />
     <Compile Include="InPlace\When_finished.cs" />
