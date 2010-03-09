@@ -9,8 +9,8 @@ namespace StorEvil.ResultListeners
     {
         public class StatusNames
         {
-            public const string Success = "Success";
-            public const string Failure = "Failure";
+            public const string Success = "Passed";
+            public const string Failure = "Failed";
             public const string NotUnderstood = "NotUnderstood";
         }
 

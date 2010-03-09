@@ -130,7 +130,7 @@ namespace StorEvil.Reports.XmlReportListener_Specs
         [Test]
         public void Story_is_marked_successful()
         {
-            FirstStoryElement().GetAttribute("Status").ShouldEqual("Success");
+            FirstStoryElement().GetAttribute("Status").ShouldEqual("Passed");
         }
 
         [Test]
@@ -142,7 +142,7 @@ namespace StorEvil.Reports.XmlReportListener_Specs
         [Test]
         public void Scenario_tag_is_marked_successful()
         {
-            FirstScenarioElement().GetAttribute("Status").ShouldEqual("Success");
+            FirstScenarioElement().GetAttribute("Status").ShouldEqual("Passed");
         }
 
         [Test]
@@ -154,8 +154,8 @@ namespace StorEvil.Reports.XmlReportListener_Specs
         [Test]
         public void line_elements_should_be_marked_successful()
         {
-            CheckStatus(GetFirstScenarioLines().First(), "Success");
-            CheckStatus(GetFirstScenarioLines().Last(), "Success");
+            CheckStatus(GetFirstScenarioLines().First(), "Passed");
+            CheckStatus(GetFirstScenarioLines().Last(), "Passed");
         }
     }
 
@@ -181,13 +181,13 @@ namespace StorEvil.Reports.XmlReportListener_Specs
         [Test]
         public void Story_is_marked_as_unsuccessful()
         {
-            CheckStatus(FirstStoryElement(), "Failure");
+            CheckStatus(FirstStoryElement(), "Failed");
         }
 
         [Test]
         public void Scenario_is_marked_as_unsuccessful()
         {
-            CheckStatus(FirstScenarioElement(), "Failure");
+            CheckStatus(FirstScenarioElement(), "Failed");
         }
 
         [Test]
@@ -199,14 +199,14 @@ namespace StorEvil.Reports.XmlReportListener_Specs
         [Test]
         public void first_and_second_line_elements_should_be_marked_successful()
         {
-            CheckStatus(GetFirstScenarioLines().First(), "Success");
-            CheckStatus(GetFirstScenarioLines().ElementAt(1), "Success");
+            CheckStatus(GetFirstScenarioLines().First(), "Passed");
+            CheckStatus(GetFirstScenarioLines().ElementAt(1), "Passed");
         }
 
         [Test]
         public void Last_line_element_is_marked_as_failure()
         {
-            CheckStatus(GetFirstScenarioLines().Last(), "Failure");
+            CheckStatus(GetFirstScenarioLines().Last(), "Failed");
         }
     }
 
@@ -251,19 +251,19 @@ namespace StorEvil.Reports.XmlReportListener_Specs
         [Test]
         public void Story_is_marked_as_unsuccessful()
         {
-            CheckStatus(FirstStoryElement(), "Failure");
+            CheckStatus(FirstStoryElement(), "Failed");
         }
 
         [Test]
         public void First_scenario_is_marked_as_successful()
         {
-            CheckStatus(FirstScenarioElement(), "Success");
+            CheckStatus(FirstScenarioElement(), "Passed");
         }
 
         [Test]
         public void Second_scenario_is_marked_as_unsuccessful()
         {
-            CheckStatus(AllScenarioElements().Last(), "Failure");
+            CheckStatus(AllScenarioElements().Last(), "Failed");
         }
     }
 
@@ -305,25 +305,25 @@ namespace StorEvil.Reports.XmlReportListener_Specs
         [Test]
         public void First_story_is_marked_as_successful()
         {
-            CheckStatus(FirstStoryElement(), "Success");
+            CheckStatus(FirstStoryElement(), "Passed");
         }
 
         [Test]
         public void Second_story_is_marked_as_unsuccessful()
         {
-            CheckStatus(StoryElements().Last(), "Failure");
+            CheckStatus(StoryElements().Last(), "Failed");
         }
 
         [Test]
         public void First_scenario_is_marked_as_successful()
         {
-            CheckStatus(FirstScenarioElement(), "Success");
+            CheckStatus(FirstScenarioElement(), "Passed");
         }
 
         [Test]
         public void Second_scenario_is_marked_as_unsuccessful()
         {
-            CheckStatus(AllScenarioElements().Last(), "Failure");
+            CheckStatus(AllScenarioElements().Last(), "Failed");
         }
     }
 

@@ -116,7 +116,7 @@ namespace StorEvil.Reports.GatheringResultListener_Specs
         [Test]
         public void Scenario_status_is_set()
         {
-            FirstStory().Scenarios.First().Status.ShouldEqual(ScenarioStatus.Success);
+            FirstStory().Scenarios.First().Status.ShouldEqual(ScenarioStatus.Passed);
         }
 
         [Test]
@@ -128,7 +128,7 @@ namespace StorEvil.Reports.GatheringResultListener_Specs
         [Test]
         public void Scenario_lines_are_marked_sucessful()
         {
-            FirstScenario().Lines.All(l=>l.Status == ScenarioStatus.Success).ShouldEqual(true);
+            FirstScenario().Lines.All(l=>l.Status == ScenarioStatus.Passed).ShouldEqual(true);
         }
 
         [Test]
@@ -177,7 +177,7 @@ namespace StorEvil.Reports.GatheringResultListener_Specs
         [Test]
         public void Scenario_status_is_set_to_failed()
         {
-            FirstStory().Scenarios.First().Status.ShouldEqual(ScenarioStatus.Failure);
+            FirstStory().Scenarios.First().Status.ShouldEqual(ScenarioStatus.Failed);
         }
 
         [Test]
@@ -189,13 +189,13 @@ namespace StorEvil.Reports.GatheringResultListener_Specs
         [Test]
         public void First_line_is_marked_sucessful()
         {
-            FirstScenario().Lines.First().Status.ShouldEqual(ScenarioStatus.Success);
+            FirstScenario().Lines.First().Status.ShouldEqual(ScenarioStatus.Passed);
         }
 
         [Test]
         public void Second_line_is_marked_failed()
         {
-            FirstScenario().Lines.Last().Status.ShouldEqual(ScenarioStatus.Failure);
+            FirstScenario().Lines.Last().Status.ShouldEqual(ScenarioStatus.Failed);
         }
 
         [Test]
@@ -272,6 +272,14 @@ namespace StorEvil.Reports.GatheringResultListener_Specs
         {
             Listener.TestResult.HasAnyScenarios(ScenarioStatus.Pending).ShouldEqual(true);
         }
+
+        [Test]
+        public void Total_story_fields_are_set()
+        {
+            Listener.TestResult.StoryCount.ShouldEqual(1);
+        }
+
+        
 
     }
 

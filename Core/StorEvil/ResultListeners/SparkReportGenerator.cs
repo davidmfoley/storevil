@@ -42,29 +42,36 @@ namespace StorEvil.ResultListeners
             _pathToTemplateFile = pathToTemplateFile;
         }
 
-        public void Handle(GatheredResultSet result)
+        public void Handle(GatheredResultSet resultSet)
         {
             // Find the full path to the template file, 
             // using current directory if argument isn't fully qualified
             var templatePath = Path.Combine(Environment.CurrentDirectory, _pathToTemplateFile);
-            var templateName = Path.GetFileName(templatePath);
-            var templateDirPath = Path.GetDirectoryName(templatePath);
-
             if (!File.Exists(templatePath))
                 throw new TemplateNotFoundException(templatePath);
 
-            var viewFolder = new FileSystemViewFolder(templateDirPath);
+            var templateName = Path.GetFileName(templatePath);
+            var templateDirPath = Path.GetDirectoryName(templatePath);
 
-            // Create an engine using the templates path as the root location
-            // as well as the shared location
-            var engine = new SparkViewEngine
-                             {
-                                 DefaultPageBaseType = typeof (SparkView).FullName,
-                                 ViewFolder = viewFolder.Append(new SubViewFolder(viewFolder, "Shared"))
-                             };
+            SparkViewEngine engine = GetSparkEngine(templateDirPath);
 
-            // compile and instantiate the template
-            SparkView view = (SparkView) engine.CreateInstance(
+            try
+            {
+                // compile and instantiate the template
+                string templateResult = ProcessViewTemplate(engine, templateName, resultSet);
+
+                _fileWriter.Write(templateResult);
+            }
+            catch (Exception ex)
+            {
+                throw new SparkReportGenerationException("An exception occurred:" + ex.GetType().Name + "\r\n" +
+                                                         ex.Message); //, ex);
+            }
+        }
+
+        private string ProcessViewTemplate(SparkViewEngine engine, string templateName, GatheredResultSet result)
+        {
+            var view = (SparkView) engine.CreateInstance(
                 new SparkViewDescriptor()
                     .AddTemplate(templateName));
 
@@ -76,7 +83,31 @@ namespace StorEvil.ResultListeners
                 view.RenderView(writer);
             }
 
-            _fileWriter.Write(sb.ToString());
+            return sb.ToString();
+        }
+
+        private SparkViewEngine GetSparkEngine(string templateDirPath)
+        {
+            var viewFolder = new FileSystemViewFolder(templateDirPath);
+
+            // Create an engine using the templates path as the root location
+            // as well as the shared location
+            return new SparkViewEngine
+                       {
+                           DefaultPageBaseType = typeof (SparkView).FullName,
+                           ViewFolder = viewFolder.Append(new SubViewFolder(viewFolder, "Shared"))
+                       };
+        }
+    }
+
+    public class SparkReportGenerationException : Exception
+    {
+        public SparkReportGenerationException(string message, Exception inner) : base(message, inner)
+        {
+        }
+
+        public SparkReportGenerationException(string message) : base(message)
+        {
         }
     }
 

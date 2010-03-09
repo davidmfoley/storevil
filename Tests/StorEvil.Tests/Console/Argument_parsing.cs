@@ -10,7 +10,7 @@ using StorEvil.ResultListeners;
 
 namespace StorEvil.Argument_parsing
 {
-    public class Argument_parsing
+    public abstract class Argument_parsing
     {
         protected ArgParser Parser;
         protected IConfigSource FakeConfigSource;
@@ -19,16 +19,23 @@ namespace StorEvil.Argument_parsing
         public void SetupContext()
         {
             FakeConfigSource = MockRepository.GenerateStub<IConfigSource>();
-            var settings = new ConfigSettings { AssemblyLocations = new[] { Assembly.GetExecutingAssembly().Location } };
+            ConfigSettings settings = GetSettings();
 
             FakeConfigSource.Stub(x => x.GetConfig("")).IgnoreArguments().Return(settings);
             Parser = new ArgParser(FakeConfigSource);
         }
+
+        protected abstract ConfigSettings GetSettings();
     }
 
     [TestFixture]
     public class Building_command_from_args : Argument_parsing
     {
+        protected override ConfigSettings GetSettings()
+        {
+            return new ConfigSettings {AssemblyLocations = new[] {Assembly.GetExecutingAssembly().Location}};
+        }
+
         [Test]
         public void can_create_inplace_job_with_path()
         {
@@ -40,7 +47,7 @@ namespace StorEvil.Argument_parsing
         [Test]
         public void can_create_inplace_job_with_no_path()
         {
-            var result = Parser.ParseArguments(new[] { "execute" });
+            var result = Parser.ParseArguments(new[] {"execute"});
             result.ShouldBeOfType<StorEvilJob>();
             result.ShouldNotBeNull();
         }
@@ -50,10 +57,10 @@ namespace StorEvil.Argument_parsing
         {
             var result =
                 Parser.ParseArguments(new[]
-                {
-                      "nunit", Assembly.GetExecutingAssembly().Location,
-                      Directory.GetCurrentDirectory(), Path.GetTempFileName()
-                });
+                                          {
+                                              "nunit", Assembly.GetExecutingAssembly().Location,
+                                              Directory.GetCurrentDirectory(), Path.GetTempFileName()
+                                          });
 
             result.ShouldBeOfType<StorEvilJob>();
             result.ShouldNotBeNull();
@@ -64,10 +71,10 @@ namespace StorEvil.Argument_parsing
         {
             var result =
                 Parser.ParseArguments(new[]
-                {
-                    "help", Assembly.GetExecutingAssembly().Location,
-                    Directory.GetCurrentDirectory(), Path.GetTempFileName()
-                });
+                                          {
+                                              "help", Assembly.GetExecutingAssembly().Location,
+                                              Directory.GetCurrentDirectory(), Path.GetTempFileName()
+                                          });
 
             result.ShouldBeOfType<DisplayHelpJob>();
             result.ShouldNotBeNull();
@@ -89,17 +96,27 @@ namespace StorEvil.Argument_parsing
         [Test]
         public void when_xml_output_is_chosen_creates_an_xml_listener()
         {
-            var result =
-                Parser.ParseArguments(new[]
-                                          {
-                                             "execute",  "-o", "foo.xml", "-f", "xml"
-                                          });
+            Parser.ParseArguments(new[]
+                                      {
+                                          "execute", "-o", "foo.xml", "-f", "xml"
+                                      });
 
             var composite = Parser.Container.Resolve<IResultListener>() as CompositeListener;
             var xmlListener = composite.Listeners.OfType<XmlReportListener>().FirstOrDefault();
             xmlListener.ShouldNotBeNull();
+        }
 
+        [Test]
+        public void when_spark_output_is_chosen_creates_a_spark_listener()
+        {
+            Parser.ParseArguments(new[]
+                                      {
+                                          "execute", "-o", "foo.html", "-f", "spark"
+                                      });
+
+            var composite = Parser.Container.Resolve<IResultListener>() as CompositeListener;
+            var htmlReportGenerator = composite.Listeners.OfType<SparkReportListener>().FirstOrDefault();
+            htmlReportGenerator.ShouldNotBeNull();
         }
     }
-    
 }

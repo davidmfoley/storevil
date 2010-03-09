@@ -8,6 +8,26 @@ using StorEvil.ResultListeners;
 
 namespace StorEvil.Reports.HTML
 {
+
+    [TestFixture]
+    public class Dealing_with_missing_template_file_setting
+    {
+        [Test]
+        public void When_template_file_does_not_exist_throws_a_sensible_exception()
+        {
+            var fakeFileWriter = new FakeFileWriter();
+            var generator = new SparkReportGenerator(fakeFileWriter, "C:\\this\\does\\not\\exist.spark");
+
+            Expect.ThisToThrow<TemplateNotFoundException>(() => generator.Handle(new GatheredResultSet()));          
+        }
+
+        [Test, Ignore("Embedded tempalte not yet supported")]
+        public void When_template_file_not_provided_uses_the_embedded_default()
+        {
+          
+        }
+    }    
+
     public abstract class HTML_Report
     {       
         protected string Result;
@@ -21,7 +41,7 @@ namespace StorEvil.Reports.HTML
             File.WriteAllText(pathToTemplate, GetView());
             try
             {
-                var generator = new HtmlReportGenerator(fakeFileWriter, pathToTemplate);
+                var generator = new SparkReportGenerator(fakeFileWriter, pathToTemplate);
 
                 generator.Handle(GetTestResult());
                 Result = fakeFileWriter.Result;

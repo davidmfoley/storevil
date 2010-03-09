@@ -9,7 +9,10 @@ namespace StorEvil.Config
     {
         const string TestConfigContents = @"
 Assemblies: C:\foo\bar\baz.dll,C:\baz\foo.dll
-Extensions: .scenario, .foo, .bar";
+Extensions: .scenario, .foo, .bar
+OutputFile: foo.html
+OutputFileFormat: spark
+OutputFileTemplate: foo.spark";
 
         protected ConfigSettings Result;
 
@@ -29,6 +32,25 @@ Extensions: .scenario, .foo, .bar";
         public void should_parse_scenario_extensions()
         {
             Result.ScenarioExtensions.ElementsShouldEqual(".scenario", ".foo", ".bar");
+            
+        }
+
+        [Test]
+        public void should_parse_output_file()
+        {
+            Result.OutputFile.ShouldEqual("foo.html");
+        }
+
+        [Test]
+        public void should_parse_output_file_format()
+        {
+            Result.OutputFileFormat.ShouldEqual("spark");
+        }
+
+        [Test]
+        public void should_parse_output_file_template()
+        {
+            Result.OutputFileTemplate.ShouldEqual("foo.spark");
         }
     }
 
@@ -60,6 +82,12 @@ Extensions: .scenario, .foo, .bar";
         public void exception_has_name_of_bad_config_name()
         {
             CaughtException.SettingName.ShouldEqual("Foo");
+        }
+
+        [Test]
+        public void exception_toString_contains_name_of_bad_setting()
+        {
+            CaughtException.ToString().ShouldContain("Foo");
         }
     }   
 

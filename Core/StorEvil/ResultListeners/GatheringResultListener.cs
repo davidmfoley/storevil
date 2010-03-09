@@ -43,10 +43,10 @@ namespace StorEvil.ResultListeners
         public void ScenarioFailed(Scenario scenario, string successPart, string failedPart, string message)
         {
             CurrentScenario().FailureMessage = message;
-            CurrentScenario().Status = ScenarioStatus.Failure;
+            CurrentScenario().Status = ScenarioStatus.Failed;
             if (!string.IsNullOrEmpty(successPart))
-                CurrentScenario().AddLine(ScenarioStatus.Success, successPart);
-            CurrentScenario().AddLine(ScenarioStatus.Failure, failedPart);
+                CurrentScenario().AddLine(ScenarioStatus.Passed, successPart);
+            CurrentScenario().AddLine(ScenarioStatus.Failed, failedPart);
         }
 
         public void CouldNotInterpret(Scenario scenario, string line)
@@ -57,8 +57,7 @@ namespace StorEvil.ResultListeners
 
         public void Success(Scenario scenario, string line)
         {
-            CurrentScenario().AddLine(ScenarioStatus.Success, line);
-
+            CurrentScenario().AddLine(ScenarioStatus.Passed, line);
         }
 
         private ScenarioResult CurrentScenario()
@@ -73,9 +72,8 @@ namespace StorEvil.ResultListeners
         public void Finished()
         {
             Handler.Handle(Result);
-        }       
+        }
     }
-
 
     public class GatheredResultSet
     {
@@ -86,10 +84,38 @@ namespace StorEvil.ResultListeners
             get { return _stories; }
         }
 
+        public int StoryCount
+        {
+            get { return Stories.Count(); }
+        }
+
         public void Add(StoryResult storyResult)
         {
             _stories.Add(storyResult);
         }
+
+        public IList<ScenarioResult> Scenarios
+        {
+            get { return _stories.SelectMany(x => x.Scenarios).ToList(); }
+        }
+
+        public IList<ScenarioResult> PendingScenarios
+        {
+            get { return ScenariosByStatus(ScenarioStatus.Pending); }
+        }
+        public IList<ScenarioResult> FailedScenarios
+        {
+            get { return ScenariosByStatus(ScenarioStatus.Failed); }
+        }
+        public IList<ScenarioResult> PassedScenarios
+        {
+            get { return ScenariosByStatus(ScenarioStatus.Passed); }
+        }
+        public List<ScenarioResult> ScenariosByStatus(ScenarioStatus status)
+        {
+            return Scenarios.Where(s => s.Status == status).ToList();
+        }
+        
 
         public bool HasAnyStories()
         {
@@ -123,13 +149,34 @@ namespace StorEvil.ResultListeners
         {
             return _scenarios.Any(s => s.Status == scenarioStatus);
         }
+
+        public IList<ScenarioResult> PendingScenarios
+        {
+            get { return ScenariosByStatus(ScenarioStatus.Pending); }
+        }
+        public IList<ScenarioResult> FailedScenarios
+        {
+            get { return ScenariosByStatus(ScenarioStatus.Failed); }
+        }
+        public IList<ScenarioResult> PassedScenarios
+        {
+            get { return ScenariosByStatus(ScenarioStatus.Passed); }
+        }
+        public List<ScenarioResult> ScenariosByStatus(ScenarioStatus status)
+        {
+            return Scenarios.Where(s => s.Status == status).ToList();
+        }
     }
 
     public class ScenarioResult
     {
         public ScenarioStatus Status { get; set; }
-        readonly List<ScenarioLineResult> _lines = new List<ScenarioLineResult>();
-        public IEnumerable<ScenarioLineResult> Lines { get { return _lines; } }
+        private readonly List<ScenarioLineResult> _lines = new List<ScenarioLineResult>();
+
+        public IEnumerable<ScenarioLineResult> Lines
+        {
+            get { return _lines; }
+        }
 
         public string FailureMessage { get; set; }
 
@@ -139,7 +186,7 @@ namespace StorEvil.ResultListeners
 
         public void AddLine(ScenarioStatus status, string text)
         {
-            _lines.Add(new ScenarioLineResult { Status = status, Text = text });
+            _lines.Add(new ScenarioLineResult {Status = status, Text = text});
         }
     }
 
@@ -151,8 +198,8 @@ namespace StorEvil.ResultListeners
 
     public enum ScenarioStatus
     {
-        Success,
-        Failure,
+        Passed,
+        Failed,
         Pending
     }
 }

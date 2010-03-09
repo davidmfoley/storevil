@@ -20,9 +20,18 @@ Scenario: beer should be $4
 When customer orders a beer 
 Grand total should be $4
 
-Scenario: pizza and beer special should be $6 
+# Example of failure
+Scenario: Example of a failure: pizza and beer special should be $6 
 When customer orders a beer 
 and orders a slice
-# uncomment this to see an example of a failure
+Grand total should be $6
+
+# Example of pending
+Scenario: Example of a pending step
+When customer orders a beer 
+and orders a slice
+# this is not implemented
+and has a superduper discount coupon
+
 Grand total should be $6
 
