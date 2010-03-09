@@ -1,6 +1,6 @@
-namespace Pizza.TestContext
+namespace Pizza.Specifications.Model
 {
-    public class Soda : IMenuItem
+    public class Soda : Specifications.Model.IMenuItem
     {
         public string Description
         {

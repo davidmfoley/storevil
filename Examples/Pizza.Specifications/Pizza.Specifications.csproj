@@ -49,7 +49,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Beer.cs" />
+    <Compile Include="Model\Discount.cs" />
+    <Compile Include="Model\IMenuItem.cs" />
+    <Compile Include="Model\Order.cs" />
+    <Compile Include="Model\Pizza.cs" />
+    <Compile Include="Model\PriceCalculator.cs" />
+    <Compile Include="Model\Slice.cs" />
+    <Compile Include="Model\Soda.cs" />
+    <Compile Include="Model\Topping.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Context\PizzaSpec.cs" />
+    <Compile Include="Context\PriceCalculatorTestContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ReadMe.txt" />

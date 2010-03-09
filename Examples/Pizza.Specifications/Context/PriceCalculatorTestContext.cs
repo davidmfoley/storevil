@@ -1,17 +1,23 @@
 ﻿using System;
+using Pizza.Specifications.Model;
+using Pizza.TestContext;
 using StorEvil;
+using Beer = Pizza.Specifications.Model.Beer;
+using Order = Pizza.Specifications.Model.Order;
+using PizzaSize = Pizza.Specifications.Model.PizzaSize;
+using Slice = Pizza.Specifications.Model.Slice;
+using Soda = Pizza.Specifications.Model.Soda;
 
-
-namespace Pizza.TestContext
+namespace Pizza.Specifications.Context
 {
-    [StorEvil.Context]
+    [Context]
     public class PriceCalculatorTestContext
     {
-        readonly Order _order = new Order();
+        private readonly Order _order = new Order();
 
         public void When_customer_orders_a_size_pizzaType_pizza(string size, string pizzaType)
         {
-            var pizza = new Pizza((PizzaSize)Enum.Parse(typeof(PizzaSize),size, true));
+            var pizza = new Model.Pizza((PizzaSize) Enum.Parse(typeof (PizzaSize), size, true));
             // add toppings for type
             _order.Add(pizza);
         }
@@ -20,22 +26,22 @@ namespace Pizza.TestContext
         {
             for (var i = 0; i < quantity; i++)
             {
-                var pizza = new Pizza(ParsePizzaSize(size));
+                var pizza = new Model.Pizza(ParsePizzaSize(size));
                 _order.Add(pizza);
-            }           
+            }
         }
-        
+
         public void When_customer_orders_quantity_pizzaType_slices_and_a_coke(int quantity, string pizzaType)
         {
             for (int i = 0; i < quantity; i++)
-                _order.Add(new Slice());    
+                _order.Add(new Slice());
 
             _order.Add(new Soda());
         }
 
         public PizzaSpec When_Customer_Orders_a_size_Pizza(string size)
         {
-            var pizza = new Pizza(ParsePizzaSize(size));
+            var pizza = new Model.Pizza(ParsePizzaSize(size));
             _order.Add(pizza);
             return new PizzaSpec(pizza);
         }
@@ -49,10 +55,10 @@ namespace Pizza.TestContext
         {
             _order.Add(new Slice());
         }
-         
+
         private static PizzaSize ParsePizzaSize(string size)
         {
-            return (PizzaSize)Enum.Parse(typeof(PizzaSize), size, true);
+            return (PizzaSize) Enum.Parse(typeof (PizzaSize), size, true);
         }
 
         /// <summary>
@@ -60,13 +66,7 @@ namespace Pizza.TestContext
         /// </summary>
         public decimal Grand_Total
         {
-            get
-            {
-                return new PriceCalculator().CalculateTotal(_order);
-
-            }
+            get { return new PriceCalculator().CalculateTotal(_order); }
         }
     }
-
-   
 }

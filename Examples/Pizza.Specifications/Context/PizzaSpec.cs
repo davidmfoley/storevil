@@ -1,13 +1,16 @@
-namespace Pizza.TestContext
+using Pizza.TestContext;
+using Topping = Pizza.Specifications.Model.Topping;
+
+namespace Pizza.Specifications.Context
 {
     public class PizzaSpec
     {
-        public PizzaSpec(Pizza pizza)
+        public PizzaSpec(Model.Pizza pizza)
         {
             Pizza = pizza;
         }
 
-        public Pizza Pizza { get; set; }
+        public Model.Pizza Pizza { get; set; }
 
         public void With_toppingCount_Toppings(int toppingCount)
         {

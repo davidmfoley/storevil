@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using Pizza.TestContext;
 
-namespace Pizza.TestContext
+namespace Pizza.Specifications.Model
 {
     public enum PizzaSize { Small, Medium, Large }
 
 
-    public class Pizza : IMenuItem
+    public class Pizza : Specifications.Model.IMenuItem
     {
         public Pizza(PizzaSize size)
         {
@@ -54,3 +55,5 @@ namespace Pizza.TestContext
         }
     }
 }
+
+

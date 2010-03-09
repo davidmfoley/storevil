@@ -1,4 +1,6 @@
-namespace Pizza.TestContext
+using Pizza.TestContext;
+
+namespace Pizza.Specifications.Model
 {
     public class Beer : IMenuItem
     {

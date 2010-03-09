@@ -1,4 +1,4 @@
-namespace Pizza.TestContext
+namespace Pizza.Specifications.Model
 {
     public class Topping
     {
