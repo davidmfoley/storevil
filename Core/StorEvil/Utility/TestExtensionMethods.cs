@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
-using StorEvil.Core;
-using StorEvil.Interpreter;
 using StorEvil.Interpreter.ParameterConverters;
 
-namespace StorEvil
+namespace StorEvil.Utility
 {
     /// <summary>
     /// An (obviously) incomplete set of extension methods that encapsulate assertions

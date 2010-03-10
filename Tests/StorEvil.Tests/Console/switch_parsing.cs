@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using StorEvil.Configuration;
+using StorEvil.Utility;
 
 namespace StorEvil.Argument_parsing
 {

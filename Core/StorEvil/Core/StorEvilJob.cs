@@ -1,4 +1,7 @@
-namespace StorEvil
+using StorEvil.Context;
+using StorEvil.InPlace;
+
+namespace StorEvil.Core
 {
     /// <summary>
     /// Runs the process of mapping stories, building code, etc.

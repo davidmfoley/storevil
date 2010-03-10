@@ -5,6 +5,8 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Infrastructure;
 using StorEvil.ResultListeners;
+using StorEvil.Utility;
+using Expect = StorEvil.Utility.Expect;
 
 namespace StorEvil.Reports.HTML
 {

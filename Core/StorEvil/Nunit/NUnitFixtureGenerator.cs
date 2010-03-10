@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Text;
+using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Parsing;
 
@@ -73,7 +74,7 @@ namespace {0} {{
             var usings = string.Join("\r\n", usingStatements.ToArray());
 
             var writeStoryToConsole = "Console.WriteLine(@\"" + story.Summary.Replace("\"", "\"\"") + "\r\n" + " \");";
-            var ns = "TestNamespace";
+            const string ns = "TestNamespace";
             return string.Format(FixtureFormat, ns, usings, GetFixtureName(story), tests, writeStoryToConsole);
         }
     }

@@ -5,6 +5,7 @@ using System.Reflection;
 using Microsoft.CSharp;
 using NUnit.Framework;
 using System.Collections.Generic;
+using StorEvil.Utility;
 
 namespace StorEvil
 {

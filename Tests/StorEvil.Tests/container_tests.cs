@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Funq;
 using NUnit.Framework;
+using StorEvil.Utility;
 
 namespace StorEvil
 {

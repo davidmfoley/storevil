@@ -12,7 +12,7 @@ namespace StorEvil.Configuration
         private Action<T, string[]> _action;
         private readonly Func<string[], object> BoolParamTransform = (ignored => true);
         private readonly Func<string[], object> StringParamTransform = (values => values[0]);
-        private readonly Func<string[], object> CollectionParamTransform = (values => values.Cast<string>().ToArray());
+        private readonly Func<string[], object> CollectionParamTransform = (values => values.ToArray());
 
         public SwitchInfo(string[] names)
         {

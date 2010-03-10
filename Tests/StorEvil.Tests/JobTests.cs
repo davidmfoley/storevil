@@ -1,8 +1,11 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using System.Collections.Generic;
 using Rhino.Mocks;
+using StorEvil.Context;
 using StorEvil.Core;
+using StorEvil.InPlace;
 using StorEvil.Nunit;
+using StorEvil.Utility;
 
 namespace StorEvil
 {

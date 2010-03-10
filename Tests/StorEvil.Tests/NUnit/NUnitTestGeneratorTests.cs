@@ -8,6 +8,7 @@ using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Interpreter;
 using StorEvil.Nunit;
+using StorEvil.Utility;
 
 namespace StorEvil.NUnit
 {

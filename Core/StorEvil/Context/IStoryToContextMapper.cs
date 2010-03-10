@@ -4,7 +4,7 @@ using System.Linq;
 using Funq;
 using StorEvil.Core;
 
-namespace StorEvil
+namespace StorEvil.Context
 {
     public interface IStoryToContextMapper
     {
@@ -33,8 +33,6 @@ namespace StorEvil
 
     public class ScenarioContext : IDisposable
     {
-        private readonly Container _container = new Container();
-
         public ScenarioContext(IEnumerable<Type> implementingTypes)
         {
             

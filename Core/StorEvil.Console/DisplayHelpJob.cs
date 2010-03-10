@@ -1,3 +1,5 @@
+using StorEvil.Core;
+
 namespace StorEvil.Console
 {
     public class DisplayHelpJob : IStorEvilJob

@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using StorEvil.Core;
 using StorEvil.ResultListeners;
+using StorEvil.Utility;
 
 namespace StorEvil.Reports.GatheringResultListener_Specs
 {

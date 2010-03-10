@@ -1,6 +1,6 @@
 using System.Linq;
 
-namespace StorEvil
+namespace StorEvil.Utility
 {
     static class Helpers
     {

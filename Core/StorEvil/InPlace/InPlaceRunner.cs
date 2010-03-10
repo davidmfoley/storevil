@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using NUnit.Framework;
+using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Interpreter;
 using StorEvil.Parsing;
+using StorEvil.Utility;
 
 namespace StorEvil.InPlace
 {

@@ -3,9 +3,11 @@ using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 using Rhino.Mocks;
+using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Nunit;
 using StorEvil.Parsing;
+using StorEvil.Utility;
 
 namespace StorEvil.NUnit
 {

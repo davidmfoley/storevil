@@ -1,3 +1,5 @@
+using StorEvil.Core;
+
 namespace StorEvil.Console
 {
     internal class InitJob : IStorEvilJob

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using StorEvil.Core;
+using StorEvil.Utility;
 
 namespace StorEvil.Parsing
 {
@@ -47,7 +48,7 @@ namespace StorEvil.Parsing
         {
             _storyId = storyId;
             _currentLineHandler = AppendToStoryName;
-        }       
+        }
 
         private void HandleStoryTextLine(string line)
         {
@@ -63,9 +64,9 @@ namespace StorEvil.Parsing
                 return;
             }
 
-            if(IsTableRow(line) && !_currentScenario.IsOutline)
+            if (IsTableRow(line) && !_currentScenario.IsOutline)
             {
-                if (_currentScenario != null  && _currentScenario.Lines.Count > 0)
+                if (_currentScenario != null && _currentScenario.Lines.Count > 0)
                 {
                     var last = _currentScenario.Lines.Last();
                     _currentScenario.Lines = _currentScenario.Lines.GetRange(0, _currentScenario.Lines.Count() - 1);
@@ -219,7 +220,7 @@ namespace StorEvil.Parsing
 
         private static IEnumerable<string> ParseLines(string text)
         {
-            return text.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries).Select(l=>l.Trim());
+            return text.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries).Select(l => l.Trim());
         }
     }
 }

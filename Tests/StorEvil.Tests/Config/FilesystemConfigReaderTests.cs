@@ -3,6 +3,7 @@ using NUnit.Framework.SyntaxHelpers;
 using Rhino.Mocks;
 using StorEvil.Configuration;
 using StorEvil.Infrastructure;
+using StorEvil.Utility;
 
 namespace StorEvil.Config
 {

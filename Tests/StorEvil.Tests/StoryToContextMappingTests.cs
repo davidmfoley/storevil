@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -6,6 +6,7 @@ using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using StorEvil.Context;
 using StorEvil.Core;
+using StorEvil.Utility;
 
 namespace StorEvil
 {

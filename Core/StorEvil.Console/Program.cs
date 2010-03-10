@@ -1,4 +1,5 @@
-﻿using StorEvil.Configuration;
+using StorEvil.Configuration;
+using StorEvil.Core;
 using StorEvil.Infrastructure;
 
 namespace StorEvil.Console

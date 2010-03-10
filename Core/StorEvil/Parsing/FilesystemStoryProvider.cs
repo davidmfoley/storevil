@@ -4,6 +4,7 @@ using System.Linq;
 using StorEvil.Configuration;
 using StorEvil.Core;
 using StorEvil.Infrastructure;
+using StorEvil.InPlace;
 
 namespace StorEvil.Parsing
 {

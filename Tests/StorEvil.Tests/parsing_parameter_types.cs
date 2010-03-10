@@ -2,6 +2,7 @@ using NUnit.Framework;
 using StorEvil.Core;
 using StorEvil.Interpreter;
 using StorEvil.Interpreter.ParameterConverters;
+using StorEvil.Utility;
 
 namespace StorEvil
 {

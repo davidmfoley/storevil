@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace StorEvil
+namespace StorEvil.Utility
 {
     internal static class StringUtility
     {

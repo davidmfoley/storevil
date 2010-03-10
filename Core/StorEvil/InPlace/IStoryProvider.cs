@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using StorEvil.Core;
 
-namespace StorEvil
+namespace StorEvil.InPlace
 {
     public interface IStoryProvider
     {
         IEnumerable<Story> GetStories();
     }
 }
+
+

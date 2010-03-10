@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Xml;
@@ -6,6 +6,7 @@ using NUnit.Framework;
 using StorEvil.Core;
 using StorEvil.InPlace;
 using StorEvil.ResultListeners;
+using StorEvil.Utility;
 
 namespace StorEvil.Reports.XmlReportListener_Specs
 {

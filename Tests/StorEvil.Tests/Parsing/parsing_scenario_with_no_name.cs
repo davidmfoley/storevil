@@ -2,6 +2,7 @@ using System.Linq;
 using NUnit.Framework;
 using StorEvil.Core;
 using StorEvil.Parsing;
+using StorEvil.Utility;
 
 namespace StorEvil.Parsing_story_text
 {

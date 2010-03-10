@@ -3,6 +3,7 @@ using NUnit.Framework;
 using StorEvil.Context;
 using StorEvil.Context.Matchers;
 using StorEvil.Context.Matches;
+using StorEvil.Utility;
 
 namespace StorEvil.RegExMatcherTests
 {

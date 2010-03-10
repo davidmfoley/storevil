@@ -1,3 +1,5 @@
+using StorEvil.Context;
+
 namespace StorEvil.Interpreter
 {
     public class ScenarioInterpreter

@@ -69,7 +69,7 @@ namespace StorEvil.ResultListeners
             }
         }
 
-        private string ProcessViewTemplate(SparkViewEngine engine, string templateName, GatheredResultSet result)
+        private string ProcessViewTemplate(ISparkViewEngine engine, string templateName, GatheredResultSet result)
         {
             var view = (SparkView) engine.CreateInstance(
                 new SparkViewDescriptor()

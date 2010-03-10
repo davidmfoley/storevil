@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using StorEvil.Utility;
 
 namespace StorEvil.Parsing
 {
@@ -13,7 +14,7 @@ namespace StorEvil.Parsing
             var words = new List<String>();
 
             string table = null;
- 
+
             if (HasTable(line))
             {
                 table = line.After("\r\n");
@@ -22,9 +23,7 @@ namespace StorEvil.Parsing
 
             // split into words
             foreach (Match m in ExtractWords.Matches(line))
-            {
                 words.Add(m.Value);
-            }
 
             if (table != null)
                 words.Add(table);

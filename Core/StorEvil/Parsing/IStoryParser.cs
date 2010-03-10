@@ -1,6 +1,6 @@
 using StorEvil.Core;
 
-namespace StorEvil
+namespace StorEvil.Parsing
 {
     public interface IStoryParser
     {

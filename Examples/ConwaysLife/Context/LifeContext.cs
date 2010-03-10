@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Linq;
 using ConwaysLife.Model;
 using StorEvil;
+using StorEvil.Utility;
 
 namespace ConwaysLife.Context
 {

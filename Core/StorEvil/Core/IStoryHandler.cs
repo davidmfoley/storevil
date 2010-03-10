@@ -1,6 +1,6 @@
-using StorEvil.Core;
+using StorEvil.Context;
 
-namespace StorEvil
+namespace StorEvil.Core
 {
     public interface IStoryHandler
     {
