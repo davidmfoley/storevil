@@ -1,6 +1,6 @@
-namespace Pizza.Specifications.Model
+namespace Pizza.Model
 {
-    public class Slice : Specifications.Model.IMenuItem
+    public class Slice : IMenuItem
     {
         public string Description
         {

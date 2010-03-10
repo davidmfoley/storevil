@@ -1,6 +1,6 @@
-using Pizza.TestContext;
 
-namespace Pizza.Specifications.Model
+
+namespace Pizza.Model
 {
     public class Discount : IMenuItem
     {

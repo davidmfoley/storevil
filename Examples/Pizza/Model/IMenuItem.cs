@@ -1,4 +1,4 @@
-namespace Pizza.Specifications.Model
+namespace Pizza.Model
 {
     public interface IMenuItem
     {

@@ -1,14 +1,10 @@
 ﻿using System;
-using Pizza.Specifications.Model;
-using Pizza.TestContext;
+using Pizza.Model;
+using Pizza;
 using StorEvil;
-using Beer = Pizza.Specifications.Model.Beer;
-using Order = Pizza.Specifications.Model.Order;
-using PizzaSize = Pizza.Specifications.Model.PizzaSize;
-using Slice = Pizza.Specifications.Model.Slice;
-using Soda = Pizza.Specifications.Model.Soda;
 
-namespace Pizza.Specifications.Context
+
+namespace Pizza.Context
 {
     [Context]
     public class PriceCalculatorTestContext

@@ -1,7 +1,7 @@
-using Pizza.TestContext;
-using Topping = Pizza.Specifications.Model.Topping;
 
-namespace Pizza.Specifications.Context
+using Topping = Pizza.Model.Topping;
+
+namespace Pizza.Context
 {
     public class PizzaSpec
     {

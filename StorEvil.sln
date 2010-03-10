@@ -20,9 +20,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConwaysLife", "Examples\Con
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{51EF7085-D82F-45FE-81EC-C604BFC5BB17}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pizza.Specifications", "Examples\Pizza.Specifications\Pizza.Specifications.csproj", "{436259FA-036B-466E-A670-F91507C34D0A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pizza.TestContext", "Examples\Pizza.TestContext\Pizza.TestContext.csproj", "{8EA2E836-2C94-4013-8D47-64F367AC9580}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pizza", "Examples\Pizza\Pizza.csproj", "{436259FA-036B-466E-A670-F91507C34D0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,10 +48,6 @@ Global
 		{436259FA-036B-466E-A670-F91507C34D0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{436259FA-036B-466E-A670-F91507C34D0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{436259FA-036B-466E-A670-F91507C34D0A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8EA2E836-2C94-4013-8D47-64F367AC9580}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8EA2E836-2C94-4013-8D47-64F367AC9580}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8EA2E836-2C94-4013-8D47-64F367AC9580}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8EA2E836-2C94-4013-8D47-64F367AC9580}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,6 +58,5 @@ Global
 		{43A7C61E-DD5B-4CC9-A05A-02C00789028F} = {963A6FE4-67D6-484D-AC34-A58F8ACD1265}
 		{2CE31BAB-0046-43E0-B58E-585FF8646EF7} = {51EF7085-D82F-45FE-81EC-C604BFC5BB17}
 		{436259FA-036B-466E-A670-F91507C34D0A} = {51EF7085-D82F-45FE-81EC-C604BFC5BB17}
-		{8EA2E836-2C94-4013-8D47-64F367AC9580} = {51EF7085-D82F-45FE-81EC-C604BFC5BB17}
 	EndGlobalSection
 EndGlobal

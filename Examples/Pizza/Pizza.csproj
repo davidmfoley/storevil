@@ -66,10 +66,6 @@
     <Content Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Pizza.TestContext\Pizza.TestContext.csproj">
-      <Project>{8EA2E836-2C94-4013-8D47-64F367AC9580}</Project>
-      <Name>Pizza.TestContext</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\StorEvil\StorEvil.Core.csproj">
       <Project>{B86235CA-045F-4222-997C-A65E966C6F9B}</Project>
       <Name>StorEvil.Core</Name>
