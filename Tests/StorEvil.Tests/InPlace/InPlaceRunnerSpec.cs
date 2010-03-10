@@ -16,7 +16,7 @@ namespace StorEvil.InPlace
         {
             ResultListener = MockRepository.GenerateStub<IResultListener>();
 
-            Context = new StoryContext(typeof(T));
+            Context = new StoryContext(typeof (T));
             Runner = new InPlaceRunner(ResultListener, new ScenarioPreprocessor());
             Runner.HandleStory(story, Context);
         }
@@ -61,6 +61,7 @@ namespace StorEvil.InPlace
         {
             MultiWordParam = param;
         }
+
         public InPlaceTestSubContext SubContext()
         {
             return new InPlaceTestSubContext();
@@ -71,8 +72,6 @@ namespace StorEvil.InPlace
             throw new Exception("test exception");
         }
     }
-
-   
 
     public class InPlaceTestSubContext
     {

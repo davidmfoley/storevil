@@ -1,16 +1,17 @@
 using System.Linq;
 using NUnit.Framework;
 using StorEvil.Core;
-using StorEvil.Parsing;
 using StorEvil.Utility;
 
-namespace StorEvil.Parsing_story_text
+namespace StorEvil.Parsing
 {
     [TestFixture]
     public class parsing_multi_story_text
     {
         private Story Result;
-        private const string testMultiStoryText = @"
+
+        private const string testMultiStoryText =
+            @"
 As a user I want to do something
 
 Scenario: Doing something
@@ -30,23 +31,21 @@ Then I should expect some other result
             var parser = new StoryParser();
 
             Result = parser.Parse(testMultiStoryText, null);
-
         }
+
         [Test]
         public void Should_Handle_Multiple_Scenarios()
         {
-
-            TestExtensionMethods.ShouldEqual(Result.Scenarios.Count(), 2);
+            Result.Scenarios.Count().ShouldEqual(2);
         }
 
         [Test]
         public void Should_Parse_Lines_For_Multiple_Scenarios()
         {
-           
-            var body = ((Scenario)Result.Scenarios.ElementAt(1)).Body;
+            var body = ((Scenario) Result.Scenarios.ElementAt(1)).Body;
 
-            body.ElementsShouldEqual("Given some other condition", "When I take some other action", "Then I should expect some other result");
+            body.ElementsShouldEqual("Given some other condition", "When I take some other action",
+                                     "Then I should expect some other result");
         }
-
     }
 }

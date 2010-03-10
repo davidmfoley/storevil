@@ -1,26 +1,22 @@
 using System;
 
-namespace StorEvil
+namespace StorEvil.NUnit
 {
     public class TestContext : IDisposable
     {
         public TestSubContext SubContext
         {
-            get
-            {
-                return SubContextField;
-            }
-            set
-            {
-                SubContextField = value;
-            }
+            get { return SubContextField; }
+            set { SubContextField = value; }
         }
+
         public TestSubContext SubContextField = new TestSubContext();
 
         public virtual TestSubContext Some_Sub_Context()
         {
             return SubContext;
         }
+
         public virtual void Given_A_User_Named(string userName)
         {
         }
@@ -47,17 +43,18 @@ namespace StorEvil
 
         public void Dispose()
         {
-            
         }
     }
 
     public class TestSubContext
     {
         public string LastParameter { get; set; }
+
         public virtual void Condition(string parameter)
         {
             LastParameter = parameter;
         }
+
         public string Name { get; set; }
     }
 }

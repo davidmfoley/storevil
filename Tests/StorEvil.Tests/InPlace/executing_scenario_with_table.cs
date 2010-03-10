@@ -7,9 +7,11 @@ using StorEvil.Utility;
 namespace StorEvil.InPlace
 {
     [TestFixture]
-    public class executing_scenario_with_table : InPlaceRunnerSpec<executing_scenario_with_table.ScenarioTableTestContext>
+    public class executing_scenario_with_table :
+        InPlaceRunnerSpec<executing_scenario_with_table.ScenarioTableTestContext>
     {
-        private string storyText = @"
+        private string storyText =
+            @"
 Story: test tables in scenarios
 Scenario:
 Given the following
@@ -24,9 +26,9 @@ Given the following
             ResultListener = MockRepository.GenerateStub<IResultListener>();
 
             var story = new StoryParser().Parse(storyText, null);
-            Context = new StoryContext(typeof(ScenarioTableTestContext));
+            Context = new StoryContext(typeof (ScenarioTableTestContext));
 
-            new InPlaceRunner(ResultListener, new ScenarioPreprocessor()).HandleStory(story, Context);           
+            new InPlaceRunner(ResultListener, new ScenarioPreprocessor()).HandleStory(story, Context);
         }
 
         [Test]
@@ -42,13 +44,12 @@ Given the following
             table.Length.ShouldEqual(3);
             table[0][0].ShouldEqual("1");
             table[0][1].ShouldEqual("one");
-            
+
             table[1][0].ShouldEqual("2");
             table[1][1].ShouldEqual("two");
 
             table[2][0].ShouldEqual("3");
             table[2][1].ShouldEqual("three");
-
         }
 
         public class ScenarioTableTestContext

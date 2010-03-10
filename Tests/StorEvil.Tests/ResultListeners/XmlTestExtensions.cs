@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 
-namespace StorEvil.Reports
+namespace StorEvil.ResultListeners
 {
     public static class XmlTestExtensions
     {
@@ -12,13 +12,13 @@ namespace StorEvil.Reports
             doc.LoadXml(xml);
         }
 
-
         public static IEnumerable<XmlElement> FindElements(this string xml, string xpath)
         {
             var doc = new XmlDocument();
             doc.LoadXml(xml);
             return doc.SelectNodes(xpath).OfType<XmlElement>();
         }
+
         public static XmlElement FindElement(this string xml, string xpath)
         {
             var doc = new XmlDocument();
@@ -30,8 +30,9 @@ namespace StorEvil.Reports
         {
             return xmlEl.SelectNodes(xpath).OfType<XmlElement>();
         }
+
         public static XmlElement FindElement(this XmlElement xmlEl, string xpath)
-        {           
+        {
             return xmlEl.SelectNodes(xpath).OfType<XmlElement>().FirstOrDefault();
         }
     }

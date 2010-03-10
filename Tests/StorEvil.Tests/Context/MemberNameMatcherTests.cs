@@ -4,7 +4,7 @@ using StorEvil.Context.Matchers;
 using StorEvil.Context.Matches;
 using StorEvil.Utility;
 
-namespace StorEvil.Method_name_matching
+namespace StorEvil.Context
 {
     public enum MatchingTest
     {

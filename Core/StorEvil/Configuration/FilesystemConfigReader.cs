@@ -28,16 +28,10 @@ namespace StorEvil.Configuration
                 var configLocation = Path.Combine(containingDirectory, "storevil.config");
 
                 if (_filesystem.FileExists(configLocation))
-                {
-                    var fileContents = _filesystem.GetFileText(configLocation);
-                    var config = _parser.Read(fileContents);
-                    FixUpPaths(Path.GetDirectoryName(configLocation), config);
-                    if (config.StoryBasePath == null)
-                        config.StoryBasePath = path;
-                    return config;
-                }
+                    return BuildConfigSettings(path, configLocation);
 
                 var parent = Directory.GetParent(containingDirectory);
+                
                 if (parent == null)
                     return ConfigSettings.Default();
 
@@ -45,6 +39,16 @@ namespace StorEvil.Configuration
             }
 
             return ConfigSettings.Default();
+        }
+
+        private ConfigSettings BuildConfigSettings(string path, string configLocation)
+        {
+            var fileContents = _filesystem.GetFileText(configLocation);
+            var config = _parser.Read(fileContents);
+            FixUpPaths(Path.GetDirectoryName(configLocation), config);
+            if (config.StoryBasePath == null)
+                config.StoryBasePath = path;
+            return config;
         }
 
         private void FixUpPaths(string basePath, ConfigSettings settings)

@@ -22,7 +22,8 @@ namespace StorEvil.InPlace
         [Test]
         public void Notifies_listener_of_failure()
         {
-            ResultListener.AssertWasCalled(x => x.ScenarioFailed(Any<Scenario>(), Any<string>(), Any<string>(), Any<string>()));
+            ResultListener.AssertWasCalled(
+                x => x.ScenarioFailed(Any<Scenario>(), Any<string>(), Any<string>(), Any<string>()));
         }
 
         [Test]
@@ -35,12 +36,13 @@ namespace StorEvil.InPlace
     [TestFixture]
     public class the_word_And_should_map_to_previous_significant_word : InPlaceRunnerSpec<InPlaceRunnerTestContext>
     {
-        private readonly Scenario TestScenario = new Scenario("test", new[] { "When some action", "And some other action" });
+        private readonly Scenario TestScenario = new Scenario("test",
+                                                              new[] {"When some action", "And some other action"});
 
         [SetUp]
         public void SetupContext()
         {
-            var story = new Story("test", "summary", new[] { TestScenario });
+            var story = new Story("test", "summary", new[] {TestScenario});
 
             RunStory(story);
         }
@@ -51,6 +53,4 @@ namespace StorEvil.InPlace
             InPlaceRunnerTestContext.WhenSomeOtherActionCalled.ShouldEqual(true);
         }
     }
-
-    
 }

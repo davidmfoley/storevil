@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using StorEvil.Core;
 using StorEvil.ResultListeners;
 using StorEvil.Utility;
 
-namespace StorEvil.Reports.GatheringResultListener_Specs
+namespace StorEvil.ResultListeners.GatheringResultListener_Specs
 {
     [TestFixture]
     public abstract class GatheringResultListener_Spec
@@ -22,8 +20,6 @@ namespace StorEvil.Reports.GatheringResultListener_Specs
         }
 
         protected abstract void SimulateRunner();
-
-       
 
         protected void SimulateFailedScenario()
         {
@@ -43,7 +39,7 @@ namespace StorEvil.Reports.GatheringResultListener_Specs
         {
             var sucessScenario = new Scenario(id, name, lines);
             Listener.ScenarioStarting(sucessScenario);
-            
+
             foreach (var line in lines)
                 Listener.Success(sucessScenario, line);
 
@@ -52,7 +48,7 @@ namespace StorEvil.Reports.GatheringResultListener_Specs
 
         protected void SimulateStoryStarting(string storyId, string storySummary)
         {
-            Listener.StoryStarting(new Story(storyId, storySummary, new[] { new Scenario() }));
+            Listener.StoryStarting(new Story(storyId, storySummary, new[] {new Scenario()}));
         }
 
         protected StoryResult FirstStory()
@@ -64,7 +60,6 @@ namespace StorEvil.Reports.GatheringResultListener_Specs
         {
             return FirstStory().Scenarios.First();
         }
-
     }
 
     [TestFixture]
@@ -129,7 +124,7 @@ namespace StorEvil.Reports.GatheringResultListener_Specs
         [Test]
         public void Scenario_lines_are_marked_sucessful()
         {
-            FirstScenario().Lines.All(l=>l.Status == ScenarioStatus.Passed).ShouldEqual(true);
+            FirstScenario().Lines.All(l => l.Status == ScenarioStatus.Passed).ShouldEqual(true);
         }
 
         [Test]
@@ -222,8 +217,6 @@ namespace StorEvil.Reports.GatheringResultListener_Specs
             var testScenario = new Scenario();
             Listener.ScenarioStarting(testScenario);
             Listener.CouldNotInterpret(testScenario, "foo bar baz");
-
-          
         }
 
         [Test]
@@ -254,7 +247,7 @@ namespace StorEvil.Reports.GatheringResultListener_Specs
             Listener.ScenarioStarting(failedScenario);
             Listener.ScenarioFailed(failedScenario, "success-part", "failed-part", "failure-message");
 
-            SimulateSuccessfulScenario("scenario-id", "scenario-name", new[] { "line1", "line2" }); 
+            SimulateSuccessfulScenario("scenario-id", "scenario-name", new[] {"line1", "line2"});
         }
 
         [Test]
@@ -262,6 +255,7 @@ namespace StorEvil.Reports.GatheringResultListener_Specs
         {
             FirstStory().Scenarios.Count().ShouldEqual(3);
         }
+
         [Test]
         public void Story_has_pending_scenarios_is_true()
         {
@@ -279,18 +273,18 @@ namespace StorEvil.Reports.GatheringResultListener_Specs
         {
             Listener.TestResult.StoryCount.ShouldEqual(1);
         }
-
-        
-
     }
-
 
     public class TestGatheringResultListener : GatheringResultListener
     {
         public TestGatheringResultListener() : base(new TestGatheredResultHandler())
         {
         }
-        public GatheredResultSet TestResult { get { return ((TestGatheredResultHandler) Handler).TestResult; } }
+
+        public GatheredResultSet TestResult
+        {
+            get { return ((TestGatheredResultHandler) Handler).TestResult; }
+        }
     }
 
     public class TestGatheredResultHandler : IGatheredResultHandler
@@ -300,6 +294,6 @@ namespace StorEvil.Reports.GatheringResultListener_Specs
             TestResult = result;
         }
 
-        public GatheredResultSet TestResult { get; set;} 
+        public GatheredResultSet TestResult { get; set; }
     }
 }

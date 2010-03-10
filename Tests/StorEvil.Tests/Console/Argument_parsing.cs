@@ -4,13 +4,12 @@ using System.Reflection;
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Configuration;
-using StorEvil.Console;
 using StorEvil.Core;
 using StorEvil.InPlace;
 using StorEvil.ResultListeners;
 using StorEvil.Utility;
 
-namespace StorEvil.Argument_parsing
+namespace StorEvil.Console
 {
     public abstract class Argument_parsing
     {

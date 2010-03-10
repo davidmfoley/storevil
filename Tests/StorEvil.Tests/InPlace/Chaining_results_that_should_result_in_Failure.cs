@@ -21,7 +21,8 @@ namespace StorEvil.InPlace
         [Test]
         public void Should_fail()
         {
-            ResultListener.AssertWasCalled(x => x.ScenarioFailed(Any<Scenario>(), Any<string>(),Any<string>(),Any<string>()));
+            ResultListener.AssertWasCalled(
+                x => x.ScenarioFailed(Any<Scenario>(), Any<string>(), Any<string>(), Any<string>()));
         }
     }
 }

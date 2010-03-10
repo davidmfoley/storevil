@@ -4,13 +4,12 @@ using System.Configuration;
 using System.Linq;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
-using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Utility;
 
-namespace StorEvil
+namespace StorEvil.Context.StoryToContextMapper_Specs
 {
-    [StorEvil.Context]
+    [Context]
     public class TestMappingContext
     {
     }
@@ -123,11 +122,11 @@ namespace StorEvil
         [Test]
         public void Dependent_object_is_same_as_explicitly_resolved_object()
         {
-            var dependedOn = (DisposableMappingContext)ScenarioContext.GetContext(typeof(DisposableMappingContext));
-            var dependent = (DependentMappingContext)ScenarioContext.GetContext(typeof(DependentMappingContext));
-            
+            var dependedOn = (DisposableMappingContext) ScenarioContext.GetContext(typeof (DisposableMappingContext));
+            var dependent = (DependentMappingContext) ScenarioContext.GetContext(typeof (DependentMappingContext));
+
             Assert.That(dependent.DependsOn, Is.SameAs(dependedOn));
-        }   
+        }
     }
 
     public class DisposableMappingContext : IDisposable

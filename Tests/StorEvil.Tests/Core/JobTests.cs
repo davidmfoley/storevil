@@ -1,13 +1,11 @@
-using NUnit.Framework;
 using System.Collections.Generic;
+using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Context;
-using StorEvil.Core;
 using StorEvil.InPlace;
-using StorEvil.Nunit;
 using StorEvil.Utility;
 
-namespace StorEvil
+namespace StorEvil.Core.StorEvilJob_Specs
 {
     [TestFixture]
     public class JobTests : TestBase
@@ -29,22 +27,20 @@ namespace StorEvil
 
             job.Handler
                 .ShouldEqual(testStoryHandler);
-
         }
 
         [Test]
         public void Invokes_Handler_For_Single_Story_And_Context()
         {
             var story = new Story("test context", "summary", new List<IScenario>());
-            var contextType = new StoryContext(typeof(object));
+            var contextType = new StoryContext(typeof (object));
 
             var job = GetJobWithMockDependencies();
 
-
-            job.StoryProvider.Stub(x => x.GetStories()).Return(new[] { story });
+            job.StoryProvider.Stub(x => x.GetStories()).Return(new[] {story});
 
             job.StoryToContextMapper.Stub(x => x.GetContextForStory(story))
-              .Return(contextType);
+                .Return(contextType);
 
             job.Run();
             job.Handler.AssertWasCalled(x => x.HandleStory(story, contextType));
@@ -56,7 +52,7 @@ namespace StorEvil
             var job = GetJobWithMockDependencies();
 
             job.StoryProvider.Stub(x => x.GetStories())
-                .Return(new[] { new Story("test context", "summary", new List<IScenario>()) });
+                .Return(new[] {new Story("test context", "summary", new List<IScenario>())});
 
             job.Run();
 
@@ -71,6 +67,4 @@ namespace StorEvil
                 Fake<IStoryHandler>());
         }
     }
-
-
 }

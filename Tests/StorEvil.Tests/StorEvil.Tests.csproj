@@ -58,9 +58,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Console\Argument_parsing.cs" />
-    <Compile Include="container_tests.cs" />
-    <Compile Include="Config\FilesystemConfigReaderTests.cs" />
-    <Compile Include="Filtering_stories_by_file_extension.cs" />
+    <Compile Include="Utility\container_tests.cs" />
+    <Compile Include="Configuration\FilesystemConfigReaderTests.cs" />
+    <Compile Include="Parsing\Filtering_stories_by_file_extension.cs" />
     <Compile Include="InPlace\Chaining_results.cs" />
     <Compile Include="InPlace\Chaining_results_that_should_result_in_Failure.cs" />
     <Compile Include="InPlace\executing_outlines_with_example_tables.cs" />
@@ -71,30 +71,30 @@
     <Compile Include="InPlace\When_scenario_does_not_map.cs" />
     <Compile Include="InPlace\When_scenario_maps_to_context_method_action_that_fails.cs" />
     <Compile Include="InPlace\When_scenario_maps_to_context_method_action_that_succeeds.cs" />
-    <Compile Include="JobTests.cs" />
-    <Compile Include="MemberNameMatcherTests.cs" />
+    <Compile Include="Core\JobTests.cs" />
+    <Compile Include="Context\MemberNameMatcherTests.cs" />
     <Compile Include="NUnit\NUnitFixtureGeneratorTests.cs" />
-    <Compile Include="Config\parsing_config.cs" />
+    <Compile Include="Configuration\parsing_config.cs" />
     <Compile Include="Parsing\parsing_empty_story.cs" />
     <Compile Include="Parsing\parsing_multi_story_text.cs" />
     <Compile Include="Parsing\parsing_scenario_with_no_name.cs" />
     <Compile Include="Parsing\parsing_simple_story_text.cs" />
     <Compile Include="Parsing\parsing_story_text_wth_examples_and_tables.cs" />
-    <Compile Include="parsing_parameter_types.cs" />
-    <Compile Include="RegexMatcherTests.cs" />
-    <Compile Include="Reports\GatheringResultListener_Specs.cs" />
-    <Compile Include="Reports\HTML_Reports.cs" />
-    <Compile Include="Reports\XmlReportListener_Specs.cs" />
-    <Compile Include="Reports\FakeFileWriter.cs" />
-    <Compile Include="Reports\XmlTestExtensions.cs" />
+    <Compile Include="Interpreter\parsing_parameter_types.cs" />
+    <Compile Include="Context\RegexMatcherTests.cs" />
+    <Compile Include="ResultListeners\GatheringResultListener_Specs.cs" />
+    <Compile Include="ResultListeners\HTML_Reports.cs" />
+    <Compile Include="ResultListeners\XmlReportListener_Specs.cs" />
+    <Compile Include="ResultListeners\FakeFileWriter.cs" />
+    <Compile Include="ResultListeners\XmlTestExtensions.cs" />
     <Compile Include="Parsing\parsing_story_with_multiple_scenario_outlines_with_examples_and_tables.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StoryToContextMappingTests.cs" />
-    <Compile Include="Suggestions_for_not_yet_implemented_grammar.cs" />
+    <Compile Include="Context\StoryToContextMappingTests.cs" />
+    <Compile Include="InPlace\Suggestions_for_not_yet_implemented_grammar.cs" />
     <Compile Include="Console\switch_parsing.cs" />
     <Compile Include="TestBase.cs" />
-    <Compile Include="TestContext.cs" />
-    <Compile Include="TestHelper.cs" />
+    <Compile Include="NUnit\TestContext.cs" />
+    <Compile Include="NUnit\TestHelper.cs" />
     <Compile Include="NUnit\NUnitTestGeneratorTests.cs" />
   </ItemGroup>
   <ItemGroup>

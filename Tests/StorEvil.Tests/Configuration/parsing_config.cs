@@ -1,14 +1,13 @@
 using NUnit.Framework;
-using Rhino.Mocks;
-using StorEvil.Configuration;
 using StorEvil.Utility;
 
-namespace StorEvil.Config
+namespace StorEvil.Configuration
 {
     [TestFixture]
     public class parsing_valid_config : parsing_config
     {
-        const string TestConfigContents = @"
+        private const string TestConfigContents =
+            @"
 Assemblies: C:\foo\bar\baz.dll,C:\baz\foo.dll
 Extensions: .scenario, .foo, .bar
 OutputFile: foo.html
@@ -33,7 +32,6 @@ OutputFileTemplate: foo.spark";
         public void should_parse_scenario_extensions()
         {
             Result.ScenarioExtensions.ElementsShouldEqual(".scenario", ".foo", ".bar");
-            
         }
 
         [Test]
@@ -57,7 +55,7 @@ OutputFileTemplate: foo.spark";
 
     [TestFixture]
     public class parsing_invalid_config_setting : parsing_config
-    {       
+    {
         private BadSettingNameException CaughtException;
 
         [SetUp]
@@ -66,7 +64,7 @@ OutputFileTemplate: foo.spark";
             try
             {
                 ParseConfig("Foo: some fake value");
-            }   
+            }
             catch (BadSettingNameException ex)
             {
                 CaughtException = ex;
@@ -90,7 +88,7 @@ OutputFileTemplate: foo.spark";
         {
             CaughtException.ToString().ShouldContain("Foo");
         }
-    }   
+    }
 
     public abstract class parsing_config
     {

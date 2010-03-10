@@ -26,7 +26,7 @@ namespace StorEvil.InPlace
         }
 
         [Test]
-        public void invokes_method_with_correct_param() 
+        public void invokes_method_with_correct_param()
         {
             InPlaceRunnerTestContext.RegexMatchParamValue.ShouldEqual(42);
         }
@@ -35,13 +35,13 @@ namespace StorEvil.InPlace
     [TestFixture, Ignore("Multi-word aparams not yet supported")]
     public class matching_a_multi_word_param : InPlaceRunnerSpec<InPlaceRunnerTestContext>
     {
-        private readonly Scenario TestScenario = new Scenario("multi-word test", new[] { ScenarioText });
+        private readonly Scenario TestScenario = new Scenario("multi-word test", new[] {ScenarioText});
         private const string ScenarioText = "test foo bar baz with multiple words";
 
         [SetUp]
         public void SetupContext()
         {
-            var story = new Story("test", "summary", new[] { TestScenario });
+            var story = new Story("test", "summary", new[] {TestScenario});
 
             RunStory(story);
         }

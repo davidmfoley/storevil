@@ -3,7 +3,6 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Context;
-using StorEvil.Core;
 using StorEvil.Parsing;
 using StorEvil.Utility;
 
@@ -12,7 +11,8 @@ namespace StorEvil.InPlace
     [TestFixture]
     public class executing_outlines_with_example_tables : InPlaceRunnerSpec<InPlaceRunnerTestContext>
     {
-        private string storyText = @"
+        private string storyText =
+            @"
 Story: test 
 
 Scenario Outline:
@@ -23,7 +23,7 @@ Examples:
 |1|one|
 |2|two|
 |3|three|
-";    
+";
 
         [SetUp]
         public void SetupContext()
@@ -31,7 +31,7 @@ Examples:
             ResultListener = MockRepository.GenerateStub<IResultListener>();
 
             var story = new StoryParser().Parse(storyText, null);
-            Context = new StoryContext(typeof(InPlaceRunnerTableTestContext));
+            Context = new StoryContext(typeof (InPlaceRunnerTableTestContext));
 
             new InPlaceRunner(ResultListener, new ScenarioPreprocessor()).HandleStory(story, Context);
         }
@@ -55,7 +55,6 @@ Examples:
             InPlaceRunnerTableTestContext.Calls.Any(c => c.IntParam == i && c.StringParam == s).ShouldEqual(true);
         }
     }
-
 
     public class InPlaceRunnerTableTestContext
     {

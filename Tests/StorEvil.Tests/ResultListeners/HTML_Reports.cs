@@ -1,16 +1,10 @@
-using System;
 using System.Diagnostics;
 using System.IO;
 using NUnit.Framework;
-using Rhino.Mocks;
-using StorEvil.Infrastructure;
-using StorEvil.ResultListeners;
 using StorEvil.Utility;
-using Expect = StorEvil.Utility.Expect;
 
-namespace StorEvil.Reports.HTML
+namespace StorEvil.ResultListeners.SparkReportGenerator_Specs
 {
-
     [TestFixture]
     public class Dealing_with_missing_template_file_setting
     {
@@ -20,18 +14,17 @@ namespace StorEvil.Reports.HTML
             var fakeFileWriter = new FakeFileWriter();
             var generator = new SparkReportGenerator(fakeFileWriter, "C:\\this\\does\\not\\exist.spark");
 
-            Expect.ThisToThrow<TemplateNotFoundException>(() => generator.Handle(new GatheredResultSet()));          
+            Expect.ThisToThrow<TemplateNotFoundException>(() => generator.Handle(new GatheredResultSet()));
         }
 
         [Test, Ignore("Embedded tempalte not yet supported")]
         public void When_template_file_not_provided_uses_the_embedded_default()
         {
-          
         }
-    }    
+    }
 
     public abstract class HTML_Report
-    {       
+    {
         protected string Result;
 
         [SetUp]
@@ -47,18 +40,17 @@ namespace StorEvil.Reports.HTML
 
                 generator.Handle(GetTestResult());
                 Result = fakeFileWriter.Result;
-               
             }
             finally
             {
                 File.Delete(pathToTemplate);
             }
-
         }
 
         protected virtual string GetView()
         {
-            return @"
+            return
+                @"
 <html>
     <head>
     </head>
@@ -88,9 +80,8 @@ namespace StorEvil.Reports.HTML
     }
 
     [TestFixture]
-    public class With_no_stories : HTML_Report 
+    public class With_no_stories : HTML_Report
     {
-        
         protected override GatheredResultSet GetTestResult()
         {
             return new GatheredResultSet();
@@ -112,19 +103,18 @@ namespace StorEvil.Reports.HTML
     [TestFixture]
     public class With_two_stories : HTML_Report
     {
-
         protected override GatheredResultSet GetTestResult()
         {
             var result = new GatheredResultSet();
             result.Add(new StoryResult
-           {
-               Summary = "first story summary"
-           });
+                           {
+                               Summary = "first story summary"
+                           });
 
             result.Add(new StoryResult
-            {
-                Summary = "second story summary"
-            });
+                           {
+                               Summary = "second story summary"
+                           });
 
             return result;
         }
@@ -146,6 +136,7 @@ namespace StorEvil.Reports.HTML
         {
             Result.FindElement("//div[@class='no-stories-found']").ShouldBeNull();
         }
+
         [Test]
         public void Should_include_the_story_wrapper()
         {

@@ -2,16 +2,17 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using StorEvil.Core;
-using StorEvil.Parsing;
 using StorEvil.Utility;
 
-namespace StorEvil.Parsing_story_text
+namespace StorEvil.Parsing
 {
     [TestFixture]
     public class parsing_story_with_multiple_scenario_outlines_with_examples_and_tables
     {
         private Story Result;
-        private const string testOutlineTableStoryText = @"
+
+        private const string testOutlineTableStoryText =
+            @"
 Story with multiple outlines
 Scenario Outline: Doing something
 Test with <param> and <anotherParam>
@@ -32,7 +33,7 @@ Examples:
         [SetUp]
         public void SetupContext()
         {
-            Result = new StoryParser().Parse(testOutlineTableStoryText, null);            
+            Result = new StoryParser().Parse(testOutlineTableStoryText, null);
         }
 
         private IEnumerable<ScenarioOutline> Outlines()
@@ -44,7 +45,6 @@ Examples:
         public void Should_Parse_Story_header()
         {
             Result.Summary.ShouldEqual("Story with multiple outlines");
-
         }
 
         [Test]
@@ -60,7 +60,6 @@ Examples:
             fieldNames.Count().ShouldEqual(2);
             fieldNames.First().ShouldEqual("param");
             fieldNames.Last().ShouldEqual("anotherParam");
-
         }
 
         [Test]

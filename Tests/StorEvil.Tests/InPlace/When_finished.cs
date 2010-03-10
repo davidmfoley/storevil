@@ -1,6 +1,5 @@
 using NUnit.Framework;
 using Rhino.Mocks;
-using StorEvil.Core;
 using StorEvil.Parsing;
 
 namespace StorEvil.InPlace
@@ -14,14 +13,14 @@ namespace StorEvil.InPlace
         public void SetupContext()
         {
             ResultListener = MockRepository.GenerateStub<IResultListener>();
-            
+
             var inPlaceRunner = new InPlaceRunner(ResultListener, new ScenarioPreprocessor());
             inPlaceRunner.Finished();
         }
+
         [Test]
         public void notifies_result_listener()
         {
-
             ResultListener.AssertWasCalled(x => x.Finished());
         }
     }

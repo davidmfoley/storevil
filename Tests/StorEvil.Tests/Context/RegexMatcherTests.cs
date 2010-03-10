@@ -1,11 +1,10 @@
 using System.Linq;
 using NUnit.Framework;
-using StorEvil.Context;
 using StorEvil.Context.Matchers;
 using StorEvil.Context.Matches;
 using StorEvil.Utility;
 
-namespace StorEvil.RegExMatcherTests
+namespace StorEvil.Context.RegexMatcher_Specs
 {
     [TestFixture]
     public class when_regex_matches_whole_line
@@ -20,6 +19,7 @@ namespace StorEvil.RegExMatcherTests
             TestText = "Some fake method name";
             TestMatch = matcher.GetMatch(TestText);
         }
+
         [Test]
         public void should_return_an_exact_match()
         {
@@ -53,7 +53,7 @@ namespace StorEvil.RegExMatcherTests
     }
 
     [TestFixture]
-    public class when_regex_is_a_partial_match 
+    public class when_regex_is_a_partial_match
     {
         private NameMatch TestMatch;
         private string TestText;
@@ -61,7 +61,8 @@ namespace StorEvil.RegExMatcherTests
         [SetUp]
         public void SetupContext()
         {
-            var matcher = new RegexMatcher("^Some fake method name", typeof(RegexTestContext).GetMethod("MethodWithReturnValue"));
+            var matcher = new RegexMatcher("^Some fake method name",
+                                           typeof (RegexTestContext).GetMethod("MethodWithReturnValue"));
             TestText = "Some fake method name and some other text";
             TestMatch = matcher.GetMatch(TestText);
         }
@@ -81,32 +82,31 @@ namespace StorEvil.RegExMatcherTests
         [Test]
         public void sets_remaining_text()
         {
-            ((PartialMatch)TestMatch).RemainingText.ShouldEqual("and some other text");
+            ((PartialMatch) TestMatch).RemainingText.ShouldEqual("and some other text");
         }
     }
 
     [TestFixture]
     public class partial_matching_on_different_types_of_members
     {
-      
         [Test]
         public void No_partial_matching_on_void_methods()
         {
-            var Matcher = new RegexMatcher("^Some fake method name", typeof(RegexTestContext).GetMethod("VoidMethod"));
+            var Matcher = new RegexMatcher("^Some fake method name", typeof (RegexTestContext).GetMethod("VoidMethod"));
             Matcher.GetMatch("Some fake method name blah blah blah").ShouldBeNull();
         }
 
         [Test]
         public void can_partially_match_on_properties()
         {
-            var Matcher = new RegexMatcher("^Foo Bar", typeof(RegexTestContext).GetProperty("SomeProperty"));
+            var Matcher = new RegexMatcher("^Foo Bar", typeof (RegexTestContext).GetProperty("SomeProperty"));
             Matcher.GetMatch("Foo Bar Baz").ShouldBeOfType<PartialMatch>();
         }
 
         [Test]
         public void can_partially_match_on_fields()
         {
-            var Matcher = new RegexMatcher("^Foo Bar", typeof(RegexTestContext).GetField("SomeField"));
+            var Matcher = new RegexMatcher("^Foo Bar", typeof (RegexTestContext).GetField("SomeField"));
             Matcher.GetMatch("Foo Bar Baz").ShouldBeOfType<PartialMatch>();
         }
     }
@@ -120,7 +120,8 @@ namespace StorEvil.RegExMatcherTests
         [SetUp]
         public void SetupContext()
         {
-            var matcher = new RegexMatcher("^Some fake method name (.+)", typeof(RegexTestContext).GetMethod("MethodWithParams"));
+            var matcher = new RegexMatcher("^Some fake method name (.+)",
+                                           typeof (RegexTestContext).GetMethod("MethodWithParams"));
             TestText = "Some fake method name and some other text";
             TestMatch = matcher.GetMatch(TestText);
         }
@@ -151,10 +152,17 @@ namespace StorEvil.RegExMatcherTests
             return 0;
         }
 
-        public void VoidMethod () {}
+        public void VoidMethod()
+        {
+        }
 
-        public string SomeProperty { get { return "foo"; } }
+        public string SomeProperty
+        {
+            get { return "foo"; }
+        }
 
-        public void MethodWithParams(string parameterName) {}
+        public void MethodWithParams(string parameterName)
+        {
+        }
     }
 }

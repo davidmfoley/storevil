@@ -12,7 +12,6 @@ using StorEvil.Utility;
 
 namespace StorEvil.NUnit
 {
-    
     [TestFixture]
     public class NUnitTestGeneratorTests : TestBase
     {
@@ -101,8 +100,8 @@ namespace StorEvil.NUnit
         public void Created_Test_Should_Dispose_Context()
         {
             // injecting parameters
-            var s = new Scenario("test", new[] { "foo" });
-            var story = new Story("test", "foo", new[] { s });
+            var s = new Scenario("test", new[] {"foo"});
+            var story = new Story("test", "foo", new[] {s});
 
             var context = new TestDisposableContext();
 
@@ -115,14 +114,14 @@ namespace StorEvil.NUnit
         public void Created_Test_Should_Parse_DateTime()
         {
             // injecting parameters
-            var s = new Scenario("test", new[] { "A condition with 1/1/2009 param" });
-            var story = new Story("test", "testing date time parsing", new[] { s });
+            var s = new Scenario("test", new[] {"A condition with 1/1/2009 param"});
+            var story = new Story("test", "testing date time parsing", new[] {s});
 
             var context = Fake<TestContext>();
 
             CreateAndCallTestMethods<TestContext>(story, context);
 
-            context.AssertWasCalled(x => x.A_Condition_With_dateTime_param(new DateTime(2009,1,1)));
+            context.AssertWasCalled(x => x.A_Condition_With_dateTime_param(new DateTime(2009, 1, 1)));
         }
 
         [Test]
@@ -200,8 +199,6 @@ namespace StorEvil.NUnit
             CreateAndCallTestMethods<TestContext>(story, context);
         }
 
-        
-
         private void CreateAndCallTestMethods<T>(Story story, object context)
         {
             var generator = GetNUnitGenerator();
@@ -223,8 +220,8 @@ namespace {0} {{
     }}
 }}";
             string formattedCode = string.Format(
-                format, GetType().Namespace, "TestClass", typeof(T).FullName,
-                code.Replace("new " + typeof(T).FullName + "()", "_context"));
+                format, GetType().Namespace, "TestClass", typeof (T).FullName,
+                code.Replace("new " + typeof (T).FullName + "()", "_context"));
 
             Assembly a = TestHelper.CreateAssembly(formattedCode);
 
@@ -246,8 +243,10 @@ namespace {0} {{
         private NUnitTestMethodGenerator GetNUnitGenerator()
         {
             var ext = new ExtensionMethodHandler();
-           
-            return new NUnitTestMethodGenerator(new CSharpMethodInvocationGenerator(new ScenarioInterpreter(new InterpreterForTypeFactory(ext))));
+
+            return
+                new NUnitTestMethodGenerator(
+                    new CSharpMethodInvocationGenerator(new ScenarioInterpreter(new InterpreterForTypeFactory(ext))));
         }
 
         private static void SetFixtureContext(object fixture, object context)
@@ -264,7 +263,9 @@ namespace {0} {{
             WasDisposed = true;
         }
 
-        public void Foo() {}
+        public void Foo()
+        {
+        }
 
         public bool WasDisposed { get; set; }
     }

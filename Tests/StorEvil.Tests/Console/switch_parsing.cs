@@ -4,7 +4,7 @@ using NUnit.Framework;
 using StorEvil.Configuration;
 using StorEvil.Utility;
 
-namespace StorEvil.Argument_parsing
+namespace StorEvil.Console
 {
     public class switch_parsing
     {
@@ -222,6 +222,8 @@ namespace StorEvil.Argument_parsing
 
     public enum TestConfigEnum
     {
-        Foo, Bar, FooBar
+        Foo,
+        Bar,
+        FooBar
     }
 }

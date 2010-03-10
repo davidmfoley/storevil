@@ -1,14 +1,9 @@
-using System;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
 using Funq;
 using NUnit.Framework;
 using StorEvil.Utility;
 
 namespace StorEvil
 {
-
     [TestFixture]
     public class funq_easy_registration
     {
@@ -18,7 +13,7 @@ namespace StorEvil
             var c = new Container();
             c.EasyRegister<IFoo, Foo>();
 
-            Assert.IsInstanceOfType(typeof(Foo), c.Resolve<IFoo>());
+            Assert.IsInstanceOfType(typeof (Foo), c.Resolve<IFoo>());
         }
 
         [Test]
@@ -46,14 +41,20 @@ namespace StorEvil
             var bar = baz.Bar as Bar;
             Assert.AreSame(bar.Foo, testFoo);
         }
-
-     
     }
 
-    public interface IFoo { }
-    public class Foo : IFoo { }
+    public interface IFoo
+    {
+    }
 
-    public interface IBar { }
+    public class Foo : IFoo
+    {
+    }
+
+    public interface IBar
+    {
+    }
+
     public class Bar : IBar
     {
         public IFoo Foo { get; set; }
@@ -64,7 +65,10 @@ namespace StorEvil
         }
     }
 
-    public interface IBaz { }
+    public interface IBaz
+    {
+    }
+
     public class Baz : IBaz
     {
         public IBar Bar { get; set; }
@@ -74,6 +78,4 @@ namespace StorEvil
             Bar = bar;
         }
     }
-
-    
 }
