@@ -33,7 +33,7 @@
   <ItemGroup>
     <Reference Include="Funq, Version=0.1.226.1, Culture=neutral, PublicKeyToken=e035bc90764f5360, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\Funq.dll</HintPath>
+      <HintPath>..\..\Lib\Funq\Funq.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />

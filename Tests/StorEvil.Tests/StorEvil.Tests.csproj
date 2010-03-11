@@ -33,15 +33,19 @@
   <ItemGroup>
     <Reference Include="Funq, Version=0.1.226.1, Culture=neutral, PublicKeyToken=e035bc90764f5360, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\Funq.dll</HintPath>
+      <HintPath>..\..\Lib\Funq\Funq.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.2.9.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TestLibrary\nunit.framework.dll</HintPath>
+      <HintPath>..\..\Lib\Test\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.Mocks, Version=3.3.0.906, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+    <Reference Include="Rhino.Mocks, Version=3.5.0.1337, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TestLibrary\Rhino.Mocks.dll</HintPath>
+      <HintPath>..\..\Lib\Test\Rhino.Mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="Spark, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7f8549eed921a12c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\Spark\Spark.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
