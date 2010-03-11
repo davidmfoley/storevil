@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,7 +9,8 @@ namespace StorEvil.Configuration
     {
         public ConfigSettings Read(string contents)
         {       
-            var lines = GetNonBlankLines(contents);
+            var nonBlankLines = GetNonBlankLines(contents);
+            var lines = StripCommentLines(nonBlankLines);
 
             var settings = new ConfigSettings();
 
@@ -35,6 +38,11 @@ namespace StorEvil.Configuration
                 }
             }
             return settings;
+        }
+
+        private IEnumerable<string> StripCommentLines(IEnumerable<string> nonBlankLines)
+        {
+            return nonBlankLines.Where(l => !(l.Trim().StartsWith("#")));
         }
 
         private static bool ApplySettingValue(ConfigSettings settings, string settingName, string settingValue)

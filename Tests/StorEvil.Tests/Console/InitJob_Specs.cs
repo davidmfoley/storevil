@@ -33,7 +33,7 @@ namespace StorEvil.Console
         [Test]
         public void Writes_example_feature()
         {
-            AssertFileWritten("example.feature");
+            AssertFileWritten("Example.feature");
         }
 
         [Test]

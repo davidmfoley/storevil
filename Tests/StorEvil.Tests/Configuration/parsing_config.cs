@@ -8,6 +8,7 @@ namespace StorEvil.Configuration
     {
         private const string TestConfigContents =
             @"
+# comment
 Assemblies: C:\foo\bar\baz.dll,C:\baz\foo.dll
 Extensions: .scenario, .foo, .bar
 OutputFile: foo.html

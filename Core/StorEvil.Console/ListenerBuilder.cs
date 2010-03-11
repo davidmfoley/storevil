@@ -27,30 +27,36 @@ namespace StorEvil.Console
                                                   });
             }
 
-            if (!string.IsNullOrEmpty(_settings.OutputFileFormat))
-            {
-                string outputFile;
-                if (!string.IsNullOrEmpty(_settings.OutputFile))
-                    outputFile = _settings.OutputFile;
-                else
-                    outputFile = "storevil-output." + _settings.OutputFileFormat.ToLower();
-
-                var fileWriter = new FileWriter(outputFile, true);
-
-                switch (_settings.OutputFileFormat.ToLower())
-                {
-                    case "xml":
-                        compositeListener.AddListener(new XmlReportListener(fileWriter));
-                        break;
-                    case "spark":
-                        compositeListener.AddListener(new SparkReportListener(fileWriter, _settings.OutputFileTemplate));
-                        break;
-                    default:
-                        throw new ConfigurationErrorsException(string.Format("'{0} is not a valid output file format.'", _settings.OutputFileFormat));
-                }
-            }
+            AddFileWritingListenerIfConfigured(compositeListener);
 
             return compositeListener;
+        }
+
+        private void AddFileWritingListenerIfConfigured(CompositeListener compositeListener)
+        {
+            if (string.IsNullOrEmpty(_settings.OutputFileFormat))
+                return;
+
+            if (string.IsNullOrEmpty(_settings.OutputFile))
+                return;
+
+            var outputFile = _settings.OutputFile;
+
+            var fileWriter = new FileWriter(outputFile, true);
+
+            switch (_settings.OutputFileFormat.ToLower())
+            {
+                case "xml":
+                    compositeListener.AddListener(new XmlReportListener(fileWriter));
+                    break;
+                case "spark":
+                    compositeListener.AddListener(new SparkReportListener(fileWriter,
+                                                                          _settings.OutputFileTemplate));
+                    break;
+                default:
+                    throw new ConfigurationErrorsException(
+                        string.Format("'{0} is not a valid output file format.'", _settings.OutputFileFormat));
+            }
         }
     }
 }

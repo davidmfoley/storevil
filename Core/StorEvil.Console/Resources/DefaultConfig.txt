@@ -1,5 +1,6 @@
-﻿# fill this in with your assembly that contains the contexts ([StorEvil.Context])
-Assemblies: bin\Debug\(your assembly here)
+﻿
+# Uncomment (remove #) and fill this in with your assembly that contains the contexts ([StorEvil.Context])
+# Assemblies: bin\Debug\(your assembly here)
 
 # storevil will search for story files under this directory that have the following extension:
 Extensions: .feature

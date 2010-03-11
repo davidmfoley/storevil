@@ -1,0 +1,424 @@
+<html>
+    <head>
+		<style type="text/css">	
+		body {
+			background: #ddd;
+			font-family: Interstate, "Lucida Grande",  Verdana, Arial, helvetica, sans-serif;
+			font-size:13px;
+			color: black;			
+		}
+		
+		div  {
+			padding:5x;
+			
+		}
+		
+		h1, h2, h3 {
+			padding:5px;
+			margin:0px;
+		}
+		
+		.story {			
+			background: #eee;
+			padding:5px 5px 10px 15px;
+			outline: 1px solid #ccc;
+			margin-bottom:10px;
+		}
+		.scenario {	
+			font-family: monospace;
+			background: #fff;
+			outline: 1px solid #ccc;
+			padding:5px 5px 5px 15px;
+		}
+		.summary {
+			padding:10px 10px 5px 10px;
+		}
+		.scenario-failed, .summary-failed	{
+			background-color:#f99;
+		}
+	
+		.scenario-passed,.summary-passed	{
+			background-color:#8d8;
+		}
+		.scenario-pending,.summary-pending	{
+			background-color:#fd7;
+		}
+		
+		.line-failed	{
+			color:red;
+			float:left;
+		}
+		
+		.line-passed	{
+			color:green;
+		}
+		
+		.line-pending	{
+			color:#981;
+		}
+		.failure-message {
+			padding:10px;
+			font-weight:bold;
+			color:Red;
+			clear:both;
+		
+		}
+	</style>
+    </head>
+    <body>
+        <h1>StorEvil Example: Conway's Game of Life</h1>
+		<div class="summary"><div class="summary-passed">
+				26 Passed
+			</div>
+		</div><div class="stories-wrapper"><div class="story">    
+                <h3>Feature: Evolving a dead cell<br/>In order to create a functioning rules engine<br/>As a programmer of Conway's Game of Life<br/>I can evolve a single dead cell based</h2> 
+				<div class="summary"><div class="summary-passed">
+						9 Passed
+					</div>
+				</div><div class="scenario">
+					<h3 class="scenario-passed">Dead cell with 0 neighbors stays dead - Passed</h3>
+						<div class="line-passed">
+							Given the following setup<br/>| . | . | . |<br/>| . | . | . |<br/>| . | . | . |<br/>
+						</div>
+						<div class="line-passed">
+							When I evolve the board<br/>
+						</div>
+						<div class="line-passed">
+							Then the center cell should be dead<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">Dead cell with 1 neighbor stays dead - Passed</h3>
+						<div class="line-passed">
+							Given the following setup<br/>| . | x | . |<br/>| . | . | . |<br/>| . | . | . |<br/>
+						</div>
+						<div class="line-passed">
+							When I evolve the board<br/>
+						</div>
+						<div class="line-passed">
+							Then the center cell should be dead<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">Dead cell with 2 neighbors stays dead - Passed</h3>
+						<div class="line-passed">
+							Given the following setup<br/>| . | x | . |<br/>| . | . | x |<br/>| . | . | . |<br/>
+						</div>
+						<div class="line-passed">
+							When I evolve the board<br/>
+						</div>
+						<div class="line-passed">
+							Then the center cell should be dead<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">Dead cell with 3 neighbors comes to life - Passed</h3>
+						<div class="line-passed">
+							Given the following setup<br/>| x | x | x |<br/>| . | . | . |<br/>| . | . | . |<br/>
+						</div>
+						<div class="line-passed">
+							When I evolve the board<br/>
+						</div>
+						<div class="line-passed">
+							Then the center cell should be alive<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">Dead cell with 4 neighbors stays dead - Passed</h3>
+						<div class="line-passed">
+							Given the following setup<br/>| x | x | x |<br/>| . | . | x |<br/>| . | . | . |<br/>
+						</div>
+						<div class="line-passed">
+							When I evolve the board<br/>
+						</div>
+						<div class="line-passed">
+							Then the center cell should be dead<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">Dead cell with 5 neighbors stays dead - Passed</h3>
+						<div class="line-passed">
+							Given the following setup<br/>| x | x | x |<br/>| x | . | x |<br/>| . | . | . |<br/>
+						</div>
+						<div class="line-passed">
+							When I evolve the board<br/>
+						</div>
+						<div class="line-passed">
+							Then the center cell should be dead<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">Dead cell with 6 neighbors stays dead - Passed</h3>
+						<div class="line-passed">
+							Given the following setup<br/>| x | x | x |<br/>| x | . | x |<br/>| x | . | . |<br/>
+						</div>
+						<div class="line-passed">
+							When I evolve the board<br/>
+						</div>
+						<div class="line-passed">
+							Then the center cell should be dead<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">Dead cell with 7 neighbors stays dead - Passed</h3>
+						<div class="line-passed">
+							Given the following setup<br/>| x | x | x |<br/>| x | . | x |<br/>| x | x | . |<br/>
+						</div>
+						<div class="line-passed">
+							When I evolve the board<br/>
+						</div>
+						<div class="line-passed">
+							Then the center cell should be dead<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">Dead cell with 8 neighbors stays dead - Passed</h3>
+						<div class="line-passed">
+							Given the following setup<br/>| x | x | x |<br/>| x | . | x |<br/>| x | x | x |<br/>
+						</div>
+						<div class="line-passed">
+							When I evolve the board<br/>
+						</div>
+						<div class="line-passed">
+							Then the center cell should be dead<br/>
+						</div>
+
+				</div>
+            </div><div class="story">    
+                <h3>Feature: Evolving a living cell<br/>In order to create a functioning rules engine<br/>As a programmer of Conway's Game of Life<br/>I can evolve a single living cell</h2> 
+				<div class="summary"><div class="summary-passed">
+						9 Passed
+					</div>
+				</div><div class="scenario">
+					<h3 class="scenario-passed">Living cell with 0 neighbors dies - Passed</h3>
+						<div class="line-passed">
+							Given the following setup<br/>| . | . | . |<br/>| . | x | . |<br/>| . | . | . |<br/>
+						</div>
+						<div class="line-passed">
+							When I evolve the board<br/>
+						</div>
+						<div class="line-passed">
+							Then the center cell should be dead<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">Living cell with 1 neighbor dies - Passed</h3>
+						<div class="line-passed">
+							Given the following setup<br/>| . | x | . |<br/>| . | x | . |<br/>| . | . | . |<br/>
+						</div>
+						<div class="line-passed">
+							When I evolve the board<br/>
+						</div>
+						<div class="line-passed">
+							Then the center cell should be dead<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">Living cell with 2 neighbors lives - Passed</h3>
+						<div class="line-passed">
+							Given the following setup<br/>| . | x | . |<br/>| . | x | x |<br/>| . | . | . |<br/>
+						</div>
+						<div class="line-passed">
+							When I evolve the board<br/>
+						</div>
+						<div class="line-passed">
+							Then the center cell should be alive<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">Living cell with 3 neighbors lives - Passed</h3>
+						<div class="line-passed">
+							Given the following setup<br/>| x | x | x |<br/>| . | x | . |<br/>| . | . | . |<br/>
+						</div>
+						<div class="line-passed">
+							When I evolve the board<br/>
+						</div>
+						<div class="line-passed">
+							Then the center cell should be alive<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">Living cell with 4 neighbors dies - Passed</h3>
+						<div class="line-passed">
+							Given the following setup<br/>| x | x | x |<br/>| . | x | x |<br/>| . | . | . |<br/>
+						</div>
+						<div class="line-passed">
+							When I evolve the board<br/>
+						</div>
+						<div class="line-passed">
+							Then the center cell should be dead<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">Living cell with 5 neighbors dies - Passed</h3>
+						<div class="line-passed">
+							Given the following setup<br/>| x | x | x |<br/>| x | x | x |<br/>| . | . | . |<br/>
+						</div>
+						<div class="line-passed">
+							When I evolve the board<br/>
+						</div>
+						<div class="line-passed">
+							Then the center cell should be dead<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">Living cell with 6 neighbors dies - Passed</h3>
+						<div class="line-passed">
+							Given the following setup<br/>| x | x | x |<br/>| x | x | x |<br/>| x | . | . |<br/>
+						</div>
+						<div class="line-passed">
+							When I evolve the board<br/>
+						</div>
+						<div class="line-passed">
+							Then the center cell should be dead<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">Living cell with 7 neighbors dies - Passed</h3>
+						<div class="line-passed">
+							Given the following setup<br/>| x | x | x |<br/>| x | x | x |<br/>| x | x | . |<br/>
+						</div>
+						<div class="line-passed">
+							When I evolve the board<br/>
+						</div>
+						<div class="line-passed">
+							Then the center cell should be dead<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">Living cell with 8 neighbors dies - Passed</h3>
+						<div class="line-passed">
+							Given the following setup<br/>| x | x | x |<br/>| x | x | x |<br/>| x | x | x |<br/>
+						</div>
+						<div class="line-passed">
+							When I evolve the board<br/>
+						</div>
+						<div class="line-passed">
+							Then the center cell should be dead<br/>
+						</div>
+
+				</div>
+            </div><div class="story">    
+                <h3>Feature: Evolving a grid with some cells in it<br/>In order to create a functioning rules engine<br/>As a programmer of Conway's Game of Life<br/>I can evolve a multiple cell grid</h2> 
+				<div class="summary"><div class="summary-passed">
+						3 Passed
+					</div>
+				</div><div class="scenario">
+					<h3 class="scenario-passed">Sparse grid with nobody staying alive - Passed</h3>
+						<div class="line-passed">
+							Given the following setup<br/>| . | . | . | . | . |<br/>| . | x | . | x | . |<br/>| . | . | . | . | . |<br/>| . | x | . | x | . |<br/>| . | . | . | . | . |<br/>
+						</div>
+						<div class="line-passed">
+							When I evolve the board<br/>
+						</div>
+						<div class="line-passed">
+							Then I should see the following board<br/>| . | . | . | . | . |<br/>| . | . | . | . | . |<br/>| . | . | . | . | . |<br/>| . | . | . | . | . |<br/>| . | . | . | . | . |<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">Over-crowded grid - Passed</h3>
+						<div class="line-passed">
+							Given the following setup<br/>| . | . | . | . | . |<br/>| . | x | x | x | . |<br/>| . | x | x | x | . |<br/>| . | x | x | x | . |<br/>| . | . | . | . | . |<br/>
+						</div>
+						<div class="line-passed">
+							When I evolve the board<br/>
+						</div>
+						<div class="line-passed">
+							Then I should see the following board<br/>| . | . | x | . | . |<br/>| . | x | . | x | . |<br/>| x | . | . | . | x |<br/>| . | x | . | x | . |<br/>| . | . | x | . | . |<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">Multiple dead cells coming to life - Passed</h3>
+						<div class="line-passed">
+							Given the following setup<br/>| . | . | . | . | . |<br/>| . | . | . | . | . |<br/>| . | x | x | x | . |<br/>| . | . | . | . | . |<br/>| . | . | . | . | . |<br/>
+						</div>
+						<div class="line-passed">
+							When I evolve the board<br/>
+						</div>
+						<div class="line-passed">
+							Then I should see the following board<br/>| . | . | . | . | . |<br/>| . | . | x | . | . |<br/>| . | . | x | . | . |<br/>| . | . | x | . | . |<br/>| . | . | . | . | . |<br/>
+						</div>
+
+				</div>
+            </div><div class="story">    
+                <h3>Feature: Evolving a grid over multiple generations<br/>In order to create a functioning rules engine<br/>As a programmer of Conway's Game of Life<br/>I can evolve a grid over multiple generations</h2> 
+				<div class="summary"><div class="summary-passed">
+						1 Passed
+					</div>
+				</div><div class="scenario">
+					<h3 class="scenario-passed">Cells come alive, then die off - Passed</h3>
+						<div class="line-passed">
+							Given the following setup<br/>| . | . | . | . | . |<br/>| . | . | . | . | . |<br/>| . | x | x | x | . |<br/>| . | . | . | . | . |<br/>| . | . | . | . | . |<br/>
+						</div>
+						<div class="line-passed">
+							When I evolve the board<br/>
+						</div>
+						<div class="line-passed">
+							Then I should see the following board<br/>| . | . | . | . | . |<br/>| . | . | x | . | . |<br/>| . | . | x | . | . |<br/>| . | . | x | . | . |<br/>| . | . | . | . | . |<br/>
+						</div>
+						<div class="line-passed">
+							When I evolve the board<br/>
+						</div>
+						<div class="line-passed">
+							Then I should see the following board<br/>| . | . | . | . | . |<br/>| . | . | . | . | . |<br/>| . | x | x | x | . |<br/>| . | . | . | . | . |<br/>| . | . | . | . | . |<br/>
+						</div>
+
+				</div>
+            </div><div class="story">    
+                <h3>Feature: Cell configurations that are static<br/>In order to create a functioning rules engine<br/>As a programmer of Conway's Game of Life<br/>I can see static structures surviving in my world</h2> 
+				<div class="summary"><div class="summary-passed">
+						4 Passed
+					</div>
+				</div><div class="scenario">
+					<h3 class="scenario-passed">Block - Passed</h3>
+						<div class="line-passed">
+							Given the following setup<br/>| . | . | . | . | . |<br/>| . | x | x | . | . |<br/>| . | x | x | . | . |<br/>| . | . | . | . | . |<br/>| . | . | . | . | . |<br/>
+						</div>
+						<div class="line-passed">
+							When I evolve the board<br/>
+						</div>
+						<div class="line-passed">
+							Then I should see the following board<br/>| . | . | . | . | . |<br/>| . | x | x | . | . |<br/>| . | x | x | . | . |<br/>| . | . | . | . | . |<br/>| . | . | . | . | . |<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">Beehive - Passed</h3>
+						<div class="line-passed">
+							Given the following setup<br/>| . | . | . | . | . | . |<br/>| . | . | x | x | . | . |<br/>| . | x | . | . | x | . |<br/>| . | . | x | x | . | . |<br/>| . | . | . | . | . | . |<br/>
+						</div>
+						<div class="line-passed">
+							When I evolve the board<br/>
+						</div>
+						<div class="line-passed">
+							Then I should see the following board<br/>| . | . | . | . | . | . |<br/>| . | . | x | x | . | . |<br/>| . | x | . | . | x | . |<br/>| . | . | x | x | . | . |<br/>| . | . | . | . | . | . |<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">Loaf - Passed</h3>
+						<div class="line-passed">
+							Given the following setup<br/>| . | . | . | . | . | . |<br/>| . | . | x | x | . | . |<br/>| . | x | . | . | x | . |<br/>| . | . | x | . | x | . |<br/>| . | . | . | x | . | . |<br/>| . | . | . | . | . | . |<br/>
+						</div>
+						<div class="line-passed">
+							When I evolve the board<br/>
+						</div>
+						<div class="line-passed">
+							Then I should see the following board<br/>| . | . | . | . | . | . |<br/>| . | . | x | x | . | . |<br/>| . | x | . | . | x | . |<br/>| . | . | x | . | x | . |<br/>| . | . | . | x | . | . |<br/>| . | . | . | . | . | . |<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">Boat - Passed</h3>
+						<div class="line-passed">
+							Given the following setup<br/>| . | . | . | . | . |<br/>| . | x | x | . | . |<br/>| . | x | . | x | . |<br/>| . | . | x | . | . |<br/>| . | . | . | . | . |<br/>
+						</div>
+						<div class="line-passed">
+							When I evolve the board<br/>
+						</div>
+						<div class="line-passed">
+							Then I should see the following board<br/>| . | . | . | . | . |<br/>| . | x | x | . | . |<br/>| . | x | . | x | . |<br/>| . | . | x | . | . |<br/>| . | . | . | . | . |<br/>
+						</div>
+
+				</div>
+            </div>
+        </div>
+    </body>
+</html>

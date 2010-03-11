@@ -18,6 +18,7 @@ namespace StorEvil.Infrastructure
 
         public void Write(string s)
         {
+            System.Console.WriteLine("writing file: " + OutputFile);
             using (var stream = File.AppendText(OutputFile))
             {
                 stream.Write(s);
