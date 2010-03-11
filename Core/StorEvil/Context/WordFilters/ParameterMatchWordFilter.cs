@@ -21,7 +21,10 @@ namespace StorEvil.Context.WordFilters
 
         public bool IsTable
         {
-            get { return _paramInfo.ParameterType.IsAssignableFrom(typeof (string[][])); }
+            get
+            {
+                return _paramInfo.ParameterType.IsArray;
+            }
         }
 
         public bool IsMatch(string s)

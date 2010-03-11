@@ -86,4 +86,40 @@ namespace StorEvil.Context
             }
         }
     }
+
+    public class Parsing_typed_tables
+    {
+        private object ParamValue;
+        private object TestTypeArray;
+
+        [SetUp]
+        public void SetupContext()
+        {
+            var matcher = MethodMatcherTestHelper.GetMatcher<Typed_table_test_context>("method_takes_a_typed_array");
+            Match = matcher.GetMatch("Method takes a typed array\r\n|IntParam|StringParam|\r\n|1|2|\r\n|3|4|\r\n|5|6|");
+            ParamValue = Match.ParamValues["values"];
+            TestTypeArray = ParamValue as TestType[];
+        }
+
+        protected NameMatch Match { get; set; }
+
+        [Test]
+        public void should_match_with_typed_array_parameter()
+        {
+            ParamValue.ShouldEqual("|IntParam|StringParam|\r\n|1|2|\r\n|3|4|\r\n|5|6|");
+        }
+
+        private class Typed_table_test_context
+        {
+            public void method_takes_a_typed_array(TestType[] values)
+            {
+            }
+        }
+
+        internal class TestType
+        {
+            public int IntParam { get; set; }
+            public string StringParam { get; set; }
+        }
+    }
 }

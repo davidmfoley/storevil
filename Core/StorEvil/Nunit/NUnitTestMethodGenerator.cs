@@ -102,7 +102,7 @@ namespace StorEvil.Nunit
 
         private string BuildConsoleWriteScenarioLine(string line)
         {
-            return string.Format("           Console.WriteLine(@\"{0}\");\r\n", line.Replace("\"", "\"\""));
+            return string.Format("           System.Console.WriteLine(@\"{0}\");\r\n", line.Replace("\"", "\"\""));
         }
 
         private string BuildTestBody(StringBuilder codeBuilder, string name, string declarations)

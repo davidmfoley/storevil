@@ -11,7 +11,7 @@ namespace StorEvil.Interpreter.ParameterConverters
             _convertFunc = func;
         }
 
-        public object ConvertParamValue(string val)
+        public object ConvertParamValue(string val, Type destinationType)
         {
             return _convertFunc(val);
         }

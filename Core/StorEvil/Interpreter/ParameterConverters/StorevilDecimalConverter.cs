@@ -4,7 +4,7 @@ namespace StorEvil.Interpreter.ParameterConverters
 {
     public class StorevilDecimalConverter : IStorevilConverter
     {
-        public object ConvertParamValue(string val)
+        public object ConvertParamValue(string val, Type destinationType)
         {
             string stripped = ConvertHelper.StripNonNumeric(val);
 
