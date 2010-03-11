@@ -32,6 +32,7 @@ namespace StorEvil.Console
             Filesystem.WriteFile(Path.Combine(Directory.GetCurrentDirectory(), destination), GetResource(resourceName),
                                  false);
 
+
             System.Console.WriteLine("Wrote file: " + destination);
         }
 
