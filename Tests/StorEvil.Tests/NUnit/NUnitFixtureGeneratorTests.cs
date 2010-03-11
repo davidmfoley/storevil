@@ -42,7 +42,11 @@ namespace StorEvil.NUnit
 
         private Assembly BuildTestAssembly(Story story)
         {
-            var generator = new NUnitFixtureGenerator(new ScenarioPreprocessor(), FakeMethodGenerator());
+            return BuildTestAssembly(story, null);
+        }
+        private Assembly BuildTestAssembly(Story story, string[] extraNamespaces)
+        {
+            var generator = new NUnitFixtureGenerator(new ScenarioPreprocessor(), FakeMethodGenerator(extraNamespaces));
             var code = generator.GenerateFixture(story, GetContext());
 
             return CreateTestAssembly(code);
@@ -54,14 +58,14 @@ namespace StorEvil.NUnit
             return TestHelper.CreateAssembly(header + "\r\n" + code);
         }
 
-        private NUnitTestMethodGenerator FakeMethodGenerator()
+        private NUnitTestMethodGenerator FakeMethodGenerator(string[] usings)
         {
             var gen = Fake<NUnitTestMethodGenerator>();
             var testName = "Test" + Guid.NewGuid().ToString().Replace("-", "");
             string body = "\r\n[Test] public void " + testName + "() {}";
             gen.Stub(x => x.GetTestFromScenario(null, null))
                 .IgnoreArguments()
-                .Return(new NUnitTest(testName, body, new TestContextField[0]));
+                .Return(new NUnitTest(testName, body, new TestContextField[0], usings ?? new string[0]));
 
             return gen;
         }

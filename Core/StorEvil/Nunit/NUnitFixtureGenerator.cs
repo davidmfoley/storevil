@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using StorEvil.Context;
@@ -59,6 +60,8 @@ namespace {0} {{
             var tests = new StringBuilder();
 
             var contextSet = new TestContextSet();
+            IEnumerable<string> namespaces = new string[0];
+
             foreach (var scenario in story.Scenarios)
             {
                 foreach (var s in _preprocessor.Preprocess(scenario))
@@ -67,10 +70,12 @@ namespace {0} {{
                     tests.Append("        " + test.Body);
                     tests.AppendLine();
                     contextSet.AddRange(test.ContextTypes);
+                    namespaces = namespaces.Union(test.Namespaces).Distinct();
                 }
             }
 
-            var usingStatements = new[] {""}; // namespaces.Select(x => string.Format("using {0};", x));
+            
+            var usingStatements = namespaces.Select(x => string.Format("using {0};", x));
             var usings = string.Join("\r\n", usingStatements.ToArray());
 
             var writeStoryToConsole = "Console.WriteLine(@\"" + story.Summary.Replace("\"", "\"\"") + "\r\n" + " \");";

@@ -21,14 +21,23 @@ namespace StorEvil.Nunit
             _interpreter = interpreter;
         }
 
-        public string MapMethod(ScenarioContext scenarioContext, string line)
+        public LineInfo MapMethod(ScenarioContext scenarioContext, string line)
         {
             var matchingChain = _interpreter.GetChain(scenarioContext, line);
 
             if (matchingChain == null)
                 return null;
 
-            return ConvertInvocationChainToCSharpCode(matchingChain);
+            return new LineInfo
+                       {
+                           Code = ConvertInvocationChainToCSharpCode(matchingChain),
+                           Namespaces = GetNamespaces(matchingChain)
+                       };
+        }
+
+        private IEnumerable<string> GetNamespaces(InvocationChain matchingChain)
+        {
+            return matchingChain.Invocations.Select(x => x.MemberInfo.DeclaringType.Namespace).Distinct();
         }
 
         private static string ConvertInvocationChainToCSharpCode(InvocationChain matchingChain)
@@ -85,5 +94,11 @@ namespace StorEvil.Nunit
         {
             return new CSharpMethodInvocationGenerator(_interpreter);
         }
+    }
+
+    public class LineInfo
+    {
+        public string Code;
+        public IEnumerable<string> Namespaces;
     }
 }

@@ -203,24 +203,35 @@ namespace StorEvil.NUnit
         {
             var generator = GetNUnitGenerator();
             string code = "";
+            IEnumerable<string> namespaces = new string[0];
+
             foreach (var sc in GetScenarios(story))
-                code += "        " + generator.GetTestFromScenario(sc, new StoryContext(typeof (T))).Body + "\r\n";
+            {
+                var nUnitTest = generator.GetTestFromScenario(sc, new StoryContext(typeof (T)));
+                code += "        " + nUnitTest.Body + "\r\n";
+                namespaces = namespaces.Union(nUnitTest.Namespaces).Distinct();
+            }
 
             var format =
                 @"
 using System;
 using NUnit.Framework;
 using StorEvil;
-namespace {0} {{   
+{0}
+namespace {1} {{   
     
     [TestFixture]
-    public class {1} {{
-        public {2} _context;      
-        {3}
+    public class {2} {{
+        public {3} _context;      
+        {4}
     }}
 }}";
             string formattedCode = string.Format(
-                format, GetType().Namespace, "TestClass", typeof (T).FullName,
+                format,
+                string.Join("\r\n", namespaces.Select(ns => "using " + ns + ";").ToArray()),
+                GetType().Namespace, 
+                "TestClass", 
+                typeof (T).FullName,
                 code.Replace("new " + typeof (T).FullName + "()", "_context"));
 
             Assembly a = TestHelper.CreateAssembly(formattedCode);

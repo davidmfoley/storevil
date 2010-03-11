@@ -36,6 +36,8 @@ namespace StorEvil.Nunit
             var codeBuilder = new StringBuilder();
 
             var contexts = new TestContextSet();
+
+            IEnumerable<string> namespaces = new string[0];
             foreach (var line in scenario.Body)
             {
                 codeBuilder.Append(BuildConsoleWriteScenarioLine(line));
@@ -58,8 +60,11 @@ namespace StorEvil.Nunit
 
                 contexts.Add(functionLine.Context);
                 codeBuilder.AppendLine(functionLine.Code);
+
+                namespaces = namespaces.Union(functionLine.Namespaces).Distinct();
             }
 
+            
             AppendDisposeCalls(codeBuilder, contexts);
 
             string declarations = BuildContextDeclarations(contexts);
@@ -67,7 +72,7 @@ namespace StorEvil.Nunit
 
             var body = BuildTestBody(codeBuilder, name, declarations);
 
-            return new NUnitTest(name, body, contexts);
+            return new NUnitTest(name, body, contexts, namespaces);
         }
 
         private void AppendDisposeCalls(StringBuilder codeBuilder, TestContextSet contexts)
@@ -174,11 +179,11 @@ namespace StorEvil.Nunit
         {
             var scenarioContext = storyContext.GetScenarioContext();
             Type chosenType = null;
-            string invocation = null;
+            LineInfo invocation = null;
             foreach (var type in storyContext.ImplementingTypes)
             {
                 invocation = _invocationGenerator.MapMethod(scenarioContext, line);
-                if (!string.IsNullOrEmpty(invocation))
+                if (null != invocation)
                 {
                     chosenType = type;
                     break;
@@ -187,8 +192,8 @@ namespace StorEvil.Nunit
             if (chosenType == null)
                 return null;
 
-            return new ScenarioLineImplementation("            context" + chosenType.Name + invocation + ";", chosenType,
-                                                  "context" + chosenType.Name);
+            return new ScenarioLineImplementation("            context" + chosenType.Name + invocation.Code + ";", chosenType,
+                                                  "context" + chosenType.Name, invocation.Namespaces);
         }
     }
 }

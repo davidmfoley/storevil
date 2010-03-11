@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 
 namespace StorEvil.Nunit
 {
     internal class ScenarioLineImplementation
     {
+        public IEnumerable<string> Namespaces { get; set; }
         private readonly string _code;
 
         public TestContextField Context { get; set; }
@@ -13,8 +15,9 @@ namespace StorEvil.Nunit
             _code = code;
         }
 
-        public ScenarioLineImplementation(string code, Type contextType, string contextFieldName)
+        public ScenarioLineImplementation(string code, Type contextType, string contextFieldName, IEnumerable<string> namespaces)
         {
+            Namespaces = namespaces;
             _code = code;
             Context = new TestContextField {Name = contextFieldName, Type = contextType};
         }
