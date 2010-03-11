@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -23,6 +24,14 @@ namespace StorEvil.Infrastructure
         public IEnumerable<string> GetSubFolders(string path)
         {
             return Directory.GetDirectories(path);
+        }
+
+        public void WriteFile(string fileName, string contents, bool overwrite)
+        {
+            if (File.Exists(fileName) && !overwrite)
+                return;
+
+            File.WriteAllText(fileName, contents);
         }
     }
 }

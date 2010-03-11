@@ -8,5 +8,7 @@ namespace StorEvil.Infrastructure
         string GetFileText(string path);
         IEnumerable<string> GetFilesInFolder(string path);
         IEnumerable<string> GetSubFolders(string path);
+
+        void WriteFile(string fileName, string contents, bool overwrite);
     }
 }
