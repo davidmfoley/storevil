@@ -16,22 +16,26 @@ namespace StorEvil.Console
 
         public void Run()
         {
-            var configDestination = Path.Combine(Directory.GetCurrentDirectory(), "storevil.config");
-            WriteResource("Resources.DefaultConfig.txt", configDestination);
+            WriteResource("DefaultConfig.txt", "storevil.config");
 
-            var sparkTemplateDestination = Path.Combine(Directory.GetCurrentDirectory(), "default.spark");
-            WriteResource("Resources.DefaultSparkTemplate.spark", sparkTemplateDestination);
+            WriteResource("DefaultSparkTemplate.spark", "default.spark");
+            WriteResource("Example.feature", "Example.feature");
+            WriteResource("ExampleContext.cs", "ExampleContext.cs");
         }
 
         private void WriteResource(string resourceName, string destination)
         {
-            Filesystem.WriteFile(destination, GetResource(resourceName), false);
+            Filesystem.WriteFile(Path.Combine(Directory.GetCurrentDirectory(),destination), GetResource(resourceName), false);
         }
 
         private string GetResource(string resourceName)
         {
-            using(var stream = GetType().Assembly.GetManifestResourceStream("StorEvil.Console." + resourceName))
+            using (var stream = GetType().Assembly.GetManifestResourceStream("StorEvil.Console.Resources." + resourceName))
             {
+                if (stream == null)
+                {
+                    throw new Exception("Could not find resource '" + resourceName +"'");
+                }
                 using(var reader = new StreamReader(stream))
                 {
                     return reader.ReadToEnd();

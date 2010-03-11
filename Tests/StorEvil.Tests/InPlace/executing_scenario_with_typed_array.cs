@@ -7,14 +7,15 @@ using StorEvil.Utility;
 namespace StorEvil.InPlace
 {
     [TestFixture]
-    public class executing_scenario_with_table :
-        InPlaceRunnerSpec<executing_scenario_with_table.ScenarioTableTestContext>
+    public class executing_scenario_with_typed_array :
+        InPlaceRunnerSpec<executing_scenario_with_typed_array.ScenarioArrayTestContext>
     {
         private string storyText =
             @"
 Story: test tables in scenarios
 Scenario:
 Given the following
+|IntField|StringProp|
 |1|one|
 |2|two|
 |3|three|
@@ -26,7 +27,7 @@ Given the following
             ResultListener = MockRepository.GenerateStub<IResultListener>();
 
             var story = new StoryParser().Parse(storyText, null);
-            Context = new StoryContext(typeof (ScenarioTableTestContext));
+            Context = new StoryContext(typeof(ScenarioArrayTestContext));
 
             new InPlaceRunner(ResultListener, new ScenarioPreprocessor()).HandleStory(story, Context);
         }
@@ -34,44 +35,36 @@ Given the following
         [Test]
         public void Table_is_not_null()
         {
-            ScenarioTableTestContext.Table.ShouldNotBeNull();
+            ScenarioArrayTestContext.Table.ShouldNotBeNull();
         }
 
         [Test]
         public void Table_data_is_set()
         {
-            var table = ScenarioTableTestContext.Table;
+            var table = ScenarioArrayTestContext.Table;
             table.Length.ShouldEqual(3);
-            table[0][0].ShouldEqual("1");
-            table[0][1].ShouldEqual("one");
+            table[0].IntField.ShouldEqual(1);
+            table[1].IntField.ShouldEqual(2);
+            table[2].IntField.ShouldEqual(3);
+            table[0].StringProp.ShouldEqual("one");
+            table[1].StringProp.ShouldEqual("two");
+            table[2].StringProp.ShouldEqual("three");
 
-            table[1][0].ShouldEqual("2");
-            table[1][1].ShouldEqual("two");
-
-            table[2][0].ShouldEqual("3");
-            table[2][1].ShouldEqual("three");
         }
 
-        public class ScenarioTableTestContext
+        public class ScenarioArrayTestContext
         {
-            public ScenarioTableTestContext()
+            public ScenarioArrayTestContext()
             {
                 Table = null;
             }
 
-            public static string[][] Table;
+            public static TestRow[] Table;
 
-            public void Given_the_following(string[][] table)
+            public void Given_the_following(TestRow[] table)
             {
                 Table = table;
             }
         }
-    }
-
-    public class TestRow
-
-    {
-        public int IntField;
-        public string StringProp { get; set; }
     }
 }

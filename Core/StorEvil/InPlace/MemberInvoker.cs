@@ -14,9 +14,11 @@ namespace StorEvil.InPlace
                 var methodParameters = ConvertParameters(info as MethodInfo, parameters);
                 if (IsExtensionMethod(info))
                 {
-                    methodParameters = new[] { context }.Union(methodParameters.ToArray());
+                   
+                    methodParameters = new[] { context }.Concat(methodParameters.ToArray());
                     //context = null;
                 }
+
                 return (info as MethodInfo).Invoke(context, methodParameters.ToArray());
             }
 

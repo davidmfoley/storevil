@@ -1,8 +1,7 @@
 ﻿using System;
 using Pizza.Model;
-using Pizza;
 using StorEvil;
-
+using StorEvil.Utility;
 
 namespace Pizza.Context
 {
@@ -65,4 +64,5 @@ namespace Pizza.Context
             get { return new PriceCalculator().CalculateTotal(_order); }
         }
     }
+
 }

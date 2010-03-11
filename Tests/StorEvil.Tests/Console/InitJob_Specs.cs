@@ -30,6 +30,18 @@ namespace StorEvil.Console
             AssertFileWritten("default.spark");
         }
 
+        [Test]
+        public void Writes_example_feature()
+        {
+            AssertFileWritten("example.feature");
+        }
+
+        [Test]
+        public void Writes_example_context_class()
+        {
+            AssertFileWritten("ExampleContext.cs");
+        }
+
         private void AssertFileWritten(string name)
         {
             Filesystem.AssertWasCalled(x => x.WriteFile(Arg<string>.Matches(n => n.EndsWith(name)), Arg<string>.Is.Anything, Arg<bool>.Is.Anything));
