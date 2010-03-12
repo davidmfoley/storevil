@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using Funq;
 using StorEvil.Configuration;
 using StorEvil.Context;
@@ -56,9 +57,18 @@ usage:
 
             _settings = _configSource.GetConfig(Directory.GetCurrentDirectory());
             _settings.StoryBasePath = Directory.GetCurrentDirectory();
-            switchParser.Parse(args, _settings);
+            switchParser.Parse(args, _settings);           
 
             container.Register(_settings);
+        }
+
+        private void SanityCheckSettings()
+        {
+            if (_settings.AssemblyLocations == null || !_settings.AssemblyLocations.Any())
+            {
+                System.Console.WriteLine("Error!\r\nYou need to specify paths to your context assembly locations \r\n(setting: \"Assemblies\") in storevil.config");
+                Environment.Exit(1);
+            }
         }
 
         private void SetupCommonComponents(Container container)
@@ -93,7 +103,7 @@ usage:
             {
                 SetupHelpJob(args, container);
                 return;
-            }
+            }            
 
             var command = args[0];
 
@@ -129,6 +139,9 @@ usage:
         private IJobFactory GetJobFactory(string command)
         {
             IJobFactory jobFactory = null;
+
+            if (command == "nunit" || command == "execute")
+                SanityCheckSettings();
 
             if (command == "nunit")
                 jobFactory = new NUnitJobFactory();

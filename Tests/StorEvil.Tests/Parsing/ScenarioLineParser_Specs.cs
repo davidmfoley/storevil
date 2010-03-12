@@ -35,5 +35,12 @@ namespace StorEvil.Parsing
             var words = Parser.ExtractWordsFromScenarioLine("Everything after a colon: is treated as a single word");
             words.Last().ShouldEqual("is treated as a single word");
         }
+
+        [Test]
+        public void Should_parse_numbers()
+        {
+            var words = Parser.ExtractWordsFromScenarioLine("numbers such as 123 can be parsed");
+            words.ElementsShouldEqual("numbers", "such", "as", "123", "can", "be", "parsed");
+        }
     }
 }

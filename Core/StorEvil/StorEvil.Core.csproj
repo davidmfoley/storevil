@@ -72,10 +72,14 @@
     <Compile Include="Context\Matchers\MethodNameMatcher.cs" />
     <Compile Include="Infrastructure\Filesystem.cs" />
     <Compile Include="Infrastructure\FileWriter.cs" />
+    <Compile Include="Interpreter\ParameterConverters\ArrayBuilder.cs" />
     <Compile Include="Interpreter\ParameterConverters\ConvertHelper.cs" />
     <Compile Include="Interpreter\ParameterConverters\IStorevilConverter.cs" />
     <Compile Include="Interpreter\ParameterConverters\SimpleConverter.cs" />
     <Compile Include="Interpreter\ParameterConverters\StorevilDecimalConverter.cs" />
+    <Compile Include="Interpreter\ParameterConverters\StorEvilTableConverter.cs" />
+    <Compile Include="Interpreter\ParameterConverters\TypedArrayTableConverter.cs" />
+    <Compile Include="Interpreter\ParameterConverters\UnknownFieldException.cs" />
     <Compile Include="Nunit\ParameterValueFormatter.cs" />
     <Compile Include="Context\Matchers\RegexMatcher.cs" />
     <Compile Include="Interpreter\ExtensionMethodHandler.cs" />
