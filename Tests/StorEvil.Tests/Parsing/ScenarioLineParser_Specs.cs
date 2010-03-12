@@ -28,5 +28,12 @@ namespace StorEvil.Parsing
             var words = Parser.ExtractWordsFromScenarioLine("First second third");
             words.ElementsShouldEqual("First", "second", "third");
         }
+
+        [Test]
+        public void Should_treat_everything_after_a_colon_as_single_word()
+        {
+            var words = Parser.ExtractWordsFromScenarioLine("Everything after a colon: is treated as a single word");
+            words.Last().ShouldEqual("is treated as a single word");
+        }
     }
 }
