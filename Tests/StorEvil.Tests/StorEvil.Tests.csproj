@@ -105,6 +105,10 @@
     <Compile Include="NUnit\NUnitTestGeneratorTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\StorEvil.Assertions\StorEvil.Assertions.csproj">
+      <Project>{92312C44-8881-41DD-8075-1284740FFF9F}</Project>
+      <Name>StorEvil.Assertions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\StorEvil.Console\StorEvil.csproj">
       <Project>{FBFE96FF-9D88-48DB-80F2-C79840BFDFA2}</Project>
       <Name>StorEvil</Name>

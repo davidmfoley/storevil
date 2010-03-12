@@ -133,7 +133,6 @@
     <Compile Include="Parsing\StoryParser.cs" />
     <Compile Include="Context\StoryToContextMapper.cs" />
     <Compile Include="Utility\StringUtility.cs" />
-    <Compile Include="Utility\TestExtensionMethods.cs" />
     <Compile Include="Nunit\NUnitTestMethodGenerator.cs" />
     <Compile Include="Context\WordFilters\TextMatchWordFilter.cs" />
     <Compile Include="Context\WordFilters\WordFilter.cs" />

@@ -2,7 +2,9 @@ using System;
 using Rhino.Mocks;
 using StorEvil.Context;
 using StorEvil.Core;
+using StorEvil.Interpreter;
 using StorEvil.Parsing;
+using StorEvil.Utility;
 
 namespace StorEvil.InPlace
 {
@@ -15,9 +17,10 @@ namespace StorEvil.InPlace
         protected void RunStory(Story story)
         {
             ResultListener = MockRepository.GenerateStub<IResultListener>();
+            new ExtensionMethodHandler().AddAssembly(typeof(TestExtensionMethods).Assembly);
 
             Context = new StoryContext(typeof (T));
-            Runner = new InPlaceRunner(ResultListener, new ScenarioPreprocessor());
+            Runner = new InPlaceRunner(ResultListener, new ScenarioPreprocessor(), new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())));
             Runner.HandleStory(story, Context);
         }
 

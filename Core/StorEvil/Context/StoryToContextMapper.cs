@@ -4,12 +4,14 @@ using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using StorEvil.Core;
+using StorEvil.Interpreter;
 
 namespace StorEvil.Context
 {
     public class StoryToContextMapper : IStoryToContextMapper
     {
         private readonly List<Type> _contextTypes = new List<Type>();
+        private ExtensionMethodHandler _extensionMethodHandler = new ExtensionMethodHandler();
 
         public void AddContext<T>() where T : class
         {
@@ -39,6 +41,7 @@ namespace StorEvil.Context
         {
             var a = Assembly.LoadFrom(pathToAssembly);
             AddAssembly(a);
+            _extensionMethodHandler.AddAssembly(a);
         }
 
         public StoryContext GetContextForStory(Story story)

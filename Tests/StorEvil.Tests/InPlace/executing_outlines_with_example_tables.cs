@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Context;
+using StorEvil.Interpreter;
 using StorEvil.Parsing;
 using StorEvil.Utility;
 
@@ -33,7 +34,7 @@ Examples:
             var story = new StoryParser().Parse(storyText, null);
             Context = new StoryContext(typeof (InPlaceRunnerTableTestContext));
 
-            new InPlaceRunner(ResultListener, new ScenarioPreprocessor()).HandleStory(story, Context);
+            new InPlaceRunner(ResultListener, new ScenarioPreprocessor(), new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()))).HandleStory(story, Context);
         }
 
         [Test]

@@ -59,6 +59,10 @@
     <None Include="Stories\static_structures.feature" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\StorEvil.Assertions\StorEvil.Assertions.csproj">
+      <Project>{92312C44-8881-41DD-8075-1284740FFF9F}</Project>
+      <Name>StorEvil.Assertions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\StorEvil\StorEvil.Core.csproj">
       <Project>{B86235CA-045F-4222-997C-A65E966C6F9B}</Project>
       <Name>StorEvil.Core</Name>

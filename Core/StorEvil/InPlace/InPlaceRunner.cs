@@ -21,11 +21,11 @@ namespace StorEvil.InPlace
         private string _lastSignificantFirstWord;
         private object _lastResult;
 
-        public InPlaceRunner(IResultListener listener, IScenarioPreprocessor preprocessor)
+        public InPlaceRunner(IResultListener listener, IScenarioPreprocessor preprocessor, ScenarioInterpreter scenarioInterpreter)
         {
             _listener = listener;
             _preprocessor = preprocessor;
-            _scenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()));
+            _scenarioInterpreter = scenarioInterpreter; // new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()));
             _memberInvoker = new MemberInvoker();
         }
 

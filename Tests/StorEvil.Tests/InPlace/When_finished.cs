@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using Rhino.Mocks;
+using StorEvil.Interpreter;
 using StorEvil.Parsing;
 
 namespace StorEvil.InPlace
@@ -14,7 +15,7 @@ namespace StorEvil.InPlace
         {
             ResultListener = MockRepository.GenerateStub<IResultListener>();
 
-            var inPlaceRunner = new InPlaceRunner(ResultListener, new ScenarioPreprocessor());
+            var inPlaceRunner = new InPlaceRunner(ResultListener, new ScenarioPreprocessor(), new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())));
             inPlaceRunner.Finished();
         }
 
