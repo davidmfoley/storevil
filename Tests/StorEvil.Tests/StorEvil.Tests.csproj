@@ -64,6 +64,7 @@
     <Compile Include="Console\Argument_parsing.cs" />
     <Compile Include="Console\InitJob_Specs.cs" />
     <Compile Include="InPlace\executing_scenario_with_typed_array.cs" />
+    <Compile Include="Parsing\ScenarioLineParser_Specs.cs" />
     <Compile Include="Utility\container_tests.cs" />
     <Compile Include="Configuration\FilesystemConfigReaderTests.cs" />
     <Compile Include="Parsing\Filtering_stories_by_file_extension.cs" />

@@ -7,12 +7,10 @@ namespace StorEvil.Parsing
 {
     public class ScenarioLineParser
     {
-        private static readonly Regex ExtractWords = new Regex(@"[A-Za-z0-9\$@\./]+");
+        private static readonly Regex ExtractWordsRegex = new Regex(@"\"".*?\""|[A-Za-z0-9\$@\./]+");
 
         public List<string> ExtractWordsFromScenarioLine(string line)
         {
-            var words = new List<String>();
-
             string table = null;
 
             if (HasTable(line))
@@ -20,14 +18,27 @@ namespace StorEvil.Parsing
                 table = line.After("\r\n");
                 line = line.Until("\r\n");
             }
-
-            // split into words
-            foreach (Match m in ExtractWords.Matches(line))
-                words.Add(m.Value);
+            var words = ExtractWords(line);
 
             if (table != null)
                 words.Add(table);
 
+            return words;
+        }
+
+        private List<string> ExtractWords(string line)
+        {
+            var words = new List<String>();
+
+            // split into words
+            foreach (Match m in ExtractWordsRegex.Matches(line))
+            {
+                var word = m.Value;
+                if (word.StartsWith("\"") && word.EndsWith("\""))
+                    words.Add(word.Substring(1, word.Length-2));
+                else
+                    words.Add(word);
+            }
             return words;
         }
 
