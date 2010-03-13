@@ -4,6 +4,7 @@ using System.Linq;
 using System.Xml;
 using NUnit.Framework;
 using StorEvil.Core;
+using StorEvil.InPlace;
 using StorEvil.Utility;
 
 namespace StorEvil.ResultListeners.XmlReportListener_Specs
@@ -167,7 +168,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
             Writer.StoryStarting(new Story("id", "summary", new IScenario[] {testScenario}));
             Writer.ScenarioStarting(testScenario);
             Writer.Success(testScenario, "line1");
-            Writer.ScenarioFailed(testScenario, "successPart", "failedPart", "failureMessage");
+            Writer.ScenarioFailed(new ScenarioFailureInfo(testScenario, "successPart", "failedPart", "failureMessage"));
             Writer.Finished();
         }
 
@@ -224,7 +225,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
             Writer.ScenarioSucceeded(sucessScenario);
 
             Writer.ScenarioStarting(failureScenario);
-            Writer.ScenarioFailed(failureScenario, "foo", "bar", "failed");
+            Writer.ScenarioFailed(new ScenarioFailureInfo(failureScenario, "foo", "bar", "failed"));
 
             Writer.Finished();
         }
@@ -284,7 +285,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
             Writer.StoryStarting(new Story("id", "summary", new IScenario[] {failureScenario}));
 
             Writer.ScenarioStarting(failureScenario);
-            Writer.ScenarioFailed(failureScenario, "foo", "bar", "failed");
+            Writer.ScenarioFailed(new ScenarioFailureInfo(failureScenario, "foo", "bar", "failed"));
 
             Writer.Finished();
         }
@@ -339,7 +340,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
             Writer.ScenarioStarting(scenario);
 
             Writer.Success(scenario, line);
-            Writer.CouldNotInterpret(scenario, line);
+            Writer.CouldNotInterpret(new CouldNotInterpretInfo(scenario, line));
 
             Writer.Finished();
         }
@@ -376,7 +377,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
             Writer.ScenarioStarting(sucessScenario);
 
             Writer.Success(sucessScenario, line);
-            Writer.ScenarioFailed(sucessScenario, line, line, line);
+            Writer.ScenarioFailed(new ScenarioFailureInfo(sucessScenario, line, line, line));
 
             Writer.Finished();
         }

@@ -5,6 +5,8 @@ using StorEvil.Utility;
 
 namespace StorEvil.ResultListeners.SparkReportGenerator_Specs
 {
+    
+
     [TestFixture]
     public class Dealing_with_missing_template_file_setting
     {

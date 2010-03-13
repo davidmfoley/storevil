@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Core;
+using StorEvil.ResultListeners;
 
 namespace StorEvil.InPlace
 {
@@ -22,7 +23,7 @@ namespace StorEvil.InPlace
         public void Should_fail()
         {
             ResultListener.AssertWasCalled(
-                x => x.ScenarioFailed(Any<Scenario>(), Any<string>(), Any<string>(), Any<string>()));
+                x => x.ScenarioFailed(Any<ScenarioFailureInfo>()));
         }
     }
 }

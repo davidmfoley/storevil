@@ -6,6 +6,7 @@ using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Interpreter;
 using StorEvil.Parsing;
+using StorEvil.ResultListeners;
 using StorEvil.Utility;
 
 namespace StorEvil.InPlace
@@ -74,7 +75,7 @@ namespace StorEvil.InPlace
 
             if (chain == null)
             {
-                _listener.CouldNotInterpret(scenario, line);
+                _listener.CouldNotInterpret(new CouldNotInterpretInfo(scenario, line));
                 return false;
             }
 
@@ -98,8 +99,7 @@ namespace StorEvil.InPlace
                 }
                 catch (Exception ex)
                 {
-                    _listener.ScenarioFailed(scenario, successPart.Trim(), invocation.MatchedText,
-                                             GetExceptionMessage(ex));
+                    _listener.ScenarioFailed(new ScenarioFailureInfo(scenario, successPart.Trim(), invocation.MatchedText, GetExceptionMessage(ex)));
                     return false;
                 }
             }

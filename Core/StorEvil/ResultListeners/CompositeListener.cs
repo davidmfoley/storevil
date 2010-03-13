@@ -32,14 +32,14 @@ namespace StorEvil.ResultListeners
             AllListeners(x => x.ScenarioStarting(scenario));
         }
 
-        public void ScenarioFailed(Scenario scenario, string successPart, string failedPart, string message)
+        public void ScenarioFailed(ScenarioFailureInfo scenarioFailureInfo)
         {
-            AllListeners(x => x.ScenarioFailed(scenario, successPart, failedPart, message));
+            AllListeners(x => x.ScenarioFailed(scenarioFailureInfo));
         }
 
-        public void CouldNotInterpret(Scenario scenario, string line)
+        public void CouldNotInterpret(CouldNotInterpretInfo couldNotInterpretInfo)
         {
-            AllListeners(x => x.CouldNotInterpret(scenario, line));
+            AllListeners(x => x.CouldNotInterpret(couldNotInterpretInfo));
         }
 
         public void Success(Scenario scenario, string line)

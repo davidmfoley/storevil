@@ -54,10 +54,10 @@ namespace StorEvil.ResultListeners
             _currentStoryElement.AppendChild(_currentScenarioElement);
         }
 
-        public void ScenarioFailed(Scenario scenario, string successPart, string failedPart, string message)
+        public void ScenarioFailed(ScenarioFailureInfo scenarioFailureInfo)
         {
-            AddLineToCurrentScenario(successPart, StatusNames.Success);
-            AddLineToCurrentScenario(failedPart, StatusNames.Failure);
+            AddLineToCurrentScenario(scenarioFailureInfo.SuccessPart, StatusNames.Success);
+            AddLineToCurrentScenario(scenarioFailureInfo.FailedPart, StatusNames.Failure);
 
             SetStatus(_currentScenarioElement, StatusNames.Failure);
             SetStatus(_currentStoryElement, StatusNames.Failure);
@@ -81,9 +81,9 @@ namespace StorEvil.ResultListeners
             element.SetAttribute(XmlNames.Status, status);
         }
 
-        public void CouldNotInterpret(Scenario scenario, string line)
+        public void CouldNotInterpret(CouldNotInterpretInfo couldNotInterpretInfo)
         {
-            AddLineToCurrentScenario(line, StatusNames.NotUnderstood);
+            AddLineToCurrentScenario(couldNotInterpretInfo.Line, StatusNames.NotUnderstood);
             SetStatus(_currentScenarioElement, StatusNames.NotUnderstood);
             SetStatus(_currentStoryElement, StatusNames.Failure);
         }

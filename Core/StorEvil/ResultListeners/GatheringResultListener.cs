@@ -40,19 +40,19 @@ namespace StorEvil.ResultListeners
             return Result.Stories.Last();
         }
 
-        public void ScenarioFailed(Scenario scenario, string successPart, string failedPart, string message)
+        public void ScenarioFailed(ScenarioFailureInfo scenarioFailureInfo)
         {
-            CurrentScenario().FailureMessage = message;
+            CurrentScenario().FailureMessage = scenarioFailureInfo.Message;
             CurrentScenario().Status = ScenarioStatus.Failed;
-            if (!string.IsNullOrEmpty(successPart))
-                CurrentScenario().AddLine(ScenarioStatus.Passed, successPart);
-            CurrentScenario().AddLine(ScenarioStatus.Failed, failedPart);
+            if (!string.IsNullOrEmpty(scenarioFailureInfo.SuccessPart))
+                CurrentScenario().AddLine(ScenarioStatus.Passed, scenarioFailureInfo.SuccessPart);
+            CurrentScenario().AddLine(ScenarioStatus.Failed, scenarioFailureInfo.FailedPart);
         }
 
-        public void CouldNotInterpret(Scenario scenario, string line)
+        public void CouldNotInterpret(CouldNotInterpretInfo couldNotInterpretInfo)
         {
             CurrentScenario().Status = ScenarioStatus.Pending;
-            CurrentScenario().AddLine(ScenarioStatus.Pending, line);
+            CurrentScenario().AddLine(ScenarioStatus.Pending, couldNotInterpretInfo.Line);
         }
 
         public void Success(Scenario scenario, string line)

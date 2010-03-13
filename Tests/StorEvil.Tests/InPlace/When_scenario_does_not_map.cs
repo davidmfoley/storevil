@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Core;
+using StorEvil.ResultListeners;
 
 namespace StorEvil.InPlace
 {
@@ -21,7 +22,7 @@ namespace StorEvil.InPlace
         [Test]
         public void Notifies_listener()
         {
-            ResultListener.AssertWasCalled(x => x.CouldNotInterpret(TestScenario, ScenarioText));
+            ResultListener.AssertWasCalled(x => x.CouldNotInterpret(Any<CouldNotInterpretInfo>()));
         }
     }
 }

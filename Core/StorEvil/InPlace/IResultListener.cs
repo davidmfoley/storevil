@@ -1,7 +1,5 @@
-using System.Collections.Generic;
-using System.Linq;
 using StorEvil.Core;
-using StorEvil.Utility;
+using StorEvil.ResultListeners;
 
 namespace StorEvil.InPlace
 {
@@ -9,68 +7,68 @@ namespace StorEvil.InPlace
     {
         void StoryStarting(Story story);
         void ScenarioStarting(Scenario scenario);
-        void ScenarioFailed(Scenario scenario, string successPart, string failedPart, string message);
-        void CouldNotInterpret(Scenario scenario, string line);
+        void ScenarioFailed(ScenarioFailureInfo scenarioFailureInfo);
+        void CouldNotInterpret(CouldNotInterpretInfo couldNotInterpretInfo);
         void Success(Scenario scenario, string line);
         void ScenarioSucceeded(Scenario scenario);
         void Finished();
     }
 
-    public class ImplementationHelper
+    public class ScenarioFailureInfo
     {
-        public string Suggest(string s)
+        private Scenario _scenario;
+        private string _successPart;
+        private string _failedPart;
+        private string _message;
+
+        public ScenarioFailureInfo(Scenario scenario, string successPart, string failedPart, string message)
         {
-            var hasTable = (s.Contains("\r\n|"));
-            if (hasTable)
-            {
-                s = s.Until("\r\n");
-            }
-            var pieces = s.Split().Where(p=>p.Trim() != "");
-
-            var argTypes = new List<string>();
-            var method = pieces.First();
-          
-            foreach (var piece in pieces.Skip(1))
-            {
-                if (IsInteger(piece))
-                {
-                    method += "_arg" + argTypes.Count;
-                    argTypes.Add("int");                    
-                }
-                else if (IsQuotedString(piece))
-                {                    
-                    method += "_arg" + argTypes.Count;
-                    argTypes.Add("string");
-                }
-                else
-                {
-                    method += "_" + piece;
-                }
-            }
-                    
-            string argText = "";
-            int currentArgIndex = 0;
-            foreach (var argType in argTypes)
-            {
-                argText += ", " + argType + " arg" + currentArgIndex;
-            }
-
-            if (hasTable)
-                argText += ", string[][] tableData";
-
-            argText += " ";
-              var code = "public void " + method + "(" + argText.Substring(1).Trim() + ") { }";
-            return code;
+            _scenario = scenario;
+            _successPart = successPart;
+            _failedPart = failedPart;
+            _message = message;
         }
 
-        private bool IsQuotedString(string piece)
+        public Scenario Scenario
         {
-            return piece.StartsWith("\"") && piece.EndsWith("\"");
+            get { return _scenario; }
         }
 
-        private bool IsInteger(string piece)
+        public string SuccessPart
         {
-            return piece.All(c => char.IsDigit(c));
+            get { return _successPart; }
         }
-    }    
+
+        public string FailedPart
+        {
+            get { return _failedPart; }
+        }
+
+        public string Message
+        {
+            get { return _message; }
+        }
+    }
+
+    public class CouldNotInterpretInfo
+    {
+        private Scenario _scenario;
+        private string _line;
+
+        public CouldNotInterpretInfo(Scenario scenario, string line)
+        {
+            _scenario = scenario;
+            _line = line;
+        }
+
+        public Scenario Scenario
+        {
+            get { return _scenario; }
+        }
+
+        public string Line
+        {
+            get { return _line; }
+        }
+    }
 }
