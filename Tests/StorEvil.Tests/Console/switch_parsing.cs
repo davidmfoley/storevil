@@ -4,7 +4,7 @@ using NUnit.Framework;
 using StorEvil.Configuration;
 using StorEvil.ResultListeners;
 using StorEvil.Utility;
-using Expect = StorEvil.Utility.Expect;
+
 
 namespace StorEvil.Console
 {

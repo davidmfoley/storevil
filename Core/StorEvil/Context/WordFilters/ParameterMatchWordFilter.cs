@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Reflection;
 
 namespace StorEvil.Context.WordFilters
@@ -26,6 +27,11 @@ namespace StorEvil.Context.WordFilters
                 return _paramInfo.ParameterType.IsArray;
             }
         }
+
+        public bool IsMultipleWordMatcher { get
+        {
+            return _paramInfo.GetCustomAttributes(typeof (MultipleWordsAttribute), false).Any();
+        }}
 
         public bool IsMatch(string s)
         {

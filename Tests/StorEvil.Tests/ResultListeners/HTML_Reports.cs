@@ -15,12 +15,7 @@ namespace StorEvil.ResultListeners.SparkReportGenerator_Specs
             var generator = new SparkReportGenerator(fakeFileWriter, "C:\\this\\does\\not\\exist.spark");
 
             Expect.ThisToThrow<TemplateNotFoundException>(() => generator.Handle(new GatheredResultSet()));
-        }
-
-        [Test, Ignore("Embedded tempalte not yet supported")]
-        public void When_template_file_not_provided_uses_the_embedded_default()
-        {
-        }
+        }       
     }
 
     public abstract class HTML_Report

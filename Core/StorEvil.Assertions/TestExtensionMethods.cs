@@ -22,6 +22,7 @@ namespace StorEvil.Utility
     /// </summary>
     public static class TestExtensionMethods
     {
+        private static readonly ParameterConverter _parameterConverter = new ParameterConverter();
         public static void ShouldEqual(this object actual, object expected)
         {
             if (actual == null && expected == null)
@@ -45,7 +46,7 @@ namespace StorEvil.Utility
         private static object ConvertToType(Type type, object expected)
         {
             //TODO: break this out or use TypeConverters
-            return new ParameterConverter().Convert(expected.ToString(), type);
+            return _parameterConverter.Convert(expected.ToString(), type);
         }
 
         public static void ShouldBe(this object actual, object expected)
@@ -86,6 +87,21 @@ namespace StorEvil.Utility
             Assert.That(actual.CompareTo(expected) > 0);
         }
 
+        public static void ShouldBeLessThan<T>(this T actual, T expected) where T : IComparable
+        {
+            Assert.That(actual.CompareTo(expected) < 0);
+        }
+
+        public static void ShouldBeLessThanOrEqualTo<T>(this T actual, T expected) where T : IComparable
+        {
+            Assert.That(actual.CompareTo(expected) <= 0);
+        }
+
+        public static void ShouldBeGreaterThanOrEqualTo<T>(this T actual, T expected) where T : IComparable
+        {
+            Assert.That(actual.CompareTo(expected) >= 0);
+        }
+
         public static void ShouldMatch(this string actual, string regex)
         {
             bool isMatch = Regex.IsMatch(actual, regex, RegexOptions.Singleline);
@@ -93,26 +109,5 @@ namespace StorEvil.Utility
         }
     }
 
-    public static class Expect
-    {
-        public static T ThisToThrow<T>(Action action) where T : Exception
-        {
-            try
-            {
-                action();
-            }
-            catch (T ex)
-            {
-                return ex;
-            }
-            catch (Exception exception)
-            {
-                Assert.Fail("Unexpected exception thrown: expected " + typeof (T).Name + " but caught " +
-                            exception.GetType().Name + "\n" + exception);
-            }
-            Assert.Fail("Expected exception " + typeof(T).Name + " was not thrown.");
-
-            return null;
-        }
-    }
+   
 }
