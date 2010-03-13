@@ -146,6 +146,8 @@ namespace StorEvil.ResultListeners.GatheringResultListener_Specs
         {
             FirstScenario().Id.ShouldEqual("scenario-id");
         }
+
+        
     }
 
     [TestFixture]
@@ -212,12 +214,14 @@ namespace StorEvil.ResultListeners.GatheringResultListener_Specs
     [TestFixture]
     public class When_a_story_that_can_not_be_interpreted_is_executed : GatheringResultListener_Spec
     {
+        private const string TestSuggestion = "void test_suggestion() {}";
+
         protected override void SimulateRunner()
         {
             SimulateStoryStarting("storyId", "storySummary");
             var testScenario = new Scenario();
             Listener.ScenarioStarting(testScenario);
-            Listener.CouldNotInterpret(new CouldNotInterpretInfo(testScenario, "foo bar baz"));
+            Listener.CouldNotInterpret(new CouldNotInterpretInfo(testScenario, "foo bar baz", TestSuggestion));
         }
 
         [Test]
@@ -231,6 +235,12 @@ namespace StorEvil.ResultListeners.GatheringResultListener_Specs
         {
             FirstScenario().Lines.Count().ShouldEqual(1);
             FirstScenario().Lines.First().Status.ShouldEqual(ScenarioStatus.Pending);
+        }
+
+        [Test]
+        public void Suggestion_is_populated()
+        {
+            FirstScenario().Suggestion.ShouldEqual(TestSuggestion);
         }
     }
 

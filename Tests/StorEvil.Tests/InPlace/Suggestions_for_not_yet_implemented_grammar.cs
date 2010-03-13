@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using NUnit.Framework;
+using StorEvil.Utility;
 
 namespace StorEvil.InPlace
 {
@@ -7,6 +8,13 @@ namespace StorEvil.InPlace
     public class Suggestions_for_not_yet_implemented_grammar
     {
         private readonly ImplementationHelper Helper = new ImplementationHelper();
+
+        [Test]
+        public void Includes_comment_with_original_text()
+        {
+            var result = Helper.Suggest("an unimplemented method");
+            result.ShouldContain("// an unimplemented method");
+        }
 
         [Test]
         public void Should_suggest_box_car_name_for_simple_case()
@@ -25,8 +33,15 @@ namespace StorEvil.InPlace
         [Test]
         public void Should_suggest_string_param()
         {
+            var result = Helper.Suggest("a user with \"dave\" as a name");
+            ShouldMatch(result, "a_user_with_arg0_as_a_name", "string", "arg0");
+        }
+
+        [Test]
+        public void Should_not_include_arg_in_name_if_trailing()
+        {
             var result = Helper.Suggest("a user named \"dave\"");
-            ShouldMatch(result, "a_user_named_arg0", "string", "arg0");
+            ShouldMatch(result, "a_user_named", "string", "arg0");
         }
 
         [Test]

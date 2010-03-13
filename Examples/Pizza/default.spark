@@ -9,8 +9,7 @@
 		}
 		
 		div  {
-			padding:5x;
-			
+			padding:5x;			
 		}
 		
 		h1, h2, h3 {
@@ -24,7 +23,7 @@
 			outline: 1px solid #ccc;
 			margin-bottom:10px;
 		}
-		.scenario {	
+		.scenario, .suggestions {	
 			background: #fff;
 			outline: 1px solid #ccc;
 			padding:5px 5px 5px 15px;
@@ -41,6 +40,10 @@
 		}
 		.scenario-pending,.summary-pending	{
 			background-color:#fd7;
+		}
+		
+		.suggestions h3 {
+			background: #ccc;
 		}
 		
 		.line-failed	{
@@ -82,7 +85,7 @@
         </div>		
         <div class="stories-wrapper" if="Model.HasAnyStories()">
             <div class="story" each="var story in Model.Stories">    
-                <h2>${story.Summary}</h2> 
+                <h2>${story.Summary.Replace("\r\n","<br/>")}</h2> 
 				<div class="summary">
 					<div class="summary-passed" if="story.PassedScenarios.Count > 0">
 						${story.PassedScenarios.Count} Passed
@@ -97,13 +100,22 @@
 				<div class="scenario" each="var scenario in story.Scenarios">
 					<h3 class="scenario-${scenario.Status.ToString().ToLower()}">${scenario.Name} - ${scenario.Status.ToString()}</h3>
 					<for each="var line in scenario.Lines">
-						<div class="line-${line.Status.ToString().ToLower()}">
-							${line.Text}<br/>
+						<div class="line-${line.Status.ToString().ToLower()}">						
+							${line.Text.Replace("\r\n","<br/>")}<br/>
 						</div>
 					</for>
 					
 					<div class="failure-message" if="!string.IsNullOrEmpty(scenario.FailureMessage)">
 						${scenario.FailureMessage}
+					</div>
+				</div>
+				
+				<div class="suggestions" if="Model.Suggestions.Count > 0">
+					<h3>Suggestions for implementing pending steps</h3>
+					<div class="suggestion" each="var suggestion in Model.Suggestions">
+						<code><pre>
+${suggestion}
+						</pre></code>
 					</div>
 				</div>
             </div>

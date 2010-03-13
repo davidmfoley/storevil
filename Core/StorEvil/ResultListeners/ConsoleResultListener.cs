@@ -29,7 +29,8 @@ namespace StorEvil.ResultListeners
         public void CouldNotInterpret(CouldNotInterpretInfo couldNotInterpretInfo)
         {
             ColorWrite(ConsoleColor.Yellow, couldNotInterpretInfo.Line + " -- Could not interpret");
-            ColorWrite(ConsoleColor.Gray, new ImplementationHelper().Suggest(couldNotInterpretInfo.Line));
+
+            ColorWrite(ConsoleColor.Gray, couldNotInterpretInfo.Suggestion);
         }
 
         public void Success(Scenario scenario, string line)

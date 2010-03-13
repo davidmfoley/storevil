@@ -53,6 +53,7 @@ namespace StorEvil.ResultListeners
         {
             CurrentScenario().Status = ScenarioStatus.Pending;
             CurrentScenario().AddLine(ScenarioStatus.Pending, couldNotInterpretInfo.Line);
+            CurrentScenario().Suggestion = couldNotInterpretInfo.Suggestion;
         }
 
         public void Success(Scenario scenario, string line)
@@ -103,19 +104,33 @@ namespace StorEvil.ResultListeners
         {
             get { return ScenariosByStatus(ScenarioStatus.Pending); }
         }
+
         public IList<ScenarioResult> FailedScenarios
         {
             get { return ScenariosByStatus(ScenarioStatus.Failed); }
         }
+
         public IList<ScenarioResult> PassedScenarios
         {
             get { return ScenariosByStatus(ScenarioStatus.Passed); }
         }
+
         public List<ScenarioResult> ScenariosByStatus(ScenarioStatus status)
         {
             return Scenarios.Where(s => s.Status == status).ToList();
         }
-        
+
+        public IList<string> Suggestions
+        {
+            get
+            {
+                return Scenarios
+                    .Select(s => s.Suggestion)
+                    .Where(s => s != null)
+                    .Distinct()
+                    .ToList();
+            }
+        }
 
         public bool HasAnyStories()
         {
@@ -154,14 +169,17 @@ namespace StorEvil.ResultListeners
         {
             get { return ScenariosByStatus(ScenarioStatus.Pending); }
         }
+
         public IList<ScenarioResult> FailedScenarios
         {
             get { return ScenariosByStatus(ScenarioStatus.Failed); }
         }
+
         public IList<ScenarioResult> PassedScenarios
         {
             get { return ScenariosByStatus(ScenarioStatus.Passed); }
         }
+
         public List<ScenarioResult> ScenariosByStatus(ScenarioStatus status)
         {
             return Scenarios.Where(s => s.Status == status).ToList();
@@ -183,6 +201,8 @@ namespace StorEvil.ResultListeners
         public string Name { get; set; }
 
         public string Id { get; set; }
+
+        public string Suggestion { get; set; }
 
         public void AddLine(ScenarioStatus status, string text)
         {

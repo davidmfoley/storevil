@@ -1,3 +1,4 @@
+using System;
 using StorEvil.Core;
 using StorEvil.ResultListeners;
 
@@ -52,23 +53,21 @@ namespace StorEvil.InPlace
 
     public class CouldNotInterpretInfo
     {
-        private Scenario _scenario;
-        private string _line;
+        public string Suggestion { get; set; }
 
         public CouldNotInterpretInfo(Scenario scenario, string line)
         {
-            _scenario = scenario;
-            _line = line;
+            Scenario = scenario;
+            Line = line;
         }
 
-        public Scenario Scenario
+        public CouldNotInterpretInfo(Scenario scenario, string line, string suggestion) : this(scenario, line)
         {
-            get { return _scenario; }
+            Suggestion = suggestion;
         }
 
-        public string Line
-        {
-            get { return _line; }
-        }
+        public Scenario Scenario { get;  set; }
+
+        public string Line { get;  set; }
     }
 }

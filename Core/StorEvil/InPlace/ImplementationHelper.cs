@@ -13,21 +13,25 @@ namespace StorEvil.InPlace
             {
                 s = s.Until("\r\n");
             }
-            var pieces = s.Split().Where(p=>p.Trim() != "");
+            var pieces = s.Split().Where(p => p.Trim() != "");
 
             var argTypes = new List<string>();
             var method = pieces.First();
-          
+            int index = 1;
+
             foreach (var piece in pieces.Skip(1))
             {
+                bool isLastPiece = (++index == pieces.Count());
                 if (IsInteger(piece))
                 {
-                    method += "_arg" + argTypes.Count;
-                    argTypes.Add("int");                    
+                    if (!isLastPiece)
+                        method += "_arg" + argTypes.Count;
+                    argTypes.Add("int");
                 }
                 else if (IsQuotedString(piece))
-                {                    
-                    method += "_arg" + argTypes.Count;
+                {
+                    if (!isLastPiece)
+                        method += "_arg" + argTypes.Count;
                     argTypes.Add("string");
                 }
                 else
@@ -35,7 +39,7 @@ namespace StorEvil.InPlace
                     method += "_" + piece;
                 }
             }
-                    
+
             string argText = "";
             int currentArgIndex = 0;
             foreach (var argType in argTypes)
@@ -48,7 +52,8 @@ namespace StorEvil.InPlace
 
             argText += " ";
             var code = "public void " + method + "(" + argText.Substring(1).Trim() + ") { }";
-            return code;
+
+            return "// " + s + "\r\n" + code;
         }
 
         private bool IsQuotedString(string piece)

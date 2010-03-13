@@ -75,7 +75,9 @@ namespace StorEvil.InPlace
 
             if (chain == null)
             {
-                _listener.CouldNotInterpret(new CouldNotInterpretInfo(scenario, line));
+                ImplementationHelper _implementationHelper = new ImplementationHelper();
+                var suggestion = _implementationHelper.Suggest(line);
+                _listener.CouldNotInterpret(new CouldNotInterpretInfo(scenario, line, suggestion));
                 return false;
             }
 
