@@ -33,10 +33,25 @@ namespace StorEvil.StubGeneration
                 {
                     if (null == _scenarioInterpreter.GetChain(scenarioContext, line))
                     {
-                        _suggestions.Add(_implementationHelper.Suggest(line) +"\r\n");
+                        var sugesstedCode = _implementationHelper.Suggest(line) + "\r\n";
+                        if (!AlreadyHaveSuggestion(sugesstedCode))
+                        {
+                            
+                            _suggestions.Add(sugesstedCode);
+                        }
                     }
                 }
             }
+        }
+
+        private bool AlreadyHaveSuggestion(string suggestedCode)
+        {
+            return _suggestions.Select(s=>ExtractDeclaration(s)).Any(x => x == ExtractDeclaration(suggestedCode));
+        }
+
+        private string ExtractDeclaration(string suggestedCode)
+        {
+            return suggestedCode.Split(new[] { "\r\n"}, StringSplitOptions.None)[1];
         }
 
         private IEnumerable<string> GetLines(IScenario scenario)

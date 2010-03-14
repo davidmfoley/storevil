@@ -28,7 +28,11 @@ namespace StorEvil.NUnit
                 new StubGenerator(new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())),
                                   new ImplementationHelper(), FakeWriter);
 
-            TestStory = new Story("foo", "", new[] { new Scenario("", "", new[] { "first line", "second line" }) });
+            TestStory = new Story("foo", "", new[]
+                                                 {
+                                                     new Scenario("", "", new[] { "first line", "second line" }),
+                                                      new Scenario("", "", new[] { "first line", "second line", "third line" })
+                                                 });
 
             Generator.HandleStory(TestStory, new StoryContext());
             Generator.Finished();
@@ -41,6 +45,12 @@ namespace StorEvil.NUnit
         {
             Suggestions.ShouldContain("first_line()");
             Suggestions.ShouldContain("second_line()");
+        }
+
+        [Test]
+        public void Should_only_suggest_each_method_once()
+        {
+            Suggestions.ShouldNotMatch("first_line\\(\\).+first_line\\(");           
         }
 
         [Test]

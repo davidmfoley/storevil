@@ -107,6 +107,12 @@ namespace StorEvil.Utility
             bool isMatch = Regex.IsMatch(actual, regex, RegexOptions.Singleline);
             Assert.IsTrue(isMatch, "Expected '" + actual + "' to match pattern: '" + regex + "'");
         }
+
+        public static void ShouldNotMatch(this string actual, string regex)
+        {
+            bool isMatch = Regex.IsMatch(actual, regex, RegexOptions.Singleline);
+            Assert.IsFalse(isMatch, "Expected '" + actual + "' not to match pattern: '" + regex + "'");
+        }
     }
 
    
