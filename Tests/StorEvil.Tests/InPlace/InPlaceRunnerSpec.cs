@@ -60,6 +60,11 @@ namespace StorEvil.InPlace
             RegexMatchParamValue = param;
         }
 
+        public void Pending_scenario_step()
+        {
+           ScenarioStatus.Pending();
+        }
+
         public void test_param_with_multiple_words([MultipleWords] string param)
         {
             MultiWordParam = param;

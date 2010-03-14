@@ -7,7 +7,6 @@ using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Interpreter;
 using StorEvil.Parsing;
-using StorEvil.Utility;
 
 namespace StorEvil.InPlace
 {
@@ -78,14 +77,14 @@ namespace StorEvil.InPlace
                 return false;
             }
 
-            if (!ExecuteChain(scenario, storyContext, chain))
+            if (!ExecuteChain(scenario, storyContext, chain, line))
                 return false;
 
             _listener.Success(scenario, line);
             return true;
         }
 
-        private bool ExecuteChain(Scenario scenario, ScenarioContext storyContext, InvocationChain chain)
+        private bool ExecuteChain(Scenario scenario, ScenarioContext storyContext, InvocationChain chain, string line)
         {
             string successPart = "";
             _lastResult = null;
@@ -96,10 +95,18 @@ namespace StorEvil.InPlace
                     InvokeContextMember(storyContext, invocation);
                     successPart += invocation.MatchedText + " ";
                 }
-                catch (Exception ex)
+                
+                catch (TargetInvocationException ex)
                 {
-                    _listener.ScenarioFailed(new ScenarioFailureInfo(scenario, successPart.Trim(),
-                                                                     invocation.MatchedText, GetExceptionMessage(ex)));
+                    if(ex.InnerException is ScenarioPendingException) {
+                        _listener.ScenarioPending(new ScenarioPendingInfo(scenario, line));
+                    
+                    }
+                    else
+                    {
+                        _listener.ScenarioFailed(new ScenarioFailureInfo(scenario, successPart.Trim(), invocation.MatchedText, GetExceptionMessage(ex)));
+                    }
+                    
                     return false;
                 }
             }
@@ -120,7 +127,7 @@ namespace StorEvil.InPlace
             var chain = _scenarioInterpreter.GetChain(storyContext, line);
 
             return chain;
-        }   
+        }
 
         private static string GetExceptionMessage(Exception exception)
         {

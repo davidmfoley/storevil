@@ -51,7 +51,7 @@ namespace StorEvil.InPlace
                 argText += ", string[][] tableData";
 
             argText += " ";
-            var code = "public void " + method + "(" + argText.Substring(1).Trim() + ") { }";
+            var code = "public void " + method + "(" + argText.Substring(1).Trim() + ") { StorEvil.ScenarioStatus.Pending(); }";
 
             return "// " + s + "\r\n" + code;
         }

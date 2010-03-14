@@ -25,4 +25,25 @@ namespace StorEvil.InPlace
             ResultListener.AssertWasCalled(x => x.ScenarioPending(Any<ScenarioPendingInfo>()));
         }
     }
+
+    [TestFixture]
+    public class When_scenario_step_is_pending : InPlaceRunnerSpec<InPlaceRunnerTestContext>
+    {
+        private readonly Scenario TestScenario = new Scenario("test", new[] { ScenarioText });
+        private const string ScenarioText = "Pending scenario step";
+
+        [SetUp]
+        public void SetupContext()
+        {
+            var story = new Story("test", "summary", new[] { TestScenario });
+
+            RunStory(story);
+        }
+
+        [Test]
+        public void Notifies_listener()
+        {
+            ResultListener.AssertWasCalled(x => x.ScenarioPending(Any<ScenarioPendingInfo>()));
+        }
+    }
 }

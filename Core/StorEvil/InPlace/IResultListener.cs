@@ -53,8 +53,7 @@ namespace StorEvil.InPlace
 
     public class ScenarioPendingInfo
     {
-        public string Suggestion { get; set; }
-
+        
         public ScenarioPendingInfo(Scenario scenario, string line)
         {
             Scenario = scenario;
@@ -64,9 +63,13 @@ namespace StorEvil.InPlace
         public ScenarioPendingInfo(Scenario scenario, string line, string suggestion) : this(scenario, line)
         {
             Suggestion = suggestion;
+            CouldNotInterpret = true;
         }
 
+        public bool CouldNotInterpret { get; set; }
+
         public Scenario Scenario { get;  set; }
+        public string Suggestion { get; set; }
 
         public string Line { get;  set; }
     }

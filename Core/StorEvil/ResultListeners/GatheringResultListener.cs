@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using StorEvil.Core;
@@ -53,7 +54,8 @@ namespace StorEvil.ResultListeners
         {
             CurrentScenario().Status = ScenarioStatus.Pending;
             CurrentScenario().AddLine(ScenarioStatus.Pending, scenarioPendingInfo.Line);
-            CurrentScenario().Suggestion = scenarioPendingInfo.Suggestion;
+            CurrentScenario().CouldNotInterpret = scenarioPendingInfo.CouldNotInterpret;
+            CurrentScenario().Suggestion = scenarioPendingInfo.Suggestion ?? "";
         }
 
         public void Success(Scenario scenario, string line)
@@ -203,6 +205,8 @@ namespace StorEvil.ResultListeners
         public string Id { get; set; }
 
         public string Suggestion { get; set; }
+
+        public bool CouldNotInterpret { get; set; }
 
         public void AddLine(ScenarioStatus status, string text)
         {

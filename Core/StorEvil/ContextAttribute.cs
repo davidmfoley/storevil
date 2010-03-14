@@ -8,4 +8,16 @@ namespace StorEvil
     {
        
     }
+
+    public static class ScenarioStatus
+    {
+        public static void Pending()
+        {
+            throw new ScenarioPendingException();
+        }
+    }
+
+    public class ScenarioPendingException : Exception
+    {
+    }
 }

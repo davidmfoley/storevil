@@ -24,9 +24,11 @@ namespace StorEvil.ResultListeners
 
         public void ScenarioPending(ScenarioPendingInfo scenarioPendingInfo)
         {
-            ColorWrite(ConsoleColor.Yellow, scenarioPendingInfo.Line + " -- Could not interpret");
+            var message = scenarioPendingInfo.CouldNotInterpret ?  "Could not interpret" : "Pending";
+            ColorWrite(ConsoleColor.Yellow, scenarioPendingInfo.Line + " -- " + message);
 
-            ColorWrite(ConsoleColor.Gray, scenarioPendingInfo.Suggestion);
+            if (scenarioPendingInfo.CouldNotInterpret && scenarioPendingInfo.Suggestion != null)
+                ColorWrite(ConsoleColor.Gray, scenarioPendingInfo.Suggestion);
         }
 
         public void Success(Scenario scenario, string line)
