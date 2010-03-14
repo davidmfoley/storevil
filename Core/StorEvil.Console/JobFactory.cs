@@ -28,8 +28,8 @@ namespace StorEvil.Console
         public IStorEvilJob ParseArguments(string[] args)
         {
             _settings = ParseCommonConfigSettings(Container, args);
-            SetupCommonComponents(Container);
-            SetupCustomComponents(Container, args);
+           
+            SetupContainer(Container, args);
 
             return Container.Resolve<IStorEvilJob>();
         }
@@ -47,33 +47,7 @@ namespace StorEvil.Console
             return settings;
         }
 
-        private void SetupCommonComponents(Container container)
-        {
-            var listenerBuilder = new ListenerBuilder(_settings);
-            container.Register(listenerBuilder.GetResultListener());
-
-            container.EasyRegister<IStoryParser, StoryParser>();
-            container.EasyRegister<IStoryProvider, StoryProvider>();
-            container.EasyRegister<IStoryReader, FilesystemStoryReader>();
-
-            container.EasyRegister<IFilesystem, Filesystem>();
-            container.EasyRegister<IScenarioPreprocessor, ScenarioPreprocessor>();
-            container.EasyRegister<ScenarioInterpreter>();
-            container.EasyRegister<InterpreterForTypeFactory>();
-            container.EasyRegister<ExtensionMethodHandler>();
-
-            container.Register<IStoryToContextMapper>(GetStoryToContextMapper());
-        }
-
-        private StoryToContextMapper GetStoryToContextMapper()
-        {
-            var mapper = new StoryToContextMapper();
-            foreach (var location in _settings.AssemblyLocations)
-                mapper.AddAssembly(location);
-            return mapper;
-        }
-
-        private void SetupCustomComponents(Container container, string[] args)
+        private void SetupContainer(Container container, string[] args)
         {
             var command = args.Length > 0 ? args[0] : "help";
 

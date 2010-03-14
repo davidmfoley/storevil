@@ -1,5 +1,11 @@
 using Funq;
 using StorEvil.Configuration;
+using StorEvil.Context;
+using StorEvil.Infrastructure;
+using StorEvil.InPlace;
+using StorEvil.Interpreter;
+using StorEvil.Parsing;
+using StorEvil.Utility;
 
 namespace StorEvil.Console
 {
@@ -7,21 +13,50 @@ namespace StorEvil.Console
     {
         protected readonly SwitchParser<settingsT> SwitchParser;
 
-        public void SetupContainer(Container container, ConfigSettings ConfigSettings, string[] args)
-        {
-            var settings = new settingsT();
-            SwitchParser.Parse(args, settings);
-            container.Register(settings);
-            SetupCustomComponents(container);
-        }
-
-        protected abstract void SetupCustomComponents(Container container);
-
         protected ContainerConfigurator()
         {
             SwitchParser = new SwitchParser<settingsT>();
             SetupSwitches(SwitchParser);
         }
+
+        public void SetupContainer(Container container, ConfigSettings configSettings, string[] args)
+        {
+            var settings = new settingsT();
+            SwitchParser.Parse(args, settings);
+            container.Register(settings);
+            SetupCommonComponents(container, configSettings);
+            SetupCustomComponents(container);
+        }
+
+        private void SetupCommonComponents(Container container, ConfigSettings settings)
+        {
+            var listenerBuilder = new ListenerBuilder(settings);
+            container.Register(listenerBuilder.GetResultListener());
+
+            container.EasyRegister<IStoryParser, StoryParser>();
+            container.EasyRegister<IStoryProvider, StoryProvider>();
+            container.EasyRegister<IStoryReader, FilesystemStoryReader>();
+
+            container.EasyRegister<IFilesystem, Filesystem>();
+            container.EasyRegister<IScenarioPreprocessor, ScenarioPreprocessor>();
+            container.EasyRegister<ScenarioInterpreter>();
+            container.EasyRegister<InterpreterForTypeFactory>();
+            container.EasyRegister<ExtensionMethodHandler>();
+
+            container.Register<IStoryToContextMapper>(GetStoryToContextMapper(settings));
+        }
+
+        private StoryToContextMapper GetStoryToContextMapper(ConfigSettings settings)
+        {
+            var mapper = new StoryToContextMapper();
+            foreach (var location in settings.AssemblyLocations)
+                mapper.AddAssembly(location);
+            return mapper;
+        }
+
+        protected abstract void SetupCustomComponents(Container container);
+
+       
 
         public string GetUsage()
         {
