@@ -49,11 +49,11 @@ namespace StorEvil.ResultListeners
             CurrentScenario().AddLine(ScenarioStatus.Failed, scenarioFailureInfo.FailedPart);
         }
 
-        public void CouldNotInterpret(CouldNotInterpretInfo couldNotInterpretInfo)
+        public void ScenarioPending(ScenarioPendingInfo scenarioPendingInfo)
         {
             CurrentScenario().Status = ScenarioStatus.Pending;
-            CurrentScenario().AddLine(ScenarioStatus.Pending, couldNotInterpretInfo.Line);
-            CurrentScenario().Suggestion = couldNotInterpretInfo.Suggestion;
+            CurrentScenario().AddLine(ScenarioStatus.Pending, scenarioPendingInfo.Line);
+            CurrentScenario().Suggestion = scenarioPendingInfo.Suggestion;
         }
 
         public void Success(Scenario scenario, string line)

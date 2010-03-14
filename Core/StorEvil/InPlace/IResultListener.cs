@@ -9,7 +9,7 @@ namespace StorEvil.InPlace
         void StoryStarting(Story story);
         void ScenarioStarting(Scenario scenario);
         void ScenarioFailed(ScenarioFailureInfo scenarioFailureInfo);
-        void CouldNotInterpret(CouldNotInterpretInfo couldNotInterpretInfo);
+        void ScenarioPending(ScenarioPendingInfo scenarioPendingInfo);
         void Success(Scenario scenario, string line);
         void ScenarioSucceeded(Scenario scenario);
         void Finished();
@@ -51,17 +51,17 @@ namespace StorEvil.InPlace
         }
     }
 
-    public class CouldNotInterpretInfo
+    public class ScenarioPendingInfo
     {
         public string Suggestion { get; set; }
 
-        public CouldNotInterpretInfo(Scenario scenario, string line)
+        public ScenarioPendingInfo(Scenario scenario, string line)
         {
             Scenario = scenario;
             Line = line;
         }
 
-        public CouldNotInterpretInfo(Scenario scenario, string line, string suggestion) : this(scenario, line)
+        public ScenarioPendingInfo(Scenario scenario, string line, string suggestion) : this(scenario, line)
         {
             Suggestion = suggestion;
         }

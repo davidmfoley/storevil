@@ -37,9 +37,9 @@ namespace StorEvil.ResultListeners
             AllListeners(x => x.ScenarioFailed(scenarioFailureInfo));
         }
 
-        public void CouldNotInterpret(CouldNotInterpretInfo couldNotInterpretInfo)
+        public void ScenarioPending(ScenarioPendingInfo scenarioPendingInfo)
         {
-            AllListeners(x => x.CouldNotInterpret(couldNotInterpretInfo));
+            AllListeners(x => x.ScenarioPending(scenarioPendingInfo));
         }
 
         public void Success(Scenario scenario, string line)

@@ -22,7 +22,7 @@ namespace StorEvil.InPlace
         [Test]
         public void Notifies_listener()
         {
-            ResultListener.AssertWasCalled(x => x.CouldNotInterpret(Any<CouldNotInterpretInfo>()));
+            ResultListener.AssertWasCalled(x => x.ScenarioPending(Any<ScenarioPendingInfo>()));
         }
     }
 }

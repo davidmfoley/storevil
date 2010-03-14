@@ -74,7 +74,7 @@ namespace StorEvil.InPlace
             {
                 ImplementationHelper _implementationHelper = new ImplementationHelper();
                 var suggestion = _implementationHelper.Suggest(line);
-                _listener.CouldNotInterpret(new CouldNotInterpretInfo(scenario, line, suggestion));
+                _listener.ScenarioPending(new ScenarioPendingInfo(scenario, line, suggestion));
                 return false;
             }
 

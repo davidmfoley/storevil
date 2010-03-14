@@ -81,9 +81,9 @@ namespace StorEvil.ResultListeners
             element.SetAttribute(XmlNames.Status, status);
         }
 
-        public void CouldNotInterpret(CouldNotInterpretInfo couldNotInterpretInfo)
+        public void ScenarioPending(ScenarioPendingInfo scenarioPendingInfo)
         {
-            AddLineToCurrentScenario(couldNotInterpretInfo.Line, StatusNames.NotUnderstood);
+            AddLineToCurrentScenario(scenarioPendingInfo.Line, StatusNames.NotUnderstood);
             SetStatus(_currentScenarioElement, StatusNames.NotUnderstood);
             SetStatus(_currentStoryElement, StatusNames.Failure);
         }

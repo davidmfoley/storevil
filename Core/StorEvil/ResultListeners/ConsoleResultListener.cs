@@ -16,21 +16,17 @@ namespace StorEvil.ResultListeners
             ColorWrite(ConsoleColor.White, "\r\n" + scenario.Name);
         }
 
-      
-
         public void ScenarioFailed(ScenarioFailureInfo scenarioFailureInfo)
         {
             ColorWrite(ConsoleColor.Yellow, scenarioFailureInfo.SuccessPart);
             ColorWrite(ConsoleColor.Red, " " + scenarioFailureInfo.FailedPart + "\r\nFAILED\r\n", scenarioFailureInfo.Message + "\r\n");
         }
 
-      
-
-        public void CouldNotInterpret(CouldNotInterpretInfo couldNotInterpretInfo)
+        public void ScenarioPending(ScenarioPendingInfo scenarioPendingInfo)
         {
-            ColorWrite(ConsoleColor.Yellow, couldNotInterpretInfo.Line + " -- Could not interpret");
+            ColorWrite(ConsoleColor.Yellow, scenarioPendingInfo.Line + " -- Could not interpret");
 
-            ColorWrite(ConsoleColor.Gray, couldNotInterpretInfo.Suggestion);
+            ColorWrite(ConsoleColor.Gray, scenarioPendingInfo.Suggestion);
         }
 
         public void Success(Scenario scenario, string line)

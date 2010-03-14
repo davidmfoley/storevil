@@ -340,7 +340,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
             Writer.ScenarioStarting(scenario);
 
             Writer.Success(scenario, line);
-            Writer.CouldNotInterpret(new CouldNotInterpretInfo(scenario, line));
+            Writer.ScenarioPending(new ScenarioPendingInfo(scenario, line));
 
             Writer.Finished();
         }
