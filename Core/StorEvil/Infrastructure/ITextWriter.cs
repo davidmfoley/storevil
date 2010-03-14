@@ -1,6 +1,6 @@
 namespace StorEvil.Infrastructure
 {
-    public interface IFileWriter
+    public interface ITextWriter
     {
         void Write(string s);
     }

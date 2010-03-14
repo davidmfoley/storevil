@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using StorEvil.Core;
 
-namespace StorEvil.InPlace
+namespace StorEvil
 {
     public interface IStoryProvider
     {

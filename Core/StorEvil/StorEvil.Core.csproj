@@ -48,6 +48,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -89,6 +90,7 @@
     <Compile Include="Interpreter\ScenarioInterpreterForType.cs" />
     <Compile Include="ResultListeners\GatheringResultListener.cs" />
     <Compile Include="ResultListeners\SparkReportGenerator.cs" />
+    <Compile Include="StubGeneration\StubGenerator.cs" />
     <Compile Include="Utility\FunqEasyRegistrationHelper.cs" />
     <Compile Include="ResultListeners\CompositeListener.cs" />
     <Compile Include="ResultListeners\ConsoleResultListener.cs" />
@@ -110,7 +112,7 @@
     <Compile Include="Nunit\NUnitFixtureGenerator.cs" />
     <Compile Include="Utility\Helpers.cs" />
     <Compile Include="Parsing\IStoryParser.cs" />
-    <Compile Include="InPlace\IStoryProvider.cs" />
+    <Compile Include="IStoryProvider.cs" />
     <Compile Include="Nunit\IFixtureGenerator.cs" />
     <Compile Include="Nunit\ITestFixtureWriter.cs" />
     <Compile Include="Nunit\CSharpMethodInvocationGenerator.cs" />
@@ -127,7 +129,7 @@
     <Compile Include="Core\Scenario.cs" />
     <Compile Include="Interpreter\ScenarioInterpreter.cs" />
     <Compile Include="Nunit\SingleFileTestFixtureWriter.cs" />
-    <Compile Include="Infrastructure\IFileWriter.cs" />
+    <Compile Include="Infrastructure\ITextWriter.cs" />
     <Compile Include="ResultListeners\XmlReportListener.cs" />
     <Compile Include="Core\StorEvilJob.cs" />
     <Compile Include="Core\Story.cs" />

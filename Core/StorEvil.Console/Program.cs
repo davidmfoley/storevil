@@ -1,11 +1,14 @@
+using System;
 using StorEvil.Configuration;
 using StorEvil.Core;
 using StorEvil.Infrastructure;
 
 namespace StorEvil.Console
 {
+   
     internal class Program
     {
+        [STAThread]
         private static void Main(string[] args)
         {
             var filesystem = new Filesystem();

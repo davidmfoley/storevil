@@ -12,6 +12,7 @@ namespace StorEvil.Console
     public abstract class ContainerConfigurator<settingsT> : IContainerConfigurator where settingsT : new()
     {
         protected readonly SwitchParser<settingsT> SwitchParser;
+        protected settingsT CustomSettings;
 
         protected ContainerConfigurator()
         {
@@ -21,9 +22,9 @@ namespace StorEvil.Console
 
         public void SetupContainer(Container container, ConfigSettings configSettings, string[] args)
         {
-            var settings = new settingsT();
-            SwitchParser.Parse(args, settings);
-            container.Register(settings);
+            CustomSettings = new settingsT();
+            SwitchParser.Parse(args, CustomSettings);
+            container.Register(CustomSettings);
             SetupCommonComponents(container, configSettings);
             SetupCustomComponents(container);
         }

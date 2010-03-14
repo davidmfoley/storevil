@@ -3,7 +3,7 @@ using StorEvil.Infrastructure;
 
 namespace StorEvil.ResultListeners
 {
-    public class FakeFileWriter : IFileWriter
+    public class FakeTextWriter : ITextWriter
     {
         public string Result
         {

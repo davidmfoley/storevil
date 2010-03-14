@@ -26,13 +26,13 @@ namespace StorEvil.ResultListeners
             public const string DocumentElement = "TestResults";
         }
 
-        private readonly IFileWriter _fileWriter;
+        private readonly ITextWriter _fileWriter;
 
         private readonly XmlDocument _doc;
         private XmlElement _currentStoryElement;
         private XmlElement _currentScenarioElement;
 
-        public XmlReportListener(IFileWriter fileWriter)
+        public XmlReportListener(ITextWriter fileWriter)
         {
             _fileWriter = fileWriter;
             _doc = new XmlDocument();

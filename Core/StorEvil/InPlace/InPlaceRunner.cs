@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Interpreter;
 using StorEvil.Parsing;
-using StorEvil.ResultListeners;
 using StorEvil.Utility;
 
 namespace StorEvil.InPlace
@@ -19,14 +19,14 @@ namespace StorEvil.InPlace
         private readonly MemberInvoker _memberInvoker;
 
         private readonly IScenarioPreprocessor _preprocessor;
-        private string _lastSignificantFirstWord;
         private object _lastResult;
 
-        public InPlaceRunner(IResultListener listener, IScenarioPreprocessor preprocessor, ScenarioInterpreter scenarioInterpreter)
+        public InPlaceRunner(IResultListener listener, IScenarioPreprocessor preprocessor,
+                             ScenarioInterpreter scenarioInterpreter)
         {
             _listener = listener;
             _preprocessor = preprocessor;
-            _scenarioInterpreter = scenarioInterpreter; // new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()));
+            _scenarioInterpreter = scenarioInterpreter;
             _memberInvoker = new MemberInvoker();
         }
 
@@ -36,6 +36,7 @@ namespace StorEvil.InPlace
             foreach (var scenario in GetScenarios(story))
             {
                 _listener.ScenarioStarting(scenario);
+                _scenarioInterpreter.NewScenario();
 
                 using (var scenarioContext = context.GetScenarioContext())
                 {
@@ -46,9 +47,7 @@ namespace StorEvil.InPlace
 
         private IEnumerable<Scenario> GetScenarios(Story story)
         {
-            foreach (var scenario in story.Scenarios)
-                foreach (var s in _preprocessor.Preprocess(scenario))
-                    yield return s;
+            return story.Scenarios.SelectMany(scenario => _preprocessor.Preprocess(scenario));
         }
 
         public void Finished()
@@ -58,8 +57,6 @@ namespace StorEvil.InPlace
 
         private void ExecuteScenario(Scenario scenario, ScenarioContext storyContext)
         {
-            _lastSignificantFirstWord = null;
-
             foreach (var line in scenario.Body)
             {
                 if (!ExecuteLine(scenario, storyContext, line))
@@ -101,7 +98,8 @@ namespace StorEvil.InPlace
                 }
                 catch (Exception ex)
                 {
-                    _listener.ScenarioFailed(new ScenarioFailureInfo(scenario, successPart.Trim(), invocation.MatchedText, GetExceptionMessage(ex)));
+                    _listener.ScenarioFailed(new ScenarioFailureInfo(scenario, successPart.Trim(),
+                                                                     invocation.MatchedText, GetExceptionMessage(ex)));
                     return false;
                 }
             }
@@ -121,23 +119,8 @@ namespace StorEvil.InPlace
         {
             var chain = _scenarioInterpreter.GetChain(storyContext, line);
 
-            bool firstWordIsAnd = (line.FirstWord().ToLower() == "and");
-
-            bool canReplaceFirstWord = (chain == null && firstWordIsAnd && _lastSignificantFirstWord != null);
-
-            if (canReplaceFirstWord)
-                chain = ReplaceFirstWithLastSignificantWord(storyContext, line);
-
-            if (chain != null && !firstWordIsAnd)
-                _lastSignificantFirstWord = line.FirstWord();
-
             return chain;
-        }
-
-        private InvocationChain ReplaceFirstWithLastSignificantWord(ScenarioContext storyContext, string line)
-        {
-            return _scenarioInterpreter.GetChain(storyContext, line.ReplaceFirstWord(_lastSignificantFirstWord));
-        }
+        }   
 
         private static string GetExceptionMessage(Exception exception)
         {

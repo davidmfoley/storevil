@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Forms;
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Context;

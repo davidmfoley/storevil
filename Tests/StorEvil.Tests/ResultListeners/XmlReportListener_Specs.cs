@@ -13,13 +13,13 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
     public abstract class Xml_reports
     {
         protected XmlReportListener Writer;
-        protected FakeFileWriter FileWriter;
+        protected FakeTextWriter FileWriter;
         protected string Result;
 
         [SetUp]
         public void SetupContext()
         {
-            FileWriter = new FakeFileWriter();
+            FileWriter = new FakeTextWriter();
 
             Writer = new XmlReportListener(FileWriter);
 

@@ -3,7 +3,7 @@ using System.IO;
 
 namespace StorEvil.Infrastructure
 {
-    public class FileWriter : IFileWriter
+    public class FileWriter : ITextWriter
     {
         public string OutputFile { get; private set; }
 

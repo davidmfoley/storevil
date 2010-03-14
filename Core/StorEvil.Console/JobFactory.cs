@@ -1,13 +1,7 @@
 using System.IO;
 using Funq;
 using StorEvil.Configuration;
-using StorEvil.Context;
 using StorEvil.Core;
-using StorEvil.Infrastructure;
-using StorEvil.InPlace;
-using StorEvil.Interpreter;
-using StorEvil.Parsing;
-using StorEvil.Utility;
 
 namespace StorEvil.Console
 {
@@ -28,7 +22,7 @@ namespace StorEvil.Console
         public IStorEvilJob ParseArguments(string[] args)
         {
             _settings = ParseCommonConfigSettings(Container, args);
-           
+
             SetupContainer(Container, args);
 
             return Container.Resolve<IStorEvilJob>();

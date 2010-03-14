@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Funq;
 using StorEvil.Configuration;
 
 namespace StorEvil.Console
@@ -29,6 +30,8 @@ namespace StorEvil.Console
                 containerConfigurator = new InPlaceContainerConfigurator();
             else if (command == "init")
                 containerConfigurator = new InitContainerConfigurator();
+            else if (command == "stub")
+                containerConfigurator = new StubGeneratorContainerConfigurator();
 
             return containerConfigurator ?? new HelpContainerConfigurator();
         }
@@ -43,4 +46,6 @@ namespace StorEvil.Console
             }
         }
     }
+
+   
 }

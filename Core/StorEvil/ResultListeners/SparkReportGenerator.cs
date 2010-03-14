@@ -24,7 +24,7 @@ namespace StorEvil.ResultListeners
 
     public class SparkReportListener : GatheringResultListener
     {
-        public SparkReportListener(IFileWriter fileWriter, string pathToTemplateFile)
+        public SparkReportListener(ITextWriter fileWriter, string pathToTemplateFile)
             : base(new SparkReportGenerator(fileWriter, pathToTemplateFile))
         {
         }
@@ -32,10 +32,10 @@ namespace StorEvil.ResultListeners
 
     public class SparkReportGenerator : IGatheredResultHandler
     {
-        private readonly IFileWriter _fileWriter;
+        private readonly ITextWriter _fileWriter;
         private readonly string _pathToTemplateFile;
 
-        public SparkReportGenerator(IFileWriter fileWriter, string pathToTemplateFile)
+        public SparkReportGenerator(ITextWriter fileWriter, string pathToTemplateFile)
         {
             _fileWriter = fileWriter;
 

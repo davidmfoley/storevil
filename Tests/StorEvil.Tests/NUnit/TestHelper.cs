@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Reflection;
 using Microsoft.CSharp;
 using NUnit.Framework;
+using StorEvil.Core;
 using StorEvil.Utility;
 
 namespace StorEvil.NUnit
@@ -30,8 +31,10 @@ namespace StorEvil.NUnit
             compilerParams.ReferencedAssemblies.Add("System.dll");
             compilerParams.ReferencedAssemblies.Add("nunit.framework.dll");
 
+
             compilerParams.ReferencedAssemblies.Add(typeof (TestHelper).Assembly.GetName().Name + ".dll");
             compilerParams.ReferencedAssemblies.Add(typeof (TestExtensionMethods).Assembly.GetName().Name + ".dll");
+            compilerParams.ReferencedAssemblies.Add(typeof(Story).Assembly.GetName().Name + ".dll");
 
             var options = new Dictionary<string, string> {{"CompilerVersion", "v3.5"}};
 
