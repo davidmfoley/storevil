@@ -50,16 +50,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArgParser.cs" />
-    <Compile Include="CommonSwitchParser.cs" />
-    <Compile Include="DisplayHelpJob.cs" />
-    <Compile Include="IJobFactory.cs" />
-    <Compile Include="InitJob.cs" />
-    <Compile Include="InPlaceJobFactory.cs" />
-    <Compile Include="InPlaceSettings.cs" />
     <Compile Include="JobFactory.cs" />
+    <Compile Include="CommonSwitchParser.cs" />
+    <Compile Include="Jobs\DisplayHelpJob.cs" />
+    <Compile Include="Jobs\HelpContainerConfigurator.cs" />
+    <Compile Include="IContainerConfigurator.cs" />
+    <Compile Include="Jobs\InitJob.cs" />
+    <Compile Include="Jobs\InitContainerConfigurator.cs" />
+    <Compile Include="Jobs\InPlaceContainerConfigurator.cs" />
+    <Compile Include="Jobs\InPlaceSettings.cs" />
+    <Compile Include="ContainerConfigurator.cs" />
+    <Compile Include="ContainerConfiguratorFactory.cs" />
     <Compile Include="ListenerBuilder.cs" />
-    <Compile Include="NUnitJobFactory.cs" />
+    <Compile Include="Jobs\NUnitContainerConfigurator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Resources\ExampleContext.cs" />

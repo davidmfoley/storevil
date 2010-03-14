@@ -13,7 +13,7 @@ namespace StorEvil.Console
 {
     public abstract class Argument_parsing
     {
-        protected ArgParser Parser;
+        protected JobFactory Parser;
         protected IConfigSource FakeConfigSource;
 
         [SetUp]
@@ -23,7 +23,7 @@ namespace StorEvil.Console
             ConfigSettings settings = GetSettings();
 
             FakeConfigSource.Stub(x => x.GetConfig("")).IgnoreArguments().Return(settings);
-            Parser = new ArgParser(FakeConfigSource);
+            Parser = new JobFactory(FakeConfigSource);
         }
 
         protected abstract ConfigSettings GetSettings();

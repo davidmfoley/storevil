@@ -11,7 +11,7 @@ namespace StorEvil.Console
             var filesystem = new Filesystem();
             var reader = new FilesystemConfigReader(filesystem, new ConfigParser());
 
-            var job = new ArgParser(reader).ParseArguments(args);
+            var job = new JobFactory(reader).ParseArguments(args);
                 
             job.Run();
         }

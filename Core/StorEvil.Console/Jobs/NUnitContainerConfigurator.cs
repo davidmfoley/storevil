@@ -6,7 +6,7 @@ using StorEvil.Utility;
 
 namespace StorEvil.Console
 {
-    public class NUnitJobFactory : JobFactory<TestFixtureGenerationSettings>
+    public class NUnitContainerConfigurator : ContainerConfigurator<TestFixtureGenerationSettings>
     {
         protected override void SetupCustomComponents(Container container)
         {

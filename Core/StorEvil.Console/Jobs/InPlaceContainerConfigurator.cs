@@ -6,7 +6,7 @@ using StorEvil.Utility;
 
 namespace StorEvil.Console
 {
-    public class InPlaceJobFactory : JobFactory<InPlaceSettings>
+    public class InPlaceContainerConfigurator : ContainerConfigurator<InPlaceSettings>
     {
         protected override void SetupCustomComponents(Container container)
         {
