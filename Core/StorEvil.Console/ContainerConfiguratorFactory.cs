@@ -38,12 +38,16 @@ namespace StorEvil.Console
 
         private void SanityCheckSettings()
         {
-            if (_settings.AssemblyLocations == null || !_settings.AssemblyLocations.Any())
-            {
-                System.Console.WriteLine(
-                    "Error!\r\nYou need to specify paths to your context assembly locations \r\n(setting: \"Assemblies\") in storevil.config");
-                Environment.Exit(1);
-            }
+            if (_settings.AssemblyLocations != null && _settings.AssemblyLocations.Any()) 
+                return;
+
+            System.Console.WriteLine(
+                "Error!\r\n" + 
+                "You need to specify paths to your context assembly locations: \r\n" + 
+                "Add the \"Assemblies\" setting to your storevil.config\r\n" + 
+                "or use the --assemblies command-line switch.");
+
+            Environment.Exit(-1);
         }
     }
 
