@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using StorEvil.Utility;
@@ -16,6 +17,8 @@ namespace StorEvil.InPlace
             var pieces = s.Split().Where(p => p.Trim() != "");
 
             var argTypes = new List<string>();
+            var argNames = new List<string>();
+
             var method = pieces.First();
             int index = 1;
 
@@ -24,15 +27,29 @@ namespace StorEvil.InPlace
                 bool isLastPiece = (++index == pieces.Count());
                 if (IsInteger(piece))
                 {
+                    var argName = "arg" + argTypes.Count;
                     if (!isLastPiece)
-                        method += "_arg" + argTypes.Count;
+                        method += "_" + argName;
                     argTypes.Add("int");
+                     argNames.Add(argName);
                 }
                 else if (IsQuotedString(piece))
                 {
+                    var argName = "arg" + argTypes.Count;
                     if (!isLastPiece)
-                        method += "_arg" + argTypes.Count;
+                        method += "_" + argName;
+
                     argTypes.Add("string");
+                    argNames.Add(argName);
+                }
+                else if (IsOutlineParameter(piece))
+                {
+                    var argName = piece.Substring(1,piece.Length-2);
+
+                    if (!isLastPiece)
+                        method += "_" + argName;
+                    argTypes.Add("string");
+                    argNames.Add(argName);
                 }
                 else
                 {
@@ -41,10 +58,10 @@ namespace StorEvil.InPlace
             }
 
             string argText = "";
-            int currentArgIndex = 0;
-            foreach (var argType in argTypes)
+
+            for (int i = 0; i < argTypes.Count; i++)
             {
-                argText += ", " + argType + " arg" + currentArgIndex;
+                argText += ", " + argTypes[i] + " " + argNames[i];
             }
 
             if (hasTable)
@@ -54,6 +71,11 @@ namespace StorEvil.InPlace
             var code = "public void " + method + "(" + argText.Substring(1).Trim() + ")\r\n{\r\n    StorEvil.ScenarioStatus.Pending(); \r\n}";
 
             return "// " + s + "\r\n" + code;
+        }
+
+        private bool IsOutlineParameter(string piece)
+        {
+            return piece.StartsWith("<") && piece.EndsWith(">");
         }
 
         private bool IsQuotedString(string piece)

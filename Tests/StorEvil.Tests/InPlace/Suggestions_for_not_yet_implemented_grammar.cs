@@ -17,6 +17,13 @@ namespace StorEvil.InPlace
         }
 
         [Test]
+        public void For_scenario_outline_uses_bracketed_names_for_params()
+        {
+            var result = Helper.Suggest("a step with <foo> and <bar> as parameters");
+            ShouldMatch(result, "a_step_with_foo_and_bar_as_parameters", "string", "foo", "string", "bar");
+        }
+
+        [Test]
         public void Should_suggest_box_car_name_for_simple_case()
         {
             var result = Helper.Suggest("an unimplemented method");
