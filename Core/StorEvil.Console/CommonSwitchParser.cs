@@ -37,7 +37,7 @@ namespace StorEvil.Console
                 .SetsEnumField(s => s.ConsoleMode)  
                 .WithDescription("Sets the format of output to the console (color, nocolor, quiet)");
 
-            AddSwitch("--debug", "-d")
+            AddSwitch("--debug")
                 .SetsField(x => x.Debug)
                 .WithDescription("Enables debug tracing of StorEvil internal processing.");
         }
