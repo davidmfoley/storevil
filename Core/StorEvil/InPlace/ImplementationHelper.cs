@@ -7,6 +7,7 @@ namespace StorEvil.InPlace
 {
     public class ImplementationHelper
     {
+
         public string Suggest(string s)
         {
             var hasTable = (s.Contains("\r\n|"));
@@ -14,7 +15,20 @@ namespace StorEvil.InPlace
             {
                 s = s.Until("\r\n");
             }
+
+            var colonPos = s.IndexOf(":");
+            string postColon = null;
+            if (colonPos > -1)
+            {
+                postColon = s.After(":");
+                s = s.Until(":");
+            }
             var pieces = s.Split().Where(p => p.Trim() != "");
+
+            if (postColon != null)
+            {
+                pieces = pieces.Concat(new[] {postColon});
+            }
 
             var argTypes = new List<string>();
             var argNames = new List<string>();
@@ -40,6 +54,15 @@ namespace StorEvil.InPlace
                         method += "_" + argName;
 
                     argTypes.Add("string");
+                    argNames.Add(argName);
+                }
+                else if (IsCommaSeparated(piece))
+                {
+                    var argName = "arg" + argTypes.Count;
+                    if (!isLastPiece)
+                        method += "_" + argName;
+
+                    argTypes.Add("string[]");
                     argNames.Add(argName);
                 }
                 else if (IsOutlineParameter(piece))
@@ -71,6 +94,11 @@ namespace StorEvil.InPlace
             var code = "public void " + method + "(" + argText.Substring(1).Trim() + ")\r\n{\r\n    StorEvil.ScenarioStatus.Pending(); \r\n}";
 
             return "// " + s + "\r\n" + code;
+        }
+
+        private bool IsCommaSeparated(string piece)
+        {
+            return piece.Contains(",");
         }
 
         private bool IsOutlineParameter(string piece)
