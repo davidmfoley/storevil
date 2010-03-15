@@ -29,8 +29,9 @@ namespace StorEvil.InPlace
             _memberInvoker = new MemberInvoker();
         }
 
-        public void HandleStory(Story story, StoryContext context)
+        public int HandleStory(Story story, StoryContext context)
         {
+            int failed = 0;
             _listener.StoryStarting(story);
             foreach (var scenario in GetScenarios(story))
             {
@@ -39,9 +40,11 @@ namespace StorEvil.InPlace
 
                 using (var scenarioContext = context.GetScenarioContext())
                 {
-                    ExecuteScenario(scenario, scenarioContext);
+                    if (!ExecuteScenario(scenario, scenarioContext))
+                        failed++;
                 }
             }
+            return failed;
         }
 
         private IEnumerable<Scenario> GetScenarios(Story story)
@@ -54,15 +57,16 @@ namespace StorEvil.InPlace
             _listener.Finished();
         }
 
-        private void ExecuteScenario(Scenario scenario, ScenarioContext storyContext)
+        private bool ExecuteScenario(Scenario scenario, ScenarioContext storyContext)
         {
             foreach (var line in scenario.Body)
             {
                 if (!ExecuteLine(scenario, storyContext, line))
-                    return;
+                    return false;
             }
 
             _listener.ScenarioSucceeded(scenario);
+            return true;
         }
 
         private bool ExecuteLine(Scenario scenario, ScenarioContext storyContext, string line)

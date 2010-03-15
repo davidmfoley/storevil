@@ -26,7 +26,7 @@ namespace StorEvil.StubGeneration
             _implementationHelper = implementationHelper;
         }
 
-        public void HandleStory(Story story, StoryContext context)
+        public int HandleStory(Story story, StoryContext context)
         {
             foreach (var scenario in story.Scenarios)
             {
@@ -40,6 +40,7 @@ namespace StorEvil.StubGeneration
                     }
                 }
             }
+            return 0;
         }
 
         private void AddSuggestion(string suggestedCode)

@@ -15,11 +15,12 @@ namespace StorEvil.Nunit
             TestFixtureWriter = testFixtureWriter;
         }
 
-        public void HandleStory(Story story, StoryContext context)
+        public int HandleStory(Story story, StoryContext context)
         {
             var sourceCode = FixtureGenerator.GenerateFixture(story, context);
 
             TestFixtureWriter.WriteFixture(story.Id, sourceCode);
+            return 0;
         }
 
         public void Finished()

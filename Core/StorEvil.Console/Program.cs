@@ -16,17 +16,19 @@ namespace StorEvil.Console
 
             var job = new JobFactory(reader).ParseArguments(args);
                 
-            job.Run();
+            var result = job.Run();
+            Environment.Exit(result);
         }
     }   
 
     public class DisplayUsageJob : IStorEvilJob
     {       
-        public void Run()
+        public int Run()
         {
             System.Console.WriteLine("usage:");
 
             System.Console.WriteLine("StorEvil.exe {execute|nunit|help}");
+            return 0;
         }
     }
 }

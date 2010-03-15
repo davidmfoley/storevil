@@ -15,7 +15,7 @@ namespace StorEvil.Console
             Filesystem = filesystem;
         }
 
-        public void Run()
+        public int Run()
         {
             WriteResource("DefaultConfig.txt", "storevil.config");
 
@@ -25,6 +25,7 @@ namespace StorEvil.Console
 
             WriteResource("ReadMe.txt", "ReadMe.txt");
             System.Console.Write("Check the ReadMe.txt file for more info");
+            return 0;
         }
 
         private void WriteResource(string resourceName, string destination)

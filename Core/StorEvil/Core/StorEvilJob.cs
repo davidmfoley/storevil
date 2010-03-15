@@ -23,21 +23,23 @@ namespace StorEvil.Core
             Handler = handler;
         }
 
-        public void Run()
+        public int Run()
         {
+            int failed = 0;
             foreach (var story in StoryProvider.GetStories())
             {
                 var context = StoryToContextMapper.GetContextForStory(story);
 
-                Handler.HandleStory(story, context);
+                failed += Handler.HandleStory(story, context);
             }
 
             Handler.Finished();
+            return failed;
         }
     }
 
     public interface IStorEvilJob
     {
-        void Run();
+        int Run();
     }
 }

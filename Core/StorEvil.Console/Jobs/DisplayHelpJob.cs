@@ -11,9 +11,10 @@ namespace StorEvil.Console
             _helpText = helpText;
         }
 
-        public void Run()
+        public int Run()
         {
             System.Console.WriteLine(_helpText);
+            return 0;
         }
     }
 }
