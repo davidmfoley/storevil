@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using StorEvil.Context.Matches;
 using StorEvil.Context.WordFilters;
+using StorEvil.Interpreter;
 using StorEvil.Parsing;
 
 namespace StorEvil.Context.Matchers
@@ -55,8 +56,12 @@ namespace StorEvil.Context.Matchers
                 return null;
 
             var isMatch = WordFiltersMatch(words);
+            if (!isMatch)
+                return null;
 
-            return !isMatch ? null : BuildNameMatch(words);
+            var match = BuildNameMatch(words);
+            DebugTrace.Trace("Property match", "Member = " + MemberInfo.DeclaringType.Name + "." + MemberInfo.Name);
+            return match;
         }
 
         private bool WordFiltersMatch(IList<string> words)

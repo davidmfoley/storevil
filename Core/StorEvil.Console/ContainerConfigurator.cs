@@ -32,6 +32,11 @@ namespace StorEvil.Console
         private void SetupCommonComponents(Container container, ConfigSettings settings)
         {
             var listenerBuilder = new ListenerBuilder(settings);
+            if (settings.Debug)
+            {
+                DebugTrace.Listener = new ConsoleDebugListener();
+            }   
+        
             container.Register(listenerBuilder.GetResultListener());
 
             container.EasyRegister<IStoryParser, StoryParser>();

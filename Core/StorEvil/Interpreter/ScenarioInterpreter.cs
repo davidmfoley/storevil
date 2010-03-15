@@ -18,6 +18,7 @@ namespace StorEvil.Interpreter
 
         public InvocationChain GetChain(ScenarioContext storyContext, string line)
         {
+            DebugTrace.Trace("Interpreting", line);
             return GetSelectedChain(storyContext, line);
         }
 

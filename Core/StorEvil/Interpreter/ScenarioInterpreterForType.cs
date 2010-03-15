@@ -60,6 +60,7 @@ namespace StorEvil.Interpreter
 
         public InvocationChain GetChain(string line)
         {
+           
             var partialMatches = new List<PartialMatch>();
             foreach (var member in _memberMatchers)
             {

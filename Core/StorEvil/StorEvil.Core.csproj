@@ -73,7 +73,9 @@
     <Compile Include="Context\Matchers\MethodNameMatcher.cs" />
     <Compile Include="Infrastructure\Filesystem.cs" />
     <Compile Include="Infrastructure\FileWriter.cs" />
+    <Compile Include="InPlace\IDebugListener.cs" />
     <Compile Include="InPlace\ImplementationHelper.cs" />
+    <Compile Include="Interpreter\DebugTrace.cs" />
     <Compile Include="Interpreter\ParameterConverters\ArrayBuilder.cs" />
     <Compile Include="Interpreter\ParameterConverters\ConvertHelper.cs" />
     <Compile Include="Interpreter\ParameterConverters\IStorevilConverter.cs" />

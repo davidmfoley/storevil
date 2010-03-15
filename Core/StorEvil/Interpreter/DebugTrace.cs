@@ -1,0 +1,15 @@
+using StorEvil.InPlace;
+
+namespace StorEvil.Interpreter
+{
+    public static class DebugTrace
+    {
+        public static IDebugListener Listener { get; set; }
+
+        public static void Trace(string area, string message)
+        {
+            if (Listener != null)
+                Listener.Trace(string.Format("[{0}] - {1}", area, message));
+        }
+    }
+}

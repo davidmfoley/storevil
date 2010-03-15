@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace StorEvil.Configuration
@@ -29,6 +30,8 @@ namespace StorEvil.Configuration
         public ConsoleMode ConsoleMode { get; set; }
 
         public string OutputFileTemplate { get; set; }
+
+        public bool Debug { get; set; }
 
         public static ConfigSettings Default()
         {

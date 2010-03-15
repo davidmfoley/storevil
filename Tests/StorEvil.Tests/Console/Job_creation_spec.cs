@@ -7,6 +7,7 @@ using StorEvil.Configuration;
 using StorEvil.Core;
 using StorEvil.Infrastructure;
 using StorEvil.InPlace;
+using StorEvil.Interpreter;
 using StorEvil.ResultListeners;
 using StorEvil.StubGeneration;
 using StorEvil.Utility;
@@ -98,11 +99,8 @@ namespace StorEvil.Console
     }
 
     [TestFixture]
-    public class Generation_job : Job_creation_spec
+    public class StubGeneration_job : Job_creation_spec
     {
-      
-
-
         [Test]
         public void can_create_generation_job()
         {
@@ -181,5 +179,31 @@ namespace StorEvil.Console
             var htmlReportGenerator = composite.Listeners.OfType<SparkReportListener>().FirstOrDefault();
             htmlReportGenerator.ShouldNotBeNull();
         }
+
+        [Test]
+        public void when_debug_is_not_set_is_chosen_registers_no_op_debug_listener()
+        {
+            Factory.ParseArguments(new[]
+                                       {
+                                           "execute"
+                                       });
+
+            DebugTrace.Listener.ShouldBeNull();
+        }
+
+        [Test]
+        public void when_debug_is_set_is_chosen_registers_console_debug_listener()
+        {
+            Factory.ParseArguments(new[]
+                                       {
+                                           "execute", "--debug"
+                                       });
+
+
+            
+            DebugTrace.Listener.ShouldBeOfType<NoOpDebugListener>();
+        }
     }
+
+
 }

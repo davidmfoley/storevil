@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using StorEvil.Context.Matches;
+using StorEvil.Interpreter;
 
 namespace StorEvil.Context.Matchers
 {
@@ -30,16 +31,21 @@ namespace StorEvil.Context.Matchers
         public NameMatch GetMatch(string line)
         {
             var result = _regex.Match(line);
+            NameMatch match = null;
             if (result.Success)
             {
                 if (result.Length == line.Length)
-                    return new ExactMatch(GetParameters(result), line);
-                
-                if (PartialMatchSupportedByMember())
-                    return new PartialMatch(MemberInfo, GetParameters(result), result.Value,
+                    match = new ExactMatch(GetParameters(result), line);                
+                else if (PartialMatchSupportedByMember())
+                    match = new PartialMatch(MemberInfo, GetParameters(result), result.Value,
                                             line.Substring(result.Length).Trim());
             }
-            return null;
+            if (match != null)
+            {
+                DebugTrace.Trace("RegExp match",
+                                 "Member = " + MemberInfo.DeclaringType.Name + "." + MemberInfo.Name);
+            }
+            return match;
         }
 
         private Dictionary<string, object> GetParameters(Match result)

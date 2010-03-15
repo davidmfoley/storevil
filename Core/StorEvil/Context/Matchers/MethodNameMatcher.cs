@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using StorEvil.Context.Matches;
 using StorEvil.Context.WordFilters;
+using StorEvil.Interpreter;
 using StorEvil.Parsing;
 
 namespace StorEvil.Context.Matchers
@@ -63,7 +64,21 @@ namespace StorEvil.Context.Matchers
                     paramValues.Add(paramFilter.ParameterName, words[i]);
             }
 
-            return BuildNameMatch(words, paramValues);
+            var match = BuildNameMatch(words, paramValues);
+            if (match != null)
+            {
+               
+                DebugTrace.Trace("Method name match", "Method = " + _methodInfo.DeclaringType.Name + "." +_methodInfo.Name);
+                if (paramValues.Count() > 0)
+                {
+                    var paramValueString = string.Join(",",
+                                                       match.ParamValues.Select(kvp => kvp.Key + ":" + kvp.Value).
+                                                           ToArray());
+
+                    DebugTrace.Trace("Method name match", "Params= " + paramValueString);
+                }
+            }
+            return match;
         }
 
         private void BuildMethodWordFilters()
