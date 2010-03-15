@@ -46,8 +46,8 @@ namespace StorEvil.Context
 
         public StoryContext GetContextForStory(Story story)
         {
-            if (_contextTypes.Count() == 0)
-                throw new ConfigurationErrorsException("no context types have been registered");
+            //if (_contextTypes.Count() == 0)
+            //    throw new ConfigurationErrorsException("no context types have been registered");
 
             return new StoryContext(_contextTypes.Union(new[] {typeof (object)}));
         }

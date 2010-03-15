@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using StorEvil.Context;
@@ -7,6 +8,7 @@ using StorEvil.Core;
 using StorEvil.Infrastructure;
 using StorEvil.InPlace;
 using StorEvil.Interpreter;
+using StorEvil.Utility;
 
 namespace StorEvil.StubGeneration
 {
@@ -33,20 +35,33 @@ namespace StorEvil.StubGeneration
                 {
                     if (null == _scenarioInterpreter.GetChain(scenarioContext, line))
                     {
-                        var sugesstedCode = _implementationHelper.Suggest(line) + "\r\n";
-                        if (!AlreadyHaveSuggestion(sugesstedCode))
-                        {
-                            
-                            _suggestions.Add(sugesstedCode);
-                        }
+                        var suggestedCode = _implementationHelper.Suggest(line) + "\r\n";
+                        AddSuggestion(suggestedCode);
                     }
                 }
             }
         }
 
-        private bool AlreadyHaveSuggestion(string suggestedCode)
+        private void AddSuggestion(string suggestedCode)
         {
-            return _suggestions.Select(s=>ExtractDeclaration(s)).Any(x => x == ExtractDeclaration(suggestedCode));
+            string existingSuggestion = ExistingSuggestion(suggestedCode);
+            if (existingSuggestion == null)
+            {
+                
+                _suggestions.Add(suggestedCode);
+                return;
+            }
+            if (suggestedCode.Until("\r\n") != existingSuggestion.Until("\r\n"))
+            {
+           
+                _suggestions.Remove(existingSuggestion);
+                _suggestions.Add(suggestedCode.Until("\r\n") + "\r\n" + existingSuggestion);
+            }
+        }
+
+        private string ExistingSuggestion(string suggestedCode)
+        {
+            return _suggestions.FirstOrDefault(s => ExtractDeclaration(s) == ExtractDeclaration(suggestedCode));
         }
 
         private string ExtractDeclaration(string suggestedCode)
@@ -64,7 +79,7 @@ namespace StorEvil.StubGeneration
 
         public void Finished()
         {
-            var joined = "        " + string.Join("\r\n", _suggestions.ToArray()).Replace("\r\n", "\r\n        ");
+            var joined = "        " + string.Join("\r\n", _suggestions.OrderBy(x=>x).ToArray()).Replace("\r\n", "\r\n        ");
             
             string classFormat = @"
 

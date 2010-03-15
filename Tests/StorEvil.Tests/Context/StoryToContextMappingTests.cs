@@ -39,7 +39,7 @@ namespace StorEvil.Context.StoryToContextMapper_Specs
             context.ImplementingTypes.First().ShouldEqual(typeof (TestMappingContext));
         }
 
-        [Test]
+        [Test, Ignore()]
         public void Throws_if_no_context_added()
         {
             var mapper = new StoryToContextMapper();

@@ -7,6 +7,7 @@ namespace StorEvil.InPlace
 {
     public class ImplementationHelper
     {
+        private string _previousSignificantFirstWord;
 
         public string Suggest(string s)
         {
@@ -25,7 +26,7 @@ namespace StorEvil.InPlace
             }
             var pieces = s.Split().Where(p => p.Trim() != "");
 
-            if (postColon != null)
+            if (!string.IsNullOrEmpty(postColon))
             {
                 pieces = pieces.Concat(new[] {postColon});
             }
@@ -34,6 +35,15 @@ namespace StorEvil.InPlace
             var argNames = new List<string>();
 
             var method = pieces.First();
+            if (method.ToLower() == "and")
+            {
+                if (_previousSignificantFirstWord != null)
+                    method = _previousSignificantFirstWord;
+            }
+            else
+            {
+                _previousSignificantFirstWord = method;
+            }
             int index = 1;
 
             foreach (var piece in pieces.Skip(1))

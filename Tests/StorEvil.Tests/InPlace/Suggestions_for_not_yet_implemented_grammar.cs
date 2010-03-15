@@ -31,6 +31,14 @@ namespace StorEvil.InPlace
         }
 
         [Test]
+        public void Should_use_last_significant_word_instead_of_and()
+        {
+            Helper.Suggest("then something ");
+            var result = Helper.Suggest("and something else");
+            ShouldMatch(result, "then_something_else");
+        }
+
+        [Test]
         public void Should_suggest_int_param()
         {
             var result = Helper.Suggest("a user with 5 beers");
