@@ -201,7 +201,7 @@ namespace StorEvil.Console
 
 
             
-            DebugTrace.Listener.ShouldBeOfType<NoOpDebugListener>();
+            DebugTrace.Listener.ShouldBeOfType<ConsoleDebugListener>();
         }
     }
 

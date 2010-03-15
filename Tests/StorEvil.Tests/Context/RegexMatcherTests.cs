@@ -15,7 +15,7 @@ namespace StorEvil.Context.RegexMatcher_Specs
         [SetUp]
         public void SetupContext()
         {
-            var matcher = new RegexMatcher("^Some fake method name", null);
+            var matcher = new RegexMatcher("^Some fake method name", typeof(RegexTestContext).GetMethod("MethodWithReturnValue"));
             TestText = "Some fake method name";
             TestMatch = matcher.GetMatch(TestText);
         }
@@ -160,6 +160,8 @@ namespace StorEvil.Context.RegexMatcher_Specs
         {
             get { return "foo"; }
         }
+
+        public int SomeField;
 
         public void MethodWithParams(string parameterName)
         {
