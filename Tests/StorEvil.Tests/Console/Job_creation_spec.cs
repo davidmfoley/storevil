@@ -181,7 +181,7 @@ namespace StorEvil.Console
         }
 
         [Test]
-        public void when_debug_is_not_set_is_chosen_registers_no_op_debug_listener()
+        public void when_debug_is_not_set_registers_no_op_debug_listener()
         {
             Factory.ParseArguments(new[]
                                        {
@@ -192,7 +192,7 @@ namespace StorEvil.Console
         }
 
         [Test]
-        public void when_debug_is_set_is_chosen_registers_console_debug_listener()
+        public void when_debug_is_set_registers_console_debug_listener()
         {
             Factory.ParseArguments(new[]
                                        {

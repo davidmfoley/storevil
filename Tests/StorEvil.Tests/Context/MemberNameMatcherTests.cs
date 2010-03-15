@@ -86,11 +86,40 @@ namespace StorEvil.Context
             }
         }
     }
+    public class Matching_words_with_puncutation
+    {
+
+        protected NameMatch Match { get; set; }
+        [SetUp]
+        public void SetupContext()
+        {
+            var matcher = MethodMatcherTestHelper.GetMatcher<Punctuation_test_context>("its_good_to_handle_apostrophes");
+            Match = matcher.GetMatch("It's good to handle apostrophes");
+        }
+
+        [Test]
+        public void should_match()
+        {
+            Match.ShouldNotBeNull();
+        }
+
+        [Test]
+        public void should_be_exact_match()
+        {
+            Match.ShouldBeOfType<ExactMatch>();
+        }
+
+        private class Punctuation_test_context
+        {
+            public void its_good_to_handle_apostrophes()
+            {
+            }
+        }
+    }
 
     public class Parsing_typed_tables
     {
         private object ParamValue;
-        private object TestTypeArray;
 
         [SetUp]
         public void SetupContext()
@@ -98,7 +127,6 @@ namespace StorEvil.Context
             var matcher = MethodMatcherTestHelper.GetMatcher<Typed_table_test_context>("method_takes_a_typed_array");
             Match = matcher.GetMatch("Method takes a typed array\r\n|IntParam|StringParam|\r\n|1|2|\r\n|3|4|\r\n|5|6|");
             ParamValue = Match.ParamValues["values"];
-            TestTypeArray = ParamValue as TestType[];
         }
 
         protected NameMatch Match { get; set; }

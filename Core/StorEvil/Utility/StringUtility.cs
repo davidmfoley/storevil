@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Text;
 
 namespace StorEvil.Utility
@@ -18,6 +19,13 @@ namespace StorEvil.Utility
             //if (val.Contains("."))
             //    return val + "M";
             return val;
+        }
+
+        public static string ToCSharpName(this string s)
+        {
+
+            var chars = s.ToCharArray().Where(c => char.IsLetterOrDigit(c) || c =='_').ToArray();
+            return new string(chars);
         }
     }
 }

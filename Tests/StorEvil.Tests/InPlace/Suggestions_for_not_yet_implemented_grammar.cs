@@ -73,6 +73,13 @@ namespace StorEvil.InPlace
             ShouldMatch(result, "Given_the_following", "string\\[\\]", "arg0");
         }
 
+        [Test]
+        public void Should_handle_punctuation()
+        {
+            var result = Helper.Suggest("It's a test of embedded apostrophes");
+            ShouldMatch(result, "Its_a_test_of_embedded_apostrophes");
+        }
+
         private void ShouldMatch(string code, string name, params string[] additionalStrings)
         {
             Regex r = new Regex(name + "\\(.*" + string.Join(".*", additionalStrings) + ".*\\).*{.*}",

@@ -1,3 +1,5 @@
+using StorEvil.Utility;
+
 namespace StorEvil.Context.WordFilters
 {
     public class TextMatchWordFilter : WordFilter
@@ -10,7 +12,7 @@ namespace StorEvil.Context.WordFilters
         public string Word { get; set; }
         public bool IsMatch(string s)
         {
-            return Word.ToLower() == s.ToLower();
+            return Word.ToLower() == s.ToLower().ToCSharpName();
         }
     }
 }

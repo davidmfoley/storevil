@@ -31,7 +31,8 @@ namespace StorEvil.NUnit
             TestStory = new Story("foo", "", new[]
                                                  {
                                                      new Scenario("", "", new[] { "first line", "second line" }),
-                                                      new Scenario("", "", new[] { "first line", "second line", "third line" })
+                                                      new Scenario("", "", new[] { "first line", "second line", "third line" }),
+                                                      new Scenario("", "", new[] { "this line's weird, punctuation! should be: handled"})
                                                  });
 
             Generator.HandleStory(TestStory, new StoryContext());

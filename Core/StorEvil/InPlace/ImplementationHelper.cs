@@ -34,7 +34,7 @@ namespace StorEvil.InPlace
             var argTypes = new List<string>();
             var argNames = new List<string>();
 
-            var method = pieces.First();
+            var method = Sanitize(pieces.First());
             if (method.ToLower() == "and")
             {
                 if (_previousSignificantFirstWord != null)
@@ -77,7 +77,7 @@ namespace StorEvil.InPlace
                 }
                 else if (IsOutlineParameter(piece))
                 {
-                    var argName = piece.Substring(1,piece.Length-2);
+                    var argName = Sanitize(piece.Substring(1,piece.Length-2));
 
                     if (!isLastPiece)
                         method += "_" + argName;
@@ -86,7 +86,7 @@ namespace StorEvil.InPlace
                 }
                 else
                 {
-                    method += "_" + piece;
+                    method += "_" + Sanitize(piece);
                 }
             }
 
@@ -104,6 +104,11 @@ namespace StorEvil.InPlace
             var code = "public void " + method + "(" + argText.Substring(1).Trim() + ")\r\n{\r\n    StorEvil.ScenarioStatus.Pending(); \r\n}";
 
             return "// " + s + "\r\n" + code;
+        }
+
+        private string Sanitize(string piece)
+        {
+            return piece.ToCSharpName();
         }
 
         private bool IsCommaSeparated(string piece)
