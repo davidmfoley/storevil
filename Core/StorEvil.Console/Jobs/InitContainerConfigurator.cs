@@ -1,21 +1,27 @@
+using System;
 using Funq;
 using StorEvil.Configuration;
 using StorEvil.Core;
+using StorEvil.Nunit;
 using StorEvil.Utility;
 
 namespace StorEvil.Console
 {
-    internal class InitContainerConfigurator : IContainerConfigurator
+    internal class InitContainerConfigurator : ContainerConfigurator<InitSettings>
     {
-        public string GetUsage()
-        {
-            return "initializes a storevil.config file";
-        }
-
-        public void SetupContainer(Container container, ConfigSettings settings, string[] args)
+        protected override void SetupCustomComponents(Container container)
         {
             container.EasyRegister<IStorEvilJob, InitJob>();
-            
+        }        
+
+        protected override void SetupSwitches(SwitchParser<InitSettings> parser)
+        {
+           
         }
+
+    }
+
+    internal class InitSettings
+    {
     }
 }
