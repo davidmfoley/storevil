@@ -132,6 +132,8 @@ namespace StorEvil.Interpreter.ParameterConverter_Specs
             result["StringProp"].ShouldEqual("foobar");
 
         }
+#pragma warning disable 649
+// ReSharper disable UnusedAutoPropertyAccessor.Local
 
         class ConversionTestType
         {
@@ -139,6 +141,8 @@ namespace StorEvil.Interpreter.ParameterConverter_Specs
             public string StringProp { get; set; }
         }
     }
+// ReSharper restore UnusedAutoPropertyAccessor.Local
+#pragma warning restore 649
 
     public class TypedArrayTestType
     {
