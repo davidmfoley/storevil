@@ -26,7 +26,6 @@ Scenario: O wins
 	When O plays in the bottom left
 	Then the winner should be O
 
-
 Scenario: X wins
 	Given the following board:
 	|X|X|O|

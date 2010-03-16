@@ -32,8 +32,8 @@ namespace StorEvil.Console
 
         protected override void SetupSwitches(SwitchParser<StubGenerationSettings> parser)
         {
-            parser.AddSwitch("--clipboard", "-b").SetsField(x => x.WriteToClipboard);
-            parser.AddSwitch("--destination", "-d").SetsField(x => x.Destination);
+            parser.AddSwitch("--clipboard", "-b").SetsField(x => x.WriteToClipboard).WithDescription("Writes the generated stubs to the clipboard");
+            parser.AddSwitch("--destination", "-d").SetsField(x => x.Destination).WithDescription("Writes the generated stubs to a file");
         }
     }
 }
