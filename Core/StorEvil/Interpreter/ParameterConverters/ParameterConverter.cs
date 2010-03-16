@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace StorEvil.Interpreter.ParameterConverters
 {
@@ -11,6 +10,7 @@ namespace StorEvil.Interpreter.ParameterConverters
             public Type ParameterType { get; set; }
             public string Value { get; set; }
         }
+
         class ConverterInfo
         {
             public Predicate<ConversionContext> Predicate;
@@ -22,6 +22,7 @@ namespace StorEvil.Interpreter.ParameterConverters
                 Converter = converter;
             }
         }
+
         private static readonly List<ConverterInfo> _typeConverters = new List<ConverterInfo>();
 
         public ParameterConverter()
@@ -31,6 +32,13 @@ namespace StorEvil.Interpreter.ParameterConverters
             AddConverter<string[][]>(new StorEvilTableConverter());
             AddConverterFilter(IsTypedArrayTable, new TypedArrayTableConverter(this));
             AddConverterFilter(IsCommaSeparatedArray, new SimpleArrayConverter(this));
+            AddConverterFilter(IsDictionary, new DictionaryConverter(this));
+            AddConverterFilter(IsCustomTypeWithTable, new TableToTypeConverter(this));    
+        }
+
+        private bool IsDictionary(ConversionContext x)
+        {
+            return typeof(IDictionary<string, string>).IsAssignableFrom( x.ParameterType) && x.Value.StartsWith("|");
         }
 
         private bool IsTypedArrayTable(ConversionContext x)
@@ -38,6 +46,10 @@ namespace StorEvil.Interpreter.ParameterConverters
             return x.ParameterType.IsArray && x.Value.StartsWith("|");
         }
 
+        private bool IsCustomTypeWithTable(ConversionContext x)
+        {
+            return (!x.ParameterType.Assembly.FullName.StartsWith("System.")) && x.Value.StartsWith("|");
+        }
 
         private bool IsCommaSeparatedArray(ConversionContext x)
         {
@@ -84,34 +96,6 @@ namespace StorEvil.Interpreter.ParameterConverters
         private static object ParseEnumValue(string value, Type type)
         {
             return Enum.Parse(type, value, true);
-        }
-    }
-
-    public class SimpleArrayConverter : IStorevilConverter
-    {
-        private readonly ParameterConverter _parameterConverter;
-        private ArrayBuilder _arrayBuilder = new ArrayBuilder();
-
-        public SimpleArrayConverter(ParameterConverter parameterConverter)
-        {
-            _parameterConverter = parameterConverter;
-        }
-
-        public object ConvertParamValue(string val, Type destinationType)
-        {
-            var elementType = destinationType.GetElementType();
-                    
-            var parsed = val.Split(',');
-            var converted = parsed.Select(x=>ConvertElement(x, elementType)).Where(x=>x != null);
-            return _arrayBuilder.BuildArrayOfType(elementType, converted);
-        }
-
-        private object ConvertElement(string x, Type elementType)
-        {
-            if (string.IsNullOrEmpty(x))
-                return null;
-
-            return _parameterConverter.Convert(x, elementType);
         }
     }
 }

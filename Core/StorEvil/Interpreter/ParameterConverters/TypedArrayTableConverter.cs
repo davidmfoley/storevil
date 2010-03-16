@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using StorEvil.Utility;
 
 namespace StorEvil.Interpreter.ParameterConverters
 {
@@ -25,8 +26,8 @@ namespace StorEvil.Interpreter.ParameterConverters
         {
             var fieldNames = rows.First().Select(x=>x.Trim());
             var destinationType = type.GetElementType();
-            var setters = fieldNames.Select(f => GetSetter(destinationType, f)).ToArray();
-            var types = fieldNames.Select(f => GetMemberType(destinationType, f)).ToArray();
+            var setters = fieldNames.Select(f => destinationType.GetSetter(f)).ToArray();
+            var types = fieldNames.Select(f => destinationType.GetMemberType(f)).ToArray();
             
             rows = rows.Skip(1).ToArray();
 
@@ -47,38 +48,6 @@ namespace StorEvil.Interpreter.ParameterConverters
             }
 
             return _arrayBuilder.BuildArrayOfType(destinationType, items);
-        }
-
-       
-
-        private Type GetMemberType(Type destinationType, string memberName)
-        {
-            var propertyInfo = destinationType.GetProperty(memberName);
-            if (null != propertyInfo)
-                return propertyInfo.PropertyType;
-
-            var fieldInfo = destinationType.GetField(memberName);
-            if (null != fieldInfo)
-                return fieldInfo.FieldType;
-            
-            return null;
-        }
-
-        private Action<object, object> GetSetter(Type destinationType, string memberName)
-        {
-            var propertyInfo = destinationType.GetProperty(memberName);
-            if (null != propertyInfo)
-            {
-                return (o, v) => propertyInfo.SetValue(o, v, null);
-            }
-
-            var fieldInfo = destinationType.GetField(memberName);
-            if (null != fieldInfo)
-            {
-                return (o, v) => fieldInfo.SetValue(o, v);
-            }
-
-            throw new UnknownFieldException(destinationType, memberName);
         }
     }
 }

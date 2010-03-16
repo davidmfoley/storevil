@@ -78,10 +78,13 @@
     <Compile Include="Interpreter\DebugTrace.cs" />
     <Compile Include="Interpreter\ParameterConverters\ArrayBuilder.cs" />
     <Compile Include="Interpreter\ParameterConverters\ConvertHelper.cs" />
+    <Compile Include="Interpreter\ParameterConverters\DictionaryConverter.cs" />
     <Compile Include="Interpreter\ParameterConverters\IStorevilConverter.cs" />
+    <Compile Include="Interpreter\ParameterConverters\SimpleArrayConverter.cs" />
     <Compile Include="Interpreter\ParameterConverters\SimpleConverter.cs" />
     <Compile Include="Interpreter\ParameterConverters\StorevilDecimalConverter.cs" />
     <Compile Include="Interpreter\ParameterConverters\StorEvilTableConverter.cs" />
+    <Compile Include="Interpreter\ParameterConverters\TableToTypeConverter.cs" />
     <Compile Include="Interpreter\ParameterConverters\TypedArrayTableConverter.cs" />
     <Compile Include="Interpreter\ParameterConverters\UnknownFieldException.cs" />
     <Compile Include="Nunit\ParameterValueFormatter.cs" />
@@ -137,6 +140,7 @@
     <Compile Include="Core\Story.cs" />
     <Compile Include="Parsing\StoryParser.cs" />
     <Compile Include="Context\StoryToContextMapper.cs" />
+    <Compile Include="Utility\ReflectionExtensions.cs" />
     <Compile Include="Utility\StringUtility.cs" />
     <Compile Include="Nunit\NUnitTestMethodGenerator.cs" />
     <Compile Include="Context\WordFilters\TextMatchWordFilter.cs" />

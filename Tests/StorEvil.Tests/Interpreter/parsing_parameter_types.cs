@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using NUnit.Framework;
 using StorEvil.Interpreter.ParameterConverters;
 using StorEvil.Utility;
@@ -7,13 +8,13 @@ namespace StorEvil.Interpreter.ParameterConverter_Specs
     [TestFixture]
     public class parsing_parameter_types
     {
-        private ParameterConverter Converter;
+        protected ParameterConverter Converter = new ParameterConverter();
 
-        [SetUp]
-        public void SetupContext()
-        {
-            Converter = new ParameterConverter();
-        }
+      
+    }
+    [TestFixture]
+    public class simple_conversions : parsing_parameter_types
+    {
 
         [Test]
         public void should_convert_int()
@@ -40,6 +41,25 @@ namespace StorEvil.Interpreter.ParameterConverter_Specs
         }
 
         [Test]
+        public void should_convert_enum_to_correct_value()
+        {
+            var result = Converter.Convert("foo", typeof(TestValues));
+            result.ShouldBeOfType<TestValues>();
+            result.ShouldEqual(TestValues.Foo);
+        }
+
+        private enum TestValues
+        {
+            Foo,
+            Bar,
+            FooBar
+        }
+
+    }
+    [TestFixture]
+    public class converting_tables_of_data : parsing_parameter_types
+    {
+        [Test]
         public void should_convert_table_to_string_array()
         {
             var result = Converter.Convert("|a1|a2|\r\n|b1|b2|", typeof (string[][])) as string[][];
@@ -64,7 +84,11 @@ namespace StorEvil.Interpreter.ParameterConverter_Specs
             result[1].StringField.ShouldBe("b");
             result[1].IntField.ShouldBe(2);
         }
+    }
 
+    [TestFixture]
+    public class converting_comma_separated_arrays : parsing_parameter_types
+    {
         [Test]
         public void should_convert_comma_separated_values_to_an_array_of_ints()
         {
@@ -85,20 +109,34 @@ namespace StorEvil.Interpreter.ParameterConverter_Specs
             result.Length.ShouldEqual(0);
             
         }
+    }
 
-        private enum TestValues
+    [TestFixture]
+    public class converting_a_table_to_a_user_type :parsing_parameter_types
+    {
+        [Test]
+        public void should_populate_fields_of_user_type_from_table()
         {
-            Foo,
-            Bar,
-            FooBar
+            var result = Converter.Convert("|IntField|42|\r\n|StringProp|foobar|", typeof(ConversionTestType)) as ConversionTestType;
+            result.ShouldNotBeNull();
+            result.IntField.ShouldEqual(42);
+            result.StringProp.ShouldEqual("foobar");
         }
 
         [Test]
-        public void should_convert_enum_to_correct_value()
+        public void should_populate_dictionary_from_table()
         {
-            var result = Converter.Convert("foo", typeof (TestValues));
-            result.ShouldBeOfType<TestValues>();
-            result.ShouldEqual(TestValues.Foo);
+            var result = Converter.Convert("|IntField|42|\r\n|StringProp|foobar|", typeof(Dictionary<string, string>)) as Dictionary<string, string>;
+            result.ShouldNotBeNull();
+            result["IntField"].ShouldEqual("42");
+            result["StringProp"].ShouldEqual("foobar");
+
+        }
+
+        class ConversionTestType
+        {
+            public int IntField;
+            public string StringProp { get; set; }
         }
     }
 

@@ -1,6 +1,4 @@
 using System;
-using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 using StorEvil;
 using StorEvil.Utility;
 
