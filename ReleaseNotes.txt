@@ -1,0 +1,113 @@
+StorEvil version 0.2 release notes
+
+This version adds a number of enhancements to parsing of tables and lists of values, two new example projects, and improved HTML report output.
+It also adds the ability to generate stubbed "pending" steps for all plaintext stories that could not be interpreted.
+Also added: the "--debug" switch for tracing StorEvil internal parsing/executiong prgress.
+
+See below for more information on the new features.
+
+-----------
+HTML output
+-----------
+
+- Nicer HTML output by default.
+
+- Added suggestions for not implemented grammar to the default HTML template
+
+------------------------------
+Separated Assertions from Core
+------------------------------
+
+- Moved the ShouldXXXX extension methods out to a separate assembly (StorEvil.Assertions), so you can use StorEvil without them if desired.
+
+- Add StorEvil.Assertions to your Assemblies list in storevil.config to include these extension methods.
+
+------------------
+Automatic stubbing
+------------------
+
+- Added a new command "stub" which can be used to generate the initial set of context classes to a file, the clipboard, or stdout.
+
+- Generates stubs for any plaintext steps that could not be interpreted.
+
+- usage: 
+	storevil stub (--destination {destination_file_name} | --clipboard )
+
+- if no args specified, it will write to stdout (the console)
+
+- Made some improvements to the suggestion engine when dealing with scenario outline parameters.
+
+---------------------------------
+Added two more example projects  
+---------------------------------
+
+- Bowling - features were copied from the SpecFlow project (note: different license for these files than the rest of StorEvil)
+
+- Tic Tac Toe
+
+---------------------------------
+Parsing/interpreting improvements
+---------------------------------
+ 
+- double-quoted strings are treated as a single term
+
+    Given my name is "Foo Bar Baz Jr."
+    
+Maps to:
+	public void Given_my_name_is(string multiWordName) 
+	{
+		// multiWordName = "Foo Bar Baz Jr."	
+	}
+
+- everything after a colon is treated as a single term
+
+	Given some arbitrary text: foo bar baz
+Maps to:
+	public void Given_some_arbitrary_text(string arbitraryText) 
+	{
+		// arbitraryText = "foo bar baz"	
+	}
+- comma-separated values can be automatically mapped to an array
+
+For example:
+
+    Given the following numbers: 1,2,3,4,5
+    
+Maps to:
+
+    public void Given_the_following_numbers(int[] numbers) 
+    {
+		// numbers[0] = 1, numbers[1] =2, etc...
+    }
+
+- Handle apostrophes (in contractions... map plaintext "it's" to C# "its").
+
+- HashTable/Dictionary & typed single argument parsing of Key/Value data in a table.
+
+For example:
+
+    Given the following user:
+    |FirstName|Foo|
+    |LastName|Bar|
+
+Maps to:
+
+    public class UserInfo {
+        string FirstName { get; set; }
+        string LastName { get; set; }		
+    }
+    public void Given_the_following_user(UserInfo userInfo) 
+    {
+        // userInfo.FirstName will be "Foo" here 
+    }
+
+... or you could write the following:
+    public void Given_the_following_user(Hashtable info) 
+    { 
+		// info["FirstName"] will be "Foo"
+    }
+    
+-----------------
+Tracing/debugging
+-----------------
+- Added command line switch @--debug@ which enables some tracing output
