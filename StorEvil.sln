@@ -14,6 +14,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{5E256EA4-5E05-4735-9937-2B8B1A8DC6AF}"
 	ProjectSection(SolutionItems) = preProject
 		default.build = default.build
+		InstallationInstructions.txt = InstallationInstructions.txt
+		ReadMe.markdown = ReadMe.markdown
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConwaysLife", "Examples\ConwaysLife\ConwaysLife.csproj", "{2CE31BAB-0046-43E0-B58E-585FF8646EF7}"
@@ -27,6 +29,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorEvil.Assertions", "Core\StorEvil.Assertions\StorEvil.Assertions.csproj", "{92312C44-8881-41DD-8075-1284740FFF9F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe", "Examples\TicTacToe\TicTacToe.csproj", "{FA4A5350-AA62-4C2D-8DE4-200B2FF2D15F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tutorial", "Examples\Tutorial\Tutorial.csproj", "{12DB6FE1-9BB4-4538-9F7B-C3113465BB64}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -66,6 +70,10 @@ Global
 		{FA4A5350-AA62-4C2D-8DE4-200B2FF2D15F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA4A5350-AA62-4C2D-8DE4-200B2FF2D15F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA4A5350-AA62-4C2D-8DE4-200B2FF2D15F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12DB6FE1-9BB4-4538-9F7B-C3113465BB64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12DB6FE1-9BB4-4538-9F7B-C3113465BB64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12DB6FE1-9BB4-4538-9F7B-C3113465BB64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12DB6FE1-9BB4-4538-9F7B-C3113465BB64}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,5 +87,6 @@ Global
 		{436259FA-036B-466E-A670-F91507C34D0A} = {51EF7085-D82F-45FE-81EC-C604BFC5BB17}
 		{43C70F9D-3747-43E3-A76B-8A8A0C2F15CC} = {51EF7085-D82F-45FE-81EC-C604BFC5BB17}
 		{FA4A5350-AA62-4C2D-8DE4-200B2FF2D15F} = {51EF7085-D82F-45FE-81EC-C604BFC5BB17}
+		{12DB6FE1-9BB4-4538-9F7B-C3113465BB64} = {51EF7085-D82F-45FE-81EC-C604BFC5BB17}
 	EndGlobalSection
 EndGlobal
