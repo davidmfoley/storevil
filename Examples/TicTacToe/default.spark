@@ -47,8 +47,7 @@
 		}
 		
 		.line-failed	{
-			color:red;
-			float:left;
+			color:red;			
 		}
 		
 		.line-passed	{
@@ -58,12 +57,15 @@
 		.line-pending	{
 			color:#981;
 		}
+		
+		.line-failed, .line-passed, .line-pending {
+			font-family: Consolas, monospace
+		}
+		
 		.failure-message {
 			padding:10px;
 			font-weight:bold;
-			color:Red;
-			clear:both;
-		
+			color:Red;			
 		}
 	</style>
     </head>
@@ -99,7 +101,7 @@
 				</div>
 				<div class="scenario" each="var scenario in story.Scenarios">
 					<h3 class="scenario-${scenario.Status.ToString().ToLower()}">${scenario.Name} - ${scenario.Status.ToString()}</h3>
-					<for each="var line in scenario.Lines">
+					<for each="var line in scenario.Lines">						
 						<div class="line-${line.Status.ToString().ToLower()}">						
 							${line.Text.Replace("\r\n","<br/>")}<br/>
 						</div>
