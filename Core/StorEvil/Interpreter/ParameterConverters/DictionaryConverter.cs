@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace StorEvil.Interpreter.ParameterConverters
@@ -15,8 +16,7 @@ namespace StorEvil.Interpreter.ParameterConverters
         public object ConvertParamValue(string val, Type destinationType)
         {
             var rows = (string[][])new StorEvilTableConverter().ConvertParamValue(val, typeof(string[][]));
-            var converted = Activator.CreateInstance(destinationType) as IDictionary<string, string>;
-
+            var converted = Activator.CreateInstance(destinationType) as IDictionary;
             foreach (var row in rows)
             {
                 var name = row[0];

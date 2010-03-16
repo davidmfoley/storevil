@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace StorEvil.Interpreter.ParameterConverters
@@ -38,7 +39,7 @@ namespace StorEvil.Interpreter.ParameterConverters
 
         private bool IsDictionary(ConversionContext x)
         {
-            return typeof(IDictionary<string, string>).IsAssignableFrom( x.ParameterType) && x.Value.StartsWith("|");
+            return typeof(IDictionary).IsAssignableFrom( x.ParameterType) && x.Value.StartsWith("|");
         }
 
         private bool IsTypedArrayTable(ConversionContext x)
