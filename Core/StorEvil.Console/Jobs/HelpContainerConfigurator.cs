@@ -40,8 +40,9 @@ StorEvil is a natural language BDD framework and runner.
 Available commands:
 
  execute - Executes the specs in the console
- nunit   - Generates NUnit text fixtures
- init    - Initializes configuration  and templates for a StorEvil project
+ init    - Initializes configuration and templates for a StorEvil project
+ stub    - Generates example C# method defintions for all unmatched steps in the plaintext steps
+ nunit   - Generates NUnit text fixtures (deprecated)
 
 usage:
   'storevil {command} {switches}  - to execute the command
