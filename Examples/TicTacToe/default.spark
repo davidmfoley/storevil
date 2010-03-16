@@ -1,0 +1,124 @@
+<html>
+    <head>
+		<style type='text/css'>	
+		body {
+			background: #ddd;
+			font-family: Interstate, "Lucida Grande",  Verdana, Arial, helvetica, sans-serif;
+			font-size:13px;
+			color: black;			
+		}
+		
+		div  {
+			padding:5x;			
+		}
+		
+		h1, h2, h3 {
+			padding:5px;
+			margin:0px;
+		}
+		
+		.story {			
+			background: #eee;
+			padding:5px 5px 10px 15px;
+			outline: 1px solid #ccc;
+			margin-bottom:10px;
+		}
+		.scenario, .suggestions {	
+			background: #fff;
+			outline: 1px solid #ccc;
+			padding:5px 5px 5px 15px;
+		}
+		.summary {
+			padding:10px 10px 5px 10px;
+		}
+		.scenario-failed, .summary-failed	{
+			background-color:#f99;
+		}
+	
+		.scenario-passed,.summary-passed	{
+			background-color:#8d8;
+		}
+		.scenario-pending,.summary-pending	{
+			background-color:#fd7;
+		}
+		
+		.suggestions h3 {
+			background: #ccc;
+		}
+		
+		.line-failed	{
+			color:red;
+			float:left;
+		}
+		
+		.line-passed	{
+			color:green;
+		}
+		
+		.line-pending	{
+			color:#981;
+		}
+		.failure-message {
+			padding:10px;
+			font-weight:bold;
+			color:Red;
+			clear:both;
+		
+		}
+	</style>
+    </head>
+    <body>
+        <h1>StorEvil Run Report</h1>
+		<div class="summary">
+			<div class="summary-passed" if="Model.PassedScenarios.Count > 0">
+				${Model.PassedScenarios.Count} Passed
+			</div>
+			<div class="summary-failed" if="Model.FailedScenarios.Count > 0">
+				${Model.FailedScenarios.Count} Failed
+			</div>
+			<div class="summary-pending" if="Model.PendingScenarios.Count > 0">
+				${Model.PendingScenarios.Count} Pending
+			</div>
+		</div>
+        <div class="no-stories-found" if="!Model.HasAnyStories()">
+            No stories were found.
+        </div>		
+        <div class="stories-wrapper" if="Model.HasAnyStories()">
+            <div class="story" each="var story in Model.Stories">    
+                <h2>${story.Summary.Replace("\r\n","<br/>")}</h2> 
+				<div class="summary">
+					<div class="summary-passed" if="story.PassedScenarios.Count > 0">
+						${story.PassedScenarios.Count} Passed
+					</div>
+					<div class="summary-failed" if="story.FailedScenarios.Count > 0">
+						${story.FailedScenarios.Count} Failed
+					</div>
+					<div class="summary-pending" if="story.PendingScenarios.Count > 0">
+						${story.PendingScenarios.Count} Pending
+					</div>
+				</div>
+				<div class="scenario" each="var scenario in story.Scenarios">
+					<h3 class="scenario-${scenario.Status.ToString().ToLower()}">${scenario.Name} - ${scenario.Status.ToString()}</h3>
+					<for each="var line in scenario.Lines">
+						<div class="line-${line.Status.ToString().ToLower()}">						
+							${line.Text.Replace("\r\n","<br/>")}<br/>
+						</div>
+					</for>
+					
+					<div class="failure-message" if="!string.IsNullOrEmpty(scenario.FailureMessage)">
+						${scenario.FailureMessage}
+					</div>
+				</div>
+				
+				<div class="suggestions" if="Model.Suggestions.Count > 0">
+					<h3>Suggestions for implementing pending steps</h3>
+					<div class="suggestion" each="var suggestion in Model.Suggestions">
+						<code><pre>
+${suggestion}
+						</pre></code>
+					</div>
+				</div>
+            </div>
+        </div>
+    </body>
+</html>
