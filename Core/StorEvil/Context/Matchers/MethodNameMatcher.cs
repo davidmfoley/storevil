@@ -66,8 +66,7 @@ namespace StorEvil.Context.Matchers
 
             var match = BuildNameMatch(words, paramValues);
             if (match != null)
-            {
-               
+            {               
                 DebugTrace.Trace("Method name match", "Method = " + _methodInfo.DeclaringType.Name + "." +_methodInfo.Name);
                 if (paramValues.Count() > 0)
                 {

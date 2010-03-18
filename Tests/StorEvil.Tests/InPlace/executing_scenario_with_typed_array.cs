@@ -68,4 +68,60 @@ Given the following
             }
         }
     }
+
+    [TestFixture]
+    public class executing_scenario_with_typed_parameter :
+        InPlaceRunnerSpec<executing_scenario_with_typed_parameter.TypedScenarioTestContext>
+    {
+        private string storyText =
+            @"
+Story: test tables in scenarios
+Scenario:
+Given the following
+|IntField|42|
+|StringProp|foobar|
+";
+
+        [SetUp]
+        public void SetupContext()
+        {
+            ResultListener = MockRepository.GenerateStub<IResultListener>();
+
+            var story = new StoryParser().Parse(storyText, null);
+            Context = new StoryContext(typeof(TypedScenarioTestContext));
+
+            new InPlaceRunner(ResultListener, new ScenarioPreprocessor(), new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()))).HandleStory(story, Context);
+
+        }
+
+        [Test]
+        public void Table_is_not_null()
+        {
+            TypedScenarioTestContext.Row.ShouldNotBeNull();
+        }
+
+        [Test]
+        public void Table_data_is_set()
+        {
+            var row = TypedScenarioTestContext.Row;
+           row.StringProp.ShouldEqual("foobar");
+            row.IntField.ShouldEqual(42);
+
+        }
+
+        public class TypedScenarioTestContext
+        {
+            public TypedScenarioTestContext()
+            {
+                Row = null;
+            }
+           
+            public static TestRow Row;
+
+            public void Given_the_following(TestRow row)
+            {
+                Row = row;
+            }
+        }
+    }
 }

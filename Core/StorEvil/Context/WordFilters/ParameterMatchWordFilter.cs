@@ -34,10 +34,7 @@ namespace StorEvil.Context.WordFilters
         }}
 
         public bool IsMatch(string s)
-        {
-            if (IsTableString(s))
-                return IsTable;
-
+        {          
             return true;
         }
 

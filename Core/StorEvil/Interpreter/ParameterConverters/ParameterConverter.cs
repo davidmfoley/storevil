@@ -83,9 +83,11 @@ namespace StorEvil.Interpreter.ParameterConverters
             foreach (var storevilConverter in _typeConverters)
             {
                 var predicate = storevilConverter.Predicate;
-               
+
                 if (predicate(conversionContext))
-                    return storevilConverter.Converter.ConvertParamValue(paramValue, type);
+                {
+                     return storevilConverter.Converter.ConvertParamValue(paramValue, type);
+                }
             }
             
             if (type.IsEnum)

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using StorEvil.Context.Matchers;
@@ -59,8 +60,7 @@ namespace StorEvil.Interpreter
         }
 
         public InvocationChain GetChain(string line)
-        {
-           
+        {          
             var partialMatches = new List<PartialMatch>();
             foreach (var member in _memberMatchers)
             {
