@@ -28,9 +28,11 @@ Given the following
             ResultListener = MockRepository.GenerateStub<IResultListener>();
 
             var story = new StoryParser().Parse(storyText, null);
-            Context = new StoryContext(typeof(ScenarioArrayTestContext));
+            Context = new StoryContext(typeof (ScenarioArrayTestContext));
 
-            new InPlaceRunner(ResultListener, new ScenarioPreprocessor(), new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()))).HandleStory(story, Context);
+            new InPlaceRunner(ResultListener, new ScenarioPreprocessor(),
+                              new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()))).
+                HandleStory(story, Context);
         }
 
         [Test]
@@ -50,7 +52,6 @@ Given the following
             table[0].StringProp.ShouldEqual("one");
             table[1].StringProp.ShouldEqual("two");
             table[2].StringProp.ShouldEqual("three");
-
         }
 
         public class ScenarioArrayTestContext
@@ -88,10 +89,11 @@ Given the following
             ResultListener = MockRepository.GenerateStub<IResultListener>();
 
             var story = new StoryParser().Parse(storyText, null);
-            Context = new StoryContext(typeof(TypedScenarioTestContext));
+            Context = new StoryContext(typeof (TypedScenarioTestContext));
 
-            new InPlaceRunner(ResultListener, new ScenarioPreprocessor(), new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()))).HandleStory(story, Context);
-
+            new InPlaceRunner(ResultListener, new ScenarioPreprocessor(),
+                              new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()))).
+                HandleStory(story, Context);
         }
 
         [Test]
@@ -104,9 +106,8 @@ Given the following
         public void Table_data_is_set()
         {
             var row = TypedScenarioTestContext.Row;
-           row.StringProp.ShouldEqual("foobar");
+            row.StringProp.ShouldEqual("foobar");
             row.IntField.ShouldEqual(42);
-
         }
 
         public class TypedScenarioTestContext
@@ -115,7 +116,7 @@ Given the following
             {
                 Row = null;
             }
-           
+
             public static TestRow Row;
 
             public void Given_the_following(TestRow row)

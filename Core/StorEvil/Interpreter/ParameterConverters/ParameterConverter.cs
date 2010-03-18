@@ -30,11 +30,17 @@ namespace StorEvil.Interpreter.ParameterConverters
         {
             AddConverter<int>(x => int.Parse(ConvertHelper.StripNonNumeric(x)));
             AddConverter<decimal>(new StorevilDecimalConverter());
-            AddConverter<string[][]>(new StorEvilTableConverter());
+            AddConverterFilter(IsArrayOfArrays, new StorEvilTableConverter(this));
             AddConverterFilter(IsTypedArrayTable, new TypedArrayTableConverter(this));
             AddConverterFilter(IsCommaSeparatedArray, new SimpleArrayConverter(this));
             AddConverterFilter(IsDictionary, new DictionaryConverter(this));
             AddConverterFilter(IsCustomTypeWithTable, new TableToTypeConverter(this));    
+        }
+
+        private bool IsArrayOfArrays(ConversionContext context)
+        {
+            var parameterType = context.ParameterType;
+            return parameterType.IsArray && parameterType.GetElementType().IsArray;
         }
 
         private bool IsDictionary(ConversionContext x)

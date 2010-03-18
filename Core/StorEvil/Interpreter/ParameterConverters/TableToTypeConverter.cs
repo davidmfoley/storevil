@@ -14,7 +14,7 @@ namespace StorEvil.Interpreter.ParameterConverters
 
         public object ConvertParamValue(string val, Type destinationType)
         {
-            var rows = (string[][])new StorEvilTableConverter().ConvertParamValue(val, typeof(string[][]));
+            var rows = (string[][])new StorEvilTableConverter(_parameterConverter).ConvertParamValue(val, typeof(string[][]));
             var converted = Activator.CreateInstance(destinationType);
 
             foreach (var row in rows)

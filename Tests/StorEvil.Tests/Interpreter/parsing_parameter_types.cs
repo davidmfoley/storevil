@@ -60,7 +60,7 @@ namespace StorEvil.Interpreter.ParameterConverter_Specs
     public class converting_tables_of_data : parsing_parameter_types
     {
         [Test]
-        public void should_convert_table_to_string_array()
+        public void should_convert_table_to_array_of_string_arrays()
         {
             var result = Converter.Convert("|a1|a2|\r\n|b1|b2|", typeof (string[][])) as string[][];
             result.ShouldNotBeNull();
@@ -69,6 +69,18 @@ namespace StorEvil.Interpreter.ParameterConverter_Specs
             result[1][0].ShouldBe("b1");
             result[1][1].ShouldBe("b2");
         }
+
+        [Test]
+        public void should_convert_table_to_array_of_int_arrays()
+        {
+            var result = Converter.Convert("|1|2|\r\n|3|42|", typeof(int[][])) as int[][];
+            result.ShouldNotBeNull();
+            result[0][0].ShouldBe(1);
+            result[0][1].ShouldBe(2);
+            result[1][0].ShouldBe(3);
+            result[1][1].ShouldBe(42);
+        }
+
 
         [Test]
         public void should_convert_typed_table_to_an_array_of_types()

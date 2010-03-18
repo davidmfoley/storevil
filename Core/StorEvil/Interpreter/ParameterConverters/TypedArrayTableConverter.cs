@@ -17,7 +17,7 @@ namespace StorEvil.Interpreter.ParameterConverters
 
         public object ConvertParamValue(string val, Type type)
         {
-            var rows =(string[][]) new StorEvilTableConverter().ConvertParamValue(val, typeof(string[][]));
+            var rows =(string[][]) new StorEvilTableConverter(_parameterConverter).ConvertParamValue(val, typeof(string[][]));
 
             return BuildTypedArray(rows, type);
         }
