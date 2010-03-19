@@ -1,10 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using StorEvil.Configuration;
 using StorEvil.Core;
 using StorEvil.Infrastructure;
-using StorEvil.InPlace;
 
 namespace StorEvil.Parsing
 {
@@ -64,21 +64,29 @@ namespace StorEvil.Parsing
 
         private IEnumerable<StoryInfo> GetStoryInfos(string path)
         {
+            if (Filesystem.FileExists(path))
+            {
+                return new[] {GetStoryInfo(path)};
+            }
             var stories = Filesystem
                 .GetFilesInFolder(path)
                 .Where(ExtensionIsSupportedByCurrentSettings)
-                .Select(file =>
-                        new StoryInfo
-                            {
-                                Id = Path.GetFileNameWithoutExtension(file),
-                                Text = Filesystem.GetFileText(file)
-                            })
+                .Select(file =>GetStoryInfo(file))                       
                 .ToList();
 
             foreach (var subPath in Filesystem.GetSubFolders(path))
                 stories.AddRange(GetStoryInfos(subPath));
 
             return stories;
+        }
+
+        private StoryInfo GetStoryInfo(string file)
+        {
+           return new StoryInfo
+                {
+                    Id = Path.GetFileNameWithoutExtension(file),
+                    Text = Filesystem.GetFileText(file)
+                };
         }
 
         private bool ExtensionIsSupportedByCurrentSettings(string file)

@@ -33,7 +33,8 @@ namespace StorEvil.Console
             SwitchParser<ConfigSettings> switchParser = new CommonSwitchParser();
 
             var settings = _configSource.GetConfig(Directory.GetCurrentDirectory());
-            settings.StoryBasePath = Directory.GetCurrentDirectory();
+            if (string.IsNullOrEmpty(settings.StoryBasePath))
+                settings.StoryBasePath = Directory.GetCurrentDirectory();
             switchParser.Parse(args, settings);
 
             container.Register(settings);

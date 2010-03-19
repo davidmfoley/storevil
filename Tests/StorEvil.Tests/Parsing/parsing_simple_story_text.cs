@@ -66,4 +66,34 @@ Then I should expect some result
             ((Scenario) Result.Scenarios.First()).Body.Count().ShouldEqual(3);
         }
     }
+
+    [TestFixture]
+    public class parsing_a_story_with_multiple_lines_of_text
+    {
+        private Story Result;
+
+        private const string testSingleStoryText =
+            @"
+As a user I want to do something
+
+and something else
+so that I can achieve a goal
+
+Scenario: Doing something
+Given some condition
+";
+
+        [SetUp]
+        public void SetupContext()
+        {
+            var parser = new StoryParser();
+            Result = parser.Parse(testSingleStoryText, null);
+        }
+
+        [Test]
+        public void Should_Parse_Summary()
+        {
+            Result.Summary.ShouldEqual("As a user I want to do something\r\n\r\nand something else\r\nso that I can achieve a goal");
+        }
+    }
 }

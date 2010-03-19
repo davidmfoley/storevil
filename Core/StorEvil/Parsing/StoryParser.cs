@@ -220,7 +220,7 @@ namespace StorEvil.Parsing
 
         private static IEnumerable<string> ParseLines(string text)
         {
-            return text.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries).Select(l => l.Trim());
+            return text.Split(new[] {"\r\n", "\r", "\n"}, StringSplitOptions.None).Select(l => l.Trim());
         }
     }
 }
