@@ -19,7 +19,7 @@ namespace StorEvil.Interpreter.ParameterConverters
 
             foreach (var row in rows)
             {
-                var name = row[0];
+                var name = row[0].Trim();
                 var propValue = row[1];
                 var memberType = destinationType.GetMemberType(name);
                 converted.SetWithReflection(name, _parameterConverter.Convert(propValue, memberType));

@@ -25,7 +25,7 @@ namespace StorEvil.Interpreter.ParameterConverters
             {
                 var values = row.Split(new[] {'|'}, StringSplitOptions.RemoveEmptyEntries);
                 var destRow = new ArrayList();
-                foreach (var converted in values.Select(t1 => _converter.Convert(t1, innerElementType)))
+                foreach (var converted in values.Select(t1 => _converter.Convert(t1.Trim(), innerElementType)))
                 {
                     destRow.Add(converted);
                 }

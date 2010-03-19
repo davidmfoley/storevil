@@ -40,7 +40,11 @@ namespace StorEvil.Interpreter.ParameterConverters
         private bool IsArrayOfArrays(ConversionContext context)
         {
             var parameterType = context.ParameterType;
-            return parameterType.IsArray && parameterType.GetElementType().IsArray;
+            if (!parameterType.IsArray)
+                return false;
+
+            var elementType = parameterType.GetElementType();
+            return elementType != null && elementType.IsArray;
         }
 
         private bool IsDictionary(ConversionContext x)
