@@ -87,7 +87,8 @@
         </div>		
         <div class="stories-wrapper" if="Model.HasAnyStories()">
             <div class="story" each="var story in Model.Stories">    
-                <h2>${story.Summary.Replace("\r\n","<br/>")}</h2> 
+                <h2>${story.Id}</h2> 
+                <p>${story.Summary.Replace("\r\n","<br/>")}</p>
 				<div class="summary">
 					<div class="summary-passed" if="story.PassedScenarios.Count > 0">
 						${story.PassedScenarios.Count} Passed

@@ -48,9 +48,12 @@
     <Compile Include="AgeContext.cs" />
     <Compile Include="BasicGrammarContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TableContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BasicGrammar.feature" />
+    <None Include="default.spark" />
+    <None Include="Tables.feature" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\StorEvil.Assertions\StorEvil.Assertions.csproj">
