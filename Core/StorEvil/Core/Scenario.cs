@@ -4,17 +4,17 @@ using System.Collections.Generic;
 namespace StorEvil.Core
 {
     [Serializable]
-    public class Scenario : IScenario   
+    public class Scenario : ScenarioBase, IScenario
     {
-        public Scenario() {}
-
-        public Scenario(string id, string name, IEnumerable<string> body) 
+        public Scenario()
         {
-         
+        }
+
+        public Scenario(string id, string name, IEnumerable<string> body)
+        {
             Id = id;
             Name = name;
             Body = body;
-          
         }
 
         public Scenario(string name, IEnumerable<string> body)
@@ -24,19 +24,18 @@ namespace StorEvil.Core
             Body = body;
         }
 
-        public string Name { get; set; }
         public IEnumerable<string> Body { get; set; }
-        public string Id { get; set; }
     }
 
     [Serializable]
-    public class ScenarioOutline : IScenario   
+    public class ScenarioOutline : ScenarioBase, IScenario
     {
         public ScenarioOutline()
         {
         }
 
-        public ScenarioOutline(string id, string name, Scenario scenario, IEnumerable<string> fieldNames, IEnumerable<IEnumerable<string>> examples)
+        public ScenarioOutline(string id, string name, Scenario scenario, IEnumerable<string> fieldNames,
+                               IEnumerable<IEnumerable<string>> examples)
         {
             Id = id;
             Name = name;
@@ -49,14 +48,19 @@ namespace StorEvil.Core
         public IEnumerable<IEnumerable<string>> Examples { get; set; }
 
         public IEnumerable<string> FieldNames { get; set; }
+    }
 
+    public class ScenarioBase
+    {
         public string Name { get; set; }
         public string Id { get; set; }
+        public IEnumerable<string> Tags { get; set; }
     }
 
     public interface IScenario
     {
-         string Name { get; }
+        string Name { get; }
         string Id { get; }
+        IEnumerable<string> Tags { get; }
     }
 }

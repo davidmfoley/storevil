@@ -4,7 +4,7 @@ using StorEvil.Context.Matchers;
 using StorEvil.Context.Matches;
 using StorEvil.Utility;
 
-namespace StorEvil.Context
+namespace StorEvil.Context.Matching_method_names_with_reflection
 {
     public enum MatchingTest
     {
@@ -17,7 +17,7 @@ namespace StorEvil.Context
     {
         public static MethodInfo GetMethod<T>(string name)
         {
-            return typeof (T).GetMethod(name);
+            return typeof(T).GetMethod(name);
         }
 
         public static MethodNameMatcher GetMatcher<T>(string methodName)
@@ -86,10 +86,11 @@ namespace StorEvil.Context
             }
         }
     }
+
     public class Matching_words_with_puncutation
     {
-
         protected NameMatch Match { get; set; }
+
         [SetUp]
         public void SetupContext()
         {
@@ -148,6 +149,45 @@ namespace StorEvil.Context
         {
             public int IntParam { get; set; }
             public string StringParam { get; set; }
+        }
+    }
+
+    public class Partial_matches
+    {
+        [SetUp]
+        public void SetupContext()
+        {         
+            var matcher = MethodMatcherTestHelper.GetMatcher<Partial_match_test_context>("when_a_user_named");
+            Match = matcher.GetMatch("when a user named foo does something");
+        }
+
+        protected NameMatch Match { get; set; }
+
+        [Test]
+        public void returns_partial_match()
+        {
+            Match.ShouldBeOfType<PartialMatch>();
+        }
+
+        [Test]
+        public void should_set_name()
+        {
+            Match.ParamValues["name"].ShouldEqual("foo");
+        }
+
+        private class Partial_match_test_context
+        {
+            public Test_user_context when_a_user_named(string name)
+            {
+                return new Test_user_context();
+            }
+        }
+
+        private class Test_user_context
+        {
+            public void does_something()
+            {
+            }
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using StorEvil.Core;
 using StorEvil.Utility;
 
@@ -27,8 +28,10 @@ namespace StorEvil.Parsing
         private readonly StringBuilder _storyName = new StringBuilder();
         private ScenarioBuildingInfo _currentScenario;
         private string _storyId;
+        private List<string> _tags =  new List<string>();
 
         private Action<string> _currentLineHandler;
+        private List<string> _storyTags = new List<string>();
 
         public Story Parse(string storyText, string storyId)
         {
@@ -52,6 +55,12 @@ namespace StorEvil.Parsing
 
         private void HandleStoryTextLine(string line)
         {
+           
+            if (IsTags(line))
+            {
+                HandleTags(line);
+                return;
+            }
             if (IsNewScenarioOrOutline(line))
             {
                 InitializeNewScenario(line);
@@ -78,6 +87,38 @@ namespace StorEvil.Parsing
             _currentLineHandler(line.Trim());
         }
 
+        private void ApplyTagsFromLastLine()
+        {
+            if (_tags.Count ==0)
+                return;
+
+            if (_currentScenario != null)
+                _currentScenario.Tags = _tags.ToArray();
+            else
+                _storyTags.AddRange(_tags);            
+
+            _tags.Clear();
+        }
+
+        private void HandleTags(string line)
+        {
+            _tags.AddRange(GetTags(line));
+        }
+
+        private IEnumerable<string> GetTags(string line)
+        {
+            var tagFinder = new Regex(@"\@\w+");
+            foreach (Match match in tagFinder.Matches(line))
+            {
+                yield return match.Value.Substring(1);
+            }
+        }
+
+        private bool IsTags(string line)
+        {
+            return line.StartsWith("@");
+        }
+
         private static bool IsTableRow(string line)
         {
             return line.StartsWith("|");
@@ -85,7 +126,7 @@ namespace StorEvil.Parsing
 
         private Story GetStory()
         {
-            return new Story(_storyId, _storyName.ToString().Trim(), scenarios);
+            return new Story(_storyId, _storyName.ToString().Trim(), scenarios) {Tags = _storyTags};
         }
 
         private static bool IsNewScenarioOrOutline(string line)
@@ -102,13 +143,14 @@ namespace StorEvil.Parsing
                                        Name = line.After(":").Trim(),
                                        IsOutline = IsScenarioOutlineHeader(line)
                                    };
-
+            ApplyTagsFromLastLine();
             _currentLineHandler = HandleScenarioLine;
         }
 
         private void AppendToStoryName(string line)
         {
             _storyName.Append(line + "\r\n");
+            ApplyTagsFromLastLine();
         }
 
         private void AddScenarioOutline()
@@ -124,7 +166,7 @@ namespace StorEvil.Parsing
                                                       _currentScenario.Name,
                                                       innerScenario,
                                                       fieldNames,
-                                                      examples);
+                                                      examples) { Tags = _currentScenario.Tags };
             scenarios.Add(
                 scenarioOutline);
         }
@@ -133,7 +175,7 @@ namespace StorEvil.Parsing
         {
             return new Scenario(_storyId + "-" + scenarios.Count,
                                 _currentScenario.Name,
-                                _currentScenario.Lines);
+                                _currentScenario.Lines) {Tags = _currentScenario.Tags};
         }
 
         private void AddScenarioOrOutlineIfExists()
@@ -216,6 +258,8 @@ namespace StorEvil.Parsing
             public List<string> Lines = new List<string>();
             public List<IEnumerable<string>> RowData = new List<IEnumerable<string>>();
             public bool IsOutline;
+
+            public string[] Tags;
         }
 
         private static IEnumerable<string> ParseLines(string text)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace StorEvil.Core
@@ -12,6 +13,8 @@ namespace StorEvil.Core
         public string Id { get; set; }
 
         public string Summary { get; private set; }
+
+        public IEnumerable<string> Tags { get; set;}       
 
         public Story(string id, string summary, IEnumerable<IScenario> scenarios)
         {

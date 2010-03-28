@@ -96,4 +96,42 @@ Given some condition
             Result.Summary.ShouldEqual("As a user I want to do something\r\n\r\nand something else\r\nso that I can achieve a goal");
         }
     }
+
+    [TestFixture]
+    public class parsing_tags
+    {
+        private Story Result;
+
+        private const string testStoryText =
+            @"
+@foo @bar
+As a user I want to do something
+
+and something else
+so that I can achieve a goal
+
+@bar @baz
+Scenario: Doing something
+Given some condition
+";
+
+        [SetUp]
+        public void SetupContext()
+        {
+            var parser = new StoryParser();
+            Result = parser.Parse(testStoryText, null);
+        }
+
+        [Test]
+        public void Story_Should_Have_Tag()
+        {
+           Result.Tags.ElementsShouldEqual("foo", "bar");
+        }
+
+        [Test]
+        public void Scenario_Should_Have_Tag()
+        {
+            Result.Scenarios.First().Tags.ElementsShouldEqual("bar", "baz");
+        }
+    }
 }

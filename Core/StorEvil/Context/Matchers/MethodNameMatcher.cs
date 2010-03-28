@@ -118,7 +118,7 @@ namespace StorEvil.Context.Matchers
 
         private void AddWordFilter(string word, Dictionary<string, ParameterInfo> paramNameMap)
         {
-            // if a word in the name exactly matches a parameter to the method
+            // if a word in the name exactly matches a parameter to the method            
             // then we will parse that value inline
             if (!paramNameMap.ContainsKey(word))
             {
