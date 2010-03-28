@@ -1,7 +1,6 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Core;
-using StorEvil.ResultListeners;
 
 namespace StorEvil.InPlace
 {

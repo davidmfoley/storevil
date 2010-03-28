@@ -7,6 +7,8 @@ namespace StorEvil
     {
         IEnumerable<Story> GetStories();
     }
+
+    
 }
 
 

@@ -87,6 +87,7 @@
     <Compile Include="Interpreter\ParameterConverters\TableToTypeConverter.cs" />
     <Compile Include="Interpreter\ParameterConverters\TypedArrayTableConverter.cs" />
     <Compile Include="Interpreter\ParameterConverters\UnknownFieldException.cs" />
+    <Compile Include="IStoryFilter.cs" />
     <Compile Include="Nunit\ParameterValueFormatter.cs" />
     <Compile Include="Context\Matchers\RegexMatcher.cs" />
     <Compile Include="Interpreter\ExtensionMethodHandler.cs" />

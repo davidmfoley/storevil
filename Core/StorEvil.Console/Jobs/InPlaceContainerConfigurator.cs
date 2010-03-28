@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Funq;
 using StorEvil.Configuration;
 using StorEvil.Core;
@@ -12,6 +14,7 @@ namespace StorEvil.Console
         {
             container.EasyRegister<IStoryHandler, InPlaceRunner>();
             container.EasyRegister<IStorEvilJob, StorEvilJob>();
+            container.Register<IStoryFilter>(new TagFilter(CustomSettings.Tags ?? new string[0]));
         }
 
         protected override void SetupSwitches(SwitchParser<InPlaceSettings> parser)
@@ -20,4 +23,6 @@ namespace StorEvil.Console
                 .SetsField(x => x.Tags);
         }
     }
+
+    
 }

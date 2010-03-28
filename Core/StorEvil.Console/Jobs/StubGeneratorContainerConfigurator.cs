@@ -17,6 +17,8 @@ namespace StorEvil.Console
             container.Register<IStoryHandler>(
                 c => new StubGenerator(c.Resolve<ScenarioInterpreter>(), new ImplementationHelper(), GetWriter())
                 );
+
+            container.Register<IStoryFilter>(new IncludeAllFilter());
         }
 
         private ITextWriter GetWriter()

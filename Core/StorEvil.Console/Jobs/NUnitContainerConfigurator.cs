@@ -18,6 +18,7 @@ namespace StorEvil.Console
             container.EasyRegister<IStoryHandler, FixtureGenerationStoryHandler>();
             container.EasyRegister<IStorEvilJob, StorEvilJob>();
             container.EasyRegister<ITestFixtureWriter, SingleFileTestFixtureWriter>();
+            container.Register<IStoryFilter>(new IncludeAllFilter());
         }
 
         protected override void SetupSwitches(SwitchParser<TestFixtureGenerationSettings> parser)
