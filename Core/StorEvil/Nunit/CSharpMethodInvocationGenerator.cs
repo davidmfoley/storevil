@@ -31,7 +31,8 @@ namespace StorEvil.Nunit
             return new LineInfo
                        {
                            Code = ConvertInvocationChainToCSharpCode(matchingChain),
-                           Namespaces = GetNamespaces(matchingChain)
+                           Namespaces = GetNamespaces(matchingChain),
+                           ImplementingType = matchingChain.Invocations.First().MemberInfo.DeclaringType
                        };
         }
 
@@ -43,13 +44,13 @@ namespace StorEvil.Nunit
         private static string ConvertInvocationChainToCSharpCode(InvocationChain matchingChain)
         {
             Func<string, Invocation, string> aggregator =
-                (codeSoFar, invocation) => codeSoFar + BuildInvocation(invocation.MemberInfo, invocation.ParamValues);
+                (codeSoFar, invocation) => codeSoFar + BuildInvocation(invocation.MemberInfo, invocation.RawParamValues);
 
             return matchingChain.Invocations
                 .Aggregate("", aggregator);
         }
 
-        private static string BuildInvocation(MemberInfo memberInfo, IEnumerable<object> paramValues)
+        private static string BuildInvocation(MemberInfo memberInfo, IEnumerable<string> paramValues)
         {
             if (memberInfo is MethodInfo)
             {
@@ -77,14 +78,14 @@ namespace StorEvil.Nunit
             return "." + info.Name;
         }
 
-        private static string BuildMethodInvocation(MethodBase member, IEnumerable<object> paramValues)
+        private static string BuildMethodInvocation(MethodBase member, IEnumerable<string> paramValues)
         {
             var parameters = new string[paramValues.Count()];
             ParameterInfo[] infos = member.GetParameters();
             for (int i = 0; i < paramValues.Count(); i++)
             {
                 parameters[i] = ParameterValueFormatter.GetParamString(infos[i].ParameterType,
-                                                                       paramValues.ElementAt(i).ToString());
+                                                                       paramValues.ElementAt(i));
             }
 
             return string.Format(".{0}({1})", member.Name, String.Join(", ", parameters));
@@ -100,5 +101,6 @@ namespace StorEvil.Nunit
     {
         public string Code;
         public IEnumerable<string> Namespaces;
+        public Type ImplementingType;
     }
 }

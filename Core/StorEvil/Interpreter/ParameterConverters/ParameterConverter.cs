@@ -30,6 +30,8 @@ namespace StorEvil.Interpreter.ParameterConverters
         {
             AddConverter<int>(x => int.Parse(ConvertHelper.StripNonNumeric(x)));
             AddConverter<decimal>(new StorevilDecimalConverter());
+            AddConverter<DateTime>(x=>DateTime.Parse(x));
+           
             AddConverterFilter(IsArrayOfArrays, new StorEvilTableConverter(this));
             AddConverterFilter(IsTypedArrayTable, new TypedArrayTableConverter(this));
             AddConverterFilter(IsCommaSeparatedArray, new SimpleArrayConverter(this));

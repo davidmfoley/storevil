@@ -4,6 +4,7 @@ using System.Text;
 using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Parsing;
+using StorEvil.Utility;
 
 namespace StorEvil.Nunit
 {
@@ -32,6 +33,7 @@ namespace {0} {{
     [TestFixture]
     {5}
     public class {2} {{
+        private StorEvil.Interpreter.ParameterConverters.ParameterConverter ParameterConverter = new StorEvil.Interpreter.ParameterConverters.ParameterConverter();
         [TestFixtureSetUp]
         public void WriteStoryToConsole() {{
             {4}
@@ -43,17 +45,15 @@ namespace {0} {{
 
         private static string GetFixtureName(Story story)
         {
-            var storyName = new StringBuilder();
-            foreach (string word in story.Summary.Split(' '))
-            {
-                storyName.Append(word[0].ToString().ToUpper());
-                if (word.Length > 1)
-                    storyName.Append(word.Substring(1).ToLower());
+            var name = story.Id;
+            if (name.Contains(":\\"))
+                name = name.After(":\\");
 
-                storyName.Append("_");
-            }
+            if (name.Contains("."))
+                name = name.Substring(0, name.LastIndexOf("."));
 
-            return storyName.ToString();
+            return name.Replace("\\", "_").Replace(" ", "_") + "_Specs";
+
         }
 
         public string GenerateFixture(Story story, StoryContext context)

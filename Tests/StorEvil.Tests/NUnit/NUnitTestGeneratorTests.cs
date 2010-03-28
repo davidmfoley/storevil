@@ -164,7 +164,7 @@ namespace StorEvil.NUnit
         }
 
         [Test]
-        public void Should_Throw_Exception_When_Context_Does_Not_Implement_Methods()
+        public void Should_Throw_IgnoreException_When_Context_Does_Not_Implement_Methods()
         {
             var story = new Story("test", "testing assertion when no name match",
                                   new[] {new Scenario("test", new[] {"subcontext bogus test"})});
@@ -178,7 +178,7 @@ namespace StorEvil.NUnit
             catch (Exception ex)
             {
                 // we use reflection to invoke, hence inner exception
-                if (ex.InnerException is AssertionException)
+                if (ex.InnerException is IgnoreException)
                     return;
 
                 throw;
@@ -197,6 +197,23 @@ namespace StorEvil.NUnit
             var context = new TestContext {SubContextField = new TestSubContext {Name = "Dave"}};
 
             CreateAndCallTestMethods<TestContext>(story, context);
+        }
+
+        [Test]
+        public void Should_Handle_MultiLine_Param()
+        {
+            var s = new Scenario("test", new[] { "foo\r\n|a|b|\r\n|c|d|" });
+
+            var story = new Story("test", "testing assertion when no name match", new[] { s });
+
+            var context = new MultiLineTestContext {};
+
+            CreateAndCallTestMethods<MultiLineTestContext>(story, context);
+
+            context.Bar[0][0].ShouldBe("a");
+            context.Bar[0][1].ShouldBe("b");
+            context.Bar[1][0].ShouldBe("c");
+            context.Bar[1][1].ShouldBe("d");
         }
 
         [Test]
@@ -255,6 +272,8 @@ namespace {1} {{
     
     [TestFixture]
     public class {2} {{
+        private StorEvil.Interpreter.ParameterConverters.ParameterConverter ParameterConverter = new StorEvil.Interpreter.ParameterConverters.ParameterConverter();
+      
         public {3} _context;      
         {4}
     }}
@@ -289,6 +308,16 @@ namespace {1} {{
             var fieldInfo = fixture.GetType().GetField("_context");
             fieldInfo.SetValue(fixture, context);
         }
+    }
+
+    public class MultiLineTestContext
+    {
+        public void Foo(string[][] bar)
+        {
+            Bar = bar;
+        }
+
+        public string[][] Bar { get; set; }
     }
 
     public class TestDisposableContext : IDisposable

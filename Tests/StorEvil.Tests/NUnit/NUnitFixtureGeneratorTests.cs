@@ -57,6 +57,17 @@ namespace StorEvil.NUnit
             
         }
 
+        [Test]
+        public void Should_name_class_after_id()
+        {
+            var s = new Scenario("test", new[] { "When I Do Something" });
+            var story = new Story("C:\\Example\\Path\\To\\File.feature", "summary", new[] { s });
+
+            Assembly a = BuildTestAssembly(story);
+            var fixture = a.GetTypes()[0];
+            fixture.Name.ShouldEqual("Example_Path_To_File_Specs");
+        }
+
         private Assembly BuildTestAssembly(Story story)
         {
             return BuildTestAssembly(story, null);
@@ -84,6 +95,7 @@ namespace StorEvil.NUnit
                 .IgnoreArguments()
                 .Return(new NUnitTest(testName, body, new TestContextField[0], usings ?? new string[0]));
 
+            
             return gen;
         }
 

@@ -103,10 +103,12 @@ namespace StorEvil.Interpreter
         private static Invocation BuildInvocation(MemberInfo memberInfo, NameMatch currentMatch)
         {
             if (memberInfo is MethodInfo)
-                return new Invocation(memberInfo, BuildParamValues((MethodInfo) memberInfo, currentMatch.ParamValues),
+                return new Invocation(memberInfo, 
+                    BuildParamValues((MethodInfo) memberInfo, currentMatch.ParamValues),
+                    BuildRawParamValues((MethodInfo) memberInfo, currentMatch.ParamValues),
                                       currentMatch.MatchedText);
 
-            return new Invocation(memberInfo, new string[0], currentMatch.MatchedText);
+            return new Invocation(memberInfo, new string[0], new string[0], currentMatch.MatchedText);
         }
 
         private InvocationChain TryToRecursivelyExtendPartialMatch(InvocationChain chain, string remainingLine,
@@ -135,6 +137,20 @@ namespace StorEvil.Interpreter
                     yield return ConvertParam(paramValues[parameterInfo.Name].ToString(), parameterInfo.ParameterType);
                 else
                     throw new ArgumentException("Could not resolve parameter " + parameterInfo.Name);
+            }
+        }
+
+        private static IEnumerable<string> BuildRawParamValues(MethodBase member, Dictionary<string, object> paramValues)
+        {
+            var parameters = member.GetParameters();
+
+            if (member.IsStatic)
+                parameters = parameters.Skip(1).ToArray();
+
+            foreach (ParameterInfo parameterInfo in parameters)
+            {
+                if (paramValues.ContainsKey(parameterInfo.Name))
+                    yield return (string)paramValues[parameterInfo.Name];
             }
         }
 

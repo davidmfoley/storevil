@@ -54,7 +54,7 @@ namespace StorEvil.Nunit
                 if (functionLine == null)
                 {
                     codeBuilder.AppendLine(
-                        @"            Assert.Fail(@""Error parsing scenario - Could not interpret '" + line + "'\");");
+                        @"            Assert.Ignore(@""Could not interpret: '" + line + "'\");");
                     break;
                 }
 
@@ -186,19 +186,14 @@ namespace StorEvil.Nunit
         private ScenarioLineImplementation BuildCodeFromScenarioLine(string line, StoryContext storyContext)
         {
             var scenarioContext = storyContext.GetScenarioContext();
-            Type chosenType = null;
+            
             LineInfo invocation = null;
-            foreach (var type in storyContext.ImplementingTypes)
-            {
-                invocation = _invocationGenerator.MapMethod(scenarioContext, line);
-                if (null != invocation)
-                {
-                    chosenType = type;
-                    break;
-                }
-            }
-            if (chosenType == null)
+            
+            invocation = _invocationGenerator.MapMethod(scenarioContext, line);
+            if (invocation == null)
                 return null;
+
+            var chosenType = invocation.ImplementingType;
 
             return new ScenarioLineImplementation("            context" + chosenType.Name + invocation.Code + ";", chosenType,
                                                   "context" + chosenType.Name, invocation.Namespaces);

@@ -16,36 +16,21 @@ namespace StorEvil.Nunit
             _typeToStringMap.Add(typeof (string), ValueToString);
             _typeToStringMap.Add(typeof (decimal), x => x.StripNonNumericFormatting());
             _typeToStringMap.Add(typeof (int), x => x.StripNonNumericFormatting());
+         }
 
-            _typeToStringMap.Add(typeof (object), GuessFormatting);
+        public static string GetParamString(Type type, object s)
+        {
+            if (type == typeof(string))
+                return ValueToString((string)s);
+           
+            return GuessFormatting(type, s);
         }
 
-        public static string GetParamString(Type type, string s)
+        public static string GuessFormatting(Type type, object s)
         {
-            if (_typeToStringMap.ContainsKey(type))
-            {
-                return _typeToStringMap[type](s);
-            }
-            return GuessFormatting(s);
-        }
+            var fmt = "({0}) this.ParameterConverter.Convert({1}, typeof({0}))";
 
-        public static string GuessFormatting(string s)
-        {
-            int parsed;
-            if (int.TryParse(s, out parsed))
-                return parsed.ToString();
-
-            decimal decimalResult;
-            if (decimal.TryParse(s, out decimalResult))
-                return decimalResult.ToString();
-
-            DateTime dateResult;
-            if (DateTime.TryParse(s, out dateResult))
-                return string.Format("new DateTime({0},{1},{2},{3},{4},{5})",
-                                     dateResult.Year, dateResult.Month, dateResult.Day, dateResult.Hour,
-                                     dateResult.Minute, dateResult.Second);
-
-            return ValueToString(s);
+            return String.Format(fmt, type.FullName.Replace("+", "."), ValueToString(s.ToString()));
         }
 
         public static string ValueToString(string value)
