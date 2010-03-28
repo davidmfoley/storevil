@@ -9,4 +9,5 @@ obj
 *.suo
 Lib/JetBrains
 *storevil.output.*
+_build
 	

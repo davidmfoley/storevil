@@ -1,0 +1,79 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5" DefaultTargets="default">
+	<PropertyGroup>
+		<BuildDir>_build</BuildDir>	
+		<OutputPath>$(MSBuildProjectDirectory)\_build</OutputPath>
+		<ExamplesDirectory>$(MSBuildProjectDirectory)\Examples</ExamplesDirectory>
+	</PropertyGroup>
+
+	<Target Name="default">
+		<Message Text="TOOLS VERSION: $(ProjectToolsVersion)" />
+		<RemoveDir Directories="$(OutputPath)" Condition="Exists($(OutputPath))"/>
+            
+		<MakeDir Directories="$(OutputPath)" />
+	
+        <MSBuild 
+			Projects="Core\StorEvil\StorEvil.Core.csproj;Core\StorEvil.Assertions\StorEvil.Assertions.csproj;Core\StorEvil.Console\StorEvil.csproj"
+			Properties="OutputPath=$(OutputPath)\Core"
+        />
+        
+        <MSBuild 
+			Projects="Tests\StorEvil.Tests\StorEvil.Tests.csproj"
+			Properties="OutputPath=$(OutputPath)\Tests"
+        />
+        
+        <Exec Command="$(MSBuildProjectDirectory)\Tools\NUnit\nunit-console.exe $(MSBuildProjectDirectory)\_build\Tests\StorEvil.Tests.dll"	/>
+        
+        <MSBuild
+            Projects="$(MSBuildProjectFile)"
+            Targets="NUnitExample"
+            Properties="ExampleProjectDirectory=$(ExamplesDirectory)\TicTacToe;ExampleProject=TicTacToe.csproj"
+        />
+        
+        <MSBuild
+            Projects="$(MSBuildProjectFile)"
+            Targets="NUnitExample"
+            Properties="ExampleProjectDirectory=$(ExamplesDirectory)\Bowling;ExampleProject=Bowling.csproj"
+        />
+        
+        <MSBuild
+            Projects="$(MSBuildProjectFile)"
+            Targets="NUnitExample"
+            Properties="ExampleProjectDirectory=$(ExamplesDirectory)\ConwaysLife;ExampleProject=ConwaysLife.csproj"
+        />
+        
+        <MSBuild
+            Projects="$(MSBuildProjectFile)"
+            Targets="NUnitExample"
+            Properties="ExampleProjectDirectory=$(ExamplesDirectory)\Pizza;ExampleProject=Pizza.csproj"
+        />
+	</Target> 
+	
+	<Target Name="NUnitExample">
+		<Message Text="NUNitExample"/>
+		<Message Text="$(ExampleProjectDirectory)"/>
+		<Message Text="$(ExampleProject)"/>
+		<MSBuild 
+			Projects="$(ExampleProjectDirectory)\$(ExampleProject)"
+			Properties="OutputPath=$(OutputPath)\Examples"
+        >
+			<Output
+                TaskParameter="TargetOutputs"
+                ItemName="ExampleAssembly" />
+        </MSBuild>
+         <Message Text="Built $(ExampleProjectDirectory)\$(ExampleProject)" />
+		 <Message Text="$(MSBuildProjectDirectory)\_build\Core\StorEvil.exe nunit --destination $(OutputPath)\Examples\Temp.cs -a @(ExampleAssembly) $(OutputPath)\Core\StorEvil.Assertions.dll" />
+		 <Exec 
+			WorkingDirectory="$(ExampleProjectDirectory)"
+			Command="$(MSBuildProjectDirectory)\_build\Core\StorEvil.exe nunit --destination $(OutputPath)\Examples\Temp.cs -a @(ExampleAssembly) $(OutputPath)\Core\StorEvil.Assertions.dll"/>
+		
+		<CSC
+			Sources="$(MSBuildProjectDirectory)\_build\Examples\Temp.cs"
+			OutputAssembly="$(MSBuildProjectDirectory)\_build\Examples\Temp.dll"
+			EmitDebugInformation="true" 
+			References="@(ExampleAssembly);$(MSBuildProjectDirectory)\Lib\Test\nunit.framework.dll;$(MSBuildProjectDirectory)\_build\Core\StorEvil.Core.dll;$(MSBuildProjectDirectory)\_build\Core\StorEvil.Assertions.dll"
+			TargetType="library"
+			/>				
+		 <Exec Command="$(MSBuildProjectDirectory)\Tools\NUnit\nunit-console.exe $(MSBuildProjectDirectory)\_build\Examples\Temp.dll"	/>
+
+	</Target>
+</Project>
