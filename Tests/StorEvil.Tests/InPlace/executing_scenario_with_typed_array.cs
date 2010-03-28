@@ -31,7 +31,7 @@ Given the following
             Context = new StoryContext(typeof (ScenarioArrayTestContext));
 
             new InPlaceRunner(ResultListener, new ScenarioPreprocessor(),
-                              new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()))).
+                              new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())), new IncludeAllFilter()).
                 HandleStory(story, Context);
         }
 
@@ -92,7 +92,7 @@ Given the following
             Context = new StoryContext(typeof (TypedScenarioTestContext));
 
             new InPlaceRunner(ResultListener, new ScenarioPreprocessor(),
-                              new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()))).
+                              new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())), new IncludeAllFilter()).
                 HandleStory(story, Context);
         }
 

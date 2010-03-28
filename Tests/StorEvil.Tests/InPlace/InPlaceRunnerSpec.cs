@@ -20,7 +20,7 @@ namespace StorEvil.InPlace
             new ExtensionMethodHandler().AddAssembly(typeof(TestExtensionMethods).Assembly);
 
             Context = new StoryContext(typeof (T));
-            Runner = new InPlaceRunner(ResultListener, new ScenarioPreprocessor(), new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())));
+            Runner = new InPlaceRunner(ResultListener, new ScenarioPreprocessor(), new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())), new IncludeAllFilter());
             Runner.HandleStory(story, Context);
             
         }

@@ -16,9 +16,7 @@ namespace StorEvil
 
         public TagFilter(IEnumerable<string> tags)
         {
-            _tags = tags;
-            Console.WriteLine("Tags: ");
-            Console.WriteLine(string.Join(",", _tags.ToArray()));
+            _tags = tags ?? new string[0];           
         }
 
         public bool Include(Story story, IScenario scenario)
@@ -31,7 +29,7 @@ namespace StorEvil
 
         private bool AnyTagMatches(IEnumerable<string> tags)
         {
-            return tags.Any(t => _tags.Contains(t));
+            return (tags ?? new string[0]).Any(t => _tags.Contains(t));
         }
     }
 

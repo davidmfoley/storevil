@@ -15,6 +15,7 @@ namespace StorEvil.InPlace
         private readonly IResultListener _listener;
 
         private readonly ScenarioInterpreter _scenarioInterpreter;
+        private readonly IStoryFilter _filter;
         private readonly MemberInvoker _memberInvoker;
 
         private readonly IScenarioPreprocessor _preprocessor;
@@ -22,11 +23,13 @@ namespace StorEvil.InPlace
 
         public InPlaceRunner(IResultListener listener, 
                             IScenarioPreprocessor preprocessor,
-                            ScenarioInterpreter scenarioInterpreter)
+                            ScenarioInterpreter scenarioInterpreter,
+                            IStoryFilter filter)
         {
             _listener = listener;
             _preprocessor = preprocessor;
             _scenarioInterpreter = scenarioInterpreter;
+            _filter = filter;
 
             _memberInvoker = new MemberInvoker();            
         }
@@ -37,6 +40,8 @@ namespace StorEvil.InPlace
             _listener.StoryStarting(story);
             foreach (var scenario in GetScenarios(story))
             {
+                if (!_filter.Include(story, scenario))
+                    continue;
                 _listener.ScenarioStarting(scenario);
                 _scenarioInterpreter.NewScenario();
 

@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Funq;
 using StorEvil.Configuration;
 using StorEvil.Core;

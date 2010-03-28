@@ -15,7 +15,7 @@ namespace StorEvil.InPlace
         {
             ResultListener = MockRepository.GenerateStub<IResultListener>();
 
-            var inPlaceRunner = new InPlaceRunner(ResultListener, new ScenarioPreprocessor(), new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())));
+            var inPlaceRunner = new InPlaceRunner(ResultListener, new ScenarioPreprocessor(), new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())), new IncludeAllFilter());
             inPlaceRunner.Finished();
         }
 
