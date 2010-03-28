@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using StorEvil.Core;
 using StorEvil.Infrastructure;
+using StorEvil.Interpreter;
 
 namespace StorEvil.Console
 {
@@ -34,7 +35,7 @@ namespace StorEvil.Console
                                  false);
 
 
-            System.Console.WriteLine("Wrote file: " + destination);
+            DebugTrace.Trace("Init Job", "Wrote file: " + destination);
         }
 
         private string GetResource(string resourceName)

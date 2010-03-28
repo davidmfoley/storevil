@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using StorEvil;
 using StorEvil.Utility;
 
@@ -26,7 +27,7 @@ namespace TicTacToe
         {
             for (int row = 0; row < 3; row++)
             {
-                _game.BoardState[row].ElementsShouldEqual(tableData[row]);
+                _game.BoardState[row].ElementsShouldEqual(tableData[row].Select(x=> x == "" ? " " : x).ToArray());
             }
         }
 

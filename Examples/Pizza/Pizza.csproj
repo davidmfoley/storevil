@@ -8,8 +8,8 @@
     <ProjectGuid>{436259FA-036B-466E-A670-F91507C34D0A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Pizza.Specifications</RootNamespace>
-    <AssemblyName>Pizza.Specifications</AssemblyName>
+    <RootNamespace>Pizza</RootNamespace>
+    <AssemblyName>Pizza</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

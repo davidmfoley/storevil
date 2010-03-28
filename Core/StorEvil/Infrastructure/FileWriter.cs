@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using StorEvil.Interpreter;
 
 namespace StorEvil.Infrastructure
 {
@@ -13,12 +14,12 @@ namespace StorEvil.Infrastructure
             if (overwrite)
                 File.Delete(OutputFile);
 
-            Console.WriteLine(Path.GetFullPath(outputFile));
+            
         }
 
         public void Write(string s)
         {
-            System.Console.WriteLine("writing file: " + OutputFile);
+            DebugTrace.Trace("FileWriter", "writing file: " + OutputFile);
             using (var stream = File.AppendText(OutputFile))
             {
                 stream.Write(s);

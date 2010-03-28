@@ -202,6 +202,13 @@ namespace StorEvil.Console
 
             
             DebugTrace.Listener.ShouldBeOfType<ConsoleDebugListener>();
+            
+        }
+
+        [TestFixtureTearDown]
+        public void TearDown()
+        {
+            DebugTrace.Listener = null;
         }
     }
 

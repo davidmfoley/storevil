@@ -6,7 +6,7 @@ using StorEvil;
 namespace Bowling.Context
 {
     [Context]
-    internal class BowlingContext
+    public class BowlingContext
     {
         private BowlingGame _game;
 
