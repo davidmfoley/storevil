@@ -94,6 +94,9 @@
     <Compile Include="Interpreter\InterpreterForTypeFactory.cs" />
     <Compile Include="Interpreter\ParameterConverters\ParameterConverter.cs" />
     <Compile Include="Interpreter\ScenarioInterpreterForType.cs" />
+    <Compile Include="Parsing\FilesystemStoryReader.cs" />
+    <Compile Include="Parsing\IStoryReader.cs" />
+    <Compile Include="Parsing\StoryProvider.cs" />
     <Compile Include="ResultListeners\GatheringResultListener.cs" />
     <Compile Include="ResultListeners\SparkReportGenerator.cs" />
     <Compile Include="StubGeneration\StubGenerator.cs" />
@@ -111,7 +114,7 @@
     <Compile Include="Parsing\ScenarioLineParser.cs" />
     <Compile Include="Configuration\ConfigSettings.cs" />
     <Compile Include="Configuration\FilesystemConfigReader.cs" />
-    <Compile Include="Parsing\FilesystemStoryProvider.cs" />
+    <Compile Include="Parsing\StoryInfo.cs" />
     <Compile Include="Interpreter\Invocation.cs" />
     <Compile Include="Interpreter\InvocationChain.cs" />
     <Compile Include="Context\IStoryToContextMapper.cs" />
