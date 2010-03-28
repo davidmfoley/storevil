@@ -69,10 +69,18 @@ namespace StorEvil.Nunit
 
             string declarations = BuildContextDeclarations(contexts);
             var name = BuildMethodName(scenario);
+            var categories = BuildCategories(scenario);
 
-            var body = BuildTestBody(codeBuilder, name, declarations);
+            var body = BuildTestBody(codeBuilder, name, declarations, categories);
 
             return new NUnitTest(name, body, contexts, namespaces);
+        }
+
+        private string BuildCategories(Scenario scenario)
+        {
+            if (scenario.Tags == null || scenario.Tags.Count() == 0)
+                return "";
+            return string.Join("", scenario.Tags.Select(t => string.Format(@"[Category(""{0}"")]", t)).ToArray());
         }
 
         private void AppendDisposeCalls(StringBuilder codeBuilder, TestContextSet contexts)
@@ -110,9 +118,9 @@ namespace StorEvil.Nunit
             return string.Format("           System.Console.WriteLine(@\"{0}\");\r\n", line.Replace("\"", "\"\""));
         }
 
-        private string BuildTestBody(StringBuilder codeBuilder, string name, string declarations)
+        private string BuildTestBody(StringBuilder codeBuilder, string name, string declarations, string categories)
         {
-            return string.Format("[Test] public void {0}(){{\r\n{1}\r\n{2}        }}", name, declarations, codeBuilder);
+            return string.Format("[Test]{3} public void {0}(){{\r\n{1}\r\n{2}        }}", name, declarations, codeBuilder, categories);
         }
 
         private static string BuildContextDeclarations(IEnumerable<TestContextField> contexts)

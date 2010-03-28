@@ -30,6 +30,7 @@ namespace {0} {{
     
 
     [TestFixture]
+    {5}
     public class {2} {{
         [TestFixtureSetUp]
         public void WriteStoryToConsole() {{
@@ -80,7 +81,8 @@ namespace {0} {{
 
             var writeStoryToConsole = "Console.WriteLine(@\"" + story.Summary.Replace("\"", "\"\"") + "\r\n" + " \");";
             const string ns = "TestNamespace";
-            return string.Format(FixtureFormat, ns, usings, GetFixtureName(story), tests, writeStoryToConsole);
+            var categories = string.Join("", (story.Tags ?? new string[0]).Select(t => string.Format(@"[Category(""{0}"")]", t)).ToArray());
+            return string.Format(FixtureFormat, ns, usings, GetFixtureName(story), tests, writeStoryToConsole, categories);
         }
     }
 }

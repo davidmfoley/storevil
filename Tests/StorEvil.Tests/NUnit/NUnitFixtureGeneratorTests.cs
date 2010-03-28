@@ -41,6 +41,22 @@ namespace StorEvil.NUnit
             a.GetTypes().Length.ShouldEqual(1);
         }
 
+        [Test]
+        public void Should_have_category_for_each_tag_on_story()
+        {
+            var scenario = new Scenario("test", new[] { "When I Do Something" });
+            var s = new Story("test", "summary", new Scenario[] { scenario }) { Tags = new[] { "foo", "bar" } };
+            Assembly a = BuildTestAssembly(s);
+            var testClass = a.GetTypes().First();
+            var attributes = testClass
+                .GetCustomAttributes(typeof (CategoryAttribute), true)
+                .Cast<CategoryAttribute>()
+                .Select(x=>x.Name);
+
+            attributes.ElementsShouldEqual("foo", "bar");
+            
+        }
+
         private Assembly BuildTestAssembly(Story story)
         {
             return BuildTestAssembly(story, null);

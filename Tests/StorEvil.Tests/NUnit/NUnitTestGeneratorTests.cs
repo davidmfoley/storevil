@@ -199,7 +199,40 @@ namespace StorEvil.NUnit
             CreateAndCallTestMethods<TestContext>(story, context);
         }
 
+        [Test]
+        public void Created_test_should_have_category_for_each_tag_on_scenario()
+        {
+            var scenario = new Scenario("test", new[] { "When I Do Something" }) { Tags = new[] { "foo", "bar" } };
+            var s = new Story("test", "summary", new[] { scenario });
+            Assembly a = CreateAssembly<object>(s);
+
+            var testClass = a.GetTypes().First();
+
+            var attributes = testClass
+                .GetMethods().First()
+                .GetCustomAttributes(typeof(CategoryAttribute), true)
+                .Cast<CategoryAttribute>()
+                .Select(x => x.Name);
+
+            attributes.ElementsShouldEqual("foo", "bar");
+
+        }
+
         private void CreateAndCallTestMethods<T>(Story story, object context)
+        {
+            Assembly a = CreateAssembly<T>(story);
+
+            var fixtureType = a.GetTypes()[0];
+
+            var fixture = Activator.CreateInstance(fixtureType);
+
+            SetFixtureContext(fixture, context);
+
+            foreach (var method in fixtureType.GetTestMethods())
+                method.Invoke(fixture, new object[] {});
+        }
+
+        private Assembly CreateAssembly<T>(Story story)
         {
             var generator = GetNUnitGenerator();
             string code = "";
@@ -234,16 +267,7 @@ namespace {1} {{
                 typeof (T).FullName,
                 code.Replace("new " + typeof (T).FullName + "()", "_context"));
 
-            Assembly a = TestHelper.CreateAssembly(formattedCode);
-
-            var fixtureType = a.GetTypes()[0];
-
-            var fixture = Activator.CreateInstance(fixtureType);
-
-            SetFixtureContext(fixture, context);
-
-            foreach (var method in fixtureType.GetTestMethods())
-                method.Invoke(fixture, new object[] {});
+            return TestHelper.CreateAssembly(formattedCode);
         }
 
         private IEnumerable<Scenario> GetScenarios(Story story)
