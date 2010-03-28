@@ -24,12 +24,7 @@ Given the following
         [SetUp]
         public void SetupContext()
         {
-            ResultListener = MockRepository.GenerateStub<IResultListener>();
-
-            var story = new StoryParser().Parse(storyText, null);
-            Context = new StoryContext(typeof (ScenarioTableTestContext));
-
-            new InPlaceRunner(ResultListener, new ScenarioPreprocessor(), new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()))).HandleStory(story, Context);
+            RunStory(new StoryParser().Parse(storyText, null));
         }
 
         [Test]

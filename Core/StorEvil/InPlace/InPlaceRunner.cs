@@ -20,13 +20,15 @@ namespace StorEvil.InPlace
         private readonly IScenarioPreprocessor _preprocessor;
         private object _lastResult;
 
-        public InPlaceRunner(IResultListener listener, IScenarioPreprocessor preprocessor,
-                             ScenarioInterpreter scenarioInterpreter)
+        public InPlaceRunner(IResultListener listener, 
+                            IScenarioPreprocessor preprocessor,
+                            ScenarioInterpreter scenarioInterpreter)
         {
             _listener = listener;
             _preprocessor = preprocessor;
             _scenarioInterpreter = scenarioInterpreter;
-            _memberInvoker = new MemberInvoker();
+
+            _memberInvoker = new MemberInvoker();            
         }
 
         public int HandleStory(Story story, StoryContext context)

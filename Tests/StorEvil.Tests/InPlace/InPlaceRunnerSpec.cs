@@ -22,6 +22,7 @@ namespace StorEvil.InPlace
             Context = new StoryContext(typeof (T));
             Runner = new InPlaceRunner(ResultListener, new ScenarioPreprocessor(), new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())));
             Runner.HandleStory(story, Context);
+            
         }
 
         protected argT Any<argT>()
