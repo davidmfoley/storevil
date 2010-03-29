@@ -1,3 +1,4 @@
+using StorEvil.Context.Matchers;
 using StorEvil.Utility;
 
 namespace StorEvil.Context.WordFilters
@@ -10,9 +11,13 @@ namespace StorEvil.Context.WordFilters
         }
 
         public string Word { get; set; }
-        public bool IsMatch(string s)
+        public WordMatch GetMatch(string[] s)
         {
-            return Word.ToLower() == s.ToLower().ToCSharpName();
+            var isMatch = Word.ToLower() == s[0].ToLower().ToCSharpName();
+            if (!isMatch)
+                return WordMatch.NoMatch();
+
+            return new WordMatch(1, s[0]);
         }
     }
 }

@@ -110,7 +110,7 @@ namespace StorEvil.Interpreter.ParameterConverters
 
         private static object ParseEnumValue(string value, Type type)
         {
-            return Enum.Parse(type, value, true);
+            return Enum.Parse(type, value.Replace(" ", ""), true);
         }
     }
 }

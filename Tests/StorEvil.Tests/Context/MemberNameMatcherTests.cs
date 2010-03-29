@@ -10,7 +10,7 @@ namespace StorEvil.Context.Matching_method_names_with_reflection
     {
         Foo,
         Bar,
-        FooBar
+        FoobarBaz,
     }
 
     public class MethodMatcherTestHelper
@@ -30,26 +30,36 @@ namespace StorEvil.Context.Matching_method_names_with_reflection
     public class Enum_values
     {
         private NameMatch FoundMatch;
+        private MethodNameMatcher Matcher;
 
         [SetUp]
         public void SetupContext()
         {
-            var matcher = MethodMatcherTestHelper.GetMatcher<EnumTestContext>("Test_parsing_of_enumValue");
-
-            FoundMatch = matcher.GetMatch("Test parsing of foo");
+            Matcher = MethodMatcherTestHelper.GetMatcher<EnumTestContext>("Test_parsing_of_enumValue");
         }
-
         [Test]
         public void Should_be_exact_match()
         {
+           
+
+            FoundMatch = Matcher.GetMatch("Test parsing of foo");
             FoundMatch.ShouldBeOfType<ExactMatch>();
         }
 
         [Test]
         public void Should_parse_param()
-        {
+        {            
+            FoundMatch = Matcher.GetMatch("Test parsing of foo");
             FoundMatch.ParamValues["enumValue"].ShouldEqual(MatchingTest.Foo);
         }
+
+        [Test]
+        public void Should_match_multiple_words_in_enum_name()
+        {
+            FoundMatch = Matcher.GetMatch( "Test parsing of foobar baz");
+            FoundMatch.ParamValues["enumValue"].ShouldEqual(MatchingTest.FoobarBaz);
+        }
+        
 
         public class EnumTestContext
         {

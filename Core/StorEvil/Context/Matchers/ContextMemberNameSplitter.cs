@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace StorEvil.Context.Matchers
 {
-    internal class ContextMemberNameSplitter
+    public class ContextMemberNameSplitter
     {
         private static readonly Regex SplitMemberNameRegex = new Regex("[A-Z]?[a-z]*");
 

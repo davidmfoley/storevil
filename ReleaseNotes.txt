@@ -1,4 +1,19 @@
 ----------------------------------------------------------------------------------------
+StorEvil version 0.4 release notes
+----------------------------------------------------------------------------------------
+Supports parsing multiple word enum values.
+For example:
+
+	public enum CityEnum {Seattle, NewYork, SanFrancisco}
+	public void When_I_Live_In(CityEnum city) {}
+
+will now match any of the following
+	
+	When I live in New York
+	When I Live in Seattle
+	When I live in San Francisco
+
+----------------------------------------------------------------------------------------
 StorEvil version 0.3 release notes
 ----------------------------------------------------------------------------------------
 

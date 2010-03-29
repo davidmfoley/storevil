@@ -14,6 +14,8 @@ namespace StorEvil.Context.Matchers
     /// </summary>
     public class MethodNameMatcher : IMemberMatcher
     {
+        private readonly WordFilterFactory _wordFilterFactory = new WordFilterFactory();
+
         private readonly MethodInfo _methodInfo;
         private readonly ContextMemberNameSplitter _nameSplitter = new ContextMemberNameSplitter();
         private readonly List<WordFilter> _wordFilters = new List<WordFilter>();
@@ -54,14 +56,15 @@ namespace StorEvil.Context.Matchers
             // check each word for a match
             for (int i = 0; i < _wordFilters.Count; i++)
             {
-                if (!_wordFilters[i].IsMatch(words[i]))
+                var wordMatch = _wordFilters[i].GetMatch(words.Skip(i).ToArray());
+                if (!wordMatch.IsMatch)
                     return null;
 
                 // if this is a parameter, add to our hash so we can resolve the (string) value later
                 var paramFilter = _wordFilters[i] as ParameterMatchWordFilter;
 
                 if (paramFilter != null)
-                    paramValues.Add(paramFilter.ParameterName, words[i]);
+                    paramValues.Add(paramFilter.ParameterName, wordMatch.Value);
             }
 
             var match = BuildNameMatch(words, paramValues);
@@ -91,19 +94,21 @@ namespace StorEvil.Context.Matchers
             AppendUnmatchedParameters(parameterInfos, paramNameMap);
         }
 
+        private static Dictionary<string, ParameterInfo> GetParameterNameToInfoMap(
+           IEnumerable<ParameterInfo> parameterInfos)
+        {
+            return parameterInfos.ToDictionary(parameter => parameter.Name);
+        }
+
         private void AppendUnmatchedParameters(IEnumerable<ParameterInfo> parameterInfos,
                                                IDictionary<string, ParameterInfo> paramNameMap)
         {
             var unmatchedParameters = parameterInfos.Where(p => paramNameMap.ContainsKey(p.Name));
-            var wordFilters = unmatchedParameters.Select(p => new ParameterMatchWordFilter(p)).Cast<WordFilter>();
+            var wordFilters = unmatchedParameters.Select(p => _wordFilterFactory.GetParameterFilter(p)).Cast<WordFilter>();
             _wordFilters.AddRange(wordFilters);
         }
 
-        private static Dictionary<string, ParameterInfo> GetParameterNameToInfoMap(
-            IEnumerable<ParameterInfo> parameterInfos)
-        {
-            return parameterInfos.ToDictionary(parameter => parameter.Name);
-        }
+       
 
         private static IEnumerable<ParameterInfo> GetMethodParameterInfos(MethodInfo methodInfo)
         {
@@ -122,11 +127,11 @@ namespace StorEvil.Context.Matchers
             // then we will parse that value inline
             if (!paramNameMap.ContainsKey(word))
             {
-                _wordFilters.Add(new TextMatchWordFilter(word));
+                _wordFilters.Add(_wordFilterFactory.GetTextFilter(word));
                 return;
             }
 
-            _wordFilters.Add(new ParameterMatchWordFilter(paramNameMap[word]));
+            _wordFilters.Add(_wordFilterFactory.GetParameterFilter(paramNameMap[word]));
             paramNameMap.Remove(word);
         }
 

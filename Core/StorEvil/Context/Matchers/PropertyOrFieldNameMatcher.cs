@@ -15,6 +15,8 @@ namespace StorEvil.Context.Matchers
     /// </summary>
     public class PropertyOrFieldNameMatcher : IMemberMatcher
     {
+        private readonly WordFilterFactory _wordFilterFactory = new WordFilterFactory();
+
         private readonly List<WordFilter> _wordFilters = new List<WordFilter>();
         public MemberInfo MemberInfo { get; set; }
         public IEnumerable<NameMatch> GetMatches(string line)
@@ -36,8 +38,7 @@ namespace StorEvil.Context.Matchers
             _wordFilters.AddRange(
                 _nameSplitter
                     .SplitMemberName(MemberInfo.Name)
-                    .Select(word => new TextMatchWordFilter(word))
-                    .Cast<WordFilter>()
+                    .Select(word => _wordFilterFactory.GetTextFilter(word))                   
                 );
         }
 
@@ -66,8 +67,17 @@ namespace StorEvil.Context.Matchers
 
         private bool WordFiltersMatch(IList<string> words)
         {
-            Func<WordFilter, int, bool> matchesWordAtIndex = (t, i) => !t.IsMatch(words[i]);
-            return !_wordFilters.Where(matchesWordAtIndex).Any();
+            int wordIndex = 0;
+            for (int filterIndex = 0; filterIndex < _wordFilters.Count; filterIndex++)
+            {
+                var match = (_wordFilters[filterIndex].GetMatch(words.Skip(wordIndex).ToArray()));
+
+                if (!match.IsMatch)
+                    return false;
+
+                wordIndex += match.WordCount;
+            }
+            return true;
         }
 
         readonly Dictionary<string, object> _noParams = new Dictionary<string, object>();
@@ -88,6 +98,29 @@ namespace StorEvil.Context.Matchers
         private static string JoinWords(IEnumerable<string> words)
         {
             return string.Join(" ", words.ToArray());
+        }
+    }
+
+    public class WordMatch
+    {
+        public WordMatch(int wordCount, string value)
+        {
+            WordCount = wordCount;
+            Value = value;
+        }
+
+        public bool IsMatch { get { return WordCount > 0; } }
+
+        public int WordCount { get; set; }
+
+        public string Value
+        {
+            get; private set;
+        }
+
+        public static WordMatch NoMatch()
+        {
+            return new WordMatch(0, "");
         }
     }
 }
