@@ -6,7 +6,7 @@ using StorEvil.Utility;
 namespace Tutorial
 {
     [StorEvil.Context]
-    class TableContext
+    public class TableContext
     {
         private string[][] _groups;
         private List<TeamInfo> _teams = new List<TeamInfo>();
