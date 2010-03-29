@@ -9,8 +9,15 @@
   <Target Name="default">
     <CallTarget Targets="CleanOutput" />
     <CallTarget Targets="BuildCore" />
+    <CallTarget Targets="Tests" />   
+  </Target>
+
+  <Target Name="All">
+    <CallTarget Targets="CleanOutput" />
+    <CallTarget Targets="BuildCore" />
     <CallTarget Targets="Tests" />
     <CallTarget Targets="RunExamples" />
+    <CallTarget Targets="Package" />
   </Target>
 
   <Target Name="Package" DependsOnTargets="CleanOutput;BuildCore">
@@ -48,7 +55,7 @@
 
   </Target>
 
-  <Target Name="RunExamples">
+  <Target Name="RunExamples" DependsOnTargets="CleanOutput;BuildCore">
     <MSBuild
           Projects="$(MSBuildProjectFile)"
           Targets="RunExample"
