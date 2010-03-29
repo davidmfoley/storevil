@@ -18,6 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{5E256EA4-5
 		InstallationInstructions.txt = InstallationInstructions.txt
 		LICENSE.txt = LICENSE.txt
 		ReadMe.markdown = ReadMe.markdown
+		ReleaseNotes.txt = ReleaseNotes.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConwaysLife", "Examples\ConwaysLife\ConwaysLife.csproj", "{2CE31BAB-0046-43E0-B58E-585FF8646EF7}"

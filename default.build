@@ -1,4 +1,4 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5" DefaultTargets="default">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5" DefaultTargets="Default">
   <PropertyGroup>
     <BuildDir>_build</BuildDir>
     <OutputPath>$(MSBuildProjectDirectory)\_build</OutputPath>
@@ -6,7 +6,7 @@
     <PackageDirectory>$(OutputPath)\Package</PackageDirectory>
   </PropertyGroup>
 
-  <Target Name="default">
+  <Target Name="Default">
     <CallTarget Targets="CleanOutput" />
     <CallTarget Targets="BuildCore" />
     <CallTarget Targets="Tests" />   
@@ -49,7 +49,7 @@
   </Target>
   
   <Target Name="CleanOutput">
-    <RemoveDir Directories="$(OutputPath)" Condition="Exists($(OutputPath))"/>
+    <RemoveDir Directories="$(OutputPath)" Condition="Exists($(OutputPath))" />
 
     <MakeDir Directories="$(OutputPath)" />
 

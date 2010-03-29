@@ -1,4 +1,20 @@
+----------------------------------------------------------------------------------------
+StorEvil version 0.3 release notes
+----------------------------------------------------------------------------------------
+
+This version fixes a number of minor issues.
+
+Also, NUnit fixture generation is now close to on par with in-place execution.
+
+It also adds a tutorial example project (which holds the code from the tutorial screencasts).
+
+StorEvil can now parse two-dimensional tables of any parseable type (int, decimal, DateTime, enums)
+
+StorEvil can now parse hashtable or single instance of a type from a set of name/values. Also fixed some bugs around this.
+
+----------------------------------------------------------------------------------------
 StorEvil version 0.2 release notes
+----------------------------------------------------------------------------------------
 
 This version adds a number of enhancements to parsing of tables and lists of values, two new example projects, and improved HTML report output.
 It also adds the ability to generate stubbed "pending" steps for all plaintext stories that could not be interpreted.
