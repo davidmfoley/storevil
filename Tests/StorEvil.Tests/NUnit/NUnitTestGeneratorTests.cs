@@ -235,7 +235,7 @@ namespace StorEvil.NUnit
 
         }
 
-        private void CreateAndCallTestMethods<T>(Story story, object context)
+        private void CreateAndCallTestMethods<T>(Story story, T context)
         {
             Assembly a = CreateAssembly<T>(story);
 
@@ -303,10 +303,12 @@ namespace {1} {{
                     new CSharpMethodInvocationGenerator(new ScenarioInterpreter(new InterpreterForTypeFactory(ext))));
         }
 
-        private static void SetFixtureContext(object fixture, object context)
+        private static void SetFixtureContext<T>(object fixture, T context)
         {
-            var fieldInfo = fixture.GetType().GetField("_context");
-            fieldInfo.SetValue(fixture, context);
+            var fields = fixture.GetType().GetFields();
+            var field = fields.First(f => f.FieldType == typeof (T));
+
+            field.SetValue(fixture, context);
         }
     }
 

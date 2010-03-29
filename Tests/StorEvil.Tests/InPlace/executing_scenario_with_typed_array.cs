@@ -30,7 +30,7 @@ Given the following
             var story = new StoryParser().Parse(storyText, null);
             Context = new StoryContext(typeof (ScenarioArrayTestContext));
 
-            new InPlaceRunner(ResultListener, new ScenarioPreprocessor(),
+            new InPlaceStoryRunner(ResultListener, new ScenarioPreprocessor(),
                               new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())), new IncludeAllFilter()).
                 HandleStory(story, Context);
         }
@@ -91,7 +91,7 @@ Given the following
             var story = new StoryParser().Parse(storyText, null);
             Context = new StoryContext(typeof (TypedScenarioTestContext));
 
-            new InPlaceRunner(ResultListener, new ScenarioPreprocessor(),
+            new InPlaceStoryRunner(ResultListener, new ScenarioPreprocessor(),
                               new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())), new IncludeAllFilter()).
                 HandleStory(story, Context);
         }

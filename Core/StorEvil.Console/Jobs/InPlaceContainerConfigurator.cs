@@ -12,7 +12,7 @@ namespace StorEvil.Console
     {
         protected override void SetupCustomComponents(Container container)
         {
-            container.EasyRegister<IStoryHandler, InPlaceRunner>();
+            container.EasyRegister<IStoryHandler, InPlaceStoryRunner>();
             container.EasyRegister<IStorEvilJob, StorEvilJob>();
             container.Register<IStoryFilter>(new TagFilter(CustomSettings.Tags ?? new string[0]));
         }

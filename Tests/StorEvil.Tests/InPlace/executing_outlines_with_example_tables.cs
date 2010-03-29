@@ -34,7 +34,7 @@ Examples:
             var story = new StoryParser().Parse(storyText, null);
             Context = new StoryContext(typeof (InPlaceRunnerTableTestContext));
 
-            var runner = new InPlaceRunner(ResultListener, new ScenarioPreprocessor(), new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())), new IncludeAllFilter());
+            var runner = new InPlaceStoryRunner(ResultListener, new ScenarioPreprocessor(), new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())), new IncludeAllFilter());
 
             runner.HandleStory(story, Context);
         }

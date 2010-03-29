@@ -75,6 +75,7 @@
     <Compile Include="Infrastructure\FileWriter.cs" />
     <Compile Include="InPlace\IDebugListener.cs" />
     <Compile Include="InPlace\ImplementationHelper.cs" />
+    <Compile Include="InPlace\InPlaceScenarioRunner.cs" />
     <Compile Include="Interpreter\DebugTrace.cs" />
     <Compile Include="Interpreter\ParameterConverters\ArrayBuilder.cs" />
     <Compile Include="Interpreter\ParameterConverters\ConvertHelper.cs" />
@@ -105,7 +106,7 @@
     <Compile Include="ResultListeners\ConsoleResultListener.cs" />
     <Compile Include="MultipleWordsAttribute.cs" />
     <Compile Include="Nunit\FixtureGenerationStoryHandler.cs" />
-    <Compile Include="InPlace\InPlaceRunner.cs" />
+    <Compile Include="InPlace\InPlaceStoryRunner.cs" />
     <Compile Include="InPlace\IResultListener.cs" />
     <Compile Include="Parsing\IScenarioPreprocessor.cs" />
     <Compile Include="InPlace\MemberInvoker.cs" />

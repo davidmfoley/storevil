@@ -12,7 +12,7 @@ namespace StorEvil.InPlace
     {
         protected IResultListener ResultListener;
         protected StoryContext Context;
-        protected InPlaceRunner Runner;
+        protected InPlaceStoryRunner Runner;
 
         protected void RunStory(Story story)
         {
@@ -20,7 +20,7 @@ namespace StorEvil.InPlace
             new ExtensionMethodHandler().AddAssembly(typeof(TestExtensionMethods).Assembly);
 
             Context = new StoryContext(typeof (T));
-            Runner = new InPlaceRunner(ResultListener, new ScenarioPreprocessor(), new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())), new IncludeAllFilter());
+            Runner = new InPlaceStoryRunner(ResultListener, new ScenarioPreprocessor(), new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())), new IncludeAllFilter());
             Runner.HandleStory(story, Context);
             
         }
