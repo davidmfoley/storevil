@@ -7,8 +7,7 @@ namespace StorEvil.InPlace
     [TestFixture]
     public class When_scenario_does_not_map : InPlaceRunnerSpec<InPlaceRunnerTestContext>
     {
-        private readonly Scenario TestScenario = new Scenario("test", new[] {ScenarioText});
-        private const string ScenarioText = "When scenario test does not map";
+        private readonly Scenario TestScenario = BuildScenario("test",  "When scenario test does not map");
 
         [SetUp]
         public void SetupContext()
@@ -28,8 +27,7 @@ namespace StorEvil.InPlace
     [TestFixture]
     public class When_scenario_step_is_pending : InPlaceRunnerSpec<InPlaceRunnerTestContext>
     {
-        private readonly Scenario TestScenario = new Scenario("test", new[] { ScenarioText });
-        private const string ScenarioText = "Pending scenario step";
+        private readonly Scenario TestScenario = BuildScenario("test", "Pending scenario step" );
 
         [SetUp]
         public void SetupContext()

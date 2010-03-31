@@ -38,13 +38,13 @@ namespace StorEvil.ResultListeners.GatheringResultListener_Specs
 
         protected void SimulateSuccessfulScenario(string id, string name, string[] lines)
         {
-            var sucessScenario = new Scenario(id, name, lines);
-            Listener.ScenarioStarting(sucessScenario);
+            var successScenario = new Scenario(id, name, lines.Select(l=> new ScenarioLine{Text = l}));
+            Listener.ScenarioStarting(successScenario);
 
             foreach (var line in lines)
-                Listener.Success(sucessScenario, line);
+                Listener.Success(successScenario, line);
 
-            Listener.ScenarioSucceeded(sucessScenario);
+            Listener.ScenarioSucceeded(successScenario);
         }
 
         protected void SimulateStoryStarting(string storyId, string storySummary)

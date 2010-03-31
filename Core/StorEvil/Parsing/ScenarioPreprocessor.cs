@@ -30,19 +30,19 @@ namespace StorEvil.Parsing
             }
         }
 
-        private IEnumerable<string> PreprocessLines(IEnumerable<string> lines, IEnumerable<string> fieldNames,
+        private IEnumerable<ScenarioLine> PreprocessLines(IEnumerable<ScenarioLine> lines, IEnumerable<string> fieldNames,
                                                     IEnumerable<string> example)
         {
             foreach (var line in lines)
             {
-                var processed = line;
+                var processed = line.Text;
 
                 for (var fieldIndex = 0; fieldIndex < fieldNames.ToArray().Length; fieldIndex++)
                 {
                     var name = fieldNames.ToArray()[fieldIndex];
                     processed = processed.Replace("<" + name + ">", example.ElementAtOrDefault(fieldIndex));
                 }
-                yield return processed;
+                yield return new ScenarioLine {Text = processed};
             }
         }
     }

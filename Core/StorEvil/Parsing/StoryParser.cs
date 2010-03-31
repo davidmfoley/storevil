@@ -77,9 +77,9 @@ namespace StorEvil.Parsing
             {
                 if (_currentScenario != null && _currentScenario.Lines.Count > 0)
                 {
-                    var last = _currentScenario.Lines.Last();
+                    var last = _currentScenario.Lines.Last().Text;
                     _currentScenario.Lines = _currentScenario.Lines.GetRange(0, _currentScenario.Lines.Count() - 1);
-                    _currentScenario.Lines.Add(last + "\r\n" + line);
+                    _currentScenario.Lines.Add(new ScenarioLine { Text = last + "\r\n" + line });
                     return;
                 }
             }
@@ -203,7 +203,7 @@ namespace StorEvil.Parsing
         private void HandleScenarioLine(string line)
         {
             if (!IsComment(line) && line.Trim().Length > 0)
-                _currentScenario.Lines.Add(line);
+                _currentScenario.Lines.Add(new ScenarioLine{Text = line});
         }
 
         private void HandleScenarioExampleRow(string line)
@@ -223,12 +223,12 @@ namespace StorEvil.Parsing
             if (scenario is Scenario)
             {
                 var s = scenario as Scenario;
-                s.Name = string.Join("\r\n", s.Body.ToArray());
+                s.Name = string.Join("\r\n", s.Body.Select(l=>l.Text).ToArray());
             }
             else if (scenario is ScenarioOutline)
             {
                 var s = scenario as ScenarioOutline;
-                s.Name = string.Join("\r\n", s.Scenario.Body.ToArray());
+                s.Name = string.Join("\r\n", s.Scenario.Body.Select(l => l.Text).ToArray());
             }
         }
 
@@ -255,7 +255,7 @@ namespace StorEvil.Parsing
         internal class ScenarioBuildingInfo
         {
             public string Name;
-            public List<string> Lines = new List<string>();
+            public List<ScenarioLine> Lines = new List<ScenarioLine>();
             public List<IEnumerable<string>> RowData = new List<IEnumerable<string>>();
             public bool IsOutline;
 

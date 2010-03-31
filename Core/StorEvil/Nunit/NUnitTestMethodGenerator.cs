@@ -40,9 +40,9 @@ namespace StorEvil.Nunit
             IEnumerable<string> namespaces = new string[0];
             foreach (var line in scenario.Body)
             {
-                codeBuilder.Append(BuildConsoleWriteScenarioLine(line));
+                codeBuilder.Append(BuildConsoleWriteScenarioLine(line.Text));
 
-                var lineVariations = GenerateLineVariations(line);
+                var lineVariations = GenerateLineVariations(line.Text);
 
                 ScenarioLineImplementation functionLine = null;
                 foreach (var variation in lineVariations)
@@ -178,7 +178,7 @@ namespace StorEvil.Nunit
             {
                 baseName = "";
                 foreach (var s in scenario.Body)
-                    baseName += s + "_";
+                    baseName += s.Text + "_";
             }
             return baseName;
         }

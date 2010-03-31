@@ -27,7 +27,7 @@ namespace StorEvil.InPlace
         {
             foreach (var line in scenario.Body)
             {
-                if (!ExecuteLine(scenario, storyContext, line))
+                if (!ExecuteLine(scenario, storyContext, line.Text))
                     return false;
             }
 

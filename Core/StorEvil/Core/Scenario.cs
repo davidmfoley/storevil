@@ -10,21 +10,26 @@ namespace StorEvil.Core
         {
         }
 
-        public Scenario(string id, string name, IEnumerable<string> body)
+        public Scenario(string id, string name, IEnumerable<ScenarioLine> body)
         {
             Id = id;
             Name = name;
             Body = body;
         }
 
-        public Scenario(string name, IEnumerable<string> body)
+        public Scenario(string name, IEnumerable<ScenarioLine> body)
         {
             Id = Guid.NewGuid().ToString();
             Name = name;
             Body = body;
         }
 
-        public IEnumerable<string> Body { get; set; }
+        public IEnumerable<ScenarioLine> Body { get; set; }
+    }
+
+    public class ScenarioLine
+    {
+        public string Text { get; set; }
     }
 
     [Serializable]

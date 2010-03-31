@@ -18,7 +18,7 @@ namespace StorEvil.NUnit
         [Test]
         public void Should_Create_One_Test_For_A_Single_Scenario()
         {
-            var s = new Scenario("test", new[] {"When I Do Something"});
+            var s = BuildScenario("test", new[] {"When I Do Something"});
             var story = new Story("test", "summary", new[] {s});
 
             Assembly a = BuildTestAssembly(story);
@@ -44,7 +44,7 @@ namespace StorEvil.NUnit
         [Test]
         public void Should_have_category_for_each_tag_on_story()
         {
-            var scenario = new Scenario("test", new[] { "When I Do Something" });
+            var scenario = BuildScenario("test", new[] { "When I Do Something" });
             var s = new Story("test", "summary", new Scenario[] { scenario }) { Tags = new[] { "foo", "bar" } };
             Assembly a = BuildTestAssembly(s);
             var testClass = a.GetTypes().First();
@@ -60,7 +60,7 @@ namespace StorEvil.NUnit
         [Test]
         public void Should_name_class_after_id()
         {
-            var s = new Scenario("test", new[] { "When I Do Something" });
+            var s = BuildScenario("test", new[] { "When I Do Something" });
             var story = new Story("C:\\Example\\Path\\To\\File.feature", "summary", new[] { s });
 
             Assembly a = BuildTestAssembly(story);
@@ -102,6 +102,11 @@ namespace StorEvil.NUnit
         private StoryContext GetContext()
         {
             return new StoryContext(new[] {typeof (TestContext)});
+        }
+
+        protected static Scenario BuildScenario(string name, params string[] lines)
+        {
+            return new Scenario("test", lines.Select(line => new ScenarioLine { Text = line }));
         }
     }
 }

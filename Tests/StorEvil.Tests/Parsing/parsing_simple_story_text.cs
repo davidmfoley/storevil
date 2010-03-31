@@ -51,13 +51,13 @@ Then I should expect some result
         [Test]
         public void Should_Parse_1st_Scenario_Text()
         {
-            ((Scenario) Result.Scenarios.First()).Body.First().ShouldEqual("Given some condition");
+            ((Scenario)Result.Scenarios.First()).Body.First().Text.ShouldEqual("Given some condition");
         }
 
         [Test]
         public void Should_Ignore_comment_Scenario_Text()
         {
-            ((Scenario) Result.Scenarios.First()).Body.Any(x => x.Contains("comment")).ShouldEqual(false);
+            ((Scenario) Result.Scenarios.First()).Body.Any(x => x.Text.Contains("comment")).ShouldEqual(false);
         }
 
         [Test]

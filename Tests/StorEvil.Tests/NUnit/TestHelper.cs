@@ -2,6 +2,7 @@ using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using Microsoft.CSharp;
 using NUnit.Framework;
@@ -53,6 +54,11 @@ namespace StorEvil.NUnit
 
             //return the assembly
             return results.CompiledAssembly;
+        }
+
+        public static Scenario BuildScenario(string name, params string[] lines)
+        {
+            return new Scenario("test", lines.Select(line => new ScenarioLine { Text = line }));
         }
     }
 

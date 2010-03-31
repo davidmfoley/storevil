@@ -8,7 +8,7 @@ namespace StorEvil.InPlace
     [TestFixture]
     public class When_scenario_maps_to_context_method_action_that_succeeds : InPlaceRunnerSpec<InPlaceRunnerTestContext>
     {
-        private readonly Scenario TestScenario = new Scenario("test", new[] {ScenarioText});
+        private readonly Scenario TestScenario = BuildScenario("test", new[] {ScenarioText});
         private const string ScenarioText = "When some action";
 
         [SetUp]

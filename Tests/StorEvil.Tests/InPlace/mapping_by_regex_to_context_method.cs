@@ -8,8 +8,7 @@ namespace StorEvil.InPlace
     [TestFixture]
     public class mapping_by_regex_to_context_method : InPlaceRunnerSpec<InPlaceRunnerTestContext>
     {
-        private readonly Scenario TestScenario = new Scenario("test", new[] {ScenarioText});
-        private const string ScenarioText = "Matches a regex with 42";
+        private readonly Scenario TestScenario = BuildScenario("test", "Matches a regex with 42");
 
         [SetUp]
         public void SetupContext()
@@ -22,7 +21,7 @@ namespace StorEvil.InPlace
         [Test]
         public void Notifies_listener_of_success()
         {
-            ResultListener.AssertWasCalled(x => x.Success(TestScenario, ScenarioText));
+            ResultListener.AssertWasCalled(x => x.Success(TestScenario, "Matches a regex with 42"));
         }
 
         [Test]
@@ -32,10 +31,10 @@ namespace StorEvil.InPlace
         }
     }
 
-    [TestFixture, Ignore("Multi-word matching not implmented")]
+    [TestFixture, Ignore("In progress")]
     public class matching_a_multi_word_param : InPlaceRunnerSpec<InPlaceRunnerTestContext>
     {
-        private readonly Scenario TestScenario = new Scenario("multi-word test", new[] {ScenarioText});
+        private readonly Scenario TestScenario = BuildScenario("multi-word test", ScenarioText);
         private const string ScenarioText = "test foo bar baz with multiple words";
 
         [SetUp]

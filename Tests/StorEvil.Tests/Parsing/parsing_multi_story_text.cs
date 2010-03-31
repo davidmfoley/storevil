@@ -44,7 +44,7 @@ Then I should expect some other result
         {
             var body = ((Scenario) Result.Scenarios.ElementAt(1)).Body;
 
-            body.ElementsShouldEqual("Given some other condition", "When I take some other action",
+            body.Select(l=>l.Text).ElementsShouldEqual("Given some other condition", "When I take some other action",
                                      "Then I should expect some other result");
         }
     }

@@ -53,10 +53,11 @@ namespace StorEvil.Context.Matchers
 
             var paramValues = new Dictionary<string, object>();
 
+            var wordIndex = 0;
             // check each word for a match
             for (int i = 0; i < _wordFilters.Count; i++)
             {
-                var wordMatch = _wordFilters[i].GetMatch(words.Skip(i).ToArray());
+                var wordMatch = _wordFilters[i].GetMatch(words.Skip(wordIndex).ToArray());
                 if (!wordMatch.IsMatch)
                     return null;
 
@@ -65,6 +66,8 @@ namespace StorEvil.Context.Matchers
 
                 if (paramFilter != null)
                     paramValues.Add(paramFilter.ParameterName, wordMatch.Value);
+
+                wordIndex += wordMatch.WordCount;
             }
 
             var match = BuildNameMatch(words, paramValues);
@@ -94,8 +97,7 @@ namespace StorEvil.Context.Matchers
             AppendUnmatchedParameters(parameterInfos, paramNameMap);
         }
 
-        private static Dictionary<string, ParameterInfo> GetParameterNameToInfoMap(
-           IEnumerable<ParameterInfo> parameterInfos)
+        private static Dictionary<string, ParameterInfo> GetParameterNameToInfoMap(IEnumerable<ParameterInfo> parameterInfos)
         {
             return parameterInfos.ToDictionary(parameter => parameter.Name);
         }

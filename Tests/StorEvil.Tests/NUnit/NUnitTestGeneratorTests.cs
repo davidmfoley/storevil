@@ -15,10 +15,15 @@ namespace StorEvil.NUnit
     [TestFixture]
     public class NUnitTestGeneratorTests : TestBase
     {
+        protected static Scenario BuildScenario(string name, params string[] lines)
+        {
+            return new Scenario("test", lines.Select(line => new ScenarioLine { Text = line }));
+        }
+
         [Test]
         public void Created_Test_Should_Call_When()
         {
-            var s = new Scenario("test", new[] {"When I do Something"});
+            var s = BuildScenario("test", new[] { "When I do Something" });
             var story = new Story("test", "summary", new[] {s});
             var context = Fake<TestContext>();
 
@@ -30,7 +35,7 @@ namespace StorEvil.NUnit
         [Test]
         public void Created_Test_Should_Call_When_And_Then()
         {
-            var s = new Scenario("test", new[] {"When I do Something", "Then something should happen"});
+            var s = BuildScenario("test", new[] { "When I do Something", "Then something should happen" });
             var story = new Story("test", "testing when and then both should be called", new[] {s});
 
             var context = Fake<TestContext>();
@@ -44,7 +49,7 @@ namespace StorEvil.NUnit
         [Test]
         public void Created_Test_Should_Inject_Unnamed_Parameter_For_Method()
         {
-            var s = new Scenario("test", new[] {"Given a user named Dave"});
+            var s = BuildScenario("test", new[] { "Given a user named Dave" });
             var story = new Story("test", "testing unnamed parameter injection", new[] {s});
 
             var context = Fake<TestContext>();
@@ -57,7 +62,7 @@ namespace StorEvil.NUnit
         [Test]
         public void Created_Test_Should_Handle_And()
         {
-            var s = new Scenario("test", new[] {"Given a user named Dave", "and a dog named Fido"});
+            var s = BuildScenario("test", new[] { "Given a user named Dave", "and a dog named Fido" });
             var story = new Story("test", "testing junction of given clause using AND", new[] {s});
 
             var context = Fake<TestContext>();
@@ -72,7 +77,7 @@ namespace StorEvil.NUnit
         public void Created_Test_Should_Inject_Parameters_By_Name()
         {
             // injecting parameters
-            var s = new Scenario("test", new[] {"A condition with 1 and test"});
+            var s = BuildScenario("test", new[] { "A condition with 1 and test" });
             var story = new Story("test", "testing named parameter injection", new[] {s});
 
             var context = Fake<TestContext>();
@@ -86,7 +91,7 @@ namespace StorEvil.NUnit
         public void Created_Test_Should_Parse_Currency()
         {
             // injecting parameters
-            var s = new Scenario("test", new[] {"A condition with $1 and test"});
+            var s = BuildScenario("test", new[] { "A condition with $1 and test" });
             var story = new Story("test", "testing named parameter injection", new[] {s});
 
             var context = Fake<TestContext>();
@@ -100,7 +105,7 @@ namespace StorEvil.NUnit
         public void Created_Test_Should_Dispose_Context()
         {
             // injecting parameters
-            var s = new Scenario("test", new[] {"foo"});
+            var s = BuildScenario("test", new[] { "foo" });
             var story = new Story("test", "foo", new[] {s});
 
             var context = new TestDisposableContext();
@@ -114,7 +119,7 @@ namespace StorEvil.NUnit
         public void Created_Test_Should_Parse_DateTime()
         {
             // injecting parameters
-            var s = new Scenario("test", new[] {"A condition with 1/1/2009 param"});
+            var s = BuildScenario("test", new[] { "A condition with 1/1/2009 param" });
             var story = new Story("test", "testing date time parsing", new[] {s});
 
             var context = Fake<TestContext>();
@@ -127,7 +132,7 @@ namespace StorEvil.NUnit
         [Test]
         public void Created_Test_Should_Chain_Calls()
         {
-            var s = new Scenario("test", new[] {"Some sub context condition test"});
+            var s = BuildScenario("test", new[] { "Some sub context condition test" });
 
             var story = new Story("test", "testing chaining", new[] {s});
 
@@ -140,7 +145,7 @@ namespace StorEvil.NUnit
         [Test]
         public void Created_Test_Should_Support_Property_Invocation()
         {
-            var s = new Scenario("test", new[] {"sub context condition test"});
+            var s = BuildScenario("test", new[] { "sub context condition test" });
 
             var story = new Story("test", "testing property", new[] {s});
 
@@ -153,7 +158,7 @@ namespace StorEvil.NUnit
         [Test]
         public void Created_Test_Should_Support_Field_Invocation()
         {
-            var s = new Scenario("test", new[] {"sub context field condition test"});
+            var s = BuildScenario("test", new[] { "sub context field condition test" });
             var story = new Story("test", "testing field invokation", new[] {s});
 
             var context = new TestContext {SubContext = new TestSubContext()};
@@ -167,7 +172,7 @@ namespace StorEvil.NUnit
         public void Should_Throw_IgnoreException_When_Context_Does_Not_Implement_Methods()
         {
             var story = new Story("test", "testing assertion when no name match",
-                                  new[] {new Scenario("test", new[] {"subcontext bogus test"})});
+                                  new[] { BuildScenario("test", new[] { "subcontext bogus test" }) });
 
             var context = new TestContext();
 
@@ -190,7 +195,7 @@ namespace StorEvil.NUnit
         [Test]
         public void Should_Invoke_Extension_Method()
         {
-            var s = new Scenario("test", new[] {"sub context field name should equal Dave"});
+            var s = BuildScenario("test", new[] { "sub context field name should equal Dave" });
 
             var story = new Story("test", "testing assertion when no name match", new[] {s});
 
@@ -202,7 +207,7 @@ namespace StorEvil.NUnit
         [Test]
         public void Should_Handle_MultiLine_Param()
         {
-            var s = new Scenario("test", new[] { "foo\r\n|a|b|\r\n|c|d|" });
+            var s = BuildScenario("test", new[] { "foo\r\n|a|b|\r\n|c|d|" });
 
             var story = new Story("test", "testing assertion when no name match", new[] { s });
 
@@ -219,7 +224,9 @@ namespace StorEvil.NUnit
         [Test]
         public void Created_test_should_have_category_for_each_tag_on_scenario()
         {
-            var scenario = new Scenario("test", new[] { "When I Do Something" }) { Tags = new[] { "foo", "bar" } };
+            var scenario = BuildScenario("test", new[] {"When I Do Something"});
+            scenario.Tags = new[] { "foo", "bar" };
+
             var s = new Story("test", "summary", new[] { scenario });
             Assembly a = CreateAssembly<object>(s);
 

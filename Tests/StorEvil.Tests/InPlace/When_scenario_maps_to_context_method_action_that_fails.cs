@@ -9,7 +9,7 @@ namespace StorEvil.InPlace
     [TestFixture]
     public class When_scenario_maps_to_context_method_action_that_fails : InPlaceRunnerSpec<InPlaceRunnerTestContext>
     {
-        private readonly Scenario TestScenario = new Scenario("test", new[] {ScenarioText});
+        private readonly Scenario TestScenario = BuildScenario("test", new[] { ScenarioText });
         private const string ScenarioText = "When some failing action";
 
         [SetUp]
@@ -37,7 +37,7 @@ namespace StorEvil.InPlace
     [TestFixture]
     public class the_word_And_should_map_to_previous_significant_word : InPlaceRunnerSpec<InPlaceRunnerTestContext>
     {
-        private readonly Scenario TestScenario = new Scenario("test",
+        private readonly Scenario TestScenario = BuildScenario("test",
                                                               new[] {"When some action", "And some other action"});
 
         [SetUp]

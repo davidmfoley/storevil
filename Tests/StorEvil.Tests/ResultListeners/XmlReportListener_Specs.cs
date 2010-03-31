@@ -5,6 +5,7 @@ using System.Xml;
 using NUnit.Framework;
 using StorEvil.Core;
 using StorEvil.InPlace;
+using StorEvil.NUnit;
 using StorEvil.Utility;
 
 namespace StorEvil.ResultListeners.XmlReportListener_Specs
@@ -15,6 +16,11 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
         protected XmlReportListener Writer;
         protected FakeTextWriter FileWriter;
         protected string Result;
+
+        protected Scenario BuildTestScenario(string id, string name, params string[] body)
+        {
+            return new Scenario(id, name, body.Select(x=>new ScenarioLine {Text = x}));
+        }
 
         [SetUp]
         public void SetupContext()
@@ -106,7 +112,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
     {
         protected override void DoTestSetup(XmlReportListener writer)
         {
-            Scenario testScenario = new Scenario("scenarioId", "scenarioName", new[] {"line1", "line2"});
+            Scenario testScenario = new Scenario("scenarioId", "scenarioName", new[] {"line1", "line2"}.Select(l=>new ScenarioLine {Text = l}));
             Writer.StoryStarting(new Story("id", "summary", new IScenario[] {testScenario}));
             Writer.ScenarioStarting(testScenario);
             Writer.Success(testScenario, "line1");
@@ -164,7 +170,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
     {
         protected override void DoTestSetup(XmlReportListener writer)
         {
-            var testScenario = new Scenario("scenarioId", "scenarioName", new[] {"line1", "line2"});
+            var testScenario = BuildTestScenario("scenarioId", "scenarioName", new[] {"line1", "line2"});
             Writer.StoryStarting(new Story("id", "summary", new IScenario[] {testScenario}));
             Writer.ScenarioStarting(testScenario);
             Writer.Success(testScenario, "line1");
@@ -215,8 +221,8 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
     {
         protected override void DoTestSetup(XmlReportListener writer)
         {
-            var sucessScenario = new Scenario("successId", "successName", new[] {"successLine"});
-            var failureScenario = new Scenario("failureId", "failureName", new[] {"failureLine"});
+            var sucessScenario = BuildTestScenario("successId", "successName", new[] { "successLine" });
+            var failureScenario = BuildTestScenario("failureId", "failureName", new[] { "failureLine" });
 
             Writer.StoryStarting(new Story("id", "summary", new IScenario[] {sucessScenario, failureScenario}));
 
@@ -272,7 +278,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
     {
         protected override void DoTestSetup(XmlReportListener writer)
         {
-            var sucessScenario = new Scenario("successId", "successName", new[] {"successLine"});
+            var sucessScenario = BuildTestScenario("successId", "successName", new[] { "successLine" });
 
             Writer.StoryStarting(new Story("id", "summary", new IScenario[] {sucessScenario}));
 
@@ -280,7 +286,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
             Writer.Success(sucessScenario, "line1");
             Writer.ScenarioSucceeded(sucessScenario);
 
-            var failureScenario = new Scenario("failureId", "failureName", new[] {"failureLine"});
+            var failureScenario = BuildTestScenario("failureId", "failureName", new[] { "failureLine" });
 
             Writer.StoryStarting(new Story("id", "summary", new IScenario[] {failureScenario}));
 
@@ -333,7 +339,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
         protected override void DoTestSetup(XmlReportListener writer)
         {
             var line = "!<%&>/>\"'line1";
-            var scenario = new Scenario("<successId&>\"'", "<successName>%&\"'", new[] {line});
+            var scenario = BuildTestScenario("<successId&>\"'", "<successName>%&\"'", new[] { line });
 
             Writer.StoryStarting(new Story("id", "summary", new IScenario[] {scenario}));
 
@@ -370,7 +376,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
         protected override void DoTestSetup(XmlReportListener writer)
         {
             var line = "!<%&>/>\"'line1";
-            var sucessScenario = new Scenario("<successId&>\"'", "<successName>%&\"'", new[] {line});
+            var sucessScenario = BuildTestScenario("<successId&>\"'", "<successName>%&\"'", new[] { line });
 
             Writer.StoryStarting(new Story("id", "summary", new IScenario[] {sucessScenario}));
 

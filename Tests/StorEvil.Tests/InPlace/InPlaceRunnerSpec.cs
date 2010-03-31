@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Rhino.Mocks;
 using StorEvil.Context;
 using StorEvil.Core;
@@ -28,6 +29,11 @@ namespace StorEvil.InPlace
         protected argT Any<argT>()
         {
             return Arg<argT>.Is.Anything;
+        }
+
+        protected static Scenario BuildScenario(string name, params string[] lines)
+        {
+            return new Scenario("test", lines.Select(line=> new ScenarioLine {Text = line}));
         }
     }
 
