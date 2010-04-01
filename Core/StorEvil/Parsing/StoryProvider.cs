@@ -21,10 +21,10 @@ namespace StorEvil.Parsing
 
             foreach (var storyInfo in _reader.GetStoryInfos())
             {
-                if (null == (story = _parser.Parse(storyInfo.Text, storyInfo.Id)))
+                if (null == (story = _parser.Parse(storyInfo.Text, storyInfo.Location)))
                     continue;
 
-                story.Id = storyInfo.Id;
+                story.Id = storyInfo.Location;
                 stories.Add(story);
             }
             return stories;

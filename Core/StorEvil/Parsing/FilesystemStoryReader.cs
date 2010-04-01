@@ -49,7 +49,7 @@ namespace StorEvil.Parsing
         {
             return new StoryInfo
                        {
-                           Id = Path.GetFileNameWithoutExtension(file),
+                           Location = Path.GetFileName(file),
                            Text = Filesystem.GetFileText(file)
                        };
         }
