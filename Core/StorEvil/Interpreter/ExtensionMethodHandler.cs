@@ -19,8 +19,10 @@ namespace StorEvil.Interpreter
             var extensionMethods =
                 publicStaticMethods.Where(methodInfo => methodInfo.IsStatic & methodInfo.GetParameters().Length > 0);
 
+            
             foreach (var methodInfo in extensionMethods)
             {
+                DebugTrace.Trace("ExtensionMethodHandler", "Adding extension method: " + type.Name + "." + methodInfo.Name);
                 _allExtensionMethods.Add(methodInfo);
             }
         }

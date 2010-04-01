@@ -15,13 +15,13 @@ namespace StorEvil.Nunit
     {
         private readonly IScenarioPreprocessor _preprocessor;
 
-        public NUnitFixtureGenerator(IScenarioPreprocessor preprocessor, NUnitTestMethodGenerator methodGenerator)
+        public NUnitFixtureGenerator(IScenarioPreprocessor preprocessor, ITestMethodGenerator methodGenerator)
         {
             _preprocessor = preprocessor;
             MethodGenerator = methodGenerator;
         }
 
-        public NUnitTestMethodGenerator MethodGenerator { get; set; }
+        public ITestMethodGenerator MethodGenerator { get; set; }
 
         private const string FixtureFormat =
             @"

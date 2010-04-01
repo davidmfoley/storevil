@@ -22,24 +22,46 @@ namespace StorEvil.Interpreter
             _type = type;
             _factory = factory;
 
+            DebugTrace.Trace(GetType().Name, "Building interpreter for: " + type);
+
             const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public;
 
-            foreach (MemberInfo member in _type.GetMembers(flags))
+            foreach (MemberInfo member in GetMembers(flags)) 
                 AddMatchers(member);
 
             // extension methods
             AddMatchersForExtensionMethods(extensionMethodHandler);
         }
 
+        private MemberInfo[] GetMembers(BindingFlags flags)
+        {
+            var members = _type.GetMembers(flags);
+           
+
+            return FilterMembers(members);
+        }
+
+        private MemberInfo[] FilterMembers(MemberInfo[] members)
+        {
+            var ignore = new[] {"GetType", "ToString", "CompareTo", "GetTypeCode", "Equals", "GetHashCode"};
+            return members.Where(m => !(m.MemberType == MemberTypes.Constructor || ignore.Contains(m.Name))).ToArray();
+        }
+
         private void AddMatchersForExtensionMethods(ExtensionMethodHandler extensionMethodHandler)
         {
             foreach (var methodInfo in extensionMethodHandler.GetExtensionMethodsFor(_type))
+            {
+                DebugTrace.Trace(GetType().Name, "Added extension method matcher: " + methodInfo.Name);
+
                 _memberMatchers.Add(new MethodNameMatcher(methodInfo));
+            }
         }
 
         private void AddMatchers(MemberInfo member)
         {
             _memberMatchers.Add(GetMemberMatcher(member));
+
+            DebugTrace.Trace(GetType().Name, "Added reflection matcher: " + member.Name);
 
             AddRegexMatchersIfAttributePresent(member);
         }
@@ -56,22 +78,34 @@ namespace StorEvil.Interpreter
         {
             var regexAttrs = member.GetCustomAttributes(typeof (ContextRegexAttribute), true);
             foreach (var regexAttr in regexAttrs.Cast<ContextRegexAttribute>())
+            {
+                DebugTrace.Trace(GetType().Name, "Added regex matcher: " + member.Name + ", \"" + regexAttr.Pattern + "\"");
+
                 _memberMatchers.Add(new RegexMatcher(regexAttr.Pattern, member));
+            }
         }
 
         public InvocationChain GetChain(string line)
-        {          
+        {
+            DebugTrace.Trace(this.GetType().Name, "Interpreting '" + line + "' with type:" + _type.Name);
+              
             var partialMatches = new List<PartialMatch>();
             foreach (var member in _memberMatchers)
             {
                 foreach (var currentMatch in member.GetMatches(line))
                 {
                     if (currentMatch is ExactMatch)
+                    {
+                        DebugTrace.Trace(this.GetType().Name, "Exact match");
+              
                         return new InvocationChain
                                    {Invocations = new[] {BuildInvocation(member.MemberInfo, currentMatch)}};
-
+                    }
                     if (currentMatch is PartialMatch)
+                    {
+                        DebugTrace.Trace(this.GetType().Name, "Partial match -" + currentMatch.MatchedText);
                         partialMatches.Add((PartialMatch) currentMatch);
+                    }
                 }
             }
 

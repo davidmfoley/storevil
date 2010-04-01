@@ -85,9 +85,9 @@ namespace StorEvil.NUnit
             return TestHelper.CreateAssembly(header + "\r\n" + code);
         }
 
-        private NUnitTestMethodGenerator FakeMethodGenerator(string[] usings)
+        private ITestMethodGenerator FakeMethodGenerator(string[] usings)
         {
-            var gen = Fake<NUnitTestMethodGenerator>();
+            var gen = Fake<ITestMethodGenerator>();
             var testName = "Test" + Guid.NewGuid().ToString().Replace("-", "");
             string body = "\r\n[Test] public void " + testName + "() {}";
             gen.Stub(x => x.GetTestFromScenario(null, null))

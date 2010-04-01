@@ -8,21 +8,18 @@ using StorEvil.Interpreter;
 
 namespace StorEvil.Nunit
 {
+    public interface ITestMethodGenerator
+    {
+        NUnitTest GetTestFromScenario(Scenario scenario, StoryContext context);
+    }
+
     /// <summary>
     /// Generates NUnit source code for scenarios
     /// </summary>
-    public class NUnitTestMethodGenerator
+    public class NUnitTestMethodGenerator : ITestMethodGenerator
     {
         private readonly CSharpMethodInvocationGenerator _invocationGenerator;
-        private string _previousSignificantFirstWord;
-
-        public NUnitTestMethodGenerator()
-        {
-            //TODO
-            _invocationGenerator =
-                new CSharpMethodInvocationGenerator(
-                    new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())));
-        }
+        private string _previousSignificantFirstWord;       
 
         public NUnitTestMethodGenerator(CSharpMethodInvocationGenerator invocationGenerator)
         {
@@ -38,6 +35,8 @@ namespace StorEvil.Nunit
             IEnumerable<string> namespaces = new string[0];
             foreach (var line in scenario.Body)
             {
+                codeBuilder.AppendLine("#line " + line.LineNumber);
+
                 codeBuilder.Append(BuildConsoleWriteScenarioLine(line.Text));
 
                 var lineVariations = GenerateLineVariations(line.Text);
@@ -49,16 +48,16 @@ namespace StorEvil.Nunit
                         break;
                 }
 
+               
                 if (functionLine == null)
                 {
                     codeBuilder.AppendLine(
-                        @"            Assert.Ignore(@""Could not interpret: '" + line + "'\");");
+                        @"            Assert.Ignore(@""Could not interpret: '" + line.Text + "'\");");
                     break;
                 }
 
                 contexts.Add(functionLine.Context);
-                codeBuilder.AppendLine("#line " + line.LineNumber);
-
+               
                 codeBuilder.AppendLine(functionLine.Code);
 
                 namespaces = namespaces.Union(functionLine.Namespaces).Distinct();

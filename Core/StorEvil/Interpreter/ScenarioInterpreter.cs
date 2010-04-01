@@ -37,9 +37,13 @@ namespace StorEvil.Interpreter
 
                     InvocationChain chain = interpreter.GetChain(linePermutation);
                     if (chain != null)
+                    {
+                        DebugTrace.Trace(this.GetType().Name, "found match");
                         return chain;
+                    }
                 }
             }
+            DebugTrace.Trace(this.GetType().Name, "no match: " + line);
             return null;
         }
 

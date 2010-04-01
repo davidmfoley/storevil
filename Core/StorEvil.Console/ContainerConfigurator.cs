@@ -56,7 +56,10 @@ namespace StorEvil.Console
         {
             var mapper = new StoryToContextMapper();
             foreach (var location in settings.AssemblyLocations)
+            {
+                DebugTrace.Trace(this.GetType().Name, "Adding context assembly:" + location);
                 mapper.AddAssembly(location);
+            }
             return mapper;
         }
 
