@@ -20,4 +20,3 @@ Scenario: parameterizing and adding a basic assertion
 Scenario: matching with an integer parameter in the middle
 	Given I am 42 years old
 	My age in one year should be 43
-

@@ -1,62 +1,62 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <!--This file represents the results of running a test suite-->
-<test-results name="C:\projects\storevil\_build\Tests\StorEvil.Tests.dll" total="251" errors="0" failures="0" not-run="3" inconclusive="0" ignored="3" skipped="0" invalid="0" date="2010-04-01" time="11:42:33">
+<test-results name="C:\projects\storevil\_build\Tests\StorEvil.Tests.dll" total="251" errors="0" failures="0" not-run="3" inconclusive="0" ignored="3" skipped="0" invalid="0" date="2010-04-01" time="13:10:04">
   <environment nunit-version="2.5.3.9345" clr-version="2.0.50727.3074" os-version="Microsoft Windows NT 6.0.6001 Service Pack 1" platform="Win32NT" cwd="C:\projects\storevil" machine-name="WIN-W6W6JHS2OGB" user="David Foley" user-domain="WIN-W6W6JHS2OGB" />
   <culture-info current-culture="en-US" current-uiculture="en-US" />
-  <test-suite name="C:\projects\storevil\_build\Tests\StorEvil.Tests.dll" executed="True" success="True" time="9.703" asserts="0">
+  <test-suite name="C:\projects\storevil\_build\Tests\StorEvil.Tests.dll" executed="True" success="True" time="10.016" asserts="0">
     <results>
-      <test-suite name="StorEvil" executed="True" success="True" time="9.688" asserts="0">
+      <test-suite name="StorEvil" executed="True" success="True" time="9.984" asserts="0">
         <results>
-          <test-suite name="Configuration" executed="True" success="True" time="0.734" asserts="0">
+          <test-suite name="Configuration" executed="True" success="True" time="1.141" asserts="0">
             <results>
-              <test-suite name="FilesystemConfigReaderTests" executed="True" success="True" time="0.625" asserts="0">
+              <test-suite name="FilesystemConfigReaderTests" executed="True" success="True" time="1.016" asserts="0">
                 <results>
-                  <test-case name="StorEvil.Configuration.FilesystemConfigReaderTests.sets_story_base_path_to_current_directory_if_not_specified" executed="True" success="True" time="0.453" asserts="0" />
-                  <test-case name="StorEvil.Configuration.FilesystemConfigReaderTests.when_config_present_in_same_folder_uses_it" executed="True" success="True" time="0.000" asserts="1" />
+                  <test-case name="StorEvil.Configuration.FilesystemConfigReaderTests.sets_story_base_path_to_current_directory_if_not_specified" executed="True" success="True" time="0.953" asserts="0" />
+                  <test-case name="StorEvil.Configuration.FilesystemConfigReaderTests.when_config_present_in_same_folder_uses_it" executed="True" success="True" time="0.016" asserts="1" />
                   <test-case name="StorEvil.Configuration.FilesystemConfigReaderTests.when_no_config_present_in_same_folder_searches_up_the_tree" executed="True" success="True" time="0.000" asserts="1" />
-                  <test-case name="StorEvil.Configuration.FilesystemConfigReaderTests.when_no_config_present_in_tree_returns_default" executed="True" success="True" time="0.016" asserts="1" />
+                  <test-case name="StorEvil.Configuration.FilesystemConfigReaderTests.when_no_config_present_in_tree_returns_default" executed="True" success="True" time="0.000" asserts="1" />
                 </results>
               </test-suite>
-              <test-suite name="parsing_invalid_config_setting" executed="True" success="True" time="0.047" asserts="0">
+              <test-suite name="parsing_invalid_config_setting" executed="True" success="True" time="0.063" asserts="0">
                 <results>
-                  <test-case name="StorEvil.Configuration.parsing_invalid_config_setting.exception_has_name_of_bad_config_name" executed="True" success="True" time="0.016" asserts="0" />
+                  <test-case name="StorEvil.Configuration.parsing_invalid_config_setting.exception_has_name_of_bad_config_name" executed="True" success="True" time="0.031" asserts="0" />
                   <test-case name="StorEvil.Configuration.parsing_invalid_config_setting.exception_toString_contains_name_of_bad_setting" executed="True" success="True" time="0.031" asserts="1" />
                   <test-case name="StorEvil.Configuration.parsing_invalid_config_setting.throws_exception" executed="True" success="True" time="0.000" asserts="1" />
                 </results>
               </test-suite>
-              <test-suite name="parsing_valid_config" executed="True" success="True" time="0.016" asserts="0">
+              <test-suite name="parsing_valid_config" executed="True" success="True" time="0.031" asserts="0">
                 <results>
                   <test-case name="StorEvil.Configuration.parsing_valid_config.parses_assembly" executed="True" success="True" time="0.016" asserts="3" />
                   <test-case name="StorEvil.Configuration.parsing_valid_config.should_parse_output_file" executed="True" success="True" time="0.000" asserts="0" />
                   <test-case name="StorEvil.Configuration.parsing_valid_config.should_parse_output_file_format" executed="True" success="True" time="0.000" asserts="0" />
                   <test-case name="StorEvil.Configuration.parsing_valid_config.should_parse_output_file_template" executed="True" success="True" time="0.000" asserts="0" />
-                  <test-case name="StorEvil.Configuration.parsing_valid_config.should_parse_scenario_extensions" executed="True" success="True" time="0.000" asserts="4" />
+                  <test-case name="StorEvil.Configuration.parsing_valid_config.should_parse_scenario_extensions" executed="True" success="True" time="0.016" asserts="4" />
                 </results>
               </test-suite>
             </results>
           </test-suite>
-          <test-suite name="Console" executed="True" success="True" time="1.109" asserts="0">
+          <test-suite name="Console" executed="True" success="True" time="1.078" asserts="0">
             <results>
-              <test-suite name="Building_command_from_args" executed="True" success="True" time="0.484" asserts="0">
+              <test-suite name="Building_command_from_args" executed="True" success="True" time="0.422" asserts="0">
                 <results>
-                  <test-case name="StorEvil.Console.Building_command_from_args.can_create_help_job" executed="True" success="True" time="0.297" asserts="2" />
-                  <test-case name="StorEvil.Console.Building_command_from_args.can_create_inplace_job_with_no_path" executed="True" success="True" time="0.141" asserts="2" />
+                  <test-case name="StorEvil.Console.Building_command_from_args.can_create_help_job" executed="True" success="True" time="0.219" asserts="2" />
+                  <test-case name="StorEvil.Console.Building_command_from_args.can_create_inplace_job_with_no_path" executed="True" success="True" time="0.172" asserts="2" />
                   <test-case name="StorEvil.Console.Building_command_from_args.can_create_inplace_job_with_path" executed="True" success="True" time="0.016" asserts="2" />
                   <test-case name="StorEvil.Console.Building_command_from_args.can_create_nunit_job" executed="True" success="True" time="0.016" asserts="2" />
                   <test-case name="StorEvil.Console.Building_command_from_args.displays_usage_if_not_a_recognized_command" executed="True" success="True" time="0.000" asserts="2" />
                 </results>
               </test-suite>
-              <test-suite name="InitJob_Specs" executed="True" success="True" time="0.109" asserts="0">
+              <test-suite name="InitJob_Specs" executed="True" success="True" time="0.172" asserts="0">
                 <results>
-                  <test-case name="StorEvil.Console.InitJob_Specs.Writes_config" executed="True" success="True" time="0.063" asserts="0" />
+                  <test-case name="StorEvil.Console.InitJob_Specs.Writes_config" executed="True" success="True" time="0.125" asserts="0" />
                   <test-case name="StorEvil.Console.InitJob_Specs.Writes_example_context_class" executed="True" success="True" time="0.016" asserts="0" />
-                  <test-case name="StorEvil.Console.InitJob_Specs.Writes_example_feature" executed="True" success="True" time="0.000" asserts="0" />
+                  <test-case name="StorEvil.Console.InitJob_Specs.Writes_example_feature" executed="True" success="True" time="0.016" asserts="0" />
                   <test-case name="StorEvil.Console.InitJob_Specs.Writes_spark" executed="True" success="True" time="0.016" asserts="0" />
                 </results>
               </test-suite>
-              <test-suite name="StubGeneration_job" executed="True" success="True" time="0.031" asserts="0">
+              <test-suite name="StubGeneration_job" executed="True" success="True" time="0.047" asserts="0">
                 <results>
-                  <test-case name="StorEvil.Console.StubGeneration_job.can_create_generation_job" executed="True" success="True" time="0.016" asserts="2" />
+                  <test-case name="StorEvil.Console.StubGeneration_job.can_create_generation_job" executed="True" success="True" time="0.031" asserts="2" />
                   <test-case name="StorEvil.Console.StubGeneration_job.Sets_up_clipboard_writer_when_switch_is_set" executed="True" success="True" time="0.000" asserts="1" />
                   <test-case name="StorEvil.Console.StubGeneration_job.Sets_up_file_writer_when_switch_is_set" executed="True" success="True" time="0.016" asserts="1" />
                   <test-case name="StorEvil.Console.StubGeneration_job.Sets_up_story_handler_to_be_generator" executed="True" success="True" time="0.000" asserts="1" />
@@ -75,9 +75,9 @@
                   <test-case name="StorEvil.Console.switch_parsing+Parsing_a_switch_for_a_decorated_property.should_parse_switch_name" executed="True" success="True" time="0.000" asserts="2" />
                 </results>
               </test-suite>
-              <test-suite name="switch_parsing+Parsing_a_switch_with_a_parameter" executed="True" success="True" time="0.016" asserts="0">
+              <test-suite name="switch_parsing+Parsing_a_switch_with_a_parameter" executed="True" success="True" time="0.000" asserts="0">
                 <results>
-                  <test-case name="StorEvil.Console.switch_parsing+Parsing_a_switch_with_a_parameter.sets_param" executed="True" success="True" time="0.016" asserts="0" />
+                  <test-case name="StorEvil.Console.switch_parsing+Parsing_a_switch_with_a_parameter.sets_param" executed="True" success="True" time="0.000" asserts="0" />
                 </results>
               </test-suite>
               <test-suite name="switch_parsing+Parsing_a_switch_with_multiple_parameters" executed="True" success="True" time="0.000" asserts="0">
@@ -85,41 +85,41 @@
                   <test-case name="StorEvil.Console.switch_parsing+Parsing_a_switch_with_multiple_parameters.sets_params" executed="True" success="True" time="0.000" asserts="4" />
                 </results>
               </test-suite>
-              <test-suite name="switch_parsing+Parsing_an_enum_switch" executed="True" success="True" time="0.016" asserts="0">
+              <test-suite name="switch_parsing+Parsing_an_enum_switch" executed="True" success="True" time="0.000" asserts="0">
                 <results>
                   <test-case name="StorEvil.Console.switch_parsing+Parsing_an_enum_switch.sets_param_with_foo" executed="True" success="True" time="0.000" asserts="0" />
                   <test-case name="StorEvil.Console.switch_parsing+Parsing_an_enum_switch.sets_param_with_foobar" executed="True" success="True" time="0.000" asserts="0" />
                 </results>
               </test-suite>
-              <test-suite name="switch_parsing+Printing_switch_usage" executed="True" success="True" time="0.344" asserts="0">
+              <test-suite name="switch_parsing+Printing_switch_usage" executed="True" success="True" time="0.234" asserts="0">
                 <results>
-                  <test-case name="StorEvil.Console.switch_parsing+Printing_switch_usage.Should_print_names_of_args" executed="True" success="True" time="0.344" asserts="1" />
+                  <test-case name="StorEvil.Console.switch_parsing+Printing_switch_usage.Should_print_names_of_args" executed="True" success="True" time="0.234" asserts="1" />
                 </results>
               </test-suite>
-              <test-suite name="switch_parsing+Setting_fields_using_lambdas" executed="True" success="True" time="0.000" asserts="0">
+              <test-suite name="switch_parsing+Setting_fields_using_lambdas" executed="True" success="True" time="0.031" asserts="0">
                 <results>
                   <test-case name="StorEvil.Console.switch_parsing+Setting_fields_using_lambdas.sets_boolean_setting_using_long_form" executed="True" success="True" time="0.000" asserts="0" />
                   <test-case name="StorEvil.Console.switch_parsing+Setting_fields_using_lambdas.sets_boolean_setting_using_short_form" executed="True" success="True" time="0.000" asserts="0" />
-                  <test-case name="StorEvil.Console.switch_parsing+Setting_fields_using_lambdas.sets_multi_param_setting_using_short_form" executed="True" success="True" time="0.000" asserts="4" />
+                  <test-case name="StorEvil.Console.switch_parsing+Setting_fields_using_lambdas.sets_multi_param_setting_using_short_form" executed="True" success="True" time="0.016" asserts="4" />
                   <test-case name="StorEvil.Console.switch_parsing+Setting_fields_using_lambdas.sets_string_setting_using_short_form" executed="True" success="True" time="0.000" asserts="0" />
-                  <test-case name="StorEvil.Console.switch_parsing+Setting_fields_using_lambdas.throws_an_exception_if_passed_a_nonsimple_expression" executed="True" success="True" time="0.000" asserts="0" />
+                  <test-case name="StorEvil.Console.switch_parsing+Setting_fields_using_lambdas.throws_an_exception_if_passed_a_nonsimple_expression" executed="True" success="True" time="0.016" asserts="0" />
                 </results>
               </test-suite>
-              <test-suite name="Wiring_up_result_listeners" executed="True" success="True" time="0.078" asserts="0">
+              <test-suite name="Wiring_up_result_listeners" executed="True" success="True" time="0.141" asserts="0">
                 <results>
-                  <test-case name="StorEvil.Console.Wiring_up_result_listeners.when_debug_is_not_set_registers_no_op_debug_listener" executed="True" success="True" time="0.016" asserts="1" />
+                  <test-case name="StorEvil.Console.Wiring_up_result_listeners.when_debug_is_not_set_registers_no_op_debug_listener" executed="True" success="True" time="0.000" asserts="1" />
                   <test-case name="StorEvil.Console.Wiring_up_result_listeners.when_debug_is_set_registers_console_debug_listener" executed="True" success="True" time="0.016" asserts="1" />
-                  <test-case name="StorEvil.Console.Wiring_up_result_listeners.when_spark_output_is_chosen_creates_a_spark_listener" executed="True" success="True" time="0.016" asserts="1" />
-                  <test-case name="StorEvil.Console.Wiring_up_result_listeners.when_xml_output_is_chosen_creates_an_xml_listener" executed="True" success="True" time="0.031" asserts="1" />
+                  <test-case name="StorEvil.Console.Wiring_up_result_listeners.when_spark_output_is_chosen_creates_a_spark_listener" executed="True" success="True" time="0.063" asserts="1" />
+                  <test-case name="StorEvil.Console.Wiring_up_result_listeners.when_xml_output_is_chosen_creates_an_xml_listener" executed="True" success="True" time="0.063" asserts="1" />
                 </results>
               </test-suite>
             </results>
           </test-suite>
-          <test-suite name="Context" executed="True" success="True" time="0.172" asserts="0">
+          <test-suite name="Context" executed="True" success="True" time="0.234" asserts="0">
             <results>
-              <test-suite name="Matching_method_names_with_reflection" executed="True" success="True" time="0.094" asserts="0">
+              <test-suite name="Matching_method_names_with_reflection" executed="True" success="True" time="0.109" asserts="0">
                 <results>
-                  <test-suite name="Enum_values" executed="True" success="True" time="0.078" asserts="0">
+                  <test-suite name="Enum_values" executed="True" success="True" time="0.094" asserts="0">
                     <results>
                       <test-case name="StorEvil.Context.Matching_method_names_with_reflection.Enum_values.Should_be_exact_match" executed="True" success="True" time="0.078" asserts="1" />
                       <test-case name="StorEvil.Context.Matching_method_names_with_reflection.Enum_values.Should_match_multiple_words_in_enum_name" executed="True" success="True" time="0.000" asserts="0" />
@@ -142,19 +142,19 @@
                       <test-case name="StorEvil.Context.Matching_method_names_with_reflection.Parsing_typed_tables.should_match_with_typed_array_parameter" executed="True" success="True" time="0.000" asserts="0" />
                     </results>
                   </test-suite>
-                  <test-suite name="Partial_matches" executed="True" success="True" time="0.016" asserts="0">
+                  <test-suite name="Partial_matches" executed="True" success="True" time="0.000" asserts="0">
                     <results>
-                      <test-case name="StorEvil.Context.Matching_method_names_with_reflection.Partial_matches.returns_partial_match" executed="True" success="True" time="0.016" asserts="1" />
+                      <test-case name="StorEvil.Context.Matching_method_names_with_reflection.Partial_matches.returns_partial_match" executed="True" success="True" time="0.000" asserts="1" />
                       <test-case name="StorEvil.Context.Matching_method_names_with_reflection.Partial_matches.should_set_name" executed="True" success="True" time="0.000" asserts="0" />
                     </results>
                   </test-suite>
                 </results>
               </test-suite>
-              <test-suite name="RegexMatcher_Specs" executed="True" success="True" time="0.047" asserts="0">
+              <test-suite name="RegexMatcher_Specs" executed="True" success="True" time="0.063" asserts="0">
                 <results>
-                  <test-suite name="partial_matching_on_different_types_of_members" executed="True" success="True" time="0.000" asserts="0">
+                  <test-suite name="partial_matching_on_different_types_of_members" executed="True" success="True" time="0.016" asserts="0">
                     <results>
-                      <test-case name="StorEvil.Context.RegexMatcher_Specs.partial_matching_on_different_types_of_members.can_partially_match_on_fields" executed="True" success="True" time="0.000" asserts="1" />
+                      <test-case name="StorEvil.Context.RegexMatcher_Specs.partial_matching_on_different_types_of_members.can_partially_match_on_fields" executed="True" success="True" time="0.016" asserts="1" />
                       <test-case name="StorEvil.Context.RegexMatcher_Specs.partial_matching_on_different_types_of_members.can_partially_match_on_properties" executed="True" success="True" time="0.000" asserts="1" />
                       <test-case name="StorEvil.Context.RegexMatcher_Specs.partial_matching_on_different_types_of_members.No_partial_matching_on_void_methods" executed="True" success="True" time="0.000" asserts="1" />
                     </results>
@@ -162,7 +162,7 @@
                   <test-suite name="regex_parameter_matching" executed="True" success="True" time="0.031" asserts="0">
                     <results>
                       <test-case name="StorEvil.Context.RegexMatcher_Specs.regex_parameter_matching.should_have_one_parameter" executed="True" success="True" time="0.016" asserts="0" />
-                      <test-case name="StorEvil.Context.RegexMatcher_Specs.regex_parameter_matching.should_use_captured_for_param_value" executed="True" success="True" time="0.000" asserts="0" />
+                      <test-case name="StorEvil.Context.RegexMatcher_Specs.regex_parameter_matching.should_use_captured_for_param_value" executed="True" success="True" time="0.016" asserts="0" />
                       <test-case name="StorEvil.Context.RegexMatcher_Specs.regex_parameter_matching.should_use_parameter_name_to_method_as_key" executed="True" success="True" time="0.000" asserts="0" />
                     </results>
                   </test-suite>
@@ -178,32 +178,32 @@
                       <test-case name="StorEvil.Context.RegexMatcher_Specs.when_regex_is_a_partial_match.sets_remaining_text" executed="True" success="True" time="0.000" asserts="0" />
                     </results>
                   </test-suite>
-                  <test-suite name="when_regex_matches_whole_line" executed="True" success="True" time="0.016" asserts="0">
+                  <test-suite name="when_regex_matches_whole_line" executed="True" success="True" time="0.000" asserts="0">
                     <results>
                       <test-case name="StorEvil.Context.RegexMatcher_Specs.when_regex_matches_whole_line.returned_match_should_span_entire_line" executed="True" success="True" time="0.000" asserts="0" />
-                      <test-case name="StorEvil.Context.RegexMatcher_Specs.when_regex_matches_whole_line.should_return_an_exact_match" executed="True" success="True" time="0.016" asserts="1" />
+                      <test-case name="StorEvil.Context.RegexMatcher_Specs.when_regex_matches_whole_line.should_return_an_exact_match" executed="True" success="True" time="0.000" asserts="1" />
                     </results>
                   </test-suite>
                 </results>
               </test-suite>
-              <test-suite name="StoryToContextMapper_Specs" executed="True" success="True" time="0.031" asserts="0">
+              <test-suite name="StoryToContextMapper_Specs" executed="True" success="True" time="0.047" asserts="0">
                 <results>
-                  <test-suite name="Context_lifetime_rules" executed="True" success="True" time="0.000" asserts="0">
+                  <test-suite name="Context_lifetime_rules" executed="True" success="True" time="0.016" asserts="0">
                     <results>
-                      <test-case name="StorEvil.Context.StoryToContextMapper_Specs.Context_lifetime_rules.Context_classes_are_reused_within_one_scenario" executed="True" success="True" time="0.000" asserts="1" />
+                      <test-case name="StorEvil.Context.StoryToContextMapper_Specs.Context_lifetime_rules.Context_classes_are_reused_within_one_scenario" executed="True" success="True" time="0.016" asserts="1" />
                       <test-case name="StorEvil.Context.StoryToContextMapper_Specs.Context_lifetime_rules.Context_classes_for_different_scenarios_are_different_objects" executed="True" success="True" time="0.000" asserts="1" />
                       <test-case name="StorEvil.Context.StoryToContextMapper_Specs.Context_lifetime_rules.Disposable_context_classes_are_disposed_at_the_end_of_the_scenario" executed="True" success="True" time="0.000" asserts="0" />
                     </results>
                   </test-suite>
-                  <test-suite name="Dependent_contexts" executed="True" success="True" time="0.016" asserts="0">
+                  <test-suite name="Dependent_contexts" executed="True" success="True" time="0.000" asserts="0">
                     <results>
-                      <test-case name="StorEvil.Context.StoryToContextMapper_Specs.Dependent_contexts.Dependent_class_is_created" executed="True" success="True" time="0.016" asserts="1" />
+                      <test-case name="StorEvil.Context.StoryToContextMapper_Specs.Dependent_contexts.Dependent_class_is_created" executed="True" success="True" time="0.000" asserts="1" />
                       <test-case name="StorEvil.Context.StoryToContextMapper_Specs.Dependent_contexts.Dependent_object_is_same_as_explicitly_resolved_object" executed="True" success="True" time="0.000" asserts="1" />
                     </results>
                   </test-suite>
-                  <test-suite name="StoryToContextMappingTests" executed="True" success="True" time="0.016" asserts="0">
+                  <test-suite name="StoryToContextMappingTests" executed="True" success="True" time="0.031" asserts="0">
                     <results>
-                      <test-case name="StorEvil.Context.StoryToContextMapper_Specs.StoryToContextMappingTests.Should_Map_By_ContextAttribute" executed="True" success="True" time="0.016" asserts="0" />
+                      <test-case name="StorEvil.Context.StoryToContextMapper_Specs.StoryToContextMappingTests.Should_Map_By_ContextAttribute" executed="True" success="True" time="0.031" asserts="0" />
                       <test-case name="StorEvil.Context.StoryToContextMapper_Specs.StoryToContextMappingTests.Should_Register_Assembly_Types" executed="True" success="True" time="0.000" asserts="0" />
                       <test-case name="StorEvil.Context.StoryToContextMapper_Specs.StoryToContextMappingTests.Throws_if_no_context_added" executed="False">
                         <reason>
@@ -216,13 +216,13 @@
               </test-suite>
             </results>
           </test-suite>
-          <test-suite name="Core" executed="True" success="True" time="0.094" asserts="0">
+          <test-suite name="Core" executed="True" success="True" time="0.141" asserts="0">
             <results>
-              <test-suite name="StorEvilJob_Specs" executed="True" success="True" time="0.078" asserts="0">
+              <test-suite name="StorEvilJob_Specs" executed="True" success="True" time="0.141" asserts="0">
                 <results>
-                  <test-suite name="JobTests" executed="True" success="True" time="0.078" asserts="0">
+                  <test-suite name="JobTests" executed="True" success="True" time="0.141" asserts="0">
                     <results>
-                      <test-case name="StorEvil.Core.StorEvilJob_Specs.JobTests.Invokes_Handler_For_Single_Story_And_Context" executed="True" success="True" time="0.078" asserts="0" />
+                      <test-case name="StorEvil.Core.StorEvilJob_Specs.JobTests.Invokes_Handler_For_Single_Story_And_Context" executed="True" success="True" time="0.141" asserts="0" />
                       <test-case name="StorEvil.Core.StorEvilJob_Specs.JobTests.Notifies_Handler_When_Finished" executed="True" success="True" time="0.000" asserts="0" />
                       <test-case name="StorEvil.Core.StorEvilJob_Specs.JobTests.Properties_Should_Match_Constructor_Parameters" executed="True" success="True" time="0.000" asserts="0" />
                     </results>
@@ -233,32 +233,32 @@
           </test-suite>
           <test-suite name="funq_easy_registration" executed="True" success="True" time="0.016" asserts="0">
             <results>
-              <test-case name="StorEvil.funq_easy_registration.should_be_able_to_chain_dependencies" executed="True" success="True" time="0.016" asserts="1" />
+              <test-case name="StorEvil.funq_easy_registration.should_be_able_to_chain_dependencies" executed="True" success="True" time="0.000" asserts="1" />
               <test-case name="StorEvil.funq_easy_registration.should_be_able_to_get_service_impl" executed="True" success="True" time="0.000" asserts="1" />
-              <test-case name="StorEvil.funq_easy_registration.should_be_able_to_inject_dependency" executed="True" success="True" time="0.000" asserts="1" />
+              <test-case name="StorEvil.funq_easy_registration.should_be_able_to_inject_dependency" executed="True" success="True" time="0.016" asserts="1" />
             </results>
           </test-suite>
-          <test-suite name="InPlace" executed="True" success="True" time="0.250" asserts="0">
+          <test-suite name="InPlace" executed="True" success="True" time="0.391" asserts="0">
             <results>
-              <test-suite name="Chaining_results" executed="True" success="True" time="0.094" asserts="0">
+              <test-suite name="Chaining_results" executed="True" success="True" time="0.109" asserts="0">
                 <results>
-                  <test-case name="StorEvil.InPlace.Chaining_results.Should_succeed" executed="True" success="True" time="0.094" asserts="0" />
+                  <test-case name="StorEvil.InPlace.Chaining_results.Should_succeed" executed="True" success="True" time="0.109" asserts="0" />
                 </results>
               </test-suite>
-              <test-suite name="Chaining_results_that_should_result_in_Failure" executed="True" success="True" time="0.016" asserts="0">
+              <test-suite name="Chaining_results_that_should_result_in_Failure" executed="True" success="True" time="0.125" asserts="0">
                 <results>
-                  <test-case name="StorEvil.InPlace.Chaining_results_that_should_result_in_Failure.Should_fail" executed="True" success="True" time="0.016" asserts="1" />
+                  <test-case name="StorEvil.InPlace.Chaining_results_that_should_result_in_Failure.Should_fail" executed="True" success="True" time="0.125" asserts="1" />
                 </results>
               </test-suite>
-              <test-suite name="executing_outlines_with_example_tables" executed="True" success="True" time="0.031" asserts="0">
+              <test-suite name="executing_outlines_with_example_tables" executed="True" success="True" time="0.063" asserts="0">
                 <results>
-                  <test-case name="StorEvil.InPlace.executing_outlines_with_example_tables.should_invoke_method_three_times" executed="True" success="True" time="0.031" asserts="0" />
-                  <test-case name="StorEvil.InPlace.executing_outlines_with_example_tables.should_pass_correct_args" executed="True" success="True" time="0.000" asserts="0" />
+                  <test-case name="StorEvil.InPlace.executing_outlines_with_example_tables.should_invoke_method_three_times" executed="True" success="True" time="0.047" asserts="0" />
+                  <test-case name="StorEvil.InPlace.executing_outlines_with_example_tables.should_pass_correct_args" executed="True" success="True" time="0.016" asserts="0" />
                 </results>
               </test-suite>
-              <test-suite name="executing_scenario_with_table" executed="True" success="True" time="0.016" asserts="0">
+              <test-suite name="executing_scenario_with_table" executed="True" success="True" time="0.000" asserts="0">
                 <results>
-                  <test-case name="StorEvil.InPlace.executing_scenario_with_table.Table_data_is_set" executed="True" success="True" time="0.016" asserts="0" />
+                  <test-case name="StorEvil.InPlace.executing_scenario_with_table.Table_data_is_set" executed="True" success="True" time="0.000" asserts="0" />
                   <test-case name="StorEvil.InPlace.executing_scenario_with_table.Table_is_not_null" executed="True" success="True" time="0.000" asserts="1" />
                 </results>
               </test-suite>
@@ -274,15 +274,15 @@
                   <test-case name="StorEvil.InPlace.executing_scenario_with_typed_parameter.Table_is_not_null" executed="True" success="True" time="0.000" asserts="1" />
                 </results>
               </test-suite>
-              <test-suite name="Filtering_by_tags" executed="True" success="True" time="0.000" asserts="0">
+              <test-suite name="Filtering_by_tags" executed="True" success="True" time="0.016" asserts="0">
                 <results>
-                  <test-case name="StorEvil.InPlace.Filtering_by_tags.allows_scenario_with_tag" executed="True" success="True" time="0.000" asserts="0" />
+                  <test-case name="StorEvil.InPlace.Filtering_by_tags.allows_scenario_with_tag" executed="True" success="True" time="0.016" asserts="0" />
                   <test-case name="StorEvil.InPlace.Filtering_by_tags.allows_story_with_tag" executed="True" success="True" time="0.000" asserts="0" />
                   <test-case name="StorEvil.InPlace.Filtering_by_tags.does_not_include_when_neither_has_any_tags" executed="True" success="True" time="0.000" asserts="0" />
                   <test-case name="StorEvil.InPlace.Filtering_by_tags.does_not_include_when_tags_do_not_match" executed="True" success="True" time="0.000" asserts="0" />
                 </results>
               </test-suite>
-              <test-suite name="mapping_by_regex_to_context_method" executed="True" success="True" time="0.016" asserts="0">
+              <test-suite name="mapping_by_regex_to_context_method" executed="True" success="True" time="0.000" asserts="0">
                 <results>
                   <test-case name="StorEvil.InPlace.mapping_by_regex_to_context_method.invokes_method_with_correct_param" executed="True" success="True" time="0.000" asserts="0" />
                   <test-case name="StorEvil.InPlace.mapping_by_regex_to_context_method.Notifies_listener_of_success" executed="True" success="True" time="0.000" asserts="0" />
@@ -305,7 +305,7 @@
                   </test-case>
                 </results>
               </test-suite>
-              <test-suite name="Suggestions_for_not_yet_implemented_grammar" executed="True" success="True" time="0.016" asserts="0">
+              <test-suite name="Suggestions_for_not_yet_implemented_grammar" executed="True" success="True" time="0.031" asserts="0">
                 <results>
                   <test-case name="StorEvil.InPlace.Suggestions_for_not_yet_implemented_grammar.For_scenario_outline_uses_bracketed_names_for_params" executed="True" success="True" time="0.016" asserts="1" />
                   <test-case name="StorEvil.InPlace.Suggestions_for_not_yet_implemented_grammar.Includes_comment_with_original_text" executed="True" success="True" time="0.000" asserts="1" />
@@ -319,9 +319,9 @@
                   <test-case name="StorEvil.InPlace.Suggestions_for_not_yet_implemented_grammar.Should_use_last_significant_word_instead_of_and" executed="True" success="True" time="0.000" asserts="1" />
                 </results>
               </test-suite>
-              <test-suite name="the_word_And_should_map_to_previous_significant_word" executed="True" success="True" time="0.000" asserts="0">
+              <test-suite name="the_word_And_should_map_to_previous_significant_word" executed="True" success="True" time="0.016" asserts="0">
                 <results>
-                  <test-case name="StorEvil.InPlace.the_word_And_should_map_to_previous_significant_word.Invokes_both_methods" executed="True" success="True" time="0.000" asserts="0" />
+                  <test-case name="StorEvil.InPlace.the_word_And_should_map_to_previous_significant_word.Invokes_both_methods" executed="True" success="True" time="0.016" asserts="0" />
                 </results>
               </test-suite>
               <test-suite name="When_finished_running_all_stories" executed="True" success="True" time="0.000" asserts="0">
@@ -359,9 +359,9 @@
               <test-suite name="CommandLineIntegrationTests" executed="True" success="False" time="0.000" asserts="0" />
             </results>
           </test-suite>
-          <test-suite name="Interpreter" executed="True" success="True" time="0.031" asserts="0">
+          <test-suite name="Interpreter" executed="True" success="True" time="0.063" asserts="0">
             <results>
-              <test-suite name="ParameterConverter_Specs" executed="True" success="True" time="0.031" asserts="0">
+              <test-suite name="ParameterConverter_Specs" executed="True" success="True" time="0.063" asserts="0">
                 <results>
                   <test-suite name="converting_a_table_to_a_user_type" executed="True" success="True" time="0.000" asserts="0">
                     <results>
@@ -371,7 +371,7 @@
                   </test-suite>
                   <test-suite name="converting_comma_separated_arrays" executed="True" success="True" time="0.016" asserts="0">
                     <results>
-                      <test-case name="StorEvil.Interpreter.ParameterConverter_Specs.converting_comma_separated_arrays.should_convert_comma_separated_values_to_an_array_of_ints" executed="True" success="True" time="0.000" asserts="1" />
+                      <test-case name="StorEvil.Interpreter.ParameterConverter_Specs.converting_comma_separated_arrays.should_convert_comma_separated_values_to_an_array_of_ints" executed="True" success="True" time="0.016" asserts="1" />
                       <test-case name="StorEvil.Interpreter.ParameterConverter_Specs.converting_comma_separated_arrays.should_convert_empty_value_to_zero_element_array" executed="True" success="True" time="0.000" asserts="1" />
                     </results>
                   </test-suite>
@@ -382,11 +382,11 @@
                       <test-case name="StorEvil.Interpreter.ParameterConverter_Specs.converting_tables_of_data.should_convert_typed_table_to_an_array_of_types" executed="True" success="True" time="0.000" asserts="1" />
                     </results>
                   </test-suite>
-                  <test-suite name="simple_conversions" executed="True" success="True" time="0.016" asserts="0">
+                  <test-suite name="simple_conversions" executed="True" success="True" time="0.047" asserts="0">
                     <results>
-                      <test-case name="StorEvil.Interpreter.ParameterConverter_Specs.simple_conversions.should_convert_currency" executed="True" success="True" time="0.000" asserts="2" />
+                      <test-case name="StorEvil.Interpreter.ParameterConverter_Specs.simple_conversions.should_convert_currency" executed="True" success="True" time="0.031" asserts="2" />
                       <test-case name="StorEvil.Interpreter.ParameterConverter_Specs.simple_conversions.should_convert_currency_without_decimal_point" executed="True" success="True" time="0.000" asserts="1" />
-                      <test-case name="StorEvil.Interpreter.ParameterConverter_Specs.simple_conversions.should_convert_enum_to_correct_value" executed="True" success="True" time="0.000" asserts="1" />
+                      <test-case name="StorEvil.Interpreter.ParameterConverter_Specs.simple_conversions.should_convert_enum_to_correct_value" executed="True" success="True" time="0.016" asserts="1" />
                       <test-case name="StorEvil.Interpreter.ParameterConverter_Specs.simple_conversions.should_convert_int" executed="True" success="True" time="0.000" asserts="1" />
                     </results>
                   </test-suite>
@@ -394,39 +394,39 @@
               </test-suite>
             </results>
           </test-suite>
-          <test-suite name="NUnit" executed="True" success="True" time="4.609" asserts="0">
+          <test-suite name="NUnit" executed="True" success="True" time="4.328" asserts="0">
             <results>
-              <test-suite name="NUnitFixtureGeneratorTests" executed="True" success="True" time="1.078" asserts="0">
+              <test-suite name="NUnitFixtureGeneratorTests" executed="True" success="True" time="1.906" asserts="0">
                 <results>
-                  <test-case name="StorEvil.NUnit.NUnitFixtureGeneratorTests.Should_Compile_When_No_Scenarios" executed="True" success="True" time="0.547" asserts="0" />
-                  <test-case name="StorEvil.NUnit.NUnitFixtureGeneratorTests.Should_Contain_A_Single_testFixture_for_a_Story" executed="True" success="True" time="0.109" asserts="0" />
+                  <test-case name="StorEvil.NUnit.NUnitFixtureGeneratorTests.Should_Compile_When_No_Scenarios" executed="True" success="True" time="1.391" asserts="0" />
+                  <test-case name="StorEvil.NUnit.NUnitFixtureGeneratorTests.Should_Contain_A_Single_testFixture_for_a_Story" executed="True" success="True" time="0.125" asserts="0" />
                   <test-case name="StorEvil.NUnit.NUnitFixtureGeneratorTests.Should_Create_One_Test_For_A_Single_Scenario" executed="True" success="True" time="0.141" asserts="0" />
                   <test-case name="StorEvil.NUnit.NUnitFixtureGeneratorTests.Should_have_category_for_each_tag_on_story" executed="True" success="True" time="0.109" asserts="3" />
-                  <test-case name="StorEvil.NUnit.NUnitFixtureGeneratorTests.Should_name_class_after_id" executed="True" success="True" time="0.172" asserts="0" />
+                  <test-case name="StorEvil.NUnit.NUnitFixtureGeneratorTests.Should_name_class_after_id" executed="True" success="True" time="0.109" asserts="0" />
                 </results>
               </test-suite>
-              <test-suite name="NUnitTestGeneratorTests" executed="True" success="True" time="3.328" asserts="0">
+              <test-suite name="NUnitTestGeneratorTests" executed="True" success="True" time="2.250" asserts="0">
                 <results>
-                  <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Created_Test_Should_Call_When" executed="True" success="True" time="0.422" asserts="0" />
-                  <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Created_Test_Should_Call_When_And_Then" executed="True" success="True" time="0.297" asserts="0" />
-                  <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Created_Test_Should_Chain_Calls" executed="True" success="True" time="0.188" asserts="0" />
+                  <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Created_Test_Should_Call_When" executed="True" success="True" time="0.266" asserts="0" />
+                  <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Created_Test_Should_Call_When_And_Then" executed="True" success="True" time="0.125" asserts="0" />
+                  <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Created_Test_Should_Chain_Calls" executed="True" success="True" time="0.125" asserts="0" />
                   <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Created_Test_Should_Dispose_Context" executed="True" success="True" time="0.125" asserts="0" />
-                  <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Created_Test_Should_Handle_And" executed="True" success="True" time="0.125" asserts="0" />
-                  <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Created_test_should_have_category_for_each_tag_on_scenario" executed="True" success="True" time="0.188" asserts="3" />
-                  <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Created_Test_Should_Inject_Parameters_By_Name" executed="True" success="True" time="0.188" asserts="0" />
-                  <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Created_Test_Should_Inject_Unnamed_Parameter_For_Method" executed="True" success="True" time="0.219" asserts="0" />
-                  <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Created_Test_Should_Parse_Currency" executed="True" success="True" time="0.453" asserts="0" />
-                  <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Created_Test_Should_Parse_DateTime" executed="True" success="True" time="0.188" asserts="0" />
-                  <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Created_Test_Should_Support_Field_Invocation" executed="True" success="True" time="0.203" asserts="0" />
-                  <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Created_Test_Should_Support_Property_Invocation" executed="True" success="True" time="0.188" asserts="0" />
+                  <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Created_Test_Should_Handle_And" executed="True" success="True" time="0.141" asserts="0" />
+                  <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Created_test_should_have_category_for_each_tag_on_scenario" executed="True" success="True" time="0.141" asserts="3" />
+                  <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Created_Test_Should_Inject_Parameters_By_Name" executed="True" success="True" time="0.109" asserts="0" />
+                  <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Created_Test_Should_Inject_Unnamed_Parameter_For_Method" executed="True" success="True" time="0.125" asserts="0" />
+                  <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Created_Test_Should_Parse_Currency" executed="True" success="True" time="0.172" asserts="0" />
+                  <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Created_Test_Should_Parse_DateTime" executed="True" success="True" time="0.234" asserts="0" />
+                  <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Created_Test_Should_Support_Field_Invocation" executed="True" success="True" time="0.109" asserts="0" />
+                  <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Created_Test_Should_Support_Property_Invocation" executed="True" success="True" time="0.125" asserts="0" />
                   <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Should_Handle_MultiLine_Param" executed="True" success="True" time="0.141" asserts="0" />
-                  <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Should_Invoke_Extension_Method" executed="True" success="True" time="0.156" asserts="0" />
-                  <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Should_Throw_IgnoreException_When_Context_Does_Not_Implement_Methods" executed="True" success="True" time="0.250" asserts="0" />
+                  <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Should_Invoke_Extension_Method" executed="True" success="True" time="0.172" asserts="0" />
+                  <test-case name="StorEvil.NUnit.NUnitTestGeneratorTests.Should_Throw_IgnoreException_When_Context_Does_Not_Implement_Methods" executed="True" success="True" time="0.125" asserts="0" />
                 </results>
               </test-suite>
-              <test-suite name="Stub_generation_specs" executed="True" success="True" time="0.203" asserts="0">
+              <test-suite name="Stub_generation_specs" executed="True" success="True" time="0.172" asserts="0">
                 <results>
-                  <test-case name="StorEvil.NUnit.Stub_generation_specs.Generated_code_should_compile" executed="True" success="True" time="0.203" asserts="1" />
+                  <test-case name="StorEvil.NUnit.Stub_generation_specs.Generated_code_should_compile" executed="True" success="True" time="0.172" asserts="1" />
                   <test-case name="StorEvil.NUnit.Stub_generation_specs.Should_only_suggest_each_method_once" executed="True" success="True" time="0.000" asserts="1" />
                   <test-case name="StorEvil.NUnit.Stub_generation_specs.Should_suggest_methods" executed="True" success="True" time="0.000" asserts="2" />
                 </results>
@@ -439,8 +439,8 @@
                 <results>
                   <test-case name="StorEvil.Parsing.Filtering_stories_by_file_extension.handles_multiple_settings_for_extension" executed="True" success="True" time="0.000" asserts="0" />
                   <test-case name="StorEvil.Parsing.Filtering_stories_by_file_extension.ignores_files_that_do_not_match_setting_for_extension" executed="True" success="True" time="0.000" asserts="0" />
-                  <test-case name="StorEvil.Parsing.Filtering_stories_by_file_extension.reads_files_that_match_setting_for_extension" executed="True" success="True" time="0.000" asserts="0" />
-                  <test-case name="StorEvil.Parsing.Filtering_stories_by_file_extension.when_no_settings_returns_all_files" executed="True" success="True" time="0.016" asserts="0" />
+                  <test-case name="StorEvil.Parsing.Filtering_stories_by_file_extension.reads_files_that_match_setting_for_extension" executed="True" success="True" time="0.016" asserts="0" />
+                  <test-case name="StorEvil.Parsing.Filtering_stories_by_file_extension.when_no_settings_returns_all_files" executed="True" success="True" time="0.000" asserts="0" />
                 </results>
               </test-suite>
               <test-suite name="parsing_a_story_with_multiple_lines_of_text" executed="True" success="True" time="0.000" asserts="0">
@@ -453,11 +453,11 @@
                   <test-case name="StorEvil.Parsing.parsing_empty_story.Should_Handle_No_Scenarios" executed="True" success="True" time="0.000" asserts="0" />
                 </results>
               </test-suite>
-              <test-suite name="parsing_multi_story_text" executed="True" success="True" time="0.031" asserts="0">
+              <test-suite name="parsing_multi_story_text" executed="True" success="True" time="0.016" asserts="0">
                 <results>
                   <test-case name="StorEvil.Parsing.parsing_multi_story_text.Should_Handle_Multiple_Scenarios" executed="True" success="True" time="0.000" asserts="0" />
                   <test-case name="StorEvil.Parsing.parsing_multi_story_text.Should_Parse_Line_Numbers_For_Multiple_Scenarios" executed="True" success="True" time="0.016" asserts="4" />
-                  <test-case name="StorEvil.Parsing.parsing_multi_story_text.Should_Parse_Lines_For_Multiple_Scenarios" executed="True" success="True" time="0.016" asserts="4" />
+                  <test-case name="StorEvil.Parsing.parsing_multi_story_text.Should_Parse_Lines_For_Multiple_Scenarios" executed="True" success="True" time="0.000" asserts="4" />
                 </results>
               </test-suite>
               <test-suite name="parsing_scenario_with_no_name" executed="True" success="True" time="0.000" asserts="0">
@@ -478,21 +478,21 @@
               <test-suite name="parsing_story_text_wth_examples_and_tables" executed="True" success="True" time="0.016" asserts="0">
                 <results>
                   <test-case name="StorEvil.Parsing.parsing_story_text_wth_examples_and_tables.should_create_scenario_outline" executed="True" success="True" time="0.000" asserts="1" />
-                  <test-case name="StorEvil.Parsing.parsing_story_text_wth_examples_and_tables.should_have_correct_number_of_Examples" executed="True" success="True" time="0.000" asserts="0" />
-                  <test-case name="StorEvil.Parsing.parsing_story_text_wth_examples_and_tables.should_have_field_names" executed="True" success="True" time="0.016" asserts="0" />
+                  <test-case name="StorEvil.Parsing.parsing_story_text_wth_examples_and_tables.should_have_correct_number_of_Examples" executed="True" success="True" time="0.016" asserts="0" />
+                  <test-case name="StorEvil.Parsing.parsing_story_text_wth_examples_and_tables.should_have_field_names" executed="True" success="True" time="0.000" asserts="0" />
                   <test-case name="StorEvil.Parsing.parsing_story_text_wth_examples_and_tables.should_have_first_Example" executed="True" success="True" time="0.000" asserts="0" />
                   <test-case name="StorEvil.Parsing.parsing_story_text_wth_examples_and_tables.should_have_second_Example" executed="True" success="True" time="0.000" asserts="0" />
                   <test-case name="StorEvil.Parsing.parsing_story_text_wth_examples_and_tables.Should_Parse_Story_header" executed="True" success="True" time="0.000" asserts="0" />
                 </results>
               </test-suite>
-              <test-suite name="parsing_story_with_multiple_scenario_outlines_with_examples_and_tables" executed="True" success="True" time="0.000" asserts="0">
+              <test-suite name="parsing_story_with_multiple_scenario_outlines_with_examples_and_tables" executed="True" success="True" time="0.016" asserts="0">
                 <results>
                   <test-case name="StorEvil.Parsing.parsing_story_with_multiple_scenario_outlines_with_examples_and_tables.First_outline_should_have_field_names" executed="True" success="True" time="0.000" asserts="0" />
                   <test-case name="StorEvil.Parsing.parsing_story_with_multiple_scenario_outlines_with_examples_and_tables.First_outline_should_have_values" executed="True" success="True" time="0.000" asserts="0" />
                   <test-case name="StorEvil.Parsing.parsing_story_with_multiple_scenario_outlines_with_examples_and_tables.Second_outline_should_have_field_names" executed="True" success="True" time="0.000" asserts="0" />
                   <test-case name="StorEvil.Parsing.parsing_story_with_multiple_scenario_outlines_with_examples_and_tables.Second_outline_should_have_values" executed="True" success="True" time="0.000" asserts="0" />
                   <test-case name="StorEvil.Parsing.parsing_story_with_multiple_scenario_outlines_with_examples_and_tables.should_create_scenario_outlines" executed="True" success="True" time="0.000" asserts="0" />
-                  <test-case name="StorEvil.Parsing.parsing_story_with_multiple_scenario_outlines_with_examples_and_tables.Should_Parse_Story_header" executed="True" success="True" time="0.000" asserts="0" />
+                  <test-case name="StorEvil.Parsing.parsing_story_with_multiple_scenario_outlines_with_examples_and_tables.Should_Parse_Story_header" executed="True" success="True" time="0.016" asserts="0" />
                 </results>
               </test-suite>
               <test-suite name="Parsing_tables_of_data_in_a_scenario" executed="True" success="True" time="0.000" asserts="0">
@@ -500,7 +500,7 @@
                   <test-case name="StorEvil.Parsing.Parsing_tables_of_data_in_a_scenario.Parses_table" executed="True" success="True" time="0.000" asserts="1" />
                 </results>
               </test-suite>
-              <test-suite name="parsing_tags" executed="True" success="True" time="0.016" asserts="0">
+              <test-suite name="parsing_tags" executed="True" success="True" time="0.000" asserts="0">
                 <results>
                   <test-case name="StorEvil.Parsing.parsing_tags.Scenario_Should_Have_Tag" executed="True" success="True" time="0.000" asserts="3" />
                   <test-case name="StorEvil.Parsing.parsing_tags.Story_Should_Have_Tag" executed="True" success="True" time="0.000" asserts="3" />
@@ -516,44 +516,44 @@
               </test-suite>
             </results>
           </test-suite>
-          <test-suite name="ResultListeners" executed="True" success="True" time="2.563" asserts="0">
+          <test-suite name="ResultListeners" executed="True" success="True" time="2.469" asserts="0">
             <results>
-              <test-suite name="GatheringResultListener_Specs" executed="True" success="True" time="0.203" asserts="0">
+              <test-suite name="GatheringResultListener_Specs" executed="True" success="True" time="0.047" asserts="0">
                 <results>
-                  <test-suite name="When_a_failing_story_is_executed" executed="True" success="True" time="0.031" asserts="0">
+                  <test-suite name="When_a_failing_story_is_executed" executed="True" success="True" time="0.016" asserts="0">
                     <results>
-                      <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_a_failing_story_is_executed.First_line_is_marked_sucessful" executed="True" success="True" time="0.016" asserts="0" />
+                      <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_a_failing_story_is_executed.First_line_is_marked_sucessful" executed="True" success="True" time="0.000" asserts="0" />
                       <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_a_failing_story_is_executed.Result_has_one_story" executed="True" success="True" time="0.000" asserts="0" />
                       <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_a_failing_story_is_executed.Scenario_failure_message_should_be_Set" executed="True" success="True" time="0.000" asserts="0" />
                       <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_a_failing_story_is_executed.Scenario_has_two_lines" executed="True" success="True" time="0.000" asserts="0" />
-                      <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_a_failing_story_is_executed.Scenario_lines_have_correct_text" executed="True" success="True" time="0.000" asserts="0" />
+                      <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_a_failing_story_is_executed.Scenario_lines_have_correct_text" executed="True" success="True" time="0.016" asserts="0" />
                       <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_a_failing_story_is_executed.Scenario_status_is_set_to_failed" executed="True" success="True" time="0.000" asserts="0" />
                       <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_a_failing_story_is_executed.Second_line_is_marked_failed" executed="True" success="True" time="0.000" asserts="0" />
                       <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_a_failing_story_is_executed.Story_has_one_scenario" executed="True" success="True" time="0.000" asserts="0" />
                     </results>
                   </test-suite>
-                  <test-suite name="When_a_story_that_can_not_be_interpreted_is_executed" executed="True" success="True" time="0.016" asserts="0">
+                  <test-suite name="When_a_story_that_can_not_be_interpreted_is_executed" executed="True" success="True" time="0.000" asserts="0">
                     <results>
-                      <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_a_story_that_can_not_be_interpreted_is_executed.Line_is_added_with_pending_status" executed="True" success="True" time="0.016" asserts="0" />
+                      <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_a_story_that_can_not_be_interpreted_is_executed.Line_is_added_with_pending_status" executed="True" success="True" time="0.000" asserts="0" />
                       <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_a_story_that_can_not_be_interpreted_is_executed.Scenario_status_is_set_to_pending" executed="True" success="True" time="0.000" asserts="0" />
                       <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_a_story_that_can_not_be_interpreted_is_executed.Suggestion_is_populated" executed="True" success="True" time="0.000" asserts="0" />
                     </results>
                   </test-suite>
-                  <test-suite name="When_a_sucessful_story_is_executed" executed="True" success="True" time="0.109" asserts="0">
+                  <test-suite name="When_a_sucessful_story_is_executed" executed="True" success="True" time="0.016" asserts="0">
                     <results>
-                      <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_a_sucessful_story_is_executed.Result_has_one_story" executed="True" success="True" time="0.016" asserts="0" />
+                      <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_a_sucessful_story_is_executed.Result_has_one_story" executed="True" success="True" time="0.000" asserts="0" />
                       <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_a_sucessful_story_is_executed.Scenario_has_two_lines" executed="True" success="True" time="0.000" asserts="0" />
                       <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_a_sucessful_story_is_executed.Scenario_id_is_set" executed="True" success="True" time="0.000" asserts="0" />
-                      <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_a_sucessful_story_is_executed.Scenario_lines_are_marked_sucessful" executed="True" success="True" time="0.016" asserts="0" />
+                      <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_a_sucessful_story_is_executed.Scenario_lines_are_marked_sucessful" executed="True" success="True" time="0.000" asserts="0" />
                       <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_a_sucessful_story_is_executed.Scenario_lines_have_correct_text" executed="True" success="True" time="0.000" asserts="0" />
-                      <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_a_sucessful_story_is_executed.Scenario_name_is_set" executed="True" success="True" time="0.000" asserts="0" />
+                      <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_a_sucessful_story_is_executed.Scenario_name_is_set" executed="True" success="True" time="0.016" asserts="0" />
                       <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_a_sucessful_story_is_executed.Scenario_status_is_set" executed="True" success="True" time="0.000" asserts="0" />
                       <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_a_sucessful_story_is_executed.Story_has_one_scenario" executed="True" success="True" time="0.000" asserts="0" />
                       <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_a_sucessful_story_is_executed.Story_id_is_set" executed="True" success="True" time="0.000" asserts="0" />
                       <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_a_sucessful_story_is_executed.Story_summary_is_set" executed="True" success="True" time="0.000" asserts="0" />
                     </results>
                   </test-suite>
-                  <test-suite name="When_multiple_scenarios_exist_for_a_story" executed="True" success="True" time="0.031" asserts="0">
+                  <test-suite name="When_multiple_scenarios_exist_for_a_story" executed="True" success="True" time="0.016" asserts="0">
                     <results>
                       <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_multiple_scenarios_exist_for_a_story.Result_has_pending_scenarios_is_true" executed="True" success="True" time="0.000" asserts="0" />
                       <test-case name="StorEvil.ResultListeners.GatheringResultListener_Specs.When_multiple_scenarios_exist_for_a_story.Story_has_pending_scenarios_is_true" executed="True" success="True" time="0.000" asserts="0" />
@@ -568,40 +568,40 @@
                   </test-suite>
                 </results>
               </test-suite>
-              <test-suite name="SparkReportGenerator_Specs" executed="True" success="True" time="2.219" asserts="0">
+              <test-suite name="SparkReportGenerator_Specs" executed="True" success="True" time="2.203" asserts="0">
                 <results>
-                  <test-suite name="Dealing_with_missing_template_file_setting" executed="True" success="True" time="0.047" asserts="0">
+                  <test-suite name="Dealing_with_missing_template_file_setting" executed="True" success="True" time="0.016" asserts="0">
                     <results>
-                      <test-case name="StorEvil.ResultListeners.SparkReportGenerator_Specs.Dealing_with_missing_template_file_setting.When_template_file_does_not_exist_throws_a_sensible_exception" executed="True" success="True" time="0.047" asserts="0" />
+                      <test-case name="StorEvil.ResultListeners.SparkReportGenerator_Specs.Dealing_with_missing_template_file_setting.When_template_file_does_not_exist_throws_a_sensible_exception" executed="True" success="True" time="0.016" asserts="0" />
                     </results>
                   </test-suite>
-                  <test-suite name="With_no_stories" executed="True" success="True" time="1.109" asserts="0">
+                  <test-suite name="With_no_stories" executed="True" success="True" time="1.234" asserts="0">
                     <results>
-                      <test-case name="StorEvil.ResultListeners.SparkReportGenerator_Specs.With_no_stories.HTML_Report.should_generate_valid_XML" executed="True" success="True" time="0.656" asserts="0" />
-                      <test-case name="StorEvil.ResultListeners.SparkReportGenerator_Specs.With_no_stories.Should_include_the_no_stories_div" executed="True" success="True" time="0.297" asserts="1" />
-                      <test-case name="StorEvil.ResultListeners.SparkReportGenerator_Specs.With_no_stories.Should_not_include_the_story_wrapper" executed="True" success="True" time="0.156" asserts="1" />
+                      <test-case name="StorEvil.ResultListeners.SparkReportGenerator_Specs.With_no_stories.HTML_Report.should_generate_valid_XML" executed="True" success="True" time="0.750" asserts="0" />
+                      <test-case name="StorEvil.ResultListeners.SparkReportGenerator_Specs.With_no_stories.Should_include_the_no_stories_div" executed="True" success="True" time="0.313" asserts="1" />
+                      <test-case name="StorEvil.ResultListeners.SparkReportGenerator_Specs.With_no_stories.Should_not_include_the_story_wrapper" executed="True" success="True" time="0.172" asserts="1" />
                     </results>
                   </test-suite>
-                  <test-suite name="With_two_stories" executed="True" success="True" time="1.063" asserts="0">
+                  <test-suite name="With_two_stories" executed="True" success="True" time="0.938" asserts="0">
                     <results>
                       <test-case name="StorEvil.ResultListeners.SparkReportGenerator_Specs.With_two_stories.HTML_Report.should_generate_valid_XML" executed="True" success="True" time="0.156" asserts="0" />
-                      <test-case name="StorEvil.ResultListeners.SparkReportGenerator_Specs.With_two_stories.should_have_first_story_summary" executed="True" success="True" time="0.234" asserts="1" />
-                      <test-case name="StorEvil.ResultListeners.SparkReportGenerator_Specs.With_two_stories.should_have_second_story_summary" executed="True" success="True" time="0.172" asserts="1" />
-                      <test-case name="StorEvil.ResultListeners.SparkReportGenerator_Specs.With_two_stories.Should_include_the_story_wrapper" executed="True" success="True" time="0.188" asserts="1" />
-                      <test-case name="StorEvil.ResultListeners.SparkReportGenerator_Specs.With_two_stories.Should_not_contain_no_stories_div" executed="True" success="True" time="0.313" asserts="1" />
+                      <test-case name="StorEvil.ResultListeners.SparkReportGenerator_Specs.With_two_stories.should_have_first_story_summary" executed="True" success="True" time="0.203" asserts="1" />
+                      <test-case name="StorEvil.ResultListeners.SparkReportGenerator_Specs.With_two_stories.should_have_second_story_summary" executed="True" success="True" time="0.188" asserts="1" />
+                      <test-case name="StorEvil.ResultListeners.SparkReportGenerator_Specs.With_two_stories.Should_include_the_story_wrapper" executed="True" success="True" time="0.203" asserts="1" />
+                      <test-case name="StorEvil.ResultListeners.SparkReportGenerator_Specs.With_two_stories.Should_not_contain_no_stories_div" executed="True" success="True" time="0.188" asserts="1" />
                     </results>
                   </test-suite>
                 </results>
               </test-suite>
-              <test-suite name="XmlReportListener_Specs" executed="True" success="True" time="0.141" asserts="0">
+              <test-suite name="XmlReportListener_Specs" executed="True" success="True" time="0.203" asserts="0">
                 <results>
-                  <test-suite name="Writing_story_with_no_scenarios" executed="True" success="True" time="0.094" asserts="0">
+                  <test-suite name="Writing_story_with_no_scenarios" executed="True" success="True" time="0.141" asserts="0">
                     <results>
-                      <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_story_with_no_scenarios.Generates_valid_xml" executed="True" success="True" time="0.063" asserts="0" />
-                      <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_story_with_no_scenarios.Has_a_story_node" executed="True" success="True" time="0.016" asserts="0" />
-                      <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_story_with_no_scenarios.No_scenarios_are_output" executed="True" success="True" time="0.000" asserts="0" />
-                      <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_story_with_no_scenarios.Story_node_has_id" executed="True" success="True" time="0.016" asserts="0" />
-                      <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_story_with_no_scenarios.Story_node_has_summary" executed="True" success="True" time="0.000" asserts="0" />
+                      <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_story_with_no_scenarios.Generates_valid_xml" executed="True" success="True" time="0.094" asserts="0" />
+                      <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_story_with_no_scenarios.Has_a_story_node" executed="True" success="True" time="0.000" asserts="0" />
+                      <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_story_with_no_scenarios.No_scenarios_are_output" executed="True" success="True" time="0.031" asserts="0" />
+                      <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_story_with_no_scenarios.Story_node_has_id" executed="True" success="True" time="0.000" asserts="0" />
+                      <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_story_with_no_scenarios.Story_node_has_summary" executed="True" success="True" time="0.016" asserts="0" />
                     </results>
                   </test-suite>
                   <test-suite name="Writing_xml_for_a_story_with_one_successful_and_one_unsuccessful_scenario" executed="True" success="True" time="0.016" asserts="0">
@@ -614,13 +614,13 @@
                       <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_xml_for_a_story_with_one_successful_and_one_unsuccessful_scenario.There_is_one_story_element" executed="True" success="True" time="0.000" asserts="0" />
                     </results>
                   </test-suite>
-                  <test-suite name="Writing_xml_for_a_story_with_one_successful_scenario" executed="True" success="True" time="0.016" asserts="0">
+                  <test-suite name="Writing_xml_for_a_story_with_one_successful_scenario" executed="True" success="True" time="0.000" asserts="0">
                     <results>
                       <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_xml_for_a_story_with_one_successful_scenario.Generates_valid_XML" executed="True" success="True" time="0.000" asserts="0" />
                       <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_xml_for_a_story_with_one_successful_scenario.Has_a_scenario_tag" executed="True" success="True" time="0.000" asserts="0" />
                       <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_xml_for_a_story_with_one_successful_scenario.Includes_one_story_tag" executed="True" success="True" time="0.000" asserts="0" />
                       <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_xml_for_a_story_with_one_successful_scenario.line_elements_exist_in_scenario_text" executed="True" success="True" time="0.000" asserts="0" />
-                      <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_xml_for_a_story_with_one_successful_scenario.line_elements_should_be_marked_successful" executed="True" success="True" time="0.016" asserts="0" />
+                      <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_xml_for_a_story_with_one_successful_scenario.line_elements_should_be_marked_successful" executed="True" success="True" time="0.000" asserts="0" />
                       <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_xml_for_a_story_with_one_successful_scenario.Scenario_tag_is_marked_successful" executed="True" success="True" time="0.000" asserts="0" />
                       <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_xml_for_a_story_with_one_successful_scenario.Story_is_marked_successful" executed="True" success="True" time="0.000" asserts="0" />
                     </results>
@@ -638,16 +638,16 @@
                   <test-suite name="Writing_xml_for_multiple_stories" executed="True" success="True" time="0.016" asserts="0">
                     <results>
                       <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_xml_for_multiple_stories.First_scenario_is_marked_as_successful" executed="True" success="True" time="0.000" asserts="0" />
-                      <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_xml_for_multiple_stories.First_story_is_marked_as_successful" executed="True" success="True" time="0.016" asserts="0" />
+                      <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_xml_for_multiple_stories.First_story_is_marked_as_successful" executed="True" success="True" time="0.000" asserts="0" />
                       <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_xml_for_multiple_stories.Generates_valid_XML" executed="True" success="True" time="0.000" asserts="0" />
-                      <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_xml_for_multiple_stories.Second_scenario_is_marked_as_unsuccessful" executed="True" success="True" time="0.000" asserts="0" />
+                      <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_xml_for_multiple_stories.Second_scenario_is_marked_as_unsuccessful" executed="True" success="True" time="0.016" asserts="0" />
                       <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_xml_for_multiple_stories.Second_story_is_marked_as_unsuccessful" executed="True" success="True" time="0.000" asserts="0" />
                       <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_xml_for_multiple_stories.There_are_two_story_element" executed="True" success="True" time="0.000" asserts="0" />
                     </results>
                   </test-suite>
-                  <test-suite name="Writing_xml_when_line_is_not_interpreted" executed="True" success="True" time="0.000" asserts="0">
+                  <test-suite name="Writing_xml_when_line_is_not_interpreted" executed="True" success="True" time="0.016" asserts="0">
                     <results>
-                      <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_xml_when_line_is_not_interpreted.Last_line_should_have_NotUnderstood_status" executed="True" success="True" time="0.000" asserts="0" />
+                      <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_xml_when_line_is_not_interpreted.Last_line_should_have_NotUnderstood_status" executed="True" success="True" time="0.016" asserts="0" />
                       <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_xml_when_line_is_not_interpreted.Scenario_should_have_NotUnderstood_status" executed="True" success="True" time="0.000" asserts="0" />
                       <test-case name="StorEvil.ResultListeners.XmlReportListener_Specs.Writing_xml_when_line_is_not_interpreted.Should_be_valid_xml" executed="True" success="True" time="0.000" asserts="0" />
                     </results>

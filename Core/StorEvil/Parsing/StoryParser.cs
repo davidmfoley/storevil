@@ -265,7 +265,7 @@ namespace StorEvil.Parsing
         private static IEnumerable<ScenarioLine> ParseLines(string text)
         {
             var lines = text.Split(new[] {"\r\n", "\r", "\n"}, StringSplitOptions.None);
-            return lines.Select((t, i) => new ScenarioLine {LineNumber = i, Text = t.Trim()});
+            return lines.Select((t, i) => new ScenarioLine {LineNumber = i + 1, Text = t.Trim()});
         }
     }
 }
