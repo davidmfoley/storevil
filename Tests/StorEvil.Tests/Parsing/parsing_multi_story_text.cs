@@ -47,5 +47,13 @@ Then I should expect some other result
             body.Select(l=>l.Text).ElementsShouldEqual("Given some other condition", "When I take some other action",
                                      "Then I should expect some other result");
         }
+
+        [Test]
+        public void Should_Parse_Line_Numbers_For_Multiple_Scenarios()
+        {
+            var body = ((Scenario)Result.Scenarios.ElementAt(1)).Body;
+
+            body.Select(l => l.LineNumber).ElementsShouldEqual(9, 10, 11);
+        }
     }
 }

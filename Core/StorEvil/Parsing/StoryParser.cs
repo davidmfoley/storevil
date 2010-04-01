@@ -30,7 +30,7 @@ namespace StorEvil.Parsing
         private string _storyId;
         private List<string> _tags =  new List<string>();
 
-        private Action<string> _currentLineHandler;
+        private Action<ScenarioLine> _currentLineHandler;
         private List<string> _storyTags = new List<string>();
 
         public Story Parse(string storyText, string storyId)
@@ -53,38 +53,38 @@ namespace StorEvil.Parsing
             _currentLineHandler = AppendToStoryName;
         }
 
-        private void HandleStoryTextLine(string line)
+        private void HandleStoryTextLine(ScenarioLine line)
         {
            
-            if (IsTags(line))
+            if (IsTags(line.Text))
             {
-                HandleTags(line);
+                HandleTags(line.Text);
                 return;
             }
-            if (IsNewScenarioOrOutline(line))
+            if (IsNewScenarioOrOutline(line.Text))
             {
-                InitializeNewScenario(line);
+                InitializeNewScenario(line.Text);
                 return;
             }
 
-            if (IsStartOfExamples(line))
+            if (IsStartOfExamples(line.Text))
             {
                 _currentLineHandler = HandleScenarioExampleRow;
                 return;
             }
 
-            if (IsTableRow(line) && !_currentScenario.IsOutline)
+            if (IsTableRow(line.Text) && !_currentScenario.IsOutline)
             {
                 if (_currentScenario != null && _currentScenario.Lines.Count > 0)
                 {
-                    var last = _currentScenario.Lines.Last().Text;
+                    var last = _currentScenario.Lines.Last();
                     _currentScenario.Lines = _currentScenario.Lines.GetRange(0, _currentScenario.Lines.Count() - 1);
-                    _currentScenario.Lines.Add(new ScenarioLine { Text = last + "\r\n" + line });
+                    _currentScenario.Lines.Add(new ScenarioLine { Text = last.Text + "\r\n" + line.Text, LineNumber = last.LineNumber});
                     return;
                 }
             }
 
-            _currentLineHandler(line.Trim());
+            _currentLineHandler(line);
         }
 
         private void ApplyTagsFromLastLine()
@@ -147,9 +147,9 @@ namespace StorEvil.Parsing
             _currentLineHandler = HandleScenarioLine;
         }
 
-        private void AppendToStoryName(string line)
+        private void AppendToStoryName(ScenarioLine line)
         {
-            _storyName.Append(line + "\r\n");
+            _storyName.Append(line.Text + "\r\n");
             ApplyTagsFromLastLine();
         }
 
@@ -200,16 +200,16 @@ namespace StorEvil.Parsing
             scenarios.Add(BuildScenario());
         }
 
-        private void HandleScenarioLine(string line)
+        private void HandleScenarioLine(ScenarioLine line)
         {
-            if (!IsComment(line) && line.Trim().Length > 0)
-                _currentScenario.Lines.Add(new ScenarioLine{Text = line});
+            if (!IsComment(line.Text) && line.Text.Trim().Length > 0)
+                _currentScenario.Lines.Add(line);
         }
 
-        private void HandleScenarioExampleRow(string line)
+        private void HandleScenarioExampleRow(ScenarioLine line)
         {
-            if (_currentScenario != null && line.StartsWith("|"))
-                _currentScenario.RowData.Add(line.Split('|').Skip(1));
+            if (_currentScenario != null && line.Text.StartsWith("|"))
+                _currentScenario.RowData.Add(line.Text.Split('|').Skip(1));
         }
 
         private void FixEmptyScenarioNames()
@@ -262,9 +262,10 @@ namespace StorEvil.Parsing
             public string[] Tags;
         }
 
-        private static IEnumerable<string> ParseLines(string text)
+        private static IEnumerable<ScenarioLine> ParseLines(string text)
         {
-            return text.Split(new[] {"\r\n", "\r", "\n"}, StringSplitOptions.None).Select(l => l.Trim());
+            var lines = text.Split(new[] {"\r\n", "\r", "\n"}, StringSplitOptions.None);
+            return lines.Select((t, i) => new ScenarioLine {LineNumber = i, Text = t});
         }
     }
 }

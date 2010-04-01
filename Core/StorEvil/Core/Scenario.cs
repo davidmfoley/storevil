@@ -30,6 +30,8 @@ namespace StorEvil.Core
     public class ScenarioLine
     {
         public string Text { get; set; }
+
+        public int LineNumber { get; set; }
     }
 
     [Serializable]

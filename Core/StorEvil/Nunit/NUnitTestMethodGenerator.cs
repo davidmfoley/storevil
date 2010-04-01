@@ -10,8 +10,6 @@ namespace StorEvil.Nunit
 {
     /// <summary>
     /// Generates NUnit source code for scenarios
-    /// 
-    /// TODO: this is sort of POC code... needs a 2nd look
     /// </summary>
     public class NUnitTestMethodGenerator
     {
@@ -59,6 +57,8 @@ namespace StorEvil.Nunit
                 }
 
                 contexts.Add(functionLine.Context);
+                codeBuilder.AppendLine("#line " + line.LineNumber);
+
                 codeBuilder.AppendLine(functionLine.Code);
 
                 namespaces = namespaces.Union(functionLine.Namespaces).Distinct();

@@ -33,6 +33,8 @@ namespace {0} {{
     [TestFixture]
     {5}
     public class {2} {{
+#line 1 ""{6}""
+#line hidden
         private StorEvil.Interpreter.ParameterConverters.ParameterConverter ParameterConverter = new StorEvil.Interpreter.ParameterConverters.ParameterConverter();
         [TestFixtureSetUp]
         public void WriteStoryToConsole() {{
@@ -82,7 +84,7 @@ namespace {0} {{
             var writeStoryToConsole = "Console.WriteLine(@\"" + story.Summary.Replace("\"", "\"\"") + "\r\n" + " \");";
             const string ns = "TestNamespace";
             var categories = string.Join("", (story.Tags ?? new string[0]).Select(t => string.Format(@"[Category(""{0}"")]", t)).ToArray());
-            return string.Format(FixtureFormat, ns, usings, GetFixtureName(story), tests, writeStoryToConsole, categories);
+            return string.Format(FixtureFormat, ns, usings, GetFixtureName(story), tests, writeStoryToConsole, categories, story.Id);
         }
     }
 }

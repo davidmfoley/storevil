@@ -17,7 +17,8 @@ namespace StorEvil.NUnit
     {
         protected static Scenario BuildScenario(string name, params string[] lines)
         {
-            return new Scenario("test", lines.Select(line => new ScenarioLine { Text = line }));
+            var lineNumber = 1;
+            return new Scenario("test", lines.Select(line => new ScenarioLine { Text = line, LineNumber = lineNumber++}).ToArray());
         }
 
         [Test]
