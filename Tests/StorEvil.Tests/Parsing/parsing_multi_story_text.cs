@@ -53,7 +53,7 @@ Then I should expect some other result
         {
             var body = ((Scenario)Result.Scenarios.ElementAt(1)).Body;
 
-            body.Select(l => l.LineNumber).ElementsShouldEqual(9, 10, 11);
+            body.Select(l => l.LineNumber).ElementsShouldEqual(10, 11, 12);
         }
     }
 }

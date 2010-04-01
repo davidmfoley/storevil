@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using StorEvil.Context;
 using StorEvil.Core;
-using StorEvil.Interpreter;
 
 namespace StorEvil.Nunit
 {
@@ -19,7 +18,7 @@ namespace StorEvil.Nunit
     public class NUnitTestMethodGenerator : ITestMethodGenerator
     {
         private readonly CSharpMethodInvocationGenerator _invocationGenerator;
-        private string _previousSignificantFirstWord;       
+        private string _previousSignificantFirstWord;
 
         public NUnitTestMethodGenerator(CSharpMethodInvocationGenerator invocationGenerator)
         {
@@ -35,8 +34,6 @@ namespace StorEvil.Nunit
             IEnumerable<string> namespaces = new string[0];
             foreach (var line in scenario.Body)
             {
-                
-
                 codeBuilder.Append(BuildConsoleWriteScenarioLine(line.Text));
                 codeBuilder.AppendLine("#line " + line.LineNumber);
                 var lineVariations = GenerateLineVariations(line.Text);
@@ -47,7 +44,7 @@ namespace StorEvil.Nunit
                     if (null != (functionLine = BuildCodeFromScenarioLine(variation, context)))
                         break;
                 }
-               
+
                 if (functionLine == null)
                 {
                     codeBuilder.AppendLine(
@@ -57,13 +54,12 @@ namespace StorEvil.Nunit
                 }
 
                 contexts.Add(functionLine.Context);
-               
+
                 codeBuilder.AppendLine(functionLine.Code);
                 codeBuilder.AppendLine("#line hidden");
                 namespaces = namespaces.Union(functionLine.Namespaces).Distinct();
             }
 
-            
             AppendDisposeCalls(codeBuilder, contexts);
 
             string declarations = BuildContextDeclarations(contexts);
@@ -119,7 +115,8 @@ namespace StorEvil.Nunit
 
         private string BuildTestBody(StringBuilder codeBuilder, string name, string declarations, string categories)
         {
-            return string.Format("[Test]{3} public void {0}(){{\r\n{1}\r\n{2}\r\n\r\n        }}", name, declarations, codeBuilder, categories);
+            return string.Format("[Test]{3} public void {0}(){{\r\n{1}\r\n{2}\r\n\r\n        }}", name, declarations,
+                                 codeBuilder, categories);
         }
 
         private static string BuildContextDeclarations(IEnumerable<TestContextField> contexts)
@@ -185,9 +182,9 @@ namespace StorEvil.Nunit
         private ScenarioLineImplementation BuildCodeFromScenarioLine(string line, StoryContext storyContext)
         {
             var scenarioContext = storyContext.GetScenarioContext();
-            
+
             LineInfo invocation = null;
-            
+
             invocation = _invocationGenerator.MapMethod(scenarioContext, line);
             if (invocation == null)
                 return null;
