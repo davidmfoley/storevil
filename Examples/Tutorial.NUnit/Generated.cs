@@ -4,7 +4,7 @@ using StorEvil;
 
 
 
-namespace TestNamespace {
+namespace StorEvilSpecifications {
     using Tutorial;
 using StorEvil.Utility;
     
@@ -89,7 +89,7 @@ contextAgeContext.My_age_in_one_year().ShouldBe((System.Object) this.ParameterCo
 }
 
 
-namespace TestNamespace {
+namespace StorEvilSpecifications {
     
     
 
@@ -138,7 +138,7 @@ extension methods, to match the plain text scenario line.
 }
 
 
-namespace TestNamespace {
+namespace StorEvilSpecifications {
     using Tutorial;
     
 

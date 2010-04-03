@@ -8,7 +8,6 @@ namespace StorEvil.Parsing
     public class ScenarioLineParser
     {
         private static readonly Regex ExtractWordsRegex = new Regex(@"\:.+|\"".*?\""|[A-Za-z0-9\$@\./']+");
-
        
         public List<string> ExtractWordsFromScenarioLine(string line)
         {

@@ -76,6 +76,7 @@
     <Compile Include="InPlace\IDebugListener.cs" />
     <Compile Include="InPlace\ImplementationHelper.cs" />
     <Compile Include="InPlace\InPlaceScenarioRunner.cs" />
+    <Compile Include="InPlace\ScenarioLineExecuter.cs" />
     <Compile Include="Interpreter\DebugTrace.cs" />
     <Compile Include="Interpreter\ParameterConverters\ArrayBuilder.cs" />
     <Compile Include="Interpreter\ParameterConverters\ConvertHelper.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="Interpreter\ParameterConverters\TypedArrayTableConverter.cs" />
     <Compile Include="Interpreter\ParameterConverters\UnknownFieldException.cs" />
     <Compile Include="IStoryFilter.cs" />
+    <Compile Include="Nunit\ImplementationBuilder.cs" />
     <Compile Include="Nunit\ParameterValueFormatter.cs" />
     <Compile Include="Context\Matchers\RegexMatcher.cs" />
     <Compile Include="Interpreter\ExtensionMethodHandler.cs" />

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using StorEvil.Context;
@@ -75,14 +76,13 @@ namespace {0} {{
                     contextSet.AddRange(test.ContextTypes);
                     namespaces = namespaces.Union(test.Namespaces).Distinct();
                 }
-            }
-
+            }            
             
             var usingStatements = namespaces.Select(x => string.Format("using {0};", x));
             var usings = string.Join("\r\n", usingStatements.ToArray());
 
             var writeStoryToConsole = "Console.WriteLine(@\"" + story.Summary.Replace("\"", "\"\"") + "\r\n" + " \");";
-            const string ns = "TestNamespace";
+            const string ns = "StorEvilSpecifications";
             var categories = string.Join("", (story.Tags ?? new string[0]).Select(t => string.Format(@"[Category(""{0}"")]", t)).ToArray());
             return string.Format(FixtureFormat, ns, usings, GetFixtureName(story), tests, writeStoryToConsole, categories, story.Id);
         }
