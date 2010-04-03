@@ -11,6 +11,7 @@ using StorEvil.Utility;
 
 namespace StorEvil.NUnit
 {
+
     [TestFixture]
     public class NUnitFixtureGeneratorTests : TestBase
     {
