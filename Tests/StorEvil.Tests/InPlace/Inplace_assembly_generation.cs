@@ -1,6 +1,8 @@
 using System;
+using System.Reflection;
 using NUnit.Framework;
 using StorEvil.Core;
+using StorEvil.NUnit;
 using StorEvil.Utility;
 
 namespace StorEvil.InPlace
@@ -9,30 +11,35 @@ namespace StorEvil.InPlace
     public class Inplace_assembly_generation
     {
         private AssemblyGenerator Generator;
+        private Assembly GeneratedAssembly;
 
         [SetUp]
         public void SetupContext()
         {
             Generator = new AssemblyGenerator();
+            var scenarios = new IScenario[]
+                                {
+                                    TestHelper.BuildScenario("foo", "When I do seomthing",
+                                                             "something else should happen")
+                                };
+            GeneratedAssembly = Generator.GenerateAssembly(new Story("foo", "bar", scenarios));
         }
 
         [Test]
         public void Should_compile()
         {
-            Generator.GenerateAssembly(new Story[0]).ShouldNotBeNull();
-        }     
+            GeneratedAssembly.ShouldNotBeNull();
+        }
 
         [Test]
         public void Should_have_a_driver_class()
         {
-            Type driverType = GetDriverType();
-            driverType.ShouldNotBeNull();
+            GetDriverType().ShouldNotBeNull();
         }
 
         private Type GetDriverType()
         {
-            var assembly = Generator.GenerateAssembly(new[] {new Story("foo", "bar", new IScenario[0]),});
-            return assembly.GetType("StorEvilTestAssembly.StorEvilDriver");
+            return GeneratedAssembly.GetType("StorEvilTestAssembly.StorEvilDriver");
         }
 
         [Test]

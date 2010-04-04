@@ -1,3 +1,4 @@
+using System;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using StorEvil.Core;
 using StorEvil.InPlace;
@@ -24,6 +25,16 @@ namespace StorEvil.Resharper
         public void ScenarioStarting(Scenario scenario)
         {
             Result = TaskResult.Success;
+        }
+
+        public void ScenarioFailed(ScenarioFailureInfo scenarioFailureInfo)
+        {
+            
+        }
+
+        public void ScenarioPending(ScenarioPendingInfo scenarioPendingInfo)
+        {
+           
         }
 
         public void ScenarioFailed(Scenario scenario, string successPart, string failedPart, string message)

@@ -1,8 +1,10 @@
 using System;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using StorEvil.Configuration;
+using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.InPlace;
+using StorEvil.Interpreter;
 using StorEvil.Parsing;
 
 namespace StorEvil.Resharper
@@ -43,18 +45,19 @@ namespace StorEvil.Resharper
 
         private IStorEvilJob GetJob(RemoteTask remoteTask, IScenario scenario)
         {
-            InPlaceRunner handler = BuildInPlaceRunner(remoteTask);
+            
+            InPlaceStoryRunner handler = BuildInPlaceRunner(remoteTask);
             IStoryProvider provider = new SingleScenarioStoryProvider(scenario);
 
             return new StorEvilJob(provider, _mapper, handler);
         }
 
-        private InPlaceRunner BuildInPlaceRunner(RemoteTask remoteTask)
+        private InPlaceStoryRunner BuildInPlaceRunner(RemoteTask remoteTask)
         {
             _listener = new ResharperResultListener(_server, remoteTask);
             IScenarioPreprocessor preprocessor = new ScenarioPreprocessor();
 
-            return new InPlaceRunner(_listener, preprocessor);
+            return new InPlaceStoryRunner(_listener, preprocessor, new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())), new IncludeAllFilter() );
         }
     }
 }

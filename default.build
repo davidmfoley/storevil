@@ -17,7 +17,7 @@
     <CallTarget Targets="BuildCore" />
     <CallTarget Targets="Tests" />
     <CallTarget Targets="RunExamples" />
-    <CallTarget Targets="Package" />
+    <CallTarget Targets="Package" />    
   </Target>
 
   <Target Name="Package" DependsOnTargets="CleanOutput;BuildCore">
@@ -34,7 +34,7 @@
  
   <Target Name="BuildCore">
     <MSBuild
-  Projects="Core\StorEvil\StorEvil.Core.csproj;Core\StorEvil.Assertions\StorEvil.Assertions.csproj;Core\StorEvil.Console\StorEvil.csproj"
+  Projects="Core\StorEvil\StorEvil.Core.csproj;Core\StorEvil.Assertions\StorEvil.Assertions.csproj;Core\StorEvil.Console\StorEvil.csproj;Core/StorEvil.Resharper/StorEvil.Resharper.csproj"
   Properties="OutputPath=$(OutputPath)\Core"
         />
   </Target>

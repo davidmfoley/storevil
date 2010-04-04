@@ -12,7 +12,7 @@ namespace StorEvil.Resharper
         public bool Explicitly { get; set; }
         private const string MagicDelimiter = "$*$*$";
 
-        private IEnumerable<string> Body;
+        private readonly IEnumerable<ScenarioLine> Body;
         private readonly string Name;
         private bool IsOutline;
         private IEnumerable<string> FieldNames;
@@ -21,7 +21,7 @@ namespace StorEvil.Resharper
         public RunScenarioTask(IScenario scenario, bool explicitly)
             : base("StorEvil")
         {
-            Logger.Log("RunScenarioTask - constructed\r\n" + scenario + "\r\n Explicitly:" +explicitly);
+            Logger.Log("RunScenarioTask - constructed\r\n" + scenario + "\r\n Explicitly:" + explicitly);
             Explicitly = explicitly;
             Id = scenario.Id;
 
@@ -57,16 +57,13 @@ namespace StorEvil.Resharper
 
         private void LoadScenarioXml(XmlElement element)
         {
-           
-
             IsOutline = false;
         }
 
         private void LoadScenarioOutlineXml(XmlElement element)
         {
-        
-
             FieldNames = SplitValues(GetXmlAttribute(element, "FieldNames"));
+            
             var exampleLines = GetXmlAttribute(element, "Examples").Split(new[] {"|||"}, StringSplitOptions.None);
             var examples = new List<IEnumerable<String>>();
 
@@ -107,10 +104,19 @@ namespace StorEvil.Resharper
             SetXmlAttribute(element, "Examples", exampleValue);
         }
 
-        private IEnumerable<string> GetXmlBody(XmlElement element)
+        private IEnumerable<ScenarioLine> GetXmlBody(XmlElement element)
         {
-            var text = GetXmlAttribute(element, "Text");
-            return SplitValues(text);
+            List<ScenarioLine> lines = new List<ScenarioLine>();
+
+            var bodyElement = (XmlElement) element.GetElementsByTagName("Body")[0];
+            var lineElements = bodyElement.GetElementsByTagName("Line");
+
+            foreach (XmlElement lineElement in lineElements)
+            {
+                lines.Add(new ScenarioLine {Text = lineElement.GetAttribute("Text"), LineNumber = int.Parse(lineElement.GetAttribute("LineNumber"))});
+            }
+
+            return lines;
         }
 
         private IEnumerable<string> SplitValues(string text)
@@ -118,9 +124,18 @@ namespace StorEvil.Resharper
             return text.Split(new[] {MagicDelimiter}, StringSplitOptions.None);
         }
 
-        private void SetXmlBody(XmlElement element, IEnumerable<string> body)
+        private void SetXmlBody(XmlElement element, IEnumerable<ScenarioLine> body)
         {
-            SetXmlAttribute(element, "Text", JoinValues(body));
+            var bodyElement = element.OwnerDocument.CreateElement("Body");
+            element.AppendChild(bodyElement);
+            foreach (var line in body)
+            {
+                var lineElement = element.OwnerDocument.CreateElement("Line");
+
+                SetXmlAttribute(lineElement, "LineNumber", line.LineNumber.ToString());
+                SetXmlAttribute(lineElement, "Text", line.Text);
+                bodyElement.AppendChild(lineElement);
+            }          
         }
 
         private string JoinValues(IEnumerable<string> values)
@@ -142,7 +157,7 @@ namespace StorEvil.Resharper
 
         public bool Equals(RunScenarioTask other)
         {
-            var equals =  other != null && other.Id == Id && other.Explicitly == Explicitly;
+            var equals = other != null && other.Id == Id && other.Explicitly == Explicitly;
             return equals;
         }
 
@@ -158,9 +173,9 @@ namespace StorEvil.Resharper
             unchecked
             {
                 int result = base.GetHashCode();
-                result = (result * 397) ^ IsOutline.GetHashCode();
-                result = (result * 397) ^ Explicitly.GetHashCode();
-                result = (result * 397) ^ (Id != null ? Id.GetHashCode() : 0);
+                result = (result*397) ^ IsOutline.GetHashCode();
+                result = (result*397) ^ Explicitly.GetHashCode();
+                result = (result*397) ^ (Id != null ? Id.GetHashCode() : 0);
                 return result;
             }
         }

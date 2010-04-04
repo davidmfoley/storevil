@@ -9,7 +9,8 @@ namespace StorEvil.InPlace
 {
     public class ScenarioLineExecuter
     {
-        public ScenarioLineExecuter(MemberInvoker memberInvoker, ScenarioInterpreter scenarioInterpreter,
+        public ScenarioLineExecuter(MemberInvoker memberInvoker, 
+                                    ScenarioInterpreter scenarioInterpreter,
                                     IResultListener listener)
         {
             _memberInvoker = memberInvoker;
