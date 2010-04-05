@@ -1,6 +1,18 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Core;
+using StorEvil.InPlace;
+
+namespace StorEvil.InPlace_Compiled
+{
+    [TestFixture]
+    public class When_scenario_does_not_map
+        : InPlace.When_scenario_does_not_map, UsingCompiledRunner { }
+
+    [TestFixture]
+    public class When_scenario_step_is_pending
+        : InPlace.When_scenario_step_is_pending, UsingCompiledRunner { }
+}
 
 namespace StorEvil.InPlace
 {

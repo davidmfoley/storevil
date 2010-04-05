@@ -76,6 +76,7 @@
     <Compile Include="InPlace\AssemblyGenerator.cs" />
     <Compile Include="InPlace\IDebugListener.cs" />
     <Compile Include="InPlace\ImplementationHelper.cs" />
+    <Compile Include="InPlace\InPlaceCompilingStoryRunner.cs" />
     <Compile Include="InPlace\InPlaceScenarioRunner.cs" />
     <Compile Include="InPlace\ScenarioLineExecuter.cs" />
     <Compile Include="Interpreter\DebugTrace.cs" />

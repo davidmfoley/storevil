@@ -1,8 +1,21 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Core;
+using StorEvil.InPlace;
 using StorEvil.ResultListeners;
 using StorEvil.Utility;
+
+
+namespace StorEvil.InPlace_Compiled
+{
+    [TestFixture]
+    public class When_scenario_maps_to_context_method_action_that_fails
+        : InPlace.When_scenario_maps_to_context_method_action_that_fails, UsingCompiledRunner { }
+
+    [TestFixture]
+    public class the_word_And_should_map_to_previous_significant_word
+        : InPlace.the_word_And_should_map_to_previous_significant_word, UsingCompiledRunner { }
+}
 
 namespace StorEvil.InPlace
 {

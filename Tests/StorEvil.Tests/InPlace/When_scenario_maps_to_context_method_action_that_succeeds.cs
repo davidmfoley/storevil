@@ -1,7 +1,18 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Core;
+using StorEvil.InPlace;
 using StorEvil.Utility;
+
+
+namespace StorEvil.InPlace_Compiled
+{
+    [TestFixture]
+    public class When_scenario_maps_to_context_method_action_that_succeeds
+        : InPlace.When_scenario_maps_to_context_method_action_that_succeeds, UsingCompiledRunner { }
+
+ 
+}
 
 namespace StorEvil.InPlace
 {

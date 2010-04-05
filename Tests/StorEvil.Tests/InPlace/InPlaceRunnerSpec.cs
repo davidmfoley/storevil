@@ -13,7 +13,7 @@ namespace StorEvil.InPlace
     {
         protected IResultListener ResultListener;
         protected StoryContext Context;
-        protected InPlaceStoryRunner Runner;
+       
 
         protected void RunStory(Story story)
         {
@@ -21,9 +21,29 @@ namespace StorEvil.InPlace
             new ExtensionMethodHandler().AddAssembly(typeof(TestExtensionMethods).Assembly);
 
             Context = new StoryContext(typeof (T));
-            Runner = new InPlaceStoryRunner(ResultListener, new ScenarioPreprocessor(), new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())), new IncludeAllFilter());
-            Runner.HandleStory(story, Context);
-            
+
+            if (UseCompilingRunner())
+            {
+                var runner = new InPlaceCompilingStoryRunner(ResultListener, new ScenarioPreprocessor(),
+                                                new ScenarioInterpreter(
+                                                    new InterpreterForTypeFactory(new ExtensionMethodHandler())),
+                                                new IncludeAllFilter());
+                runner.HandleStory(story, Context);
+            }
+            else
+            {
+                var runner = new InPlaceStoryRunner(ResultListener, new ScenarioPreprocessor(),
+                                                new ScenarioInterpreter(
+                                                    new InterpreterForTypeFactory(new ExtensionMethodHandler())),
+                                                new IncludeAllFilter());
+                runner.HandleStory(story, Context);
+            }
+
+        }
+
+        private bool UseCompilingRunner()
+        {
+            return (null != this as UsingCompiledRunner);
         }
 
         protected argT Any<argT>()
@@ -33,8 +53,13 @@ namespace StorEvil.InPlace
 
         protected static Scenario BuildScenario(string name, params string[] lines)
         {
-            return new Scenario("test", lines.Select(line=> new ScenarioLine {Text = line}));
+            int lineNumber = 0;
+            return new Scenario("test", lines.Select(line=> new ScenarioLine {Text = line, LineNumber = ++lineNumber}).ToArray());
         }
+    }
+
+    internal interface UsingCompiledRunner
+    {
     }
 
     public class InPlaceRunnerTestContext

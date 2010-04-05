@@ -8,11 +8,14 @@ using System.Text;
 using Microsoft.CSharp;
 using StorEvil.Core;
 using StorEvil.Nunit;
+using StorEvil.Parsing;
 
 namespace StorEvil.InPlace
 {
     public class AssemblyGenerator
     {
+       
+
         private string _sourceCodeTemplate =
             @"
 namespace StorEvilTestAssembly {{
@@ -21,31 +24,33 @@ namespace StorEvilTestAssembly {{
     using StorEvil.Interpreter;
     using StorEvil.InPlace;
     using System.Linq;
+    using StorEvil.Parsing;
     {0}
 
     public class StorEvilDriver {{
         private readonly IResultListener _listener;
         private readonly ScenarioInterpreter _scenarioInterpreter;
         private readonly ScenarioLineExecuter _lineExecuter;
-        private readonly Story _story;
-        private readonly IScenario[] _scenarios;
+        private readonly Scenario[] _scenarios;
+        private readonly ScenarioPreprocessor _scenarioPreprocessor;
 
         public StorEvilDriver(  IResultListener listener, 
                                 MemberInvoker memberInvoker,
-                                ScenarioInterpreter scenarioInterpreter,
-                                Story story)
+                                ScenarioInterpreter scenarioInterpreter,                            
+                                Scenario[] scenarios)
         {{
             _listener = listener;
             _scenarioInterpreter = scenarioInterpreter;
             _lineExecuter = new ScenarioLineExecuter(memberInvoker, scenarioInterpreter, listener);
-            _story = story;
-            _scenarios = _story.Scenarios.ToArray();
+            
+            _scenarios = scenarios;
         }}
 
-        public bool Execute() {{
+        public int Execute(StoryContext storyContext) {{
             int failures = 0;
             bool scenarioFailed;
-            IScenario scenario;
+            Scenario scenario;
+            ScenarioContext context;
 
             {1}
 
@@ -53,37 +58,39 @@ namespace StorEvilTestAssembly {{
         }}
     }}
 }}";
-        public Assembly GenerateAssembly(Story story)
+        public Assembly GenerateAssembly(Story story, Scenario[] scenarios)
         {
             var codeBuilder = new StringBuilder();
             
             codeBuilder.AppendLine("// " + story.Id);
-            AppendStoryCode(codeBuilder, story);
+            AppendStoryCode(codeBuilder, story, scenarios);
                 
-            var sourceCode = string.Format(_sourceCodeTemplate, "", codeBuilder.ToString());
-            Debug.WriteLine(sourceCode);
+            var sourceCode = string.Format(_sourceCodeTemplate, "", codeBuilder.ToString());            
             return CompileSource(sourceCode);
         }
 
-        private void AppendStoryCode(StringBuilder codeBuilder, Story story)
+        private void AppendStoryCode(StringBuilder codeBuilder, Story story, Scenario[] scenarios)
         {
             var i = 0;
-            foreach (var scenario in story.Scenarios)
+            foreach (var scenario in scenarios)
             {
                 codeBuilder.AppendLine(@"
 scenario = _scenarios[" + i + @"];
-scenarioFailed = false;");
+scenarioFailed = false;
+_scenarioInterpreter.NewScenario();
+_listener.ScenarioStarting(scenario);
+context = storyContext.GetScenarioContext();");
                 foreach (var line in GetLines(scenario))
                 {
-                    codeBuilder.Append(@"
-if (!scenarioFailed) {
-#line " + line.LineNumber + @" """ + story.Id + @"""
-scenarioFailed &= _lineExecuter.ExecuteLine(scenario, null, @""" + line.Text.Replace("\"", "\"\"") + @""");
+                    codeBuilder.AppendFormat(@"
+if (!scenarioFailed) {{
+#line {0} ""{1}""
+scenarioFailed = scenarioFailed || !_lineExecuter.ExecuteLine(scenario, context, @""{2}"");
 #line hidden
-}    
-");
+}}  
+", line.LineNumber, story.Id, line.Text.Replace("\"", "\"\""));
                 }
-                codeBuilder.AppendLine(@"if (scenarioFailed) {failures++;}");
+                codeBuilder.AppendLine(@"if (scenarioFailed) {failures++;} else { _listener.ScenarioSucceeded(scenario);}");
 
                 i++;
             }
@@ -99,6 +106,7 @@ scenarioFailed &= _lineExecuter.ExecuteLine(scenario, null, @""" + line.Text.Rep
 
         private Assembly CompileSource(string sourceCode)
         {
+            Debug.Write(sourceCode);
             var compilerParams = new CompilerParameters
                                      {
                                          CompilerOptions = "/target:library",

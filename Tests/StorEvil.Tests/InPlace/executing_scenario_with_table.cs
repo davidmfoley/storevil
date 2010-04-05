@@ -1,9 +1,16 @@
 using NUnit.Framework;
-using Rhino.Mocks;
-using StorEvil.Context;
-using StorEvil.Interpreter;
+using StorEvil.InPlace;
 using StorEvil.Parsing;
 using StorEvil.Utility;
+
+namespace StorEvil.InPlace_Compiled
+{
+    [TestFixture]
+    public class executing_scenario_with_table
+        : InPlace.executing_scenario_with_table, UsingCompiledRunner
+    {
+    }
+}
 
 namespace StorEvil.InPlace
 {

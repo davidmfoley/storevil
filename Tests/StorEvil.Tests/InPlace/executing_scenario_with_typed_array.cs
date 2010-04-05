@@ -1,9 +1,25 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Context;
+using StorEvil.InPlace;
 using StorEvil.Interpreter;
 using StorEvil.Parsing;
 using StorEvil.Utility;
+
+namespace StorEvil.InPlace_Compiled
+{
+    [TestFixture]
+    public class executing_scenario_with_typed_array
+        : InPlace.executing_scenario_with_typed_array, UsingCompiledRunner
+    {
+    }
+
+    [TestFixture]
+    public class executing_scenario_with_typed_parameter
+        : InPlace.executing_scenario_with_typed_parameter, UsingCompiledRunner
+    {
+    }
+}
 
 namespace StorEvil.InPlace
 {
@@ -25,14 +41,8 @@ Given the following
         [SetUp]
         public void SetupContext()
         {
-            ResultListener = MockRepository.GenerateStub<IResultListener>();
-
             var story = new StoryParser().Parse(storyText, null);
-            Context = new StoryContext(typeof (ScenarioArrayTestContext));
-
-            new InPlaceStoryRunner(ResultListener, new ScenarioPreprocessor(),
-                              new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())), new IncludeAllFilter()).
-                HandleStory(story, Context);
+            RunStory(story);
         }
 
         [Test]
@@ -92,7 +102,8 @@ Given the following
             Context = new StoryContext(typeof (TypedScenarioTestContext));
 
             new InPlaceStoryRunner(ResultListener, new ScenarioPreprocessor(),
-                              new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())), new IncludeAllFilter()).
+                                   new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())),
+                                   new IncludeAllFilter()).
                 HandleStory(story, Context);
         }
 

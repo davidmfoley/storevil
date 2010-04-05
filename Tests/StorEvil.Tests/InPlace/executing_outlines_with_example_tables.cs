@@ -3,14 +3,23 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Context;
+using StorEvil.InPlace;
 using StorEvil.Interpreter;
 using StorEvil.Parsing;
 using StorEvil.Utility;
 
-namespace StorEvil.InPlace
+namespace StorEvil.InPlace_Compiled
 {
     [TestFixture]
-    public class executing_outlines_with_example_tables : InPlaceRunnerSpec<InPlaceRunnerTestContext>
+    public class executing_outlines_with_example_tables
+        : InPlace.executing_outlines_with_example_tables, UsingCompiledRunner { }
+
+}
+namespace StorEvil.InPlace
+{    
+
+    [TestFixture]
+    public class executing_outlines_with_example_tables : InPlaceRunnerSpec<InPlaceRunnerTableTestContext>
     {
         private string storyText =
             @"
@@ -29,14 +38,11 @@ Examples:
         [SetUp]
         public void SetupContext()
         {
-            ResultListener = MockRepository.GenerateStub<IResultListener>();
-
+           
+            InPlaceRunnerTableTestContext.Calls.Clear();
             var story = new StoryParser().Parse(storyText, null);
-            Context = new StoryContext(typeof (InPlaceRunnerTableTestContext));
+            RunStory(story);
 
-            var runner = new InPlaceStoryRunner(ResultListener, new ScenarioPreprocessor(), new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())), new IncludeAllFilter());
-
-            runner.HandleStory(story, Context);
         }
 
         [Test]

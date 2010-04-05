@@ -1,7 +1,16 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Core;
+using StorEvil.InPlace;
 using StorEvil.Utility;
+
+namespace StorEvil.InPlace_Compiled
+{
+    [TestFixture]
+    public class Chaining_results
+        : StorEvil.InPlace.Chaining_results, UsingCompiledRunner { }
+
+}
 
 namespace StorEvil.InPlace
 {
@@ -22,7 +31,7 @@ namespace StorEvil.InPlace
         [Test]
         public void Should_succeed()
         {
-            ResultListener.AssertWasCalled(x => x.Success(TestScenario, ScenarioText));
+            ResultListener.AssertWasCalled(x => x.Success(Any<Scenario>(), Any<string>()));
         }
     }
 

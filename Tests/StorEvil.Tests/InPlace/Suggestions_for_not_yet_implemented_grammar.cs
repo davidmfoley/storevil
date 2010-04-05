@@ -1,6 +1,8 @@
 using System.Text.RegularExpressions;
 using NUnit.Framework;
+using StorEvil.InPlace;
 using StorEvil.Utility;
+
 
 namespace StorEvil.InPlace
 {

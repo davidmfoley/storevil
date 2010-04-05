@@ -1,8 +1,19 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Core;
+using StorEvil.InPlace;
 using StorEvil.Utility;
 
+namespace StorEvil.InPlace_Compiled
+{
+    [TestFixture]
+    public class mapping_by_regex_to_context_method
+        : InPlace.mapping_by_regex_to_context_method, UsingCompiledRunner { }
+
+    [TestFixture, Ignore("In progress")]
+    public class matching_a_multi_word_param
+        : InPlace.matching_a_multi_word_param, UsingCompiledRunner { }
+}
 namespace StorEvil.InPlace
 {
     [TestFixture]

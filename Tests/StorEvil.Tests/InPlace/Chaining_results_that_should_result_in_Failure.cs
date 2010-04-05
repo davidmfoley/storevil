@@ -25,4 +25,6 @@ namespace StorEvil.InPlace
                 x => x.ScenarioFailed(Any<ScenarioFailureInfo>()));
         }
     }
+
+  
 }

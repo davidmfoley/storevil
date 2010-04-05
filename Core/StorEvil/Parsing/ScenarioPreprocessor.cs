@@ -42,7 +42,7 @@ namespace StorEvil.Parsing
                     var name = fieldNames.ToArray()[fieldIndex];
                     processed = processed.Replace("<" + name + ">", example.ElementAtOrDefault(fieldIndex));
                 }
-                yield return new ScenarioLine {Text = processed};
+                yield return new ScenarioLine {Text = processed, LineNumber = line.LineNumber};
             }
         }
     }
