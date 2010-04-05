@@ -55,6 +55,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\JetBrains\JetBrains.Platform.ReSharper.UI.dll</HintPath>
     </Reference>
+    <Reference Include="JetBrains.Platform.ReSharper.Util, Version=5.0.1648.10, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\JetBrains\JetBrains.Platform.ReSharper.Util.dll</HintPath>
+    </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.VSIntegration, Version=5.0.1618.49, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\JetBrains\JetBrains.Platform.ReSharper.VSIntegration.dll</HintPath>
