@@ -1,14 +1,11 @@
 using System;
 using System.CodeDom.Compiler;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 using Microsoft.CSharp;
 using StorEvil.Core;
-using StorEvil.Nunit;
-using StorEvil.Parsing;
 
 namespace StorEvil.InPlace
 {
