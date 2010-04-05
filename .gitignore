@@ -10,4 +10,4 @@ obj
 Lib/JetBrains
 *storevil.output.*
 _build
-	
+TestResult.xml
