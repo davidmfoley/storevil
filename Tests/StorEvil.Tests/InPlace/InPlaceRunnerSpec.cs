@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using Rhino.Mocks;
 using StorEvil.Context;
 using StorEvil.Core;
@@ -12,8 +13,7 @@ namespace StorEvil.InPlace
     public class InPlaceRunnerSpec<T>
     {
         protected IResultListener ResultListener;
-        protected StoryContext Context;
-       
+        protected StoryContext Context;       
 
         protected void RunStory(Story story)
         {
@@ -43,7 +43,14 @@ namespace StorEvil.InPlace
 
         private bool UseCompilingRunner()
         {
-            return (null != this as UsingCompiledRunner);
+            if (null != this as UsingCompiledRunner)
+                return true;
+
+            if (null == this as UsingNonCompiledRunner)
+                throw new ApplicationException(
+                    "In place specs must implement UsingCompiledRunner or Using NonCOmpiledRunner");
+
+            return false;
         }
 
         protected argT Any<argT>()
@@ -59,6 +66,10 @@ namespace StorEvil.InPlace
     }
 
     internal interface UsingCompiledRunner
+    {
+    }
+
+    internal interface UsingNonCompiledRunner
     {
     }
 

@@ -3,7 +3,7 @@ using StorEvil.InPlace;
 using StorEvil.Parsing;
 using StorEvil.Utility;
 
-namespace StorEvil.InPlace_Compiled
+namespace StorEvil.InPlace.Compiled
 {
     [TestFixture]
     public class executing_scenario_with_table
@@ -12,10 +12,19 @@ namespace StorEvil.InPlace_Compiled
     }
 }
 
-namespace StorEvil.InPlace
+
+namespace StorEvil.InPlace.NonCompiled
 {
     [TestFixture]
-    public class executing_scenario_with_table :
+    public class executing_scenario_with_table
+        : InPlace.executing_scenario_with_table, UsingNonCompiledRunner
+    {
+    }
+}
+
+namespace StorEvil.InPlace
+{
+    public abstract  class executing_scenario_with_table :
         InPlaceRunnerSpec<executing_scenario_with_table.ScenarioTableTestContext>
     {
         private string storyText =
@@ -72,7 +81,6 @@ Given the following
     }
 
     public class TestRow
-
     {
         public int IntField;
         public string StringProp { get; set; }

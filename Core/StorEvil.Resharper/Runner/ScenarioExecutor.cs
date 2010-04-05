@@ -12,7 +12,6 @@ namespace StorEvil.Resharper
     internal class ScenarioExecutor
     {
         private readonly IRemoteTaskServer _server;
-        private readonly ConfigSettings _settings;
         private readonly IStoryToContextMapper _mapper;
         private ResharperResultListener _listener;
 

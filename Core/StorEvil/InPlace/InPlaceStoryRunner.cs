@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Interpreter;
@@ -7,34 +6,23 @@ using StorEvil.Parsing;
 
 namespace StorEvil.InPlace
 {
-    public class InPlaceStoryRunner : IStoryHandler
+    public class InPlaceStoryRunner :InPlaceStoryRunnerBase
     {
-        private readonly IResultListener _listener;
-
-        private readonly IStoryFilter _filter;
-        private readonly MemberInvoker _memberInvoker;
-
-        private readonly IScenarioPreprocessor _preprocessor;
-        private readonly InPlaceScenarioRunner _scenarioRunner;
+          private readonly InPlaceScenarioRunner _scenarioRunner;
 
         public InPlaceStoryRunner(IResultListener listener,
                                   IScenarioPreprocessor preprocessor,
                                   ScenarioInterpreter scenarioInterpreter,
-                                  IStoryFilter filter)
+                                  IStoryFilter filter) : base(listener, preprocessor, filter)
         {
-            _listener = listener;
-            _preprocessor = preprocessor;
-            _filter = filter;
-
-            _memberInvoker = new MemberInvoker();
-            _scenarioRunner = new InPlaceScenarioRunner(_listener, _memberInvoker, scenarioInterpreter);
+           
+            _scenarioRunner = new InPlaceScenarioRunner(listener,new MemberInvoker(), scenarioInterpreter);
         }
 
-        public int HandleStory(Story story, StoryContext context)
+        protected override int Execute(Story story, IEnumerable<Scenario> scenariosMatchingFilter, StoryContext context)
         {
             int failed = 0;
-            _listener.StoryStarting(story);
-            foreach (var scenario in GetScenariosMatchingFilter(story))
+            foreach (var scenario in scenariosMatchingFilter)
             {
                 using (var scenarioContext = context.GetScenarioContext())
                 {
@@ -43,21 +31,6 @@ namespace StorEvil.InPlace
                 }
             }
             return failed;
-        }
-
-        private IEnumerable<Scenario> GetScenariosMatchingFilter(Story story)
-        {
-            return GetScenarios(story).Where(s => _filter.Include(story, s));
-        }
-
-        private IEnumerable<Scenario> GetScenarios(Story story)
-        {
-            return story.Scenarios.SelectMany(scenario => _preprocessor.Preprocess(scenario));
-        }
-
-        public void Finished()
-        {
-            _listener.Finished();
         }
     }
 }

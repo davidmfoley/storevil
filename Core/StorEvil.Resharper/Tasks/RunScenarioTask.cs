@@ -161,6 +161,16 @@ namespace StorEvil.Resharper
             return equals;
         }
 
+        public override bool Equals(RemoteTask other)
+        {
+            if (other is RunScenarioTask)
+            {
+                var runScenarioTask = (RunScenarioTask)other;
+                return runScenarioTask.Id == Id && runScenarioTask.Explicitly == this.Explicitly;
+            }
+            return false;
+        }
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;

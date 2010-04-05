@@ -1,23 +1,30 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Core;
-using StorEvil.InPlace;
 using StorEvil.Utility;
 
-
-namespace StorEvil.InPlace_Compiled
+namespace StorEvil.InPlace.Compiled
 {
     [TestFixture]
     public class When_scenario_maps_to_context_method_action_that_succeeds
-        : InPlace.When_scenario_maps_to_context_method_action_that_succeeds, UsingCompiledRunner { }
+        : InPlace.When_scenario_maps_to_context_method_action_that_succeeds, UsingCompiledRunner
+    {
+    }
+}
 
- 
+namespace StorEvil.InPlace.NonCompiled
+{
+    [TestFixture]
+    public class When_scenario_maps_to_context_method_action_that_succeeds
+        : InPlace.When_scenario_maps_to_context_method_action_that_succeeds, UsingNonCompiledRunner
+    {
+    }
 }
 
 namespace StorEvil.InPlace
 {
-    [TestFixture]
-    public class When_scenario_maps_to_context_method_action_that_succeeds : InPlaceRunnerSpec<InPlaceRunnerTestContext>
+
+    public abstract class When_scenario_maps_to_context_method_action_that_succeeds : InPlaceRunnerSpec<InPlaceRunnerTestContext>
     {
         private readonly Scenario TestScenario = BuildScenario("test", new[] {ScenarioText});
         private const string ScenarioText = "When some action";

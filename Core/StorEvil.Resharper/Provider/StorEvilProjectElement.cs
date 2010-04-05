@@ -57,5 +57,13 @@ namespace StorEvil.Resharper
         {
             return Equals(other.Id, Id) && other.Explicitly == Explicitly;
         }
+
+        public override bool Equals(RemoteTask other)
+        {
+            if (other is ProjectTask)
+                return Equals((ProjectTask) other);
+
+            return false;
+        }
     }
 }

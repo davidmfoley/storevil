@@ -66,6 +66,7 @@
     <Compile Include="Console\InitJob_Specs.cs" />
     <Compile Include="Expect.cs" />
     <Compile Include="InPlace\executing_scenario_with_typed_array.cs" />
+    <Compile Include="InPlace\Filtering_by_tags.cs" />
     <Compile Include="InPlace\Inplace_assembly_generation.cs" />
     <Compile Include="Integration\Class1.cs" />
     <Compile Include="NUnit\Stub_generation_specs.cs" />

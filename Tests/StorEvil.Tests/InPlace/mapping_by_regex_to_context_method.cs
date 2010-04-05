@@ -4,7 +4,7 @@ using StorEvil.Core;
 using StorEvil.InPlace;
 using StorEvil.Utility;
 
-namespace StorEvil.InPlace_Compiled
+namespace StorEvil.InPlace.Compiled
 {
     [TestFixture]
     public class mapping_by_regex_to_context_method
@@ -14,10 +14,22 @@ namespace StorEvil.InPlace_Compiled
     public class matching_a_multi_word_param
         : InPlace.matching_a_multi_word_param, UsingCompiledRunner { }
 }
-namespace StorEvil.InPlace
+
+namespace StorEvil.InPlace.NonCompiled
 {
     [TestFixture]
-    public class mapping_by_regex_to_context_method : InPlaceRunnerSpec<InPlaceRunnerTestContext>
+    public class mapping_by_regex_to_context_method
+        : InPlace.mapping_by_regex_to_context_method, UsingNonCompiledRunner { }
+
+    [TestFixture, Ignore("In progress")]
+    public class matching_a_multi_word_param
+        : InPlace.matching_a_multi_word_param, UsingNonCompiledRunner { }
+}
+
+namespace StorEvil.InPlace
+{
+
+    public abstract class mapping_by_regex_to_context_method : InPlaceRunnerSpec<InPlaceRunnerTestContext>
     {
         private readonly Scenario TestScenario = BuildScenario("test", "Matches a regex with 42");
 

@@ -1,25 +1,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
-using StorEvil.Context;
-using StorEvil.InPlace;
-using StorEvil.Interpreter;
 using StorEvil.Parsing;
 using StorEvil.Utility;
 
-namespace StorEvil.InPlace_Compiled
+namespace StorEvil.InPlace.Compiled
 {
     [TestFixture]
     public class executing_outlines_with_example_tables
         : InPlace.executing_outlines_with_example_tables, UsingCompiledRunner { }
 
 }
-namespace StorEvil.InPlace
-{    
 
+namespace StorEvil.InPlace.NonCompiled
+{
     [TestFixture]
-    public class executing_outlines_with_example_tables : InPlaceRunnerSpec<InPlaceRunnerTableTestContext>
+    public class executing_outlines_with_example_tables
+        : InPlace.executing_outlines_with_example_tables, UsingNonCompiledRunner { }
+
+}
+namespace StorEvil.InPlace
+{
+
+
+    public abstract class executing_outlines_with_example_tables : InPlaceRunnerSpec<InPlaceRunnerTableTestContext>
     {
         private string storyText =
             @"

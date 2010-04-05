@@ -6,7 +6,7 @@ using StorEvil.ResultListeners;
 using StorEvil.Utility;
 
 
-namespace StorEvil.InPlace_Compiled
+namespace StorEvil.InPlace.Compiled
 {
     [TestFixture]
     public class When_scenario_maps_to_context_method_action_that_fails
@@ -17,10 +17,22 @@ namespace StorEvil.InPlace_Compiled
         : InPlace.the_word_And_should_map_to_previous_significant_word, UsingCompiledRunner { }
 }
 
-namespace StorEvil.InPlace
+
+namespace StorEvil.InPlace.NonCompiled
 {
     [TestFixture]
-    public class When_scenario_maps_to_context_method_action_that_fails : InPlaceRunnerSpec<InPlaceRunnerTestContext>
+    public class When_scenario_maps_to_context_method_action_that_fails
+        : InPlace.When_scenario_maps_to_context_method_action_that_fails, UsingNonCompiledRunner { }
+
+    [TestFixture]
+    public class the_word_And_should_map_to_previous_significant_word
+        : InPlace.the_word_And_should_map_to_previous_significant_word, UsingNonCompiledRunner { }
+}
+
+namespace StorEvil.InPlace
+{
+
+    public abstract class When_scenario_maps_to_context_method_action_that_fails : InPlaceRunnerSpec<InPlaceRunnerTestContext>
     {
         private readonly Scenario TestScenario = BuildScenario("test", new[] { ScenarioText });
         private const string ScenarioText = "When some failing action";
@@ -47,8 +59,7 @@ namespace StorEvil.InPlace
         }
     }
 
-    [TestFixture]
-    public class the_word_And_should_map_to_previous_significant_word : InPlaceRunnerSpec<InPlaceRunnerTestContext>
+    public abstract class the_word_And_should_map_to_previous_significant_word : InPlaceRunnerSpec<InPlaceRunnerTestContext>
     {
         private readonly Scenario TestScenario = BuildScenario("test",
                                                               new[] {"When some action", "And some other action"});

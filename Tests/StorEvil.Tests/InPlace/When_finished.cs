@@ -4,7 +4,7 @@ using StorEvil.InPlace;
 using StorEvil.Interpreter;
 using StorEvil.Parsing;
 
-namespace StorEvil.InPlace_Compiled
+namespace StorEvil.InPlace.Compiled
 {
     [TestFixture]
     public class When_finished_running_all_stories
@@ -28,7 +28,7 @@ namespace StorEvil.InPlace_Compiled
     }
 }
 
-namespace StorEvil.InPlace
+namespace StorEvil.InPlace.NonCompiled
 {
     [TestFixture]
     public class When_finished_running_all_stories

@@ -9,14 +9,9 @@ using StorEvil.Parsing;
 
 namespace StorEvil.InPlace
 {
-    public class InPlaceCompilingStoryRunner : IStoryHandler
+    public class InPlaceCompilingStoryRunner : InPlaceStoryRunnerBase
     {
-        private readonly IResultListener _listener;
-
-        private readonly IStoryFilter _filter;
         private readonly MemberInvoker _memberInvoker;
-
-        private readonly IScenarioPreprocessor _preprocessor;
         private readonly ScenarioInterpreter _scenarioInterpreter;
         private readonly AssemblyGenerator _generator = new AssemblyGenerator();
 
@@ -24,35 +19,25 @@ namespace StorEvil.InPlace
                                            IScenarioPreprocessor preprocessor,
                                            ScenarioInterpreter scenarioInterpreter,
                                            IStoryFilter filter)
+            : base(listener, preprocessor, filter)
         {
-            _listener = listener;
-            _preprocessor = preprocessor;
             _scenarioInterpreter = scenarioInterpreter;
-            _filter = filter;
-
             _memberInvoker = new MemberInvoker();
         }
 
-        public int HandleStory(Story story, StoryContext context)
+        protected override int Execute(Story story, IEnumerable<Scenario> scenarios, StoryContext context)
         {
-            var scenarios = GetScenariosMatchingFilter(story).ToArray();
+            Scenario[] asArray = scenarios.ToArray();
+            var assembly = _generator.GenerateAssembly(story, asArray);
 
-            var assembly = _generator.GenerateAssembly(story, scenarios);
-
-            
-            _listener.StoryStarting(story);
-
-            return ExecuteAssemblyDriver(assembly, story, context, scenarios);
-
+            return ExecuteAssemblyDriver(assembly, story, context, asArray);
         }
 
         private int ExecuteAssemblyDriver(Assembly assembly, Story story, StoryContext context, Scenario[] scenarios)
         {
-            var preprocessor = new ScenarioPreprocessor();
-          
             var driverType = GetDriverType(assembly);
             var driver = Activator.CreateInstance(driverType,
-                                                  _listener,
+                                                  ResultListener,
                                                   _memberInvoker,
                                                   _scenarioInterpreter,
                                                   scenarios
@@ -60,27 +45,12 @@ namespace StorEvil.InPlace
 
             var methodInfo = driverType.GetMethod("Execute");
 
-            return (int)methodInfo.Invoke(driver, new[] { context });
+            return (int) methodInfo.Invoke(driver, new[] {context});
         }
 
-        private Type GetDriverType(Assembly assembly)
+        private static Type GetDriverType(Assembly assembly)
         {
             return assembly.GetTypes().First();
-        }
-
-        private IEnumerable<Scenario> GetScenariosMatchingFilter(Story story)
-        {
-            return GetScenarios(story).Where(s => _filter.Include(story, s));
-        }
-
-        private IEnumerable<Scenario> GetScenarios(Story story)
-        {
-            return story.Scenarios.SelectMany(scenario => _preprocessor.Preprocess(scenario));
-        }
-
-        public void Finished()
-        {
-            _listener.Finished();
         }
     }
 }

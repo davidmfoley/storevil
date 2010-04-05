@@ -38,7 +38,12 @@ namespace StorEvil.Resharper
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return base.Equals(other) && Equals(other.Project, Project) && other.Explicitly.Equals(Explicitly);
+            return other.Project == this.Project;
+        }
+
+        public override bool Equals(RemoteTask other)
+        {
+            return ReferenceEquals(this, other);
         }
 
         public override bool Equals(object obj)

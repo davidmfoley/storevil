@@ -6,7 +6,7 @@ using StorEvil.Interpreter;
 using StorEvil.Parsing;
 using StorEvil.Utility;
 
-namespace StorEvil.InPlace_Compiled
+namespace StorEvil.InPlace.Compiled
 {
     [TestFixture]
     public class executing_scenario_with_typed_array
@@ -21,10 +21,25 @@ namespace StorEvil.InPlace_Compiled
     }
 }
 
-namespace StorEvil.InPlace
+
+namespace StorEvil.InPlace.NonCompiled
 {
     [TestFixture]
-    public class executing_scenario_with_typed_array :
+    public class executing_scenario_with_typed_array
+        : InPlace.executing_scenario_with_typed_array, UsingNonCompiledRunner
+    {
+    }
+
+    [TestFixture]
+    public class executing_scenario_with_typed_parameter
+        : InPlace.executing_scenario_with_typed_parameter, UsingNonCompiledRunner
+    {
+    }
+}
+
+namespace StorEvil.InPlace
+{
+    public abstract class executing_scenario_with_typed_array :
         InPlaceRunnerSpec<executing_scenario_with_typed_array.ScenarioArrayTestContext>
     {
         private string storyText =
@@ -80,8 +95,7 @@ Given the following
         }
     }
 
-    [TestFixture]
-    public class executing_scenario_with_typed_parameter :
+    public abstract class executing_scenario_with_typed_parameter :
         InPlaceRunnerSpec<executing_scenario_with_typed_parameter.TypedScenarioTestContext>
     {
         private string storyText =
@@ -96,15 +110,9 @@ Given the following
         [SetUp]
         public void SetupContext()
         {
-            ResultListener = MockRepository.GenerateStub<IResultListener>();
-
+            
             var story = new StoryParser().Parse(storyText, null);
-            Context = new StoryContext(typeof (TypedScenarioTestContext));
-
-            new InPlaceStoryRunner(ResultListener, new ScenarioPreprocessor(),
-                                   new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())),
-                                   new IncludeAllFilter()).
-                HandleStory(story, Context);
+           RunStory(story);
         }
 
         [Test]
