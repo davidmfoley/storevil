@@ -6,6 +6,6 @@ namespace StorEvil.Core
     {
         void HandleStory(Story story);
         void Finished();
-        StorEvilResult GetResult();
+        JobResult GetResult();
     }
 }

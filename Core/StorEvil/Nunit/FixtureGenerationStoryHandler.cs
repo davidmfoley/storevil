@@ -31,9 +31,9 @@ namespace StorEvil.Nunit
             TestFixtureWriter.Finished();
         }
 
-        public StorEvilResult GetResult()
+        public JobResult GetResult()
         {
-            return new StorEvilResult();
+            return new JobResult();
         }
     }
 }

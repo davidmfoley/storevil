@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
@@ -21,63 +22,47 @@ namespace StorEvil.InPlace.Compiled
     public class Inplace_assembly_generation
     {
         private AssemblyGenerator Generator;
-        private Assembly GeneratedAssembly;
+        private string GeneratedAssemblyPath;
         private IScenario[] _scenarios;
 
         [SetUp]
         public void SetupContext()
         {
-            Generator = new AssemblyGenerator();
+            Generator = new AssemblyGenerator(new ScenarioPreprocessor());
             _scenarios = new IScenario[]
                              {
                                  TestHelper.BuildScenario("foo", "When I do seomthing",
                                                           "something else should happen")
                              };
-            GeneratedAssembly = Generator.GenerateAssembly(new Story("foo", "bar", _scenarios),
-                                                           _scenarios.Cast<Scenario>().ToArray());
+            GeneratedAssemblyPath = Generator.GenerateAssembly(new Story("foo", "bar", _scenarios),
+                                                           new[] {this.GetType().Assembly.Location});
         }
 
         [Test]
-        public void Should_compile()
+        public void Should_exist()
         {
-            GeneratedAssembly.ShouldNotBeNull();
+            File.Exists(GeneratedAssemblyPath).ShouldBe(true);
         }
+
+
 
         [Test]
-        public void Should_have_a_driver_class()
+        public void Should_be_able_to_instantiate()
         {
-            GetDriverType().ShouldNotBeNull();
+            var handle = Activator.CreateInstanceFrom(
+                GeneratedAssemblyPath,
+                "StorEvilTestAssembly.StorEvilDriver");
+
+            var driver = handle.Unwrap() as IStoryHandler;
+
+            driver.ShouldNotBeNull();
+
         }
 
-        private Type GetDriverType()
+        [TestFixtureTearDown]
+        public void TearDown()
         {
-            return GeneratedAssembly.GetType("StorEvilTestAssembly.StorEvilDriver");
-        }
-
-        [Test]
-        public void Driver_class_exposes_an_Execute_method()
-        {
-            GetDriverType().GetMethod("Execute").ShouldNotBeNull();
-        }
-
-        [Test]
-        public void Should_be_able_to_execute()
-        {
-            IResultListener listener = new ConsoleResultListener();
-            MemberInvoker memberInvoker = new MemberInvoker();
-            ScenarioInterpreter scenarioInterpreter =
-                new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()));
-            var scenarioPreprocessor = new ScenarioPreprocessor();
-            var scenarios = _scenarios.SelectMany(x => scenarioPreprocessor.Preprocess(x)).ToArray();
-
-            var driver = Activator.CreateInstance(GetDriverType(),
-                                                  listener,
-                                                  memberInvoker,
-                                                  scenarioInterpreter,
-                                                  scenarios
-                );
-
-            GetDriverType().GetMethod("Execute").Invoke(driver, new[] {new StoryContext()});
+            File.Delete(GeneratedAssemblyPath);
         }
     }
 

@@ -98,9 +98,9 @@ namespace Your.Namespace.Here
 
         }
 
-        public StorEvilResult GetResult()
+        public JobResult GetResult()
         {
-            return new StorEvilResult();
+            return new JobResult();
         }
     }
 }

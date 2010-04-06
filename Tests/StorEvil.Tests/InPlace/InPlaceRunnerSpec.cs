@@ -50,7 +50,7 @@ namespace StorEvil.InPlace
 
             if (null == this as UsingNonCompiledRunner)
                 throw new ApplicationException(
-                    "In place specs must implement UsingCompiledRunner or Using NonCOmpiledRunner");
+                    "In place specs must implement UsingCompiledRunner or Using NonCompiledRunner");
 
             return false;
         }

@@ -31,7 +31,7 @@ namespace StorEvil.Core.StorEvilJob_Specs
             var job = GetJobWithMockDependencies();
 
             job.StoryProvider.Stub(x => x.GetStories()).Return(new[] {story});
-            job.Handler.Stub(x => x.GetResult()).Return(new StorEvilResult());
+            job.Handler.Stub(x => x.GetResult()).Return(new JobResult());
             job.Run();
             job.Handler.AssertWasCalled(x => x.HandleStory(story));
         }
@@ -40,7 +40,7 @@ namespace StorEvil.Core.StorEvilJob_Specs
         public void Notifies_Handler_When_Finished()
         {
             var job = GetJobWithMockDependencies();
-            job.Handler.Stub(x => x.GetResult()).Return(new StorEvilResult());
+            job.Handler.Stub(x => x.GetResult()).Return(new JobResult());
             job.StoryProvider.Stub(x => x.GetStories())
                 .Return(new[] {new Story("test context", "summary", new List<IScenario>())});
 
@@ -55,5 +55,11 @@ namespace StorEvil.Core.StorEvilJob_Specs
                 Fake<IStoryProvider>(),
                 Fake<IStoryHandler>());
         }
+    }
+
+    [TestFixture]
+    public class Executing_a_remote_debugging_job
+    {
+        
     }
 }

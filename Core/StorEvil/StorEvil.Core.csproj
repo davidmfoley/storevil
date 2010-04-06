@@ -71,10 +71,12 @@
     <Compile Include="Context\Matchers\PropertyOrFieldNameMatcher.cs" />
     <Compile Include="Context\Matches\ExactMatch.cs" />
     <Compile Include="Context\Matchers\MethodNameMatcher.cs" />
-    <Compile Include="Core\StorEvilResult.cs" />
+    <Compile Include="Core\JobResult.cs" />
     <Compile Include="Infrastructure\Filesystem.cs" />
     <Compile Include="Infrastructure\FileWriter.cs" />
     <Compile Include="InPlace\AssemblyGenerator.cs" />
+    <Compile Include="InPlace\HandlerCodeGenerator.cs" />
+    <Compile Include="InPlace\HandlerCompiler.cs" />
     <Compile Include="InPlace\IDebugListener.cs" />
     <Compile Include="InPlace\ImplementationHelper.cs" />
     <Compile Include="InPlace\InPlaceCompilingStoryRunner.cs" />

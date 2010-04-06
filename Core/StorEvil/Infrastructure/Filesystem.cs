@@ -33,5 +33,10 @@ namespace StorEvil.Infrastructure
 
             File.WriteAllText(fileName, contents);
         }
+
+        public void Delete(string filePath)
+        {
+            File.Delete(filePath);
+        }
     }
 }

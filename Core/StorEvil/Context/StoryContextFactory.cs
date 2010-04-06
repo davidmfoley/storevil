@@ -11,7 +11,7 @@ namespace StorEvil.Context
     public class StoryContextFactory : IStoryContextFactory
     {
         private readonly List<Type> _contextTypes = new List<Type>();
-        private ExtensionMethodHandler _extensionMethodHandler = new ExtensionMethodHandler();
+        private readonly ExtensionMethodHandler _extensionMethodHandler = new ExtensionMethodHandler();
 
         public void AddContext<T>() where T : class
         {
@@ -31,7 +31,7 @@ namespace StorEvil.Context
             foreach (var t in storEvilContexts)            
                 AddContext(t);
         }
-
+      
         private static bool TypeHasContextAttrbiute(Type t)
         {
             return t.GetCustomAttributes(typeof (ContextAttribute), true).Any();

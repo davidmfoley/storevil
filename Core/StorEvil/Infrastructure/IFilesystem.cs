@@ -10,5 +10,6 @@ namespace StorEvil.Infrastructure
         IEnumerable<string> GetSubFolders(string path);
 
         void WriteFile(string fileName, string contents, bool overwrite);
+        void Delete(string filePath);
     }
 }
