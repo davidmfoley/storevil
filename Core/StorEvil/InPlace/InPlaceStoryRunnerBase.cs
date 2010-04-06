@@ -23,15 +23,15 @@ namespace StorEvil.InPlace
             _contextFactory = contextFactory;
         }
 
-        public int HandleStory(Story story)
+        public void HandleStory(Story story)
         {
             ResultListener.StoryStarting(story);
             IEnumerable<Scenario> scenariosMatchingFilter = GetScenariosMatchingFilter(story);
 
-            return Execute(story, scenariosMatchingFilter, _contextFactory.GetContextForStory(story));
+            Execute(story, scenariosMatchingFilter, _contextFactory.GetContextForStory(story));
         }
 
-        protected abstract int Execute(Story story, IEnumerable<Scenario> scenariosMatchingFilter, StoryContext context);
+        protected abstract void Execute(Story story, IEnumerable<Scenario> scenariosMatchingFilter, StoryContext context);
 
         private IEnumerable<Scenario> GetScenariosMatchingFilter(Story story)
         {
@@ -46,6 +46,10 @@ namespace StorEvil.InPlace
         public void Finished()
         {
             ResultListener.Finished();
+        }
+        public StorEvilResult GetResult()
+        {
+            return new StorEvilResult();
         }
     }
 }

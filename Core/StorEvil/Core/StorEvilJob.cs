@@ -21,15 +21,16 @@ namespace StorEvil.Core
         }
 
         public int Run()
-        {
-            int failed = 0;
+        {            
             foreach (var story in StoryProvider.GetStories())
             {      
-                failed += Handler.HandleStory(story);
+                Handler.HandleStory(story);
             }
 
             Handler.Finished();
-            return failed;
+            var results = Handler.GetResult();
+
+            return results.Failed;
         }
     }
 

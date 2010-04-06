@@ -14,6 +14,7 @@ namespace StorEvil.InPlace
         private readonly MemberInvoker _memberInvoker;
         private readonly ScenarioInterpreter _scenarioInterpreter;
         private readonly AssemblyGenerator _generator = new AssemblyGenerator();
+        private int _failures;
 
         public InPlaceCompilingStoryRunner(IResultListener listener,
                                            IScenarioPreprocessor preprocessor,
@@ -26,15 +27,15 @@ namespace StorEvil.InPlace
             _memberInvoker = new MemberInvoker();
         }
 
-        protected override int Execute(Story story, IEnumerable<Scenario> scenarios, StoryContext context)
+        protected override void Execute(Story story, IEnumerable<Scenario> scenarios, StoryContext context)
         {
             Scenario[] asArray = scenarios.ToArray();
             var assembly = _generator.GenerateAssembly(story, asArray);
 
-            return ExecuteAssemblyDriver(assembly, story, context, asArray);
+            ExecuteAssemblyDriver(assembly, story, context, asArray);
         }
 
-        private int ExecuteAssemblyDriver(Assembly assembly, Story story, StoryContext context, Scenario[] scenarios)
+        private void ExecuteAssemblyDriver(Assembly assembly, Story story, StoryContext context, Scenario[] scenarios)
         {
             var driverType = GetDriverType(assembly);
             var driver = Activator.CreateInstance(driverType,
@@ -46,7 +47,7 @@ namespace StorEvil.InPlace
 
             var methodInfo = driverType.GetMethod("Execute");
 
-            return (int) methodInfo.Invoke(driver, new[] {context});
+            _failures += (int) methodInfo.Invoke(driver, new[] {context});
         }
 
         private static Type GetDriverType(Assembly assembly)

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Windows.Forms;
 using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Infrastructure;
@@ -28,7 +27,7 @@ namespace StorEvil.StubGeneration
             _implementationHelper = implementationHelper;
         }
 
-        public int HandleStory(Story story)
+        public void HandleStory(Story story)
         {
             var context = _contextFactory.GetContextForStory(story);
             foreach (var scenario in story.Scenarios)
@@ -43,7 +42,6 @@ namespace StorEvil.StubGeneration
                     }
                 }
             }
-            return 0;
         }
 
         private void AddSuggestion(string suggestedCode)
@@ -99,15 +97,10 @@ namespace Your.Namespace.Here
             SuggestionWriter.Write(classDefinition);
 
         }
-    }
 
-    public class ClipboardWriter : ITextWriter
-    {
-        public void Write(string suggestions)
+        public StorEvilResult GetResult()
         {
-            Clipboard.SetText(suggestions);
+            return new StorEvilResult();
         }
     }
-
-  
 }

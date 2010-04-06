@@ -9,6 +9,7 @@ namespace StorEvil.InPlace
     public class InPlaceStoryRunner :InPlaceStoryRunnerBase
     {
           private readonly InPlaceScenarioRunner _scenarioRunner;
+        private int _failed;
 
         public InPlaceStoryRunner(IResultListener listener,
                                   IScenarioPreprocessor preprocessor,
@@ -21,7 +22,7 @@ namespace StorEvil.InPlace
             _scenarioRunner = new InPlaceScenarioRunner(listener,new MemberInvoker(), scenarioInterpreter);
         }
 
-        protected override int Execute(Story story, IEnumerable<Scenario> scenariosMatchingFilter, StoryContext context)
+        protected override void Execute(Story story, IEnumerable<Scenario> scenariosMatchingFilter, StoryContext context)
         {
             int failed = 0;
             foreach (var scenario in scenariosMatchingFilter)
@@ -32,7 +33,7 @@ namespace StorEvil.InPlace
                         failed++;
                 }
             }
-            return failed;
+            _failed += failed;
         }
     }
 }

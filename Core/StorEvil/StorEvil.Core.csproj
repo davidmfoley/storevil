@@ -71,6 +71,7 @@
     <Compile Include="Context\Matchers\PropertyOrFieldNameMatcher.cs" />
     <Compile Include="Context\Matches\ExactMatch.cs" />
     <Compile Include="Context\Matchers\MethodNameMatcher.cs" />
+    <Compile Include="Core\StorEvilResult.cs" />
     <Compile Include="Infrastructure\Filesystem.cs" />
     <Compile Include="Infrastructure\FileWriter.cs" />
     <Compile Include="InPlace\AssemblyGenerator.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Parsing\StoryProvider.cs" />
     <Compile Include="ResultListeners\GatheringResultListener.cs" />
     <Compile Include="ResultListeners\SparkReportGenerator.cs" />
+    <Compile Include="StubGeneration\ClipboardWriter.cs" />
     <Compile Include="StubGeneration\StubGenerator.cs" />
     <Compile Include="Utility\FunqEasyRegistrationHelper.cs" />
     <Compile Include="ResultListeners\CompositeListener.cs" />

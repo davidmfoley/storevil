@@ -1,3 +1,4 @@
+using System;
 using StorEvil.Context;
 using StorEvil.Core;
 
@@ -18,17 +19,21 @@ namespace StorEvil.Nunit
             _contextFactory = contextFactory;
         }
 
-        public int HandleStory(Story story)
+        public void HandleStory(Story story)
         {
             var sourceCode = FixtureGenerator.GenerateFixture(story, _contextFactory.GetContextForStory(story));
 
             TestFixtureWriter.WriteFixture(story.Id, sourceCode);
-            return 0;
         }
 
         public void Finished()
         {
             TestFixtureWriter.Finished();
+        }
+
+        public StorEvilResult GetResult()
+        {
+            return new StorEvilResult();
         }
     }
 }
