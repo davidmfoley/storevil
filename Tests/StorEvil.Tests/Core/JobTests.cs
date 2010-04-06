@@ -14,16 +14,12 @@ namespace StorEvil.Core.StorEvilJob_Specs
         public void Properties_Should_Match_Constructor_Parameters()
         {
             var storyProvider = Fake<IStoryProvider>();
-            var storyToContextMapper = Fake<IStoryContextFactory>();
             var testStoryHandler = Fake<IStoryHandler>();
 
-            var job = new StorEvilJob(storyProvider, storyToContextMapper, testStoryHandler);
+            var job = new StorEvilJob(storyProvider, testStoryHandler);
 
             job.StoryProvider
                 .ShouldEqual(storyProvider);
-
-            job.StoryContextFactory
-                .ShouldEqual(storyToContextMapper);
 
             job.Handler
                 .ShouldEqual(testStoryHandler);
@@ -38,9 +34,6 @@ namespace StorEvil.Core.StorEvilJob_Specs
             var job = GetJobWithMockDependencies();
 
             job.StoryProvider.Stub(x => x.GetStories()).Return(new[] {story});
-
-            job.StoryContextFactory.Stub(x => x.GetContextForStory(story))
-                .Return(contextType);
 
             job.Run();
             job.Handler.AssertWasCalled(x => x.HandleStory(story));
@@ -63,7 +56,6 @@ namespace StorEvil.Core.StorEvilJob_Specs
         {
             return new StorEvilJob(
                 Fake<IStoryProvider>(),
-                Fake<IStoryContextFactory>(),
                 Fake<IStoryHandler>());
         }
     }

@@ -9,17 +9,14 @@ namespace StorEvil.Core
     public class StorEvilJob : IStorEvilJob
     {
         public IStoryProvider StoryProvider { get; set; }
-        public IStoryContextFactory StoryContextFactory { get; set; }
         public IStoryHandler Handler { get; set; }
 
         public StorEvilJob(
             IStoryProvider storyProvider,
-            IStoryContextFactory storyContextFactory,
             IStoryHandler handler)
 
         {
             StoryProvider = storyProvider;
-            StoryContextFactory = storyContextFactory;
             Handler = handler;
         }
 

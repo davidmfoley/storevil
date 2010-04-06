@@ -48,7 +48,7 @@ namespace StorEvil.Resharper
             InPlaceStoryRunner handler = BuildInPlaceRunner(remoteTask);
             IStoryProvider provider = new SingleScenarioStoryProvider(scenario);
 
-            return new StorEvilJob(provider, _factory, handler);
+            return new StorEvilJob(provider, handler);
         }
 
         private InPlaceStoryRunner BuildInPlaceRunner(RemoteTask remoteTask)
