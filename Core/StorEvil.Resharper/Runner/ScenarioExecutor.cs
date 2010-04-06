@@ -12,13 +12,13 @@ namespace StorEvil.Resharper
     internal class ScenarioExecutor
     {
         private readonly IRemoteTaskServer _server;
-        private readonly IStoryToContextMapper _mapper;
+        private readonly IStoryContextFactory _factory;
         private ResharperResultListener _listener;
 
-        public ScenarioExecutor(IRemoteTaskServer server, IStoryToContextMapper mapper)
+        public ScenarioExecutor(IRemoteTaskServer server, IStoryContextFactory factory)
         {
             _server = server;
-            _mapper = mapper;
+            _factory = factory;
         }
 
         public TaskResult Execute(RemoteTask remoteTask)
@@ -48,7 +48,7 @@ namespace StorEvil.Resharper
             InPlaceStoryRunner handler = BuildInPlaceRunner(remoteTask);
             IStoryProvider provider = new SingleScenarioStoryProvider(scenario);
 
-            return new StorEvilJob(provider, _mapper, handler);
+            return new StorEvilJob(provider, _factory, handler);
         }
 
         private InPlaceStoryRunner BuildInPlaceRunner(RemoteTask remoteTask)
@@ -56,7 +56,7 @@ namespace StorEvil.Resharper
             _listener = new ResharperResultListener(_server, remoteTask);
             IScenarioPreprocessor preprocessor = new ScenarioPreprocessor();
 
-            return new InPlaceStoryRunner(_listener, preprocessor, new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())), new IncludeAllFilter() );
+            return new InPlaceStoryRunner(_listener, preprocessor, new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())), new IncludeAllFilter(), _factory );
         }
     }
 }

@@ -10,23 +10,25 @@ namespace StorEvil.InPlace
     {
         protected readonly IResultListener ResultListener;
         private readonly IStoryFilter _filter;
+        private readonly IStoryContextFactory _contextFactory;
         private readonly IScenarioPreprocessor _preprocessor;
 
         protected InPlaceStoryRunnerBase(IResultListener resultListener,
                                          IScenarioPreprocessor preprocessor,
-                                         IStoryFilter filter)
+                                         IStoryFilter filter, IStoryContextFactory contextFactory)
         {
             ResultListener = resultListener;
             _preprocessor = preprocessor;
             _filter = filter;
+            _contextFactory = contextFactory;
         }
 
-        public int HandleStory(Story story, StoryContext context)
+        public int HandleStory(Story story)
         {
             ResultListener.StoryStarting(story);
             IEnumerable<Scenario> scenariosMatchingFilter = GetScenariosMatchingFilter(story);
 
-            return Execute(story, scenariosMatchingFilter, context);
+            return Execute(story, scenariosMatchingFilter, _contextFactory.GetContextForStory(story));
         }
 
         protected abstract int Execute(Story story, IEnumerable<Scenario> scenariosMatchingFilter, StoryContext context);

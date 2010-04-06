@@ -21,19 +21,27 @@ namespace StorEvil.Console
             if (command == null || command == "help")
                 return new HelpContainerConfigurator();
 
-            if (command == "nunit" || command == "execute")
+            if (CommandRequiresValidSettings(command))
                 SanityCheckSettings();
 
             if (command == "nunit")
-                containerConfigurator = new NUnitContainerConfigurator();
-            else if (command == "execute")
-                containerConfigurator = new InPlaceContainerConfigurator();
-            else if (command == "init")
-                containerConfigurator = new InitContainerConfigurator();
-            else if (command == "stub")
-                containerConfigurator = new StubGeneratorContainerConfigurator();
+                return new NUnitContainerConfigurator();
 
-            return containerConfigurator ?? new HelpContainerConfigurator();
+            if (command == "execute")
+                return new InPlaceContainerConfigurator();
+
+            if (command == "init")
+                return new InitContainerConfigurator();
+
+            if (command == "stub")
+                return new StubGeneratorContainerConfigurator();
+
+            return new HelpContainerConfigurator();
+        }
+
+        private bool CommandRequiresValidSettings(string command)
+        {
+            return command == "nunit" || command == "execute" || command == "debug";
         }
 
         private void SanityCheckSettings()

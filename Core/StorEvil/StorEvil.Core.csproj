@@ -123,7 +123,7 @@
     <Compile Include="Parsing\StoryInfo.cs" />
     <Compile Include="Interpreter\Invocation.cs" />
     <Compile Include="Interpreter\InvocationChain.cs" />
-    <Compile Include="Context\IStoryToContextMapper.cs" />
+    <Compile Include="Context\IStoryContextFactory.cs" />
     <Compile Include="Nunit\NUnitFixtureGenerator.cs" />
     <Compile Include="Utility\Helpers.cs" />
     <Compile Include="Parsing\IStoryParser.cs" />
@@ -149,7 +149,7 @@
     <Compile Include="Core\StorEvilJob.cs" />
     <Compile Include="Core\Story.cs" />
     <Compile Include="Parsing\StoryParser.cs" />
-    <Compile Include="Context\StoryToContextMapper.cs" />
+    <Compile Include="Context\StoryContextFactory.cs" />
     <Compile Include="Utility\ReflectionExtensions.cs" />
     <Compile Include="Utility\StringUtility.cs" />
     <Compile Include="Nunit\NUnitTestMethodGenerator.cs" />

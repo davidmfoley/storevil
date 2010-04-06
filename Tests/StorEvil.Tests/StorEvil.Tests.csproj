@@ -70,6 +70,7 @@
     <Compile Include="InPlace\Inplace_assembly_generation.cs" />
     <Compile Include="Integration\Class1.cs" />
     <Compile Include="NUnit\Stub_generation_specs.cs" />
+    <Compile Include="NUnit\FakeStoryContextFactory.cs" />
     <Compile Include="Parsing\ScenarioLineParser_Specs.cs" />
     <Compile Include="Utility\container_tests.cs" />
     <Compile Include="Configuration\FilesystemConfigReaderTests.cs" />

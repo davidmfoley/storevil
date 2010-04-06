@@ -12,8 +12,11 @@ using StorEvil.Parsing;
 using StorEvil.ResultListeners;
 using StorEvil.Utility;
 
-namespace StorEvil.InPlace_Compiled
+namespace StorEvil.InPlace.Compiled
 {
+
+
+
     [TestFixture]
     public class Inplace_assembly_generation
     {
@@ -93,8 +96,8 @@ namespace StorEvil.InPlace_Compiled
             Runner = new InPlaceCompilingStoryRunner(ResultListener, new ScenarioPreprocessor(),
                                                      new ScenarioInterpreter(
                                                          new InterpreterForTypeFactory(new ExtensionMethodHandler())),
-                                                     new IncludeAllFilter());
-            Runner.HandleStory(story, Context);
+                                                     new IncludeAllFilter(), new StoryContextFactory());
+            Runner.HandleStory(story);
         }
 
         protected argT Any<argT>()

@@ -5,6 +5,7 @@ using Rhino.Mocks;
 using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Interpreter;
+using StorEvil.NUnit;
 using StorEvil.Parsing;
 using StorEvil.Utility;
 
@@ -27,16 +28,17 @@ namespace StorEvil.InPlace
                 var runner = new InPlaceCompilingStoryRunner(ResultListener, new ScenarioPreprocessor(),
                                                 new ScenarioInterpreter(
                                                     new InterpreterForTypeFactory(new ExtensionMethodHandler())),
-                                                new IncludeAllFilter());
-                runner.HandleStory(story, Context);
+                                                new IncludeAllFilter(), new FakeStoryContextFactory(Context));
+                runner.HandleStory(story);
+                runner.Finished();
             }
             else
             {
                 var runner = new InPlaceStoryRunner(ResultListener, new ScenarioPreprocessor(),
                                                 new ScenarioInterpreter(
                                                     new InterpreterForTypeFactory(new ExtensionMethodHandler())),
-                                                new IncludeAllFilter());
-                runner.HandleStory(story, Context);
+                                                new IncludeAllFilter(), new FakeStoryContextFactory(Context));
+                runner.HandleStory(story);
             }
 
         }

@@ -1,5 +1,6 @@
 using Funq;
 using StorEvil.Configuration;
+using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Infrastructure;
 using StorEvil.InPlace;
@@ -15,7 +16,7 @@ namespace StorEvil.Console
         {
             container.EasyRegister<IStorEvilJob, StorEvilJob>();
             container.Register<IStoryHandler>(
-                c => new StubGenerator(c.Resolve<ScenarioInterpreter>(), new ImplementationHelper(), GetWriter())
+                c => new StubGenerator(c.Resolve<ScenarioInterpreter>(), new ImplementationHelper(), GetWriter(), c.Resolve<IStoryContextFactory>())
                 );
 
             container.Register<IStoryFilter>(new IncludeAllFilter());

@@ -81,7 +81,7 @@ namespace StorEvil.Resharper
         private void SetUpScenarioExecutorForCurrentProject(TaskExecutionNode node)
         {
             var projectTask = node.RemoteTask as RunProjectTask;
-            var mapper = new StoryToContextMapper();
+            var mapper = new StoryContextFactory();
             projectTask.Assemblies.ForEach(mapper.AddAssembly);
 
             _executor = new ScenarioExecutor(Server, mapper);

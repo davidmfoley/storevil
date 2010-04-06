@@ -18,8 +18,9 @@ namespace StorEvil.InPlace
         public InPlaceCompilingStoryRunner(IResultListener listener,
                                            IScenarioPreprocessor preprocessor,
                                            ScenarioInterpreter scenarioInterpreter,
-                                           IStoryFilter filter)
-            : base(listener, preprocessor, filter)
+                                           IStoryFilter filter,
+                                            IStoryContextFactory contextFactory)
+            : base(listener, preprocessor, filter, contextFactory)
         {
             _scenarioInterpreter = scenarioInterpreter;
             _memberInvoker = new MemberInvoker();

@@ -9,17 +9,17 @@ namespace StorEvil.Core
     public class StorEvilJob : IStorEvilJob
     {
         public IStoryProvider StoryProvider { get; set; }
-        public IStoryToContextMapper StoryToContextMapper { get; set; }
+        public IStoryContextFactory StoryContextFactory { get; set; }
         public IStoryHandler Handler { get; set; }
 
         public StorEvilJob(
             IStoryProvider storyProvider,
-            IStoryToContextMapper storyToContextMapper,
+            IStoryContextFactory storyContextFactory,
             IStoryHandler handler)
 
         {
             StoryProvider = storyProvider;
-            StoryToContextMapper = storyToContextMapper;
+            StoryContextFactory = storyContextFactory;
             Handler = handler;
         }
 
@@ -27,10 +27,8 @@ namespace StorEvil.Core
         {
             int failed = 0;
             foreach (var story in StoryProvider.GetStories())
-            {
-                var context = StoryToContextMapper.GetContextForStory(story);
-
-                failed += Handler.HandleStory(story, context);
+            {      
+                failed += Handler.HandleStory(story);
             }
 
             Handler.Finished();

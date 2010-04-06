@@ -49,12 +49,12 @@ namespace StorEvil.Console
             container.EasyRegister<InterpreterForTypeFactory>();
             container.EasyRegister<ExtensionMethodHandler>();
 
-            container.Register<IStoryToContextMapper>(GetStoryToContextMapper(settings));
+            container.Register<IStoryContextFactory>(GetStoryToContextMapper(settings));
         }
 
-        private StoryToContextMapper GetStoryToContextMapper(ConfigSettings settings)
+        private StoryContextFactory GetStoryToContextMapper(ConfigSettings settings)
         {
-            var mapper = new StoryToContextMapper();
+            var mapper = new StoryContextFactory();
             foreach (var location in settings.AssemblyLocations)
             {
                 DebugTrace.Trace(this.GetType().Name, "Adding context assembly:" + location);

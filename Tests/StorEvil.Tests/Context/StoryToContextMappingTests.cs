@@ -22,7 +22,7 @@ namespace StorEvil.Context.StoryToContextMapper_Specs
         {
             var story = new Story("context test", "context test", new List<IScenario>());
 
-            var mapper = new StoryToContextMapper();
+            var mapper = new StoryContextFactory();
             mapper.AddContext<TestMappingContext>();
 
             var context = mapper.GetContextForStory(story);
@@ -32,7 +32,7 @@ namespace StorEvil.Context.StoryToContextMapper_Specs
         [Test]
         public void Should_Register_Assembly_Types()
         {
-            var mapper = new StoryToContextMapper();
+            var mapper = new StoryContextFactory();
             mapper.AddAssembly(GetType().Assembly);
 
             var context = mapper.GetContextForStory(new Story("context test", "context test", new List<IScenario>()));
@@ -42,7 +42,7 @@ namespace StorEvil.Context.StoryToContextMapper_Specs
         [Test, Ignore()]
         public void Throws_if_no_context_added()
         {
-            var mapper = new StoryToContextMapper();
+            var mapper = new StoryContextFactory();
 
             Expect.ThisToThrow<ConfigurationException>(() => mapper.GetContextForStory(new Story("unknown type",
                                                                                                  "totally bogus",
@@ -58,7 +58,7 @@ namespace StorEvil.Context.StoryToContextMapper_Specs
         [SetUp]
         public void SetupContext()
         {
-            var mapper = new StoryToContextMapper();
+            var mapper = new StoryContextFactory();
             mapper.AddContext<TestMappingContext>();
             StoryContext = mapper.GetContextForStory(new Story("", "", new IScenario[] {}));
         }
@@ -103,7 +103,7 @@ namespace StorEvil.Context.StoryToContextMapper_Specs
         [SetUp]
         public void SetupContext()
         {
-            var mapper = new StoryToContextMapper();
+            var mapper = new StoryContextFactory();
             mapper.AddContext<TestMappingContext>();
             mapper.AddContext<DependentMappingContext>();
             StoryContext = mapper.GetContextForStory(new Story("", "", new IScenario[] {}));

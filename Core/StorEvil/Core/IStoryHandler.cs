@@ -4,7 +4,7 @@ namespace StorEvil.Core
 {
     public interface IStoryHandler
     {
-        int HandleStory(Story story, StoryContext context);
+        int HandleStory(Story story);
         void Finished();
     }
 }

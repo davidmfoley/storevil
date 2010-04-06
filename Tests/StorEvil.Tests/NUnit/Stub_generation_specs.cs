@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -26,7 +27,7 @@ namespace StorEvil.NUnit
 
             Generator =
                 new StubGenerator(new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())),
-                                  new ImplementationHelper(), FakeWriter);
+                                  new ImplementationHelper(), FakeWriter, new FakeStoryContextFactory());
 
             TestStory = new Story("foo", "", new[]
                                                  {
@@ -35,7 +36,7 @@ namespace StorEvil.NUnit
                                                       TestHelper.BuildScenario("", new[] { "this line's weird, punctuation! should be: handled"})
                                                  });
 
-            Generator.HandleStory(TestStory, new StoryContext());
+            Generator.HandleStory(TestStory);
             Generator.Finished();
 
             Suggestions = (string) FakeWriter.GetArgumentsForCallsMadeOn(x => x.Write(Arg<string>.Is.Anything))[0][0];            

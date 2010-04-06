@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using Rhino.Mocks;
+using StorEvil.Context;
 using StorEvil.InPlace;
 using StorEvil.Interpreter;
 using StorEvil.Parsing;
@@ -16,7 +17,7 @@ namespace StorEvil.InPlace.Compiled
         {
             ResultListener = MockRepository.GenerateStub<IResultListener>();
 
-            var inPlaceRunner = new InPlaceCompilingStoryRunner(ResultListener, new ScenarioPreprocessor(), new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())), new IncludeAllFilter());
+            var inPlaceRunner = new InPlaceCompilingStoryRunner(ResultListener, new ScenarioPreprocessor(), new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())), new IncludeAllFilter(), new StoryContextFactory());
             inPlaceRunner.Finished();
         }
 
@@ -40,7 +41,7 @@ namespace StorEvil.InPlace.NonCompiled
         {
             ResultListener = MockRepository.GenerateStub<IResultListener>();
 
-            var inPlaceRunner = new InPlaceStoryRunner(ResultListener, new ScenarioPreprocessor(), new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())), new IncludeAllFilter());
+            var inPlaceRunner = new InPlaceStoryRunner(ResultListener, new ScenarioPreprocessor(), new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())), new IncludeAllFilter(), new StoryContextFactory());
             inPlaceRunner.Finished();
         }
 
