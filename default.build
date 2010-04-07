@@ -34,8 +34,20 @@
  
   <Target Name="BuildCore">
     <MSBuild
-  Projects="Core\StorEvil\StorEvil.Core.csproj;Core\StorEvil.Assertions\StorEvil.Assertions.csproj;Core\StorEvil.Console\StorEvil.csproj;Core/StorEvil.Resharper/StorEvil.Resharper.csproj"
+  Projects="Core\StorEvil\StorEvil.Core.csproj;Core\StorEvil.Assertions\StorEvil.Assertions.csproj;Core\StorEvil.Console\StorEvil.csproj"
   Properties="OutputPath=$(OutputPath)\Core"
+        />
+  </Target>
+
+  <Target Name="BuildReSharper">
+    <CreateItem Include="$(OutputPath)\Core\*.dll">
+      <Output TaskParameter="Include" ItemName="DllFiles" />
+    </CreateItem>
+    <MakeDir Directories="$(OutputPath)\ReSharper"/>
+    <Copy SourceFiles="@(DllFiles)" DestinationFolder="$(PackageDirectory)" />
+    <MSBuild
+  Projects="Core\StorEvil\StorEvil.Core.csproj;Core\StorEvil.Assertions\StorEvil.Assertions.csproj;Core\StorEvil.Console\StorEvil.csproj;Core/StorEvil.Resharper/StorEvil.Resharper.csproj"
+  Properties="OutputPath=$(OutputPath)\Resharper"
         />
   </Target>
 
