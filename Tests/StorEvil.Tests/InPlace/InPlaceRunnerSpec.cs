@@ -44,11 +44,12 @@ namespace StorEvil.InPlace
                                          AssemblyLocations = new[]
                                                                  {
                                                                      GetType().Assembly.Location,
-                                                                     typeof (TestExtensionMethods).Assembly.Location
+                                                                     typeof (TestExtensionMethods).Assembly.Location,
+                                                                     typeof (Story).Assembly.Location
                                                                  }
                                      };
 
-            var remoteHandlerFactory = new RemoteHandlerFactory(new AssemblyGenerator(preprocessor), configSettings, new Filesystem() );
+            var remoteHandlerFactory = new TestRemoteHandlerFactory(new AssemblyGenerator(preprocessor), configSettings, new Filesystem() );
                                      
             var runner = new InPlaceCompilingStoryRunner(
                 remoteHandlerFactory,                                                
@@ -106,6 +107,20 @@ namespace StorEvil.InPlace
         {
             ResultListener.AssertWasNotCalled(x => x.ScenarioFailed(Any<ScenarioFailureInfo>()));
         }
+    }
+
+    internal class TestRemoteHandlerFactory : RemoteHandlerFactory
+    {
+        public TestRemoteHandlerFactory(AssemblyGenerator assemblyGenerator, 
+            ConfigSettings configSettings, Filesystem filesystem) : base(assemblyGenerator,configSettings,filesystem)
+        {}
+        public override IRemoteStoryHandler GetHandler(Story story, System.Collections.Generic.IEnumerable<Scenario> scenarios, IResultListener listener)
+        {
+            var handler = base.GetHandler(story, scenarios, listener) as RemoteStoryHandler;
+            handler.InTest = true;
+
+            return handler;
+        } 
     }
 
     public class LocalStoryHandler : IRemoteStoryHandler

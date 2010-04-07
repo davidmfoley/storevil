@@ -102,6 +102,17 @@
                 ItemName="ExampleAssembly" />
     </MSBuild>
 
+    <Message Text="Executing in debug mode: $(ExampleProjectDirectory)/$(ExampleProject)"/>
+    <Exec
+     WorkingDirectory="$(ExampleProjectDirectory)"
+     Command="$(MSBuildProjectDirectory)\_build\Core\StorEvil.exe debug -a @(ExampleAssembly) $(OutputPath)\Core\StorEvil.Assertions.dll"
+     IgnoreExitCode ="true"
+     >
+      <Output
+        TaskParameter="ExitCode"
+        ItemName="InPlaceExitCode" />
+    </Exec>
+
     <Message Text="Executing in-place: $(ExampleProjectDirectory)/$(ExampleProject)"/>
     <Exec
      WorkingDirectory="$(ExampleProjectDirectory)"
@@ -110,7 +121,7 @@
      >
       <Output
         TaskParameter="ExitCode"
-        ItemName="InPlaceExitCode" />
+        ItemName="DebugExitCode" />
     </Exec>
 
     <Message Text="Executing in NUnit: $(ExampleProjectDirectory)/$(ExampleProject)"/>
@@ -136,9 +147,14 @@
     <Error
             Text="NUnit failures: Expected $(ExpectedFailures) but got @(NUnitExitCode)"
             Condition="$(ExpectedFailures) != @(NUnitExitCode)" />
+    
     <Error
            Text="In place failures: Expected $(ExpectedFailures) but got @(InPlaceExitCode)"
-           Condition="$(ExpectedFailures) != @(NUnitExitCode)" />
+           Condition="$(ExpectedFailures) != @(InPlaceExitCode)" />
+
+    <Error
+          Text="Debug mode failures: Expected $(ExpectedFailures) but got @(DebugExitCode)"
+          Condition="$(ExpectedFailures) != @(DebugExitCode)" />
   </Target>
   
  

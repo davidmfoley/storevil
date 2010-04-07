@@ -1,10 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using StorEvil.Context;
 using StorEvil.Core;
-using StorEvil.Interpreter;
 using StorEvil.Parsing;
 
 namespace StorEvil.InPlace

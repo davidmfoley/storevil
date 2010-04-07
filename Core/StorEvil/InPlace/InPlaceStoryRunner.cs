@@ -8,7 +8,7 @@ namespace StorEvil.InPlace
 {
     public class InPlaceStoryRunner :InPlaceStoryRunnerBase
     {
-          private readonly InPlaceScenarioRunner _scenarioRunner;
+        private readonly InPlaceScenarioRunner _scenarioRunner;
         private int _failed;
 
         public InPlaceStoryRunner(IResultListener listener,
@@ -33,7 +33,8 @@ namespace StorEvil.InPlace
                         failed++;
                 }
             }
-            _failed += failed;
+
+            Result.Failed = Result.Failed + failed;
         }
     }
 }

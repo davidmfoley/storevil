@@ -3,7 +3,7 @@ using System;
 namespace StorEvil.Core
 {
     [Serializable]
-    public struct JobResult
+    public class JobResult
     {
         public int Succeeded { get; set; }
         public int Failed { get; set; }

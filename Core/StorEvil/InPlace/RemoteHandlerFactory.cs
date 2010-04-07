@@ -25,7 +25,7 @@ namespace StorEvil.InPlace
             _filesystem = filesystem;
         }
 
-        public IRemoteStoryHandler GetHandler(Story story, IEnumerable<Scenario> scenarios, IResultListener listener)
+        public virtual IRemoteStoryHandler GetHandler(Story story, IEnumerable<Scenario> scenarios, IResultListener listener)
         {
             var assemblyLocation = _assemblyGenerator.GenerateAssembly(story, scenarios, _settings.AssemblyLocations);
             return new RemoteStoryHandler(assemblyLocation, _filesystem, new RemoteListener(listener), _settings.AssemblyLocations);
