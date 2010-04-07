@@ -26,8 +26,11 @@ namespace StorEvil.InPlace
 
             foreach (var line in scenario.Body)
             {
-                if (!_lineExecuter.ExecuteLine(scenario, storyContext, line.Text))
+                LineStatus status = _lineExecuter.ExecuteLine(scenario, storyContext, line.Text);
+                if (LineStatus.Failed == status)
                     return false;
+                if (LineStatus.Pending ==status)
+                    return true;
             }
 
             _listener.ScenarioSucceeded(scenario);

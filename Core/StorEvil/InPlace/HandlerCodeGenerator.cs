@@ -43,20 +43,21 @@ scenarioFailed = false;
 scenarioInterpreter.NewScenario();
 _listener.ScenarioStarting(scenario);
 context = storyContext.GetScenarioContext();
+lastStatus = LineStatus.Passed;
 
 #line 1  """ + story.Id + @"""
 #line hidden");
                 foreach (var line in GetLines(scenario))
                 {
                     codeBuilder.AppendFormat(@"
-if (!scenarioFailed) {{
+if (lastStatus == LineStatus.Passed) {{
 #line {0} 
-scenarioFailed = scenarioFailed || !lineExecuter.ExecuteLine(scenario, context, @""{1}"");
+lastStatus = lineExecuter.ExecuteLine(scenario, context, @""{1}"");
 #line hidden
 }}  
 ", line.LineNumber, line.Text.Replace("\"", "\"\""));
                 }
-                codeBuilder.AppendLine(@"if (scenarioFailed) {failures++;} else { _listener.ScenarioSucceeded(scenario);}");
+                codeBuilder.AppendLine(@"if (lastStatus == LineStatus.Failed) {failures++;} else { _listener.ScenarioSucceeded(scenario);}");
 
                 i++;
             }
@@ -104,6 +105,7 @@ namespace StorEvilTestAssembly {{
             bool scenarioFailed;
             Scenario scenario;
             ScenarioContext context;
+            LineStatus lastStatus;
 
             {2}
 

@@ -5,6 +5,7 @@ using NUnit.Framework;
 using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Interpreter;
+using StorEvil.ResultListeners;
 
 namespace StorEvil.InPlace
 {
@@ -26,7 +27,7 @@ namespace StorEvil.InPlace
         private object _lastResult;
         private readonly ImplementationHelper _implementationHelper = new ImplementationHelper();
 
-        public bool ExecuteLine(Scenario scenario, ScenarioContext storyContext, string line)
+        public LineStatus ExecuteLine(Scenario scenario, ScenarioContext storyContext, string line)
         {
             // Debug.WriteLine("SLE: " + line);
             InvocationChain chain = GetMatchingChain(storyContext, line);
@@ -35,14 +36,14 @@ namespace StorEvil.InPlace
             {
                 var suggestion = _implementationHelper.Suggest(line);
                 _listener.ScenarioPending(new ScenarioPendingInfo(scenario, line, suggestion));
-                return false;
+                return LineStatus.Pending;
             }
 
             if (!ExecuteChain(scenario, storyContext, chain, line))
-                return false;
+                return LineStatus.Failed;
 
             _listener.Success(scenario, line);
-            return true;
+            return LineStatus.Passed;
         }
 
         private bool ExecuteChain(Scenario scenario, ScenarioContext storyContext, InvocationChain chain, string line)
@@ -98,5 +99,12 @@ namespace StorEvil.InPlace
 
             return noStackTrace ? ex.Message : ex.Message + "\r\n" + ex;
         }
+    }
+
+    public enum LineStatus
+    {
+        Passed,
+        Failed,
+        Pending
     }
 }

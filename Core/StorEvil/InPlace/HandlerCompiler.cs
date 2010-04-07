@@ -37,14 +37,14 @@ namespace StorEvil.InPlace
 
         private static void ThrowAndLogCompilerErrors(string sourceCode, CompilerResults results)
         {
-            //Debug.WriteLine(sourceCode);
+            
             if (results.Errors.Count == 0)
                 return;
 
             foreach (var error in results.Errors)
                 Debug.WriteLine(error);
 
-            
+            Debug.WriteLine(sourceCode);            
 
             throw new ApplicationException("Could not compile");
         }
