@@ -57,6 +57,14 @@ namespace StorEvil.Console
         }
 
         [Test]
+        public void can_create_debug_job()
+        {
+            var result = Factory.ParseArguments(new[] { "debug" });
+            result.ShouldBeOfType<StorEvilJob>();
+            result.ShouldNotBeNull();
+        }
+
+        [Test]
         public void can_create_nunit_job()
         {
             var result =

@@ -30,6 +30,9 @@ namespace StorEvil.Console
             if (command == "execute")
                 return new InPlaceContainerConfigurator();
 
+            if (command == "debug")
+                return new InPlaceDebugContainerConfigurator();
+
             if (command == "init")
                 return new InitContainerConfigurator();
 

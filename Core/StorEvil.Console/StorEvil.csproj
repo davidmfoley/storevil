@@ -53,6 +53,7 @@
     <Compile Include="JobFactory.cs" />
     <Compile Include="CommonSwitchParser.cs" />
     <Compile Include="Jobs\DisplayHelpJob.cs" />
+    <Compile Include="Jobs\InPlaceDebugContainerConfigurator.cs" />
     <Compile Include="Jobs\StdOutWriter.cs" />
     <Compile Include="Jobs\StubGeneratorContainerConfigurator.cs" />
     <Compile Include="Jobs\HelpContainerConfigurator.cs" />
