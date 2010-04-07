@@ -57,7 +57,7 @@ lastStatus = lineExecuter.ExecuteLine(scenario, context, @""{1}"");
 }}  
 ", line.LineNumber, line.Text.Replace("\"", "\"\""));
                 }
-                codeBuilder.AppendLine(@"if (lastStatus == LineStatus.Failed) {failures++;} else { _listener.ScenarioSucceeded(scenario);}");
+                codeBuilder.AppendLine(@"if (lastStatus == LineStatus.Failed) {Result.Failed++; } else if (lastStatus == LineStatus.Pending) {Result.Pending++; } else { Result.Succeeded++; _listener.ScenarioSucceeded(scenario);}");
 
                 i++;
             }

@@ -57,6 +57,12 @@
 
   <Target Name="RunExamples" DependsOnTargets="CleanOutput;BuildCore">
     <MSBuild
+      Projects="$(MSBuildProjectFile)"
+      Targets="RunExample"
+      Properties="ExampleProjectDirectory=$(ExamplesDirectory)\Pizza;ExampleProject=Pizza.csproj;ExpectedFailures=1"
+        />
+    
+    <MSBuild
           Projects="$(MSBuildProjectFile)"
           Targets="RunExample"
           Properties="ExampleProjectDirectory=$(ExamplesDirectory)\Tutorial;ExampleProject=Tutorial.csproj"
@@ -80,11 +86,6 @@
         Properties="ExampleProjectDirectory=$(ExamplesDirectory)\ConwaysLife;ExampleProject=ConwaysLife.csproj"
         />
 
-    <MSBuild
-        Projects="$(MSBuildProjectFile)"
-        Targets="RunExample"
-        Properties="ExampleProjectDirectory=$(ExamplesDirectory)\Pizza;ExampleProject=Pizza.csproj;ExpectedFailures=1"
-        />
   </Target>
 
   <!-- runs an example project in both In-place and NUnit modes-->
@@ -110,7 +111,7 @@
      >
       <Output
         TaskParameter="ExitCode"
-        ItemName="InPlaceExitCode" />
+        ItemName="DebugExitCode" />
     </Exec>
 
     <Message Text="Executing in-place: $(ExampleProjectDirectory)/$(ExampleProject)"/>
@@ -121,7 +122,7 @@
      >
       <Output
         TaskParameter="ExitCode"
-        ItemName="DebugExitCode" />
+        ItemName="InPlaceExitCode" />
     </Exec>
 
     <Message Text="Executing in NUnit: $(ExampleProjectDirectory)/$(ExampleProject)"/>
@@ -146,15 +147,15 @@
 
     <Error
             Text="NUnit failures: Expected $(ExpectedFailures) but got @(NUnitExitCode)"
-            Condition="$(ExpectedFailures) != @(NUnitExitCode)" />
+            Condition="'$(ExpectedFailures)' != '@(NUnitExitCode)'" />
     
     <Error
            Text="In place failures: Expected $(ExpectedFailures) but got @(InPlaceExitCode)"
-           Condition="$(ExpectedFailures) != @(InPlaceExitCode)" />
+           Condition="'$(ExpectedFailures)' != '@(InPlaceExitCode)'" />
 
     <Error
           Text="Debug mode failures: Expected $(ExpectedFailures) but got @(DebugExitCode)"
-          Condition="$(ExpectedFailures) != @(DebugExitCode)" />
+          Condition="'$(ExpectedFailures)' != '@(DebugExitCode)'" />
   </Target>
   
  
