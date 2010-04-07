@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.Linq;
 using StorEvil.Core;
 using StorEvil.Infrastructure;
 
@@ -17,7 +20,7 @@ namespace StorEvil.InPlace
         private IFilesystem _filesystem;
         private IResultListener _listener;
 
-        public RemoteStoryHandler(string assemblyLocation, IFilesystem filesystem, IResultListener listener)
+        public RemoteStoryHandler(string assemblyLocation, IFilesystem filesystem, IResultListener listener, IEnumerable<string> assemblyLocations)
         {
             _assemblyLocation = assemblyLocation;
             _listener = listener;
@@ -25,10 +28,10 @@ namespace StorEvil.InPlace
 
             // Construct and initialize settings for a second AppDomain.
             var domainSetup = new AppDomainSetup();
-            domainSetup.ApplicationBase = Environment.CurrentDirectory;
-            domainSetup.DisallowBindingRedirects = false;
-            domainSetup.DisallowCodeDownload = true;
-            domainSetup.ConfigurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+            //domainSetup.ApplicationBase = Environment.CurrentDirectory;
+            //domainSetup.DisallowBindingRedirects = false;
+            domainSetup.ShadowCopyDirectories = GetDirectories(assemblyLocations);
+            //domainSetup.ConfigurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
 
             // Create the second AppDomain.
             _appDomain = AppDomain.CreateDomain("TestDomain", null, domainSetup);
@@ -36,6 +39,12 @@ namespace StorEvil.InPlace
             Handler = _appDomain.CreateInstanceFrom(
                 _assemblyLocation,
                 "StorEvilTestAssembly.StorEvilDriver",true, 0, null, new object[] {listener}, CultureInfo.CurrentCulture, new object[0], AppDomain.CurrentDomain.Evidence).Unwrap() as IStoryHandler;
+        }
+
+        private string GetDirectories(IEnumerable<string> assemblyLocations)
+        {
+            var dirs = assemblyLocations.Select(x => Path.GetDirectoryName(x)).Distinct().ToArray();
+            return string.Join(";", dirs.ToArray());
         }
 
         public IStoryHandler Handler { get; private set; }
