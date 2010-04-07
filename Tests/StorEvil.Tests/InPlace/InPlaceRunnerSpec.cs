@@ -2,8 +2,10 @@ using System;
 using System.Linq;
 using System.Threading;
 using Rhino.Mocks;
+using StorEvil.Configuration;
 using StorEvil.Context;
 using StorEvil.Core;
+using StorEvil.Infrastructure;
 using StorEvil.Interpreter;
 using StorEvil.NUnit;
 using StorEvil.Parsing;
@@ -25,22 +27,45 @@ namespace StorEvil.InPlace
 
             if (UseCompilingRunner())
             {
-                var runner = new InPlaceCompilingStoryRunner(ResultListener, new ScenarioPreprocessor(),
-                                                new ScenarioInterpreter(
-                                                    new InterpreterForTypeFactory(new ExtensionMethodHandler())),
-                                                new IncludeAllFilter(), new FakeStoryContextFactory(Context));
-                runner.HandleStory(story);
-                runner.Finished();
+                RunInCompilingRunner(story);
             }
             else
             {
-                var runner = new InPlaceStoryRunner(ResultListener, new ScenarioPreprocessor(),
-                                                new ScenarioInterpreter(
-                                                    new InterpreterForTypeFactory(new ExtensionMethodHandler())),
-                                                new IncludeAllFilter(), new FakeStoryContextFactory(Context));
-                runner.HandleStory(story);
+                GetRunner().HandleStory(story);
             }
+        }
 
+        private void RunInCompilingRunner(Story story)
+        {
+            var preprocessor = new ScenarioPreprocessor();
+
+            var configSettings = new ConfigSettings
+                                     {
+                                         AssemblyLocations = new[]
+                                                                 {
+                                                                     GetType().Assembly.Location,
+                                                                     typeof (TestExtensionMethods).Assembly.Location
+                                                                 }
+                                     };
+
+            var remoteHandlerFactory = new RemoteHandlerFactory(new AssemblyGenerator(preprocessor), configSettings, new Filesystem() );
+                                     
+            var runner = new InPlaceCompilingStoryRunner(
+                remoteHandlerFactory,                                                
+                ResultListener, 
+                preprocessor,                                               
+                new IncludeAllFilter(), 
+                new FakeStoryContextFactory(Context));
+            runner.HandleStory(story);
+            runner.Finished();
+        }
+
+        private InPlaceStoryRunner GetRunner()
+        {
+            return new InPlaceStoryRunner(ResultListener, new ScenarioPreprocessor(),
+                                          new ScenarioInterpreter(
+                                              new InterpreterForTypeFactory(new ExtensionMethodHandler())),
+                                          new IncludeAllFilter(), new FakeStoryContextFactory(Context));
         }
 
         private bool UseCompilingRunner()
@@ -65,6 +90,42 @@ namespace StorEvil.InPlace
             int lineNumber = 0;
             return new Scenario("test", lines.Select(line=> new ScenarioLine {Text = line, LineNumber = ++lineNumber}).ToArray());
         }
+
+        protected void AssertLineSuccess(string expectedLine)
+        {
+            ResultListener.AssertWasCalled(x => x.Success(Any<Scenario>(), Arg<string>.Is.Equal(expectedLine)));
+        }
+
+        protected void AssertScenarioSuccess()
+        {
+            var args = ResultListener.GetArgumentsForCallsMadeOn(x => x.ScenarioSucceeded(Any<Scenario>()));
+            args.Count().ShouldBeGreaterThan(0);
+        }
+
+        protected void AssertNoFailures()
+        {
+            ResultListener.AssertWasNotCalled(x => x.ScenarioFailed(Any<ScenarioFailureInfo>()));
+        }
+    }
+
+    public class LocalStoryHandler : IRemoteStoryHandler
+    {
+        private readonly IStoryHandler _handler;
+
+        public LocalStoryHandler(IStoryHandler handler)
+        {
+            _handler = handler;
+        }
+
+        public void Dispose()
+        {
+          
+        }
+
+        public IStoryHandler Handler
+        {
+            get { return _handler; }
+        }
     }
 
     internal interface UsingCompiledRunner
@@ -75,6 +136,7 @@ namespace StorEvil.InPlace
     {
     }
 
+    [Context]
     public class InPlaceRunnerTestContext
     {
         public static bool WhenSomeActionCalled;
@@ -94,6 +156,11 @@ namespace StorEvil.InPlace
             WhenSomeActionCalled = true;
         }
 
+        public bool then_some_action_was_called()
+        {
+            return WhenSomeActionCalled;
+        }
+
         public void WhenSomeOtherAction()
         {
             WhenSomeOtherActionCalled = true;
@@ -103,6 +170,11 @@ namespace StorEvil.InPlace
         public void RegexMatchWithParam(int param)
         {
             RegexMatchParamValue = param;
+        }
+
+        public int then_regex_match_param_value()
+        {
+            return RegexMatchParamValue ?? 0;
         }
 
         public void Pending_scenario_step()

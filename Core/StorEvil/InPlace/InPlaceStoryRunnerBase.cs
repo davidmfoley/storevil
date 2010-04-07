@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using StorEvil.Context;
@@ -21,26 +22,28 @@ namespace StorEvil.InPlace
             _preprocessor = preprocessor;
             _filter = filter;
             _contextFactory = contextFactory;
+
+            Result = new JobResult();
         }
 
         public void HandleStory(Story story)
         {
             ResultListener.StoryStarting(story);
-            IEnumerable<Scenario> scenariosMatchingFilter = GetScenariosMatchingFilter(story);
+            Scenario[] scenariosMatchingFilter = GetScenariosMatchingFilter(story);
 
             Execute(story, scenariosMatchingFilter, _contextFactory.GetContextForStory(story));
         }
 
         protected abstract void Execute(Story story, IEnumerable<Scenario> scenariosMatchingFilter, StoryContext context);
 
-        private IEnumerable<Scenario> GetScenariosMatchingFilter(Story story)
+        private Scenario[] GetScenariosMatchingFilter(Story story)
         {
-            return GetScenarios(story).Where(s => _filter.Include(story, s));
+            return GetScenarios(story).Where(s => _filter.Include(story, s)).ToArray();
         }
 
         private IEnumerable<Scenario> GetScenarios(Story story)
         {
-            return story.Scenarios.SelectMany(scenario => _preprocessor.Preprocess(scenario));
+            return story.Scenarios.SelectMany(scenario => _preprocessor.Preprocess(scenario)).ToArray();
         }
 
         public void Finished()
@@ -49,7 +52,9 @@ namespace StorEvil.InPlace
         }
         public JobResult GetResult()
         {
-            return new JobResult();
+            return Result;
         }
+
+        protected JobResult Result { get; set; }
     }
 }

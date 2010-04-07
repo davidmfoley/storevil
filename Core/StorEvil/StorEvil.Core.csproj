@@ -82,6 +82,8 @@
     <Compile Include="InPlace\InPlaceCompilingStoryRunner.cs" />
     <Compile Include="InPlace\InPlaceScenarioRunner.cs" />
     <Compile Include="InPlace\InPlaceStoryRunnerBase.cs" />
+    <Compile Include="InPlace\RemoteHandlerFactory.cs" />
+    <Compile Include="InPlace\RemoteStoryHandler.cs" />
     <Compile Include="InPlace\ScenarioLineExecuter.cs" />
     <Compile Include="Interpreter\DebugTrace.cs" />
     <Compile Include="Interpreter\ParameterConverters\ArrayBuilder.cs" />

@@ -11,49 +11,28 @@ namespace StorEvil.InPlace
 {
     public class InPlaceCompilingStoryRunner : InPlaceStoryRunnerBase
     {
-        private readonly MemberInvoker _memberInvoker;
-        private readonly ScenarioInterpreter _scenarioInterpreter;
-        private readonly AssemblyGenerator _generator;
-        private int _failures;
+        private readonly IRemoteHandlerFactory _factory;   
+        
 
-        public InPlaceCompilingStoryRunner(IResultListener listener,
-                                           IScenarioPreprocessor preprocessor,
-                                           ScenarioInterpreter scenarioInterpreter,
+        public InPlaceCompilingStoryRunner(IRemoteHandlerFactory factory,
+                                           IResultListener listener,
+                                           IScenarioPreprocessor preprocessor,                                         
                                            IStoryFilter filter,
-                                            IStoryContextFactory contextFactory)
+                                           IStoryContextFactory contextFactory)
             : base(listener, preprocessor, filter, contextFactory)
         {
-            _scenarioInterpreter = scenarioInterpreter;
-            _memberInvoker = new MemberInvoker();
-            _generator = new AssemblyGenerator(preprocessor);
+            
+            _factory = factory;     
         }
 
         protected override void Execute(Story story, IEnumerable<Scenario> scenarios, StoryContext context)
         {
-            Scenario[] asArray = scenarios.ToArray();
-            var assembly = _generator.GenerateAssembly(story, new string[0]);
-
-            //ExecuteAssemblyDriver(assembly, context, asArray);
-        }
-
-        private void ExecuteAssemblyDriver(Assembly assembly, StoryContext context, Scenario[] scenarios)
-        {
-            var driverType = GetDriverType(assembly);
-            var driver = Activator.CreateInstance(driverType,
-                                                  ResultListener,
-                                                  _memberInvoker,
-                                                  _scenarioInterpreter,
-                                                  scenarios
-                );
-
-            var methodInfo = driverType.GetMethod("Execute");
-
-            _failures += (int) methodInfo.Invoke(driver, new[] {context});
-        }
-
-        private static Type GetDriverType(Assembly assembly)
-        {
-            return assembly.GetTypes().First();
+            using (var remoteHandler = _factory.GetHandler(story, scenarios, ResultListener))
+            {
+                var handler = remoteHandler.Handler;
+                handler.HandleStory(story);
+                Result += handler.GetResult();
+            }
         }
     }
 }

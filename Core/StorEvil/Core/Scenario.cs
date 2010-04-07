@@ -10,23 +10,24 @@ namespace StorEvil.Core
         {
         }
 
-        public Scenario(string id, string name, IEnumerable<ScenarioLine> body)
+        public Scenario(string id, string name, ScenarioLine[] body)
         {
             Id = id;
             Name = name;
             Body = body;
         }
 
-        public Scenario(string name, IEnumerable<ScenarioLine> body)
+        public Scenario(string name, ScenarioLine[] body)
         {
             Id = Guid.NewGuid().ToString();
             Name = name;
             Body = body;
         }
 
-        public IEnumerable<ScenarioLine> Body { get; set; }
+        public ScenarioLine[] Body { get; set; }
     }
 
+    [Serializable]
     public class ScenarioLine
     {
         public string Text { get; set; }
@@ -41,8 +42,8 @@ namespace StorEvil.Core
         {
         }
 
-        public ScenarioOutline(string id, string name, Scenario scenario, IEnumerable<string> fieldNames,
-                               IEnumerable<IEnumerable<string>> examples)
+        public ScenarioOutline(string id, string name, Scenario scenario, string[] fieldNames,
+                               string[][] examples)
         {
             Id = id;
             Name = name;
@@ -52,11 +53,12 @@ namespace StorEvil.Core
         }
 
         public Scenario Scenario { get; set; }
-        public IEnumerable<IEnumerable<string>> Examples { get; set; }
+        public string[][] Examples { get; set; }
 
-        public IEnumerable<string> FieldNames { get; set; }
+        public string[] FieldNames { get; set; }
     }
 
+    [Serializable]
     public class ScenarioBase
     {
         public string Name { get; set; }

@@ -158,9 +158,9 @@ namespace StorEvil.Parsing
             var innerScenario = BuildScenario();
 
             var count = _currentScenario.RowData.First().Count() - 1;
-            var fieldNames = _currentScenario.RowData.First().Take(count);
+            var fieldNames = _currentScenario.RowData.First().Take(count).ToArray();
             var examples =
-                _currentScenario.RowData.Skip(1).Select(x => x.Take(count));
+                _currentScenario.RowData.Skip(1).Select(x => x.Take(count).ToArray()).ToArray();
 
             var scenarioOutline = new ScenarioOutline(_storyId + "- outline -" + scenarios.Count,
                                                       _currentScenario.Name,
@@ -175,7 +175,7 @@ namespace StorEvil.Parsing
         {
             return new Scenario(_storyId + "-" + scenarios.Count,
                                 _currentScenario.Name,
-                                _currentScenario.Lines) {Tags = _currentScenario.Tags};
+                                _currentScenario.Lines.ToArray()) {Tags = _currentScenario.Tags};
         }
 
         private void AddScenarioOrOutlineIfExists()

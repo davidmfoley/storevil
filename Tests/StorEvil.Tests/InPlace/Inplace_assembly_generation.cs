@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -34,7 +35,7 @@ namespace StorEvil.InPlace.Compiled
                                  TestHelper.BuildScenario("foo", "When I do seomthing",
                                                           "something else should happen")
                              };
-            GeneratedAssemblyPath = Generator.GenerateAssembly(new Story("foo", "bar", _scenarios),
+            GeneratedAssemblyPath = Generator.GenerateAssembly(new Story("foo", "bar", _scenarios), _scenarios.Cast<Scenario>(),
                                                            new[] {this.GetType().Assembly.Location});
         }
 
@@ -44,19 +45,16 @@ namespace StorEvil.InPlace.Compiled
             File.Exists(GeneratedAssemblyPath).ShouldBe(true);
         }
 
-
-
         [Test]
         public void Should_be_able_to_instantiate()
         {
             var handle = Activator.CreateInstanceFrom(
                 GeneratedAssemblyPath,
-                "StorEvilTestAssembly.StorEvilDriver");
+                "StorEvilTestAssembly.StorEvilDriver", true, 0, null, new object[] {new RemoteListener(null)},CultureInfo.CurrentCulture, new object[0], AppDomain.CurrentDomain.Evidence );
 
             var driver = handle.Unwrap() as IStoryHandler;
 
             driver.ShouldNotBeNull();
-
         }
 
         [TestFixtureTearDown]
@@ -66,33 +64,4 @@ namespace StorEvil.InPlace.Compiled
         }
     }
 
-    public class InPlaceCompilingRunnerSpec<T>
-    {
-        protected IResultListener ResultListener;
-        protected StoryContext Context;
-        protected InPlaceCompilingStoryRunner Runner;
-
-        protected void RunStory(Story story)
-        {
-            ResultListener = MockRepository.GenerateStub<IResultListener>();
-            new ExtensionMethodHandler().AddAssembly(typeof (TestExtensionMethods).Assembly);
-
-            Context = new StoryContext(typeof (T));
-            Runner = new InPlaceCompilingStoryRunner(ResultListener, new ScenarioPreprocessor(),
-                                                     new ScenarioInterpreter(
-                                                         new InterpreterForTypeFactory(new ExtensionMethodHandler())),
-                                                     new IncludeAllFilter(), new StoryContextFactory());
-            Runner.HandleStory(story);
-        }
-
-        protected argT Any<argT>()
-        {
-            return Arg<argT>.Is.Anything;
-        }
-
-        protected static Scenario BuildScenario(string name, params string[] lines)
-        {
-            return new Scenario("test", lines.Select(line => new ScenarioLine {Text = line}));
-        }
-    }
 }

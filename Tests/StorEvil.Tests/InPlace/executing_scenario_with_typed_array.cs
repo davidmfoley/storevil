@@ -1,3 +1,4 @@
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Context;
@@ -51,6 +52,9 @@ Given the following
 |1|one|
 |2|two|
 |3|three|
+typed params should include 1 one
+typed params should include 2 two
+typed params should include 3 three
 ";
 
         [SetUp]
@@ -61,24 +65,12 @@ Given the following
         }
 
         [Test]
-        public void Table_is_not_null()
+        public void should_succeed()
         {
-            ScenarioArrayTestContext.Table.ShouldNotBeNull();
+            AssertScenarioSuccess();
         }
 
-        [Test]
-        public void Table_data_is_set()
-        {
-            var table = ScenarioArrayTestContext.Table;
-            table.Length.ShouldEqual(3);
-            table[0].IntField.ShouldEqual(1);
-            table[1].IntField.ShouldEqual(2);
-            table[2].IntField.ShouldEqual(3);
-            table[0].StringProp.ShouldEqual("one");
-            table[1].StringProp.ShouldEqual("two");
-            table[2].StringProp.ShouldEqual("three");
-        }
-
+        [Context]
         public class ScenarioArrayTestContext
         {
             public ScenarioArrayTestContext()
@@ -92,6 +84,11 @@ Given the following
             {
                 Table = table;
             }
+
+            public void typed_params_should_include_i_s(int i, string s)
+            {
+                Table.Any(t=>t.IntField ==i && t.StringProp ==s).ShouldEqual(true);
+            }
         }
     }
 
@@ -102,9 +99,10 @@ Given the following
             @"
 Story: test tables in scenarios
 Scenario:
-Given the following
+Given the following row
 |IntField|42|
 |StringProp|foobar|
+then the fields should be 42 and foobar
 ";
 
         [SetUp]
@@ -112,23 +110,16 @@ Given the following
         {
             
             var story = new StoryParser().Parse(storyText, null);
-           RunStory(story);
+            RunStory(story);
         }
 
         [Test]
-        public void Table_is_not_null()
+        public void should_succeed()
         {
-            TypedScenarioTestContext.Row.ShouldNotBeNull();
+            AssertScenarioSuccess();
         }
-
-        [Test]
-        public void Table_data_is_set()
-        {
-            var row = TypedScenarioTestContext.Row;
-            row.StringProp.ShouldEqual("foobar");
-            row.IntField.ShouldEqual(42);
-        }
-
+      
+        [Context]
         public class TypedScenarioTestContext
         {
             public TypedScenarioTestContext()
@@ -138,9 +129,15 @@ Given the following
 
             public static TestRow Row;
 
-            public void Given_the_following(TestRow row)
+            public void Given_the_following_row(TestRow r)
             {
-                Row = row;
+                Row = r;
+            }
+
+            public void then_the_fields_should_be_i_and_s(int i, string s)
+            {
+                Row.IntField.ShouldEqual(i);
+                Row.StringProp.ShouldEqual(s);
             }
         }
     }

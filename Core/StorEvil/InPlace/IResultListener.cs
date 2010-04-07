@@ -14,7 +14,8 @@ namespace StorEvil.InPlace
         void ScenarioSucceeded(Scenario scenario);
         void Finished();
     }
-
+    
+    [Serializable]
     public class ScenarioFailureInfo
     {
         private Scenario _scenario;
@@ -51,6 +52,7 @@ namespace StorEvil.InPlace
         }
     }
 
+    [Serializable]
     public class ScenarioPendingInfo
     {
         

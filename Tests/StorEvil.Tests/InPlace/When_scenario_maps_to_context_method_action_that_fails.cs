@@ -75,7 +75,7 @@ namespace StorEvil.InPlace
         [Test]
         public void Invokes_both_methods()
         {
-            InPlaceRunnerTestContext.WhenSomeOtherActionCalled.ShouldEqual(true);
+            AssertLineSuccess("And some other action");
         }
     }
 }

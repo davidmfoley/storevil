@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Core;
@@ -31,7 +32,9 @@ namespace StorEvil.InPlace
 
     public abstract class mapping_by_regex_to_context_method : InPlaceRunnerSpec<InPlaceRunnerTestContext>
     {
-        private readonly Scenario TestScenario = BuildScenario("test", "Matches a regex with 42");
+        private readonly Scenario TestScenario = BuildScenario("test", 
+            "Matches a regex with 42",
+            "then RegEx match param value should be 42");
 
         [SetUp]
         public void SetupContext()
@@ -42,16 +45,24 @@ namespace StorEvil.InPlace
         }
 
         [Test]
-        public void Notifies_listener_of_success()
+        public void Notifies_listener_of_1st_line_success()
         {
-            ResultListener.AssertWasCalled(x => x.Success(TestScenario, "Matches a regex with 42"));
+            AssertLineSuccess("Matches a regex with 42");
+
         }
 
         [Test]
-        public void invokes_method_with_correct_param()
+        public void Notifies_listener_of_2nd_line_success()
         {
-            InPlaceRunnerTestContext.RegexMatchParamValue.ShouldEqual(42);
+            AssertLineSuccess("then RegEx match param value should be 42");
         }
+
+        [Test]
+        public void Scenario_should_be_scucessful()
+        {
+            AssertScenarioSuccess();
+        }
+       
     }
 
     [TestFixture, Ignore("In progress")]

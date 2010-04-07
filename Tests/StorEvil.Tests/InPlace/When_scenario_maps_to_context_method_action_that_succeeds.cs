@@ -26,8 +26,12 @@ namespace StorEvil.InPlace
 
     public abstract class When_scenario_maps_to_context_method_action_that_succeeds : InPlaceRunnerSpec<InPlaceRunnerTestContext>
     {
-        private readonly Scenario TestScenario = BuildScenario("test", new[] {ScenarioText});
-        private const string ScenarioText = "When some action";
+        private readonly Scenario TestScenario = BuildScenario("test", ScenarioText);
+        private static string[] ScenarioText = new []
+                                                   {
+                                                       "When some action",
+                                                       "then some action was called should be true"
+                                                   };
 
         [SetUp]
         public void SetupContext()
@@ -38,21 +42,21 @@ namespace StorEvil.InPlace
         }
 
         [Test]
-        public void Notifies_listener_of_line_success()
+        public void Notifies_listener_of_first_line_success()
         {
-            ResultListener.AssertWasCalled(x => x.Success(TestScenario, ScenarioText));
+            ResultListener.AssertWasCalled(x => x.Success(Any<Scenario>(),  Arg<string>.Is.Equal("When some action")));
+        }
+
+        [Test]
+        public void Notifies_listener_of_second_line_success()
+        {
+            ResultListener.AssertWasCalled(x => x.Success(Any<Scenario>(), Arg<string>.Is.Equal("then some action was called should be true")));
         }
 
         [Test]
         public void Notifies_listener_of_scenario_success()
         {
-            ResultListener.AssertWasCalled(x => x.ScenarioSucceeded(TestScenario));
-        }
-
-        [Test]
-        public void invokes_method()
-        {
-            InPlaceRunnerTestContext.WhenSomeActionCalled.ShouldEqual(true);
+            ResultListener.AssertWasCalled(x => x.ScenarioSucceeded(Any<Scenario>()));
         }
     }
 }

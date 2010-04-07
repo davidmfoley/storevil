@@ -12,11 +12,11 @@ namespace StorEvil.Resharper
         public bool Explicitly { get; set; }
         private const string MagicDelimiter = "$*$*$";
 
-        private readonly IEnumerable<ScenarioLine> Body;
+        private readonly ScenarioLine[] Body;
         private readonly string Name;
         private bool IsOutline;
-        private IEnumerable<string> FieldNames;
-        private IEnumerable<IEnumerable<string>> Examples;
+        private string[] FieldNames;
+        private string[][] Examples;
 
         public RunScenarioTask(IScenario scenario, bool explicitly)
             : base("StorEvil")
@@ -65,12 +65,12 @@ namespace StorEvil.Resharper
             FieldNames = SplitValues(GetXmlAttribute(element, "FieldNames"));
             
             var exampleLines = GetXmlAttribute(element, "Examples").Split(new[] {"|||"}, StringSplitOptions.None);
-            var examples = new List<IEnumerable<String>>();
+            var examples = new List<string[]>();
 
             foreach (var exampleLine in exampleLines)
                 examples.Add(SplitValues(exampleLine));
 
-            Examples = examples;
+            Examples = examples.ToArray();
             IsOutline = true;
         }
 
@@ -104,7 +104,7 @@ namespace StorEvil.Resharper
             SetXmlAttribute(element, "Examples", exampleValue);
         }
 
-        private IEnumerable<ScenarioLine> GetXmlBody(XmlElement element)
+        private ScenarioLine[] GetXmlBody(XmlElement element)
         {
             List<ScenarioLine> lines = new List<ScenarioLine>();
 
@@ -116,10 +116,10 @@ namespace StorEvil.Resharper
                 lines.Add(new ScenarioLine {Text = lineElement.GetAttribute("Text"), LineNumber = int.Parse(lineElement.GetAttribute("LineNumber"))});
             }
 
-            return lines;
+            return lines.ToArray();
         }
 
-        private IEnumerable<string> SplitValues(string text)
+        private string[] SplitValues(string text)
         {
             return text.Split(new[] {MagicDelimiter}, StringSplitOptions.None);
         }

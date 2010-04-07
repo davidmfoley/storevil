@@ -22,7 +22,6 @@ namespace StorEvil.InPlace.NonCompiled
 namespace StorEvil.InPlace
 {
 
-
     public abstract class executing_outlines_with_example_tables : InPlaceRunnerSpec<InPlaceRunnerTableTestContext>
     {
         private string storyText =
@@ -31,6 +30,7 @@ Story: test
 
 Scenario Outline:
 Call a method with <int> and <string>
+An example should have <int> and <string>
 
 Examples:
 |int|string|
@@ -41,41 +41,39 @@ Examples:
 
         [SetUp]
         public void SetupContext()
-        {
-           
-            InPlaceRunnerTableTestContext.Calls.Clear();
+        {                    
             var story = new StoryParser().Parse(storyText, null);
             RunStory(story);
-
+        }
+        
+        [Test]
+        public void should_be_successful()
+        {
+            AssertScenarioSuccess();            
         }
 
         [Test]
-        public void should_invoke_method_three_times()
+        public void should_be_no_failures()
         {
-            InPlaceRunnerTableTestContext.Calls.Count.ShouldBe(3);
-        }
-
-        [Test]
-        public void should_pass_correct_args()
-        {
-            ShouldBeACallWith(1, "one");
-            ShouldBeACallWith(2, "two");
-            ShouldBeACallWith(3, "three");
-        }
-
-        private void ShouldBeACallWith(int i, string s)
-        {
-            InPlaceRunnerTableTestContext.Calls.Any(c => c.IntParam == i && c.StringParam == s).ShouldEqual(true);
+            AssertNoFailures();
         }
     }
 
+    [Context]
     public class InPlaceRunnerTableTestContext
     {
-        public static List<Call> Calls = new List<Call>();
+        private List<Call> Calls = new List<Call>();
 
         public virtual void Call_a_method_with_intParam_and_stringParam(int intParam, string stringParam)
         {
             Calls.Add(new Call(intParam, stringParam));
+        }
+
+        public void An_example_should_have_intParam_and_stringParam(int intParam, string stringParam)
+        {
+            var call = Calls[0];
+            call.IntParam.ShouldEqual(intParam);
+            call.StringParam.ShouldEqual(stringParam);
         }
 
         public class Call

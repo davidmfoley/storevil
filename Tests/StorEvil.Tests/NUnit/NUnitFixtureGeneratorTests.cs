@@ -106,7 +106,7 @@ namespace StorEvil.NUnit
 
         protected static Scenario BuildScenario(string name, params string[] lines)
         {
-            return new Scenario("test", lines.Select(line => new ScenarioLine { Text = line }));
+            return new Scenario("test", lines.Select(line => new ScenarioLine { Text = line }).ToArray());
         }
     }
 }

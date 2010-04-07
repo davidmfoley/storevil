@@ -16,7 +16,8 @@ namespace StorEvil.Interpreter
         private readonly List<IMemberMatcher> _memberMatchers = new List<IMemberMatcher>();
         private static readonly ParameterConverter _parameterConverter = new ParameterConverter();
 
-        public ScenarioInterpreterForType(Type type, ExtensionMethodHandler extensionMethodHandler,
+        public ScenarioInterpreterForType(Type type, 
+                                          ExtensionMethodHandler extensionMethodHandler,
                                           InterpreterForTypeFactory factory)
         {
             _type = type;

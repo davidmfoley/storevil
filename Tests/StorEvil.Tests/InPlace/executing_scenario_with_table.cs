@@ -31,10 +31,20 @@ namespace StorEvil.InPlace
             @"
 Story: test tables in scenarios
 Scenario:
-Given the following
+Given the following table
 |1|one|
 |2|two|
 |3|three|
+
+table row 0 column 0 Should Be 1
+table row 0 column 1 should be one
+
+table row 1 column 0 should be 2
+
+table row 1 column 1 should be two
+table row 2 column 0 should be 3
+
+table row 2 column 1 should be three
 ";
 
         [SetUp]
@@ -44,26 +54,17 @@ Given the following
         }
 
         [Test]
-        public void Table_is_not_null()
+        public void is_successful()
         {
-            ScenarioTableTestContext.Table.ShouldNotBeNull();
+            AssertScenarioSuccess();           
         }
 
         [Test]
-        public void Table_data_is_set()
+        public void no_failures()
         {
-            var table = ScenarioTableTestContext.Table;
-            table.Length.ShouldEqual(3);
-            table[0][0].ShouldEqual("1");
-            table[0][1].ShouldEqual("one");
-
-            table[1][0].ShouldEqual("2");
-            table[1][1].ShouldEqual("two");
-
-            table[2][0].ShouldEqual("3");
-            table[2][1].ShouldEqual("three");
-        }
-
+            AssertNoFailures();
+        }  
+        [Context]
         public class ScenarioTableTestContext
         {
             public ScenarioTableTestContext()
@@ -71,11 +72,16 @@ Given the following
                 Table = null;
             }
 
-            public static string[][] Table;
+            private string[][] Table;
 
-            public void Given_the_following(string[][] table)
+            public void Given_the_following_table(string[][] tableData)
             {
-                Table = table;
+                Table = tableData;
+            }
+
+            public string Table_row_r_column_c(int r, int c)
+            {
+                return Table[r][c];
             }
         }
     }

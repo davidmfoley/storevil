@@ -8,6 +8,7 @@ namespace StorEvil.Core
     /// 
     /// The scenarios are what are used to actually generate the test code 
     /// </summary>
+    [Serializable]
     public class Story
     {
         public string Id { get; set; }

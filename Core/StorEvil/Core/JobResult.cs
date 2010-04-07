@@ -1,5 +1,8 @@
+using System;
+
 namespace StorEvil.Core
 {
+    [Serializable]
     public struct JobResult
     {
         public int Succeeded { get; set; }

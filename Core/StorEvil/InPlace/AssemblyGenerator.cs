@@ -7,7 +7,7 @@ using StorEvil.Parsing;
 namespace StorEvil.InPlace
 {
 
-    public abstract class DriverBase : IStoryHandler
+    public abstract class DriverBase : MarshalByRefObject, IStoryHandler
     {
         protected JobResult Result = new JobResult();
 
@@ -26,23 +26,18 @@ namespace StorEvil.InPlace
 
     public class AssemblyGenerator
     {
-        private readonly IScenarioPreprocessor _scenarioPreprocessor;
-
         public AssemblyGenerator(IScenarioPreprocessor scenarioPreprocessor)
         {
             _handlerGenerator = new HandlerCodeGenerator(scenarioPreprocessor);
             _compiler = new HandlerCompiler();
-
-            _scenarioPreprocessor = scenarioPreprocessor;
         }
-
       
         private HandlerCodeGenerator _handlerGenerator;
         private HandlerCompiler _compiler;
 
-        public string GenerateAssembly(Story story, IEnumerable<string> referencedAssemblies)
+        public string GenerateAssembly(Story story, IEnumerable<Scenario> scenarios, IEnumerable<string> referencedAssemblies)
         {
-            string sourceCode = _handlerGenerator.GetSourceCode(story, referencedAssemblies);
+            string sourceCode = _handlerGenerator.GetSourceCode(story, scenarios, referencedAssemblies);
             return _compiler.CompileToFile(sourceCode, referencedAssemblies, GetAssemblyLocation());
         }
 

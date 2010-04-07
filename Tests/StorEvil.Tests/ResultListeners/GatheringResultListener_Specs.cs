@@ -38,7 +38,7 @@ namespace StorEvil.ResultListeners.GatheringResultListener_Specs
 
         protected void SimulateSuccessfulScenario(string id, string name, string[] lines)
         {
-            var successScenario = new Scenario(id, name, lines.Select(l=> new ScenarioLine{Text = l}));
+            var successScenario = new Scenario(id, name, lines.Select(l=> new ScenarioLine{Text = l}).ToArray());
             Listener.ScenarioStarting(successScenario);
 
             foreach (var line in lines)

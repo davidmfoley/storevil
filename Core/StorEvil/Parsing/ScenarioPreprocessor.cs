@@ -10,7 +10,7 @@ namespace StorEvil.Parsing
         public IEnumerable<Scenario> Preprocess(IScenario scenario)
         {
             if (scenario is ScenarioOutline)
-                return PreprocessExamples((ScenarioOutline) scenario);
+                return PreprocessExamples((ScenarioOutline) scenario).ToArray();
 
             if (scenario is Scenario)
                 return new[] {(Scenario) scenario};
@@ -26,7 +26,7 @@ namespace StorEvil.Parsing
             {
                 yield return
                     new Scenario(outline.Id + (count++), scenario.Name,
-                                 PreprocessLines(scenario.Body, outline.FieldNames, example));
+                                 PreprocessLines(scenario.Body, outline.FieldNames, example).ToArray());
             }
         }
 
