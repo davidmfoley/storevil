@@ -1,52 +1,59 @@
 using System;
+using System.Diagnostics;
 using StorEvil.Core;
 using StorEvil.InPlace;
 
 namespace StorEvil.ResultListeners
 {
-    public class ConsoleResultListener : IResultListener
+    public abstract class WriterListener : IResultListener
     {
+        protected abstract void DoWrite(ConsoleColor white, params string[] s);
+
         public void StoryStarting(Story story)
         {
-            ColorWrite(ConsoleColor.White, "\r\n" + "\r\nSTORY: \r\n" + story.Summary);
+            DoWrite(ConsoleColor.White, "\r\n" + "\r\nSTORY: " + story.Id + "\r\n" + story.Summary);
         }
 
         public void ScenarioStarting(Scenario scenario)
         {
-            ColorWrite(ConsoleColor.White, "\r\n" + scenario.Name);
+            DoWrite(ConsoleColor.White, "\r\nSCENARIO: " + scenario.Name);
         }
 
         public void ScenarioFailed(ScenarioFailureInfo scenarioFailureInfo)
         {
-            ColorWrite(ConsoleColor.Yellow, scenarioFailureInfo.SuccessPart);
-            ColorWrite(ConsoleColor.Red, " " + scenarioFailureInfo.FailedPart + "\r\nFAILED\r\n", scenarioFailureInfo.Message + "\r\n");
+            DoWrite(ConsoleColor.Yellow, scenarioFailureInfo.SuccessPart);
+            DoWrite(ConsoleColor.Red, " " + scenarioFailureInfo.FailedPart + "\r\nFAILED\r\n",
+                    scenarioFailureInfo.Message + "\r\n");
         }
 
         public void ScenarioPending(ScenarioPendingInfo scenarioPendingInfo)
         {
-            var message = scenarioPendingInfo.CouldNotInterpret ?  "Could not interpret" : "Pending";
-            ColorWrite(ConsoleColor.Yellow, scenarioPendingInfo.Line + " -- " + message);
+            var message = scenarioPendingInfo.CouldNotInterpret ? "Could not interpret" : "Pending";
+            DoWrite(ConsoleColor.Yellow, scenarioPendingInfo.Line + " -- " + message);
 
             if (scenarioPendingInfo.CouldNotInterpret && scenarioPendingInfo.Suggestion != null)
-                ColorWrite(ConsoleColor.Gray, scenarioPendingInfo.Suggestion);
+                DoWrite(ConsoleColor.Gray, scenarioPendingInfo.Suggestion);
         }
 
         public void Success(Scenario scenario, string line)
         {
-            ColorWrite(ConsoleColor.Green, line);
+            DoWrite(ConsoleColor.Green, line);
         }
 
         public void ScenarioSucceeded(Scenario scenario)
         {
-            
+            DoWrite(ConsoleColor.Green, "Scenario succeeded");
         }
 
         public void Finished()
         {
-            
+            DoWrite(ConsoleColor.Green, "Finished");
         }
+    }
 
-        private void ColorWrite(ConsoleColor color, params string[] lines)
+    public class ConsoleResultListener : WriterListener
+    {
+        protected override void DoWrite(ConsoleColor color, params string[] lines)
         {
             if (ColorEnabled)
                 Console.ForegroundColor = color;
@@ -59,5 +66,16 @@ namespace StorEvil.ResultListeners
         }
 
         public bool ColorEnabled { get; set; }
+    }
+
+    public class DebugListener : WriterListener
+    {
+        protected override void DoWrite(ConsoleColor white, params string[] s)
+        {
+            foreach (var message in s)
+            {
+                Debug.WriteLine(message);
+            }
+        }
     }
 }

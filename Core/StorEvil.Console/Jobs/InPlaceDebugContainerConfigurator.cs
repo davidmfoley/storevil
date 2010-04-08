@@ -2,6 +2,7 @@ using Funq;
 using StorEvil.Configuration;
 using StorEvil.Core;
 using StorEvil.InPlace;
+using StorEvil.ResultListeners;
 using StorEvil.Utility;
 
 namespace StorEvil.Console
@@ -16,6 +17,9 @@ namespace StorEvil.Console
             container.EasyRegister<AssemblyGenerator>(); 
 
             container.Register<IStoryFilter>(new TagFilter(CustomSettings.Tags ?? new string[0]));
+
+            var listener = container.Resolve<IResultListener>() as CompositeListener;
+            listener.Listeners.Add(new DebugListener());
         }
 
         protected override void SetupSwitches(SwitchParser<InPlaceSettings> parser)
@@ -24,4 +28,6 @@ namespace StorEvil.Console
                 .SetsField(x => x.Tags);
         }
     }
+
+   
 }

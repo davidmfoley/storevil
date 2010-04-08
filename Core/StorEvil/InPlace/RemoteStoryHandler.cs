@@ -76,6 +76,8 @@ namespace StorEvil.InPlace
                 AppDomain.Unload(_appDomain);
 
             _filesystem.Delete(_assemblyLocation);
+            string pdbFile = _assemblyLocation.Substring(0, _assemblyLocation.LastIndexOf(".")) + ".pdb";
+            _filesystem.Delete(pdbFile);
         }
     }
 }

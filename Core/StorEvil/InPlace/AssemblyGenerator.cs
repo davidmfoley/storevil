@@ -43,6 +43,8 @@ namespace StorEvil.InPlace
 
         private string GetAssemblyLocation()
         {
+            return Path.GetTempFileName();
+
             string path = Path.GetDirectoryName(GetType().Assembly.Location) + "\\StorEvilTemp" +
                           Guid.NewGuid().ToString().Replace("-", "");
 

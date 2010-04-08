@@ -42,7 +42,7 @@ scenario = scenarios[" + i + @"];
 scenarioFailed = false;
 scenarioInterpreter.NewScenario();
 _listener.ScenarioStarting(scenario);
-context = storyContext.GetScenarioContext();
+using (context = storyContext.GetScenarioContext()) {
 lastStatus = LineStatus.Passed;
 
 #line 1  """ + story.Id + @"""
@@ -57,6 +57,7 @@ lastStatus = lineExecuter.ExecuteLine(scenario, context, @""{1}"");
 }}  
 ", line.LineNumber, line.Text.Replace("\"", "\"\""));
                 }
+                codeBuilder.AppendLine("}");
                 codeBuilder.AppendLine(@"if (lastStatus == LineStatus.Failed) {Result.Failed++; } else if (lastStatus == LineStatus.Pending) {Result.Pending++; } else { Result.Succeeded++; _listener.ScenarioSucceeded(scenario);}");
 
                 i++;
