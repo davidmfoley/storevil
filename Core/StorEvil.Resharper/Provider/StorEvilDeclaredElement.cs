@@ -10,16 +10,6 @@ namespace StorEvil.Resharper
 {
     public class StorEvilDeclaredElement : IDeclaredElement
     {
-        private string _shortName;
-
-        private bool _caseSensistiveName;
-
-        private PsiLanguageType _language;
-
-        private IPsiModule _module;
-
-        private ISubstitution _idSubstitution;
-
         public IList<IDeclaration> GetDeclarations()
         {
             return new List<IDeclaration>();
@@ -85,29 +75,14 @@ namespace StorEvil.Resharper
             return false;
         }
 
-        public string ShortName
-        {
-            get { return _shortName; }
-        }
+        public string ShortName { get; private set; }
 
-        public bool CaseSensistiveName
-        {
-            get { return _caseSensistiveName; }
-        }
+        public bool CaseSensistiveName { get; private set; }
 
-        public PsiLanguageType Language
-        {
-            get { return _language; }
-        }
+        public PsiLanguageType Language { get; private set; }
 
-        public IPsiModule Module
-        {
-            get { return _module; }
-        }
+        public IPsiModule Module { get; private set; }
 
-        public ISubstitution IdSubstitution
-        {
-            get { return _idSubstitution; }
-        }
+        public ISubstitution IdSubstitution { get; private set; }
     }
 }

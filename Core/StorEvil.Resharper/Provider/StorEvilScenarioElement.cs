@@ -26,56 +26,29 @@ namespace StorEvil.Resharper
 
         public override bool Equals(object obj)
         {
-            if (obj is StorEvilScenarioElement)
-            {
-                var scenarioElement = (StorEvilScenarioElement)obj;
-                return scenarioElement.Scenario.Id == Scenario.Id;
-            }
-
-            return false;
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return Equals(obj as StorEvilScenarioElement);
         }
 
         public override string GetTypeClrName()
         {
             return Scenario.Id;
         }
-    }
 
-    public class StorEvilScenarioOutlineElement : StorEvilUnitTestElement
-    {
-        private readonly ScenarioOutline _scenarioOutline;
-        private readonly UnitTestNamespace _namespace;
-
-        public StorEvilScenarioOutlineElement(StorEvilTestProvider provider, UnitTestElement parent, IProject project,
-                                       string title, ScenarioOutline scenarioOutline)
-            : base(provider, parent, project, title)
+        public bool Equals(StorEvilScenarioElement other)
         {
-            _scenarioOutline = scenarioOutline;
-            _namespace = new UnitTestNamespace(project.Name);
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return base.Equals(other) && Equals(other._namespace, _namespace);
         }
 
-        public override UnitTestNamespace GetNamespace()
+        public override int GetHashCode()
         {
-            return _namespace;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj is StorEvilScenarioElement)
+            unchecked
             {
-                var testElement = (StorEvilScenarioOutlineElement)obj;
-                return testElement.GetNamespace().NamespaceName == _namespace.NamespaceName &&
-                       testElement.GetTitle() == GetTitle();
+                return (base.GetHashCode()*397) ^ (_namespace != null ? _namespace.GetHashCode() : 0);
             }
-
-            return false;
-        }
-
-
-        public override string GetTypeClrName()
-        {
-            return _scenarioOutline.Id;
-           
         }
     }
 }

@@ -100,9 +100,6 @@
       <HintPath>..\..\Lib\JetBrains\JetBrains.ReSharper.VS.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
@@ -115,6 +112,7 @@
     <Compile Include="Logger.cs" />
     <Compile Include="Provider\StorEvilDeclaredElement.cs" />
     <Compile Include="Provider\StorEvilDeclaredElementType.cs" />
+    <Compile Include="Provider\StorEvilScenarioOutlineElement.cs" />
     <Compile Include="Runner\ExecutionResult.cs" />
     <Compile Include="Runner\ResharperResultListener.cs" />
     <Compile Include="Runner\ScenarioExecutor.cs" />

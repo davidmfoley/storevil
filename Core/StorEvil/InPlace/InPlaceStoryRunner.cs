@@ -9,8 +9,7 @@ namespace StorEvil.InPlace
     public class InPlaceStoryRunner :InPlaceStoryRunnerBase
     {
         private readonly InPlaceScenarioRunner _scenarioRunner;
-        private int _failed;
-
+ 
         public InPlaceStoryRunner(IResultListener listener,
                                   IScenarioPreprocessor preprocessor,
                                   ScenarioInterpreter scenarioInterpreter,

@@ -27,17 +27,28 @@ namespace StorEvil.Resharper
 
         public override bool Equals(object obj)
         {
-            if (obj is StorEvilProjectElement)
-            {
-                var testElement = (StorEvilProjectElement)obj;
-                return testElement.GetNamespace().NamespaceName == _namespace.NamespaceName &&
-                       testElement.GetTitle() == GetTitle();
-            }
-
-            return false;
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return Equals(obj as StorEvilProjectElement);
         }
 
-   
+        public bool Equals(StorEvilProjectElement other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return base.Equals(other) && Equals(other._namespace, _namespace) && Equals(other.Assemblies, Assemblies);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int result = base.GetHashCode();
+                result = (result*397) ^ (_namespace != null ? _namespace.GetHashCode() : 0);
+                result = (result*397) ^ (Assemblies != null ? Assemblies.GetHashCode() : 0);
+                return result;
+            }
+        }
     }
 
     [Serializable]

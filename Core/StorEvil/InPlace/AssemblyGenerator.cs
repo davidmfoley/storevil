@@ -41,16 +41,9 @@ namespace StorEvil.InPlace
             return _compiler.CompileToFile(sourceCode, referencedAssemblies, GetAssemblyLocation());
         }
 
-        private string GetAssemblyLocation()
+        private static string GetAssemblyLocation()
         {
             return Path.GetTempFileName();
-
-            string path = Path.GetDirectoryName(GetType().Assembly.Location) + "\\StorEvilTemp" +
-                          Guid.NewGuid().ToString().Replace("-", "");
-
-            Directory.CreateDirectory(path);
-
-            return path + "\\StorevilTestAssembly.dll";
         }
     }
 }

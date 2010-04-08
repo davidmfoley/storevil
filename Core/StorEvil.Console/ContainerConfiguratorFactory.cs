@@ -16,8 +16,6 @@ namespace StorEvil.Console
 
         public IContainerConfigurator GetConfigurator(string command)
         {
-            IContainerConfigurator containerConfigurator = null;
-
             if (command == null || command == "help")
                 return new HelpContainerConfigurator();
 
