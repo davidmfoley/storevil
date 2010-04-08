@@ -113,6 +113,11 @@ namespace StorEvil.Utility
             bool isMatch = Regex.IsMatch(actual, regex, RegexOptions.Singleline);
             Assert.IsFalse(isMatch, "Expected '" + actual + "' not to match pattern: '" + regex + "'");
         }
+
+        public static void ShouldContain<T>(this IEnumerable<T> collection, T expected)
+        {
+            collection.Contains(expected).ShouldBe(true);
+        }
     }
 
    

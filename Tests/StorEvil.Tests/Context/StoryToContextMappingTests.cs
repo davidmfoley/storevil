@@ -36,7 +36,7 @@ namespace StorEvil.Context.StoryToContextMapper_Specs
             mapper.AddAssembly(GetType().Assembly);
 
             var context = mapper.GetContextForStory(new Story("context test", "context test", new List<IScenario>()));
-            context.ImplementingTypes.First().ShouldEqual(typeof (TestMappingContext));
+            context.ImplementingTypes.ShouldContain(typeof (TestMappingContext));
         }
 
         [Test, Ignore()]
