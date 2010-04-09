@@ -76,7 +76,7 @@
     <Compile Include="Infrastructure\FileWriter.cs" />
     <Compile Include="InPlace\AssemblyGenerator.cs" />
     <Compile Include="InPlace\HandlerCodeGenerator.cs" />
-    <Compile Include="InPlace\HandlerCompiler.cs" />
+    <Compile Include="InPlace\CodeCompiler.cs" />
     <Compile Include="InPlace\IDebugListener.cs" />
     <Compile Include="InPlace\ImplementationHelper.cs" />
     <Compile Include="InPlace\InPlaceCompilingStoryRunner.cs" />

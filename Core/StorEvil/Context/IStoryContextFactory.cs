@@ -71,6 +71,11 @@ namespace StorEvil.Context
             return Activator.CreateInstance(type, parameters.ToArray(), null);
         }
 
+        public IDictionary<Type, object> Contexts
+        {
+            get { return _cache; }
+        }
+
         public void SetContext(object context)
         {
             _cache[context.GetType()] = context;

@@ -34,5 +34,23 @@ namespace StorEvil.Utility
             var setter = obj.GetType().GetSetter(propertyOrField);
             setter(obj, value);
         }
+
+        public static object GetWithReflection(this object obj, string propertyOrField)
+        {
+            var getter = obj.GetType().GetGetter(propertyOrField);
+            return getter(obj);
+        }
+        public static Func<object, object> GetGetter(this Type destinationType, string memberName)
+        {
+            var propertyInfo = destinationType.GetProperty(memberName);
+            if (null != propertyInfo)
+                return (o) => propertyInfo.GetValue(o, null);
+
+            var fieldInfo = destinationType.GetField(memberName);
+            if (null != fieldInfo)
+                return fieldInfo.GetValue;
+
+            throw new UnknownFieldException(destinationType, memberName);
+        }
     }
 }

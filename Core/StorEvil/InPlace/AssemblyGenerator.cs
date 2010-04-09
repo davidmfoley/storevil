@@ -29,11 +29,11 @@ namespace StorEvil.InPlace
         public AssemblyGenerator(IScenarioPreprocessor scenarioPreprocessor)
         {
             _handlerGenerator = new HandlerCodeGenerator(scenarioPreprocessor);
-            _compiler = new HandlerCompiler();
+            _compiler = new CodeCompiler();
         }
       
         private HandlerCodeGenerator _handlerGenerator;
-        private HandlerCompiler _compiler;
+        private CodeCompiler _compiler;
 
         public string GenerateAssembly(Story story, IEnumerable<Scenario> scenarios, IEnumerable<string> referencedAssemblies)
         {

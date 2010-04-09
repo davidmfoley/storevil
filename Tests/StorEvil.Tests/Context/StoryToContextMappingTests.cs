@@ -5,10 +5,68 @@ using System.Linq;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using StorEvil.Core;
+using StorEvil.InPlace;
 using StorEvil.Utility;
 
 namespace StorEvil.Context.StoryToContextMapper_Specs
 {
+    [TestFixture]
+    public class Debugging_contexts
+    {
+        private object View;
+        private TestMappingContext _testMappingContext;
+
+        [SetUp]
+        public void SetupContext()
+        {
+            var viewer = new ContextViewer();
+            var dictionary = new Dictionary<Type, object>();
+
+            _testMappingContext = new TestMappingContext();
+            dictionary.Add(typeof(TestMappingContext), _testMappingContext);
+
+            View = viewer.Create(dictionary);
+        }
+        [Test]
+        public void should_have_context_on_type()
+        {            
+            View.GetType().GetProperty("TestMappingContext").ShouldNotBeNull();
+        }
+
+        [Test]
+        public void should_have_property_set()
+        {
+           
+            View.GetWithReflection("TestMappingContext").ShouldBe(_testMappingContext);
+        }
+    }
+
+    public class ContextViewer
+    {
+        private CodeCompiler _compiler = new CodeCompiler();
+
+        public object Create(Dictionary<Type, object> dictionary)
+        {
+            var lines = dictionary.Select(x=> BuildProperty(x.Key)).ToArray();
+            var propertySource = string.Join("\r\n", lines);
+            var source = "public class DebugContext { \r\n" + propertySource + "\r\n}";
+
+            var assembly = _compiler.CompileInMemory(source, new[] {  GetType().Assembly.Location});
+            var context =  Activator.CreateInstance(assembly.GetTypes().First());
+            foreach (var type in dictionary.Keys)
+            {
+                context.SetWithReflection(type.Name, dictionary[type]);
+            }
+
+            return context;
+        }
+
+        private string BuildProperty(Type type)
+        {
+            return string.Format("    public {0} {1} {{ get;set; }}", type.FullName, type.Name);
+        }
+    }
+
     [Context]
     public class TestMappingContext
     {
@@ -39,7 +97,7 @@ namespace StorEvil.Context.StoryToContextMapper_Specs
             context.ImplementingTypes.ShouldContain(typeof (TestMappingContext));
         }
 
-        [Test, Ignore()]
+        [Test, Ignore]
         public void Throws_if_no_context_added()
         {
             var mapper = new StoryContextFactory();
