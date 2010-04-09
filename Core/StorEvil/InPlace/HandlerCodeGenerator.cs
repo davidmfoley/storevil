@@ -16,6 +16,11 @@ namespace StorEvil.InPlace
             codeBuilder.AppendLine("// " + story.Id);
             AppendStoryCode(codeBuilder, story, scenarios.ToArray());
 
+            return BuildSourceCode(codeBuilder, referencedAssemblies);
+        }
+
+        private string BuildSourceCode(StringBuilder codeBuilder, IEnumerable<string> referencedAssemblies)
+        {
             return string.Format(_sourceCodeTemplate, "", BuildContextFactorySetup(referencedAssemblies), codeBuilder);
         }
 
