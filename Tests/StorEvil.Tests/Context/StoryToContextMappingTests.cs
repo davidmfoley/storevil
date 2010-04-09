@@ -41,8 +41,6 @@ namespace StorEvil.Context.StoryToContextMapper_Specs
         }
     }
 
-    
-
     [Context]
     public class TestMappingContext
     {

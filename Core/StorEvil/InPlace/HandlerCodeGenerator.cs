@@ -28,7 +28,7 @@ namespace StorEvil.InPlace
         private string BuildContextFactorySetup(IEnumerable<string> referencedAssemblies)
         {
             var adds =
-                referencedAssemblies.Select(a => string.Format("contextFactory.AddAssembly(@\"{0}\");", a));
+                referencedAssemblies.Select(a => string.Format("AddAssembly(@\"{0}\");", a));
             return string.Join("\r\n            ", adds.ToArray());
         }
 
@@ -39,26 +39,23 @@ namespace StorEvil.InPlace
             {
                 codeBuilder.AppendLine(@"
 scenario = scenarios[" + i + @"];
-scenarioFailed = false;
-scenarioInterpreter.NewScenario();
-_listener.ScenarioStarting(scenario);
-using (context = storyContext.GetScenarioContext()) {
-lastStatus = LineStatus.Passed;
+
+using (StartScenario(story, scenario)) {
 
 #line 1  """ + story.Id + @"""
 #line hidden");
                 foreach (var line in GetLines(scenario))
                 {
                     codeBuilder.AppendFormat(@"
-if (lastStatus == LineStatus.Passed) {{
+if (ShouldContinue) {{
 #line {0} 
-lastStatus = lineExecuter.ExecuteLine(scenario, context, @""{1}"");
+ExecuteLine(@""{1}"");
 #line hidden
 }}  
 ", line.LineNumber, line.Text.Replace("\"", "\"\""));
                 }
                 codeBuilder.AppendLine("}");
-                codeBuilder.AppendLine(@"if (lastStatus == LineStatus.Failed) {Result.Failed++; } else if (lastStatus == LineStatus.Pending) {Result.Pending++; } else { Result.Succeeded++; _listener.ScenarioSucceeded(scenario);}");
+                codeBuilder.AppendLine(@"CollectScenarioResult();");
 
                 i++;
             }
@@ -84,29 +81,16 @@ namespace StorEvilTestAssembly {{
     using StorEvil.ResultListeners;
     {0}
 
-    public class StorEvilDriver : StorEvil.InPlace.DriverBase  {{
-        IResultListener _listener;
-        public StorEvilDriver(IResultListener listener) {{
-            _listener = listener;
+    public class StorEvilDriver : StorEvil.InPlace.DriverBase  {{        
+        public StorEvilDriver(IResultListener listener) : base(listener) {{
+           
         }}
 
         public override void HandleStory(Story story) {{
-             
-             ScenarioInterpreter scenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()));
-             ScenarioPreprocessor scenarioPreprocessor = new ScenarioPreprocessor();
-             Scenario[] scenarios = story.Scenarios.SelectMany(s=>scenarioPreprocessor.Preprocess(s)).ToArray();
-                       
-             var lineExecuter = new ScenarioLineExecuter(new MemberInvoker(), scenarioInterpreter, _listener);
-
-            var contextFactory = new StoryContextFactory();            
+                                    
             {1}
-            var storyContext = contextFactory.GetContextForStory(story);         
-
-            int failures = 0;
-            bool scenarioFailed;
+            var scenarios = GetScenarios(story);
             Scenario scenario;
-            ScenarioContext context;
-            LineStatus lastStatus;
 
             {2}
 

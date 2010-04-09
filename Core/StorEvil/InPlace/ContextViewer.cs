@@ -15,7 +15,7 @@ namespace StorEvil.InPlace
             var propertySource = string.Join("\r\n", lines);
             var source = "public class DebugContext { \r\n" + propertySource + "\r\n}";
 
-            var assembly = _compiler.CompileInMemory(source, new[] { GetType().Assembly.Location });
+            var assembly = _compiler.CompileInMemory(source, GetReferencedAssemblies(dictionary));
             var context = Activator.CreateInstance(assembly.GetTypes().First());
             foreach (var type in dictionary.Keys)
             {
@@ -23,6 +23,11 @@ namespace StorEvil.InPlace
             }
 
             return context;
+        }
+
+        private string[] GetReferencedAssemblies(Dictionary<Type, object> dictionary)
+        {
+            return dictionary.Keys.Select(t => t.Assembly.Location).Distinct().ToArray();
         }
 
         private string BuildProperty(Type type)
