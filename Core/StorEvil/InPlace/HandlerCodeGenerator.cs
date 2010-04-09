@@ -73,6 +73,7 @@ using (StartScenario(story, scenario)) {
 if (ShouldContinue) {{
 #line {0} 
 ExecuteLine(@""{1}"");
+StorEvilContexts = GetContexts();
 #line hidden
 }}  
 ", line.LineNumber,
@@ -109,6 +110,7 @@ namespace StorEvilTestAssembly {{
                                     
             {1}
             var scenarios = GetScenarios(story);
+            var StorEvilContexts = new object[0];
             Scenario scenario;
 
             {2}

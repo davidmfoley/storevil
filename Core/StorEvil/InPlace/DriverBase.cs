@@ -16,6 +16,7 @@ namespace StorEvil.InPlace
         private StoryContextFactory ContextFactory;
         private ScenarioContext CurrentScenarioContext;
         private Scenario CurrentScenario;
+        
 
         protected DriverBase(IResultListener listener)
         {
@@ -24,29 +25,17 @@ namespace StorEvil.InPlace
             ScenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()));           
             LineExecuter = new ScenarioLineExecuter(new MemberInvoker(), ScenarioInterpreter, _listener);
             ContextFactory = new StoryContextFactory();            
-        }
-
-        public object DebuggingContext
-        {
-            get
-            {
-                if (_debuggingContext == null)
-                    _debuggingContext = CreateDebuggingContext();
-
-                return _debuggingContext;
-            }
-        }
-
-        private object CreateDebuggingContext()
-        {
-            return new ContextViewer().Create(CurrentScenarioContext.Contexts);
-        }
+        } 
 
         protected void AddAssembly(string location)
         {
             ContextFactory.AddAssembly(location);
         }
 
+        protected object[] GetContexts()
+        {
+            return CurrentScenarioContext.Contexts.Values.ToArray();
+        }
         protected Scenario[] GetScenarios(Story story)
         {
            
@@ -54,7 +43,6 @@ namespace StorEvil.InPlace
         }
 
         protected ScenarioInterpreter ScenarioInterpreter;
-        private object _debuggingContext;
 
         public abstract void HandleStory(Story story);
 
@@ -65,8 +53,7 @@ namespace StorEvil.InPlace
 
         protected void ExecuteLine(string line)
         {
-            LastStatus = LineExecuter.ExecuteLine(CurrentScenario, CurrentScenarioContext, line);
-            _debuggingContext = null;
+            LastStatus = LineExecuter.ExecuteLine(CurrentScenario, CurrentScenarioContext, line);            
         }
         public JobResult GetResult()
         {
