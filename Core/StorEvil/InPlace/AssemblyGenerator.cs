@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using StorEvil.Core;
@@ -6,24 +5,6 @@ using StorEvil.Parsing;
 
 namespace StorEvil.InPlace
 {
-
-    public abstract class DriverBase : MarshalByRefObject, IStoryHandler
-    {
-        protected JobResult Result = new JobResult();
-
-        public abstract void HandleStory(Story story);
-
-        public void Finished()
-        {
-           
-        }
-
-        public JobResult GetResult()
-        {
-            return Result;
-        }
-    }
-
     public class AssemblyGenerator
     {
         public AssemblyGenerator(IScenarioPreprocessor scenarioPreprocessor)

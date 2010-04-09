@@ -75,6 +75,8 @@
     <Compile Include="Infrastructure\Filesystem.cs" />
     <Compile Include="Infrastructure\FileWriter.cs" />
     <Compile Include="InPlace\AssemblyGenerator.cs" />
+    <Compile Include="InPlace\ContextViewer.cs" />
+    <Compile Include="InPlace\DriverBase.cs" />
     <Compile Include="InPlace\HandlerCodeGenerator.cs" />
     <Compile Include="InPlace\CodeCompiler.cs" />
     <Compile Include="InPlace\IDebugListener.cs" />
