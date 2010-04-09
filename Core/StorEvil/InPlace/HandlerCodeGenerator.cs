@@ -8,21 +8,15 @@ namespace StorEvil.InPlace
 {
     public class HandlerCodeGenerator
     {
-        private readonly IScenarioPreprocessor _scenarioPreprocessor;
-
-        public HandlerCodeGenerator(IScenarioPreprocessor scenarioPreprocessor)
-        {
-            _scenarioPreprocessor = scenarioPreprocessor;
-        }
-
-        public string GetSourceCode(Story story, IEnumerable<Scenario> scenarios, IEnumerable<string> referencedAssemblies)
+        public string GetSourceCode(Story story, IEnumerable<Scenario> scenarios,
+                                    IEnumerable<string> referencedAssemblies)
         {
             var codeBuilder = new StringBuilder();
 
             codeBuilder.AppendLine("// " + story.Id);
             AppendStoryCode(codeBuilder, story, scenarios.ToArray());
 
-            return string.Format(_sourceCodeTemplate, "", BuildContextFactorySetup(referencedAssemblies), codeBuilder.ToString());
+            return string.Format(_sourceCodeTemplate, "", BuildContextFactorySetup(referencedAssemblies), codeBuilder);
         }
 
         private string BuildContextFactorySetup(IEnumerable<string> referencedAssemblies)
@@ -37,36 +31,56 @@ namespace StorEvil.InPlace
             var i = 0;
             foreach (var scenario in scenarios)
             {
-                codeBuilder.AppendLine(@"
-scenario = scenarios[" + i + @"];
+                codeBuilder.AppendLine(GetScenarioPreamble(i, story));
 
-using (StartScenario(story, scenario)) {
-
-#line 1  """ + story.Id + @"""
-#line hidden");
                 foreach (var line in GetLines(scenario))
-                {
-                    codeBuilder.AppendFormat(@"
-if (ShouldContinue) {{
-#line {0} 
-ExecuteLine(@""{1}"");
-#line hidden
-}}  
-", line.LineNumber, line.Text.Replace("\"", "\"\""));
-                }
-                codeBuilder.AppendLine("}");
-                codeBuilder.AppendLine(@"CollectScenarioResult();");
+                    codeBuilder.AppendLine(BuildLine(line));
+
+                codeBuilder.AppendLine(GetScenarioEnd());
 
                 i++;
             }
         }
 
+        private string GetScenarioEnd()
+        {
+            return "}\r\nCollectScenarioResult();";
+        }
+
+        private string GetScenarioPreamble(int i, Story story)
+        {
+            return @"
+scenario = scenarios[" + i + @"];
+
+using (StartScenario(story, scenario)) {
+
+#line 1  """ +
+                   story.Id + @"""
+#line hidden";
+        }
+
+        private string BuildLine(ScenarioLine line)
+        {
+            var lineCodeBuilder = new StringBuilder();
+
+            lineCodeBuilder.AppendFormat(
+                @"
+if (ShouldContinue) {{
+#line {0} 
+ExecuteLine(@""{1}"");
+#line hidden
+}}  
+", line.LineNumber,
+                line.Text.Replace("\"", "\"\""));
+            return lineCodeBuilder.ToString();
+        }
+
         private IEnumerable<ScenarioLine> GetLines(IScenario scenario)
         {
             if (scenario is Scenario)
-                return ((Scenario)scenario).Body;
+                return ((Scenario) scenario).Body;
             else
-                return ((ScenarioOutline)scenario).Scenario.Body;
+                return ((ScenarioOutline) scenario).Scenario.Body;
         }
 
         private string _sourceCodeTemplate =
@@ -98,6 +112,5 @@ namespace StorEvilTestAssembly {{
         }}
     }}
 }}";
-
     }
 }

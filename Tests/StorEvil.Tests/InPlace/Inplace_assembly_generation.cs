@@ -29,7 +29,7 @@ namespace StorEvil.InPlace.Compiled
         [SetUp]
         public void SetupContext()
         {
-            Generator = new AssemblyGenerator(new ScenarioPreprocessor());
+            Generator = new AssemblyGenerator();
             _scenarios = new IScenario[]
                              {
                                  TestHelper.BuildScenario("foo", "When I do seomthing",

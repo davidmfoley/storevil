@@ -20,16 +20,28 @@ namespace StorEvil.InPlace
         protected DriverBase(IResultListener listener)
         {
             _listener = listener;
-
             
-            ScenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()));
-           
+            ScenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()));           
             LineExecuter = new ScenarioLineExecuter(new MemberInvoker(), ScenarioInterpreter, _listener);
-
             ContextFactory = new StoryContextFactory();            
-
         }
-        
+
+        public object DebuggingContext
+        {
+            get
+            {
+                if (_debuggingContext == null)
+                    _debuggingContext = CreateDebuggingContext();
+
+                return _debuggingContext;
+            }
+        }
+
+        private object CreateDebuggingContext()
+        {
+            return new ContextViewer().Create(CurrentScenarioContext.Contexts);
+        }
+
         protected void AddAssembly(string location)
         {
             ContextFactory.AddAssembly(location);
@@ -42,6 +54,7 @@ namespace StorEvil.InPlace
         }
 
         protected ScenarioInterpreter ScenarioInterpreter;
+        private object _debuggingContext;
 
         public abstract void HandleStory(Story story);
 
@@ -52,7 +65,8 @@ namespace StorEvil.InPlace
 
         protected void ExecuteLine(string line)
         {
-            LineExecuter.ExecuteLine(CurrentScenario, CurrentScenarioContext, line);
+            LastStatus = LineExecuter.ExecuteLine(CurrentScenario, CurrentScenarioContext, line);
+            _debuggingContext = null;
         }
         public JobResult GetResult()
         {
@@ -62,14 +76,15 @@ namespace StorEvil.InPlace
         protected IDisposable StartScenario(Story story, Scenario scenario)
         {
             _listener.ScenarioStarting(scenario);
+
             CurrentScenarioContext = ContextFactory.GetContextForStory(story).GetScenarioContext();
             CurrentScenario = scenario;
             LastStatus = LineStatus.Passed;
             ScenarioInterpreter.NewScenario();
 
-
             return CurrentScenarioContext;
         }
+
         protected LineStatus LastStatus
         {
             get; set;

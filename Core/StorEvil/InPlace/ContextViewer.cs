@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using StorEvil.Utility;
 
 namespace StorEvil.InPlace
@@ -9,7 +10,7 @@ namespace StorEvil.InPlace
     {
         private CodeCompiler _compiler = new CodeCompiler();
 
-        public object Create(Dictionary<Type, object> dictionary)
+        public object Create(IDictionary<Type, object> dictionary)
         {
             var lines = dictionary.Select(x => BuildProperty(x.Key)).ToArray();
             var propertySource = string.Join("\r\n", lines);
@@ -25,9 +26,9 @@ namespace StorEvil.InPlace
             return context;
         }
 
-        private string[] GetReferencedAssemblies(Dictionary<Type, object> dictionary)
+        private Assembly[] GetReferencedAssemblies(IDictionary<Type, object> dictionary)
         {
-            return dictionary.Keys.Select(t => t.Assembly.Location).Distinct().ToArray();
+            return dictionary.Keys.Select(t => t.Assembly).Distinct().ToArray();
         }
 
         private string BuildProperty(Type type)

@@ -2,6 +2,7 @@ using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using Microsoft.CSharp;
 using StorEvil.Core;
@@ -23,9 +24,9 @@ namespace StorEvil.InPlace
             return assemblyLocation;
         }
 
-        public Assembly CompileInMemory(string sourceCode, IEnumerable<string> referencedAssemblies)
+        public Assembly CompileInMemory(string sourceCode, IEnumerable<Assembly> referencedAssemblies)
         {
-            var compilerParams = BuildCompilerParams(referencedAssemblies);
+            var compilerParams = BuildCompilerParams(referencedAssemblies.Select(a =>a.Location));
             compilerParams.GenerateInMemory = true;
 
             var results = Compile(compilerParams, sourceCode);

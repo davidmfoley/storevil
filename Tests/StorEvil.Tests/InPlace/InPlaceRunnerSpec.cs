@@ -49,7 +49,7 @@ namespace StorEvil.InPlace
                                                                  }
                                      };
 
-            var remoteHandlerFactory = new TestRemoteHandlerFactory(new AssemblyGenerator(preprocessor), configSettings, new Filesystem() );
+            var remoteHandlerFactory = new TestRemoteHandlerFactory(new AssemblyGenerator(), configSettings, new Filesystem() );
                                      
             var runner = new InPlaceCompilingStoryRunner(
                 remoteHandlerFactory,                                                
