@@ -4,17 +4,37 @@ StorEvil version 0.4 release notes
 
 DONE:
 
-	Supports parsing multiple word enum values.
-	For example:
-
-		public enum CityEnum {Seattle, NewYork, SanFrancisco}
-		public void When_I_Live_In(CityEnum city) {}
-
-	will now match any of the following
+	Debugging support
+		you can now set breakpoints in your plaintext file.
 		
-		When I live in New York
-		When I Live in Seattle
-		When I live in San Francisco
+		For your StorEvil project, you can enable F5-debugging in Visual Studio as follows:
+		
+			1. Right-click on the project in Solution Explorer, go to "Properties"
+			2. Select the Debug tab
+			3. Choose "Start external program"
+			4. Enter the path to storevil.exe in the external program text box
+			5. Set the working directory to the project directory
+			
+			You should now be able to set the project as your startup project, set
+			some breakpoints in your feature files, and press F5. 
+			
+			StorEvil's output will be sent to the debug window.
+
+		For NUnit generation:
+			Just "debug" your generated test (I tested in the ReSharper runner)
+			
+	StorEvil now supports parsing multiple word enum values.
+	
+		For example:
+
+			public enum CityEnum {Seattle, NewYork, SanFrancisco}
+			public void When_I_Live_In(CityEnum city) {}
+
+		will now match any of the following
+			
+			When I live in New York
+			When I Live in Seattle
+			When I live in San Francisco
 	
 TODO:
 
