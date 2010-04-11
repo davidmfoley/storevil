@@ -19,6 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{5E256EA4-5
 		LICENSE.txt = LICENSE.txt
 		ReadMe.markdown = ReadMe.markdown
 		ReleaseNotes.txt = ReleaseNotes.txt
+		ToDo.txt = ToDo.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConwaysLife", "Examples\ConwaysLife\ConwaysLife.csproj", "{2CE31BAB-0046-43E0-B58E-585FF8646EF7}"
@@ -38,6 +39,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tutorial.NUnit", "Examples\Tutorial.NUnit\Tutorial.NUnit.csproj", "{7513C08A-D12A-43C1-B5C0-EBC1B1A9FDB5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorEvil.Resharper", "Core\StorEvil.Resharper\StorEvil.Resharper.csproj", "{F6BDC77F-FB15-46A2-89B9-9E66E89DE62D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{EE6099F0-03E3-46B9-8F11-13891AEC23CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorEvil.MsBuild", "Build\StorEvil.MsBuild\StorEvil.MsBuild.csproj", "{D0F1AFA9-AC1C-45A3-98D0-BF79866E9DCF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,6 +94,10 @@ Global
 		{F6BDC77F-FB15-46A2-89B9-9E66E89DE62D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6BDC77F-FB15-46A2-89B9-9E66E89DE62D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6BDC77F-FB15-46A2-89B9-9E66E89DE62D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0F1AFA9-AC1C-45A3-98D0-BF79866E9DCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0F1AFA9-AC1C-45A3-98D0-BF79866E9DCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0F1AFA9-AC1C-45A3-98D0-BF79866E9DCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0F1AFA9-AC1C-45A3-98D0-BF79866E9DCF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -105,5 +114,6 @@ Global
 		{FA4A5350-AA62-4C2D-8DE4-200B2FF2D15F} = {51EF7085-D82F-45FE-81EC-C604BFC5BB17}
 		{12DB6FE1-9BB4-4538-9F7B-C3113465BB64} = {51EF7085-D82F-45FE-81EC-C604BFC5BB17}
 		{7513C08A-D12A-43C1-B5C0-EBC1B1A9FDB5} = {51EF7085-D82F-45FE-81EC-C604BFC5BB17}
+		{D0F1AFA9-AC1C-45A3-98D0-BF79866E9DCF} = {EE6099F0-03E3-46B9-8F11-13891AEC23CB}
 	EndGlobalSection
 EndGlobal
