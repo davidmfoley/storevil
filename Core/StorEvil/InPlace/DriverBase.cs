@@ -10,20 +10,20 @@ namespace StorEvil.InPlace
     public abstract class DriverBase : MarshalByRefObject, IStoryHandler
     {
         protected JobResult Result = new JobResult();
-        private IResultListener _listener;
+        private readonly IResultListener ResultListener;
 
-        private ScenarioLineExecuter LineExecuter;
-        private StoryContextFactory ContextFactory;
+        private readonly ScenarioLineExecuter LineExecuter;
+        private readonly StoryContextFactory ContextFactory;
         private ScenarioContext CurrentScenarioContext;
         private Scenario CurrentScenario;
         
 
-        protected DriverBase(IResultListener listener)
+        protected DriverBase(IResultListener resultListener)
         {
-            _listener = listener;
+            ResultListener = resultListener;
             
             ScenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()));           
-            LineExecuter = new ScenarioLineExecuter(new MemberInvoker(), ScenarioInterpreter, _listener);
+            LineExecuter = new ScenarioLineExecuter(new MemberInvoker(), ScenarioInterpreter, ResultListener);
             ContextFactory = new StoryContextFactory();            
         } 
 
@@ -36,9 +36,9 @@ namespace StorEvil.InPlace
         {
             return CurrentScenarioContext.Contexts.Values.ToArray();
         }
+
         protected Scenario[] GetScenarios(Story story)
-        {
-           
+        {           
             return story.Scenarios.SelectMany(s=> new ScenarioPreprocessor().Preprocess(s)).ToArray();
         }
 
@@ -47,13 +47,14 @@ namespace StorEvil.InPlace
         public abstract void HandleStory(Story story);
 
         public void Finished()
-        {
-            
+        {            
         }
 
-        protected void ExecuteLine(string line)
+        protected object[] ExecuteLine(string line)
         {
-            LastStatus = LineExecuter.ExecuteLine(CurrentScenario, CurrentScenarioContext, line);            
+            LastStatus = LineExecuter.ExecuteLine(CurrentScenario, CurrentScenarioContext, line);
+
+            return GetContexts();
         }
         public JobResult GetResult()
         {
@@ -62,7 +63,7 @@ namespace StorEvil.InPlace
 
         protected IDisposable StartScenario(Story story, Scenario scenario)
         {
-            _listener.ScenarioStarting(scenario);
+            ResultListener.ScenarioStarting(scenario);
 
             CurrentScenarioContext = ContextFactory.GetContextForStory(story).GetScenarioContext();
             CurrentScenario = scenario;
@@ -98,7 +99,7 @@ namespace StorEvil.InPlace
             else
             {
                 Result.Succeeded++; 
-                _listener.ScenarioSucceeded(CurrentScenario);
+                ResultListener.ScenarioSucceeded(CurrentScenario);
             }
         }
     }

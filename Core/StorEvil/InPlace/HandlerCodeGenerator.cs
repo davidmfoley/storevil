@@ -72,8 +72,7 @@ using (StartScenario(story, scenario)) {
                 @"
 if (ShouldContinue) {{
 #line {0} 
-ExecuteLine(@""{1}"");
-StorEvilContexts = GetContexts();
+StorEvilContexts = ExecuteLine(@""{1}"");
 #line hidden
 }}  
 ", line.LineNumber,

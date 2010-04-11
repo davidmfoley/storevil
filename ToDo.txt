@@ -1,0 +1,5 @@
+TODO:
+
+consider acceptance vs. regression a la StoryTeller
+consider better syntax for tables (and/or HTML input with tables?)
+editor or VS add in (suggestions from contexts?)

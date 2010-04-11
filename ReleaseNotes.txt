@@ -29,6 +29,10 @@ DONE:
 		Fixed some bugs
 		
 		Brought R# runner up to the latest RC build.
+		
+		Updated build script
+			added Package command for 
+		
 			
 	StorEvil now supports parsing multiple word enum values.
 	
@@ -178,9 +182,3 @@ StorEvil version 0.2 release notes
 	-----------------
 	- Added command line switch @--debug@ which enables some tracing output
 	
-	
-TODO:
-
-consider acceptance vs. regression a la StoryTeller
-consider better syntax for tables (and/or HTML input with tables?)
-editor or VS add in (suggestions from contexts?)

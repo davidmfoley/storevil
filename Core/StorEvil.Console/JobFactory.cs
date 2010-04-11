@@ -35,6 +35,7 @@ namespace StorEvil.Console
             var settings = _configSource.GetConfig(Directory.GetCurrentDirectory());
             if (string.IsNullOrEmpty(settings.StoryBasePath))
                 settings.StoryBasePath = Directory.GetCurrentDirectory();
+
             switchParser.Parse(args, settings);
 
             container.Register(settings);
