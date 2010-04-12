@@ -11,7 +11,7 @@ namespace StorEvil.Context
         StoryContext GetContextForStory(Story story);
     }
 
-    public class StoryContext
+    public class StoryContext : IDisposable
     {
         public StoryContext(params Type[] types)
         {
@@ -24,38 +24,73 @@ namespace StorEvil.Context
         }
 
         public IEnumerable<Type> ImplementingTypes { get; set; }
+        private readonly Dictionary<Type, object> _cache = new Dictionary<Type, object>();      
 
         public ScenarioContext GetScenarioContext()
         {
-            return new ScenarioContext(ImplementingTypes);
+            return new ScenarioContext(this, ImplementingTypes, _cache);
+        }
+
+        public void SetContext(object o)
+        {
+            _cache.Add(o.GetType(), o);
+        }
+
+        public void Dispose()
+        {
+            foreach (var context in _cache.Values)
+            {
+                if (context is IDisposable)
+                    ((IDisposable)context).Dispose();
+            }
         }
     }
 
     public class ScenarioContext : IDisposable
     {
-        public ScenarioContext(IEnumerable<Type> implementingTypes)
+        private readonly StoryContext _parentContext;
+
+        public ScenarioContext(StoryContext parentContext, IEnumerable<Type> implementingTypes, Dictionary<Type, object> outerContexts)
         {
-            
+            _cache = new Dictionary<Type, object>(outerContexts);
+
+            _parentContext = parentContext;
+
             ImplementingTypes = implementingTypes;
         }
 
         public IEnumerable<Type> ImplementingTypes { get; set; }
 
-        private readonly Dictionary<Type, object> _cache = new Dictionary<Type, object>();
+        private readonly Dictionary<Type, object> _cache = new Dictionary<Type, object>();      
 
         public object GetContext(Type type)
         {
             try
             {
                 if (!_cache.ContainsKey(type))
+                {
                     _cache.Add(type, CreateContextObject(type));
 
+                    if (HasStoryLifetime(type))
+                    {
+                        _parentContext.SetContext(_cache[type]);
+                    }
+                }
                 return _cache[type];
             }
             catch
             {
                 return null;
             }
+        }
+
+        private bool HasStoryLifetime(Type type)
+        {
+            var contextAttr = (ContextAttribute) type.GetCustomAttributes(typeof (ContextAttribute), true).FirstOrDefault();
+            if (contextAttr == null)
+                return false;
+
+            return contextAttr.Lifetime == ContextLifetime.Story;
         }
 
         private object CreateContextObject(Type type)
@@ -85,7 +120,7 @@ namespace StorEvil.Context
         {
             foreach (var context in _cache.Values)
             {
-                if (context is IDisposable)
+                if (context is IDisposable && !HasStoryLifetime(context.GetType()))
                     ((IDisposable)context).Dispose();
             }
         }

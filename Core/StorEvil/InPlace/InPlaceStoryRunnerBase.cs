@@ -31,7 +31,10 @@ namespace StorEvil.InPlace
             ResultListener.StoryStarting(story);
             Scenario[] scenariosMatchingFilter = GetScenariosMatchingFilter(story);
 
-            Execute(story, scenariosMatchingFilter, _contextFactory.GetContextForStory(story));
+            using (StoryContext contextForStory = _contextFactory.GetContextForStory(story))
+            {
+                Execute(story, scenariosMatchingFilter, contextForStory);
+            }
         }
 
         protected abstract void Execute(Story story, IEnumerable<Scenario> scenariosMatchingFilter, StoryContext context);

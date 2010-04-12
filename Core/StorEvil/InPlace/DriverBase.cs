@@ -10,14 +10,14 @@ namespace StorEvil.InPlace
     public abstract class DriverBase : MarshalByRefObject, IStoryHandler
     {
         protected JobResult Result = new JobResult();
-        private readonly IResultListener ResultListener;
 
+        private readonly IResultListener ResultListener;
         private readonly ScenarioLineExecuter LineExecuter;
         private readonly StoryContextFactory ContextFactory;
+
         private ScenarioContext CurrentScenarioContext;
         private Scenario CurrentScenario;
         
-
         protected DriverBase(IResultListener resultListener)
         {
             ResultListener = resultListener;
@@ -47,7 +47,8 @@ namespace StorEvil.InPlace
         public abstract void HandleStory(Story story);
 
         public void Finished()
-        {            
+        {          
+            CurrentStoryContext.Dispose();
         }
 
         protected object[] ExecuteLine(string line)
@@ -56,16 +57,23 @@ namespace StorEvil.InPlace
 
             return GetContexts();
         }
+
         public JobResult GetResult()
         {
             return Result;
         }
 
+        protected StoryContext CurrentStoryContext;
+        
+
         protected IDisposable StartScenario(Story story, Scenario scenario)
         {
             ResultListener.ScenarioStarting(scenario);
 
-            CurrentScenarioContext = ContextFactory.GetContextForStory(story).GetScenarioContext();
+            if (CurrentStoryContext == null)
+                CurrentStoryContext = ContextFactory.GetContextForStory(story);
+
+            CurrentScenarioContext = CurrentStoryContext.GetScenarioContext();
             CurrentScenario = scenario;
             LastStatus = LineStatus.Passed;
             ScenarioInterpreter.NewScenario();
