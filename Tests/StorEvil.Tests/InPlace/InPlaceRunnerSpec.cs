@@ -24,7 +24,7 @@ namespace StorEvil.InPlace
             new ExtensionMethodHandler().AddAssembly(typeof(TestExtensionMethods).Assembly);
 
             Context = new StoryContext(typeof (T));
-
+            
             if (UseCompilingRunner())
             {
                 RunInCompilingRunner(story);
@@ -33,6 +33,8 @@ namespace StorEvil.InPlace
             {
                 GetRunner().HandleStory(story);
             }
+            
+            Context.Dispose();
         }
 
         private void RunInCompilingRunner(Story story)
@@ -89,7 +91,7 @@ namespace StorEvil.InPlace
         protected static Scenario BuildScenario(string name, params string[] lines)
         {
             int lineNumber = 0;
-            return new Scenario("test", lines.Select(line=> new ScenarioLine {Text = line, LineNumber = ++lineNumber}).ToArray());
+            return new Scenario(name, lines.Select(line=> new ScenarioLine {Text = line, LineNumber = ++lineNumber}).ToArray());
         }
 
         protected void AssertLineSuccess(string expectedLine)
