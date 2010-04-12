@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using Rhino.Mocks;
@@ -68,8 +69,16 @@ namespace StorEvil.InPlace.NonCompiled
 
     [TestFixture]
     public class Disposing_contexts_with_story_lifetime
-        : StorEvil.InPlace.Disposing_contexts_with_story_lifetime, UsingNonCompiledRunner { }
-
+        : StorEvil.InPlace.Disposing_contexts_with_story_lifetime, UsingNonCompiledRunner
+    {
+        [Test]
+        public void Running_a_separate_story_it_should_be_disposed()
+        {
+            var story = new Story("separate", "summary", new[] { BuildScenario("test1", "when a disposable context with a story lifetime is used", "story lifetime dispose calls should be 1") });
+            RunStory(story);
+            AssertAllScenariosSucceeded();
+        }
+    }
 }
 
 namespace StorEvil.InPlace
@@ -104,6 +113,8 @@ namespace StorEvil.InPlace
         [SetUp]
         public void SetupContext()
         {
+            StoryLifetimeDisposalTestContext.DisposeCalls = 0;
+ 
             var story = new Story("test", "summary", new[] { TestScenario1, TestScenario2, TestScenario3 });
 
             RunStory(story);
@@ -131,15 +142,25 @@ namespace StorEvil.InPlace
         }
 
         [Test]
-        public void Running_a_separate_story_it_should_be_disposed()
+        public void All_scenarios_should_succeed()
         {
-            var story = new Story("separate", "summary", new[] {BuildScenario("test1", "when a disposable context with a story lifetime is used", "story lifetime dispose calls should be 1")});
-            RunStory(story);
-            AssertScenarioSuccessWithName("separate");
+            AssertAllScenariosSucceeded();
         }
 
-        private void AssertScenarioSuccessWithName(string name)
+        protected void AssertAllScenariosSucceeded()
         {
+            var args = ResultListener.GetArgumentsForCallsMadeOn(x => x.ScenarioFailed(Any<ScenarioFailureInfo>()));
+            if (args.Count > 0)
+            {
+                var message = string.Join("\r\n", args.Select(a => ((ScenarioFailureInfo) a[0]).Message).ToArray());
+
+                Assert.Fail(message);
+            }
+        }
+
+        protected void AssertScenarioSuccessWithName(string name)
+        {
+            
             ResultListener.AssertWasCalled(x => x.ScenarioSucceeded(Arg<Scenario>.Matches(s => s.Name == name)));
         }
     }
@@ -163,7 +184,7 @@ namespace StorEvil.InPlace
     [Context(Lifetime=ContextLifetime.Story)]
     public class StoryLifetimeDisposalTestContext : IDisposable
     {
-        private static int DisposeCalls = 0;
+        public static int DisposeCalls = 0;
         public void when_a_disposable_context_with_a_story_lifetime_is_used() { }
 
         public int story_lifetime_dispose_calls()

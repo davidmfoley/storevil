@@ -19,7 +19,9 @@ namespace StorEvil.NUnit
 
         public StoryContext GetContextForStory(Story story)
         {
-            return  _context ?? new StoryContext();
+            if (_context == null)
+                _context = new StoryContext();
+            return  _context;
         }
     }
 }

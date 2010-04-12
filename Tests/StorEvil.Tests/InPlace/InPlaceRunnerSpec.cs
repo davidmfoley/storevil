@@ -32,9 +32,7 @@ namespace StorEvil.InPlace
             else
             {
                 GetRunner().HandleStory(story);
-            }
-            
-            Context.Dispose();
+            }                     
         }
 
         private void RunInCompilingRunner(Story story)
