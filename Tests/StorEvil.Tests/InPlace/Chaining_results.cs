@@ -51,22 +51,30 @@ namespace StorEvil.InPlace
 namespace StorEvil.InPlace.Compiled
 {
     [TestFixture]
-    public class Disposing_contexts
-        : StorEvil.InPlace.Disposing_contexts, UsingCompiledRunner { }
+    public class Disposing_contexts_with_default_lifetime
+        : StorEvil.InPlace.Disposing_contexts_with_default_lifetime, UsingCompiledRunner { }
+
+    [TestFixture]
+    public class Disposing_contexts_with_story_lifetime
+        : StorEvil.InPlace.Disposing_contexts_with_story_lifetime, UsingCompiledRunner { }
 
 }
 
 namespace StorEvil.InPlace.NonCompiled
 {
     [TestFixture]
-    public class Disposing_contexts
-        : StorEvil.InPlace.Disposing_contexts, UsingNonCompiledRunner { }
+    public class Disposing_contexts_with_default_lifetime
+        : StorEvil.InPlace.Disposing_contexts_with_default_lifetime, UsingNonCompiledRunner { }
+
+    [TestFixture]
+    public class Disposing_contexts_with_story_lifetime
+        : StorEvil.InPlace.Disposing_contexts_with_story_lifetime, UsingNonCompiledRunner { }
 
 }
 
 namespace StorEvil.InPlace
 {
-    public abstract class Disposing_contexts : InPlaceRunnerSpec<InPlaceRunnerDisposalTestContext>
+    public abstract class Disposing_contexts_with_default_lifetime : InPlaceRunnerSpec<InPlaceRunnerDisposalTestContext>
     {
         private readonly Scenario TestScenario1 = BuildScenario("test", "when a disposable context is used");
         private readonly Scenario TestScenario2 = BuildScenario("test", "then it should be disposed");
@@ -87,6 +95,55 @@ namespace StorEvil.InPlace
         }
     }
 
+    public abstract class Disposing_contexts_with_story_lifetime : InPlaceRunnerSpec<StoryLifetimeDisposalTestContext>
+    {
+        private readonly Scenario TestScenario1 = BuildScenario("test1", "when a disposable context with a story lifetime is used", "story lifetime dispose calls should be 0");
+        private readonly Scenario TestScenario2 = BuildScenario("test2", "when a disposable context with a story lifetime is used", "story lifetime dispose calls should be 0");
+        private readonly Scenario TestScenario3 = BuildScenario("test3", "when a disposable context with a story lifetime is used", "story lifetime dispose calls should be 0");
+
+        [SetUp]
+        public void SetupContext()
+        {
+            var story = new Story("test", "summary", new[] { TestScenario1, TestScenario2, TestScenario3 });
+
+            RunStory(story);
+        }
+
+        [Test]
+        public void First_time_should_not_have_disposed()
+        {
+            string name = "test1";
+            AssertScenarioSuccessWithName(name);
+        }
+
+        [Test]
+        public void Second_time_should_not_have_disposed()
+        {
+            string name = "test2";
+            AssertScenarioSuccessWithName(name);
+        }
+
+        [Test]
+        public void Third_time_should_not_have_disposed()
+        {
+            string name = "test3";
+            AssertScenarioSuccessWithName(name);
+        }
+
+        [Test]
+        public void Running_a_separate_story_it_should_be_disposed()
+        {
+            var story = new Story("separate", "summary", new[] {BuildScenario("test1", "when a disposable context with a story lifetime is used", "story lifetime dispose calls should be 1")});
+            RunStory(story);
+            AssertScenarioSuccessWithName("separate");
+        }
+
+        private void AssertScenarioSuccessWithName(string name)
+        {
+            ResultListener.AssertWasCalled(x => x.ScenarioSucceeded(Arg<Scenario>.Matches(s => s.Name == name)));
+        }
+    }
+
     [Context]
     public class InPlaceRunnerDisposalTestContext :IDisposable
     {
@@ -95,6 +152,23 @@ namespace StorEvil.InPlace
         public void then_it_should_be_disposed()
         {
             Assert.That(DisposeCalls, Is.GreaterThan(0));
+        }
+
+        public void Dispose()
+        {
+            DisposeCalls++;
+        }
+    }
+
+    [Context(Lifetime=ContextLifetime.Story)]
+    public class StoryLifetimeDisposalTestContext : IDisposable
+    {
+        private static int DisposeCalls = 0;
+        public void when_a_disposable_context_with_a_story_lifetime_is_used() { }
+
+        public int story_lifetime_dispose_calls()
+        {
+            return DisposeCalls;
         }
 
         public void Dispose()
