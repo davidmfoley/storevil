@@ -1,7 +1,7 @@
 using System.IO;
 using System.Text;
 
-namespace StorEvil.Nunit
+namespace StorEvil.NUnit
 {
     /// <summary>
     /// Writes all fixtures to a single file

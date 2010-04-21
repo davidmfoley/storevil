@@ -5,7 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Context;
 using StorEvil.Core;
-using StorEvil.Nunit;
+using StorEvil.NUnit;
 using StorEvil.Parsing;
 using StorEvil.Utility;
 
@@ -53,7 +53,7 @@ namespace StorEvil.NUnit
                 .Cast<CategoryAttribute>()
                 .Select(x=>x.Name);
 
-            attributes.ElementsShouldEqual("foo", "bar");
+            attributes.OrderBy(x=>x).ElementsShouldEqual("bar", "foo");
             
         }
 

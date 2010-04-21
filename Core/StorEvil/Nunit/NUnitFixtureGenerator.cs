@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -7,8 +8,73 @@ using StorEvil.Core;
 using StorEvil.Parsing;
 using StorEvil.Utility;
 
-namespace StorEvil.Nunit
+namespace StorEvil.NUnit
 {
+
+    public class StorEvilTestFixtureBase
+    {
+        private Dictionary<Type, object> _cache = new Dictionary<Type, object>();
+
+        protected void SetUp()
+        {
+            
+        }
+
+        protected void CleanUpScenario()
+        {
+            var typesToCleanup = _cache.Keys.Where(IsScenarioLifetime) ?? new Type[0];
+
+            DestroyContexts(typesToCleanup);
+        }
+
+        protected void CleanUpStory()
+        {
+            var typesToCleanup = _cache.Keys.Where(IsStoryLifetime);
+
+            DestroyContexts(typesToCleanup);
+        }
+
+        private void DestroyContexts(IEnumerable<Type> typesToCleanup)
+        {
+            foreach (var type in typesToCleanup.ToArray())
+            {
+                var context = _cache[type];
+                if (context is IDisposable)
+                    ((IDisposable)context).Dispose();
+
+                _cache.Remove(type);
+            }
+        }
+
+        private bool IsScenarioLifetime(Type type)
+        {
+            return GetLifetime(type) == ContextLifetime.Scenario;
+        }
+
+        private ContextLifetime GetLifetime(Type type)
+        {
+            var attribute = (StorEvil.ContextAttribute)type.GetCustomAttributes(typeof (StorEvil.ContextAttribute), true).FirstOrDefault();
+            if (attribute == null)
+                return ContextLifetime.Scenario;
+
+            return attribute.Lifetime;
+        }
+
+        private bool IsStoryLifetime(Type type)
+        {
+            return GetLifetime(type) != ContextLifetime.Scenario;
+        }
+
+        protected T GetContext<T>()
+        {
+            var type = typeof (T);
+            if (!_cache.ContainsKey(type))
+                _cache.Add(type, Activator.CreateInstance(type));
+
+            return (T)_cache[type];
+        }
+        
+    }
     /// <summary>
     /// Generates NUnit fixtures
     /// </summary>
@@ -24,6 +90,7 @@ namespace StorEvil.Nunit
 
         public ITestMethodGenerator MethodGenerator { get; set; }
 
+
         private const string FixtureFormat =
             @"
 
@@ -33,15 +100,26 @@ namespace {0} {{
 
     [TestFixture]
     {5}
-    public class {2} {{
+    public class {2} : StorEvil.NUnit.StorEvilTestFixtureBase {{
 #line 1 ""{6}""
 #line hidden
         private StorEvil.Interpreter.ParameterConverters.ParameterConverter ParameterConverter = new StorEvil.Interpreter.ParameterConverters.ParameterConverter();
         [TestFixtureSetUp]
-        public void WriteStoryToConsole() {{
+        public void FixtureSetUp() {{
+            base.SetUp();
             {4}
         }}
         
+
+        [TearDown]
+        public void TearDown() {{
+            base.CleanUpScenario();
+        }}
+
+        [TestFixtureTearDown]
+        public void FixtureTearDown() {{
+            base.CleanUpStory();
+        }}
 {3}
     }}
 }}";

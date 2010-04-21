@@ -7,7 +7,7 @@ using Rhino.Mocks;
 using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Interpreter;
-using StorEvil.Nunit;
+using StorEvil.NUnit;
 using StorEvil.Utility;
 
 namespace StorEvil.NUnit
@@ -18,7 +18,7 @@ namespace StorEvil.NUnit
         protected static Scenario BuildScenario(string name, params string[] lines)
         {
             var lineNumber = 1;
-            return new Scenario("test", lines.Select(line => new ScenarioLine { Text = line, LineNumber = lineNumber++}).ToArray());
+            return new Scenario(name, lines.Select(line => new ScenarioLine { Text = line, LineNumber = lineNumber++}).ToArray());
         }
 
         [Test]
@@ -103,7 +103,7 @@ namespace StorEvil.NUnit
         }
 
         [Test]
-        public void Created_Test_Should_Dispose_Context()
+        public void Created_Test_Should_Dispose_Context_using_default_lifetime()
         {
             // injecting parameters
             var s = BuildScenario("test", new[] { "foo" });
@@ -115,6 +115,8 @@ namespace StorEvil.NUnit
 
             context.WasDisposed.ShouldEqual(true);
         }
+
+        
 
         [Test]
         public void Created_Test_Should_Parse_DateTime()
@@ -279,11 +281,11 @@ using StorEvil;
 namespace {1} {{   
     
     [TestFixture]
-    public class {2} {{
+    public class {2} : StorEvil.NUnit.StorEvilTestFixtureBase {{
         private StorEvil.Interpreter.ParameterConverters.ParameterConverter ParameterConverter = new StorEvil.Interpreter.ParameterConverters.ParameterConverter();
-      
-        public {3} _context;      
-        {4}
+        
+            
+        {3}
     }}
 }}";
             string formattedCode = string.Format(
@@ -291,8 +293,7 @@ namespace {1} {{
                 string.Join("\r\n", namespaces.Select(ns => "using " + ns + ";").ToArray()),
                 GetType().Namespace, 
                 "TestClass", 
-                typeof (T).FullName,
-                code.Replace("new " + typeof (T).FullName + "()", "_context"));
+                code);
 
             return TestHelper.CreateAssembly(formattedCode);
         }
@@ -313,10 +314,9 @@ namespace {1} {{
 
         private static void SetFixtureContext<T>(object fixture, T context)
         {
-            var fields = fixture.GetType().GetFields();
-            var field = fields.First(f => f.FieldType == typeof (T));
-
-            field.SetValue(fixture, context);
+            var field = typeof(StorEvilTestFixtureBase).GetField("_cache", BindingFlags.NonPublic | BindingFlags.Instance );
+            var cache = (Dictionary<Type, object>)field.GetValue(fixture);
+            cache.Add(typeof(T), context);
         }
     }
 
@@ -330,6 +330,19 @@ namespace {1} {{
         public string[][] Bar { get; set; }
     }
 
+    public class TestStoryLifetimeDisposableContext
+    {
+        public int DisposeCalls;
+
+        public void Dispose()
+        {
+            DisposeCalls++;
+        }
+
+        public void Foo()
+        {
+        }
+    }
     public class TestDisposableContext : IDisposable
     {
         public void Dispose()

@@ -1,6 +1,6 @@
 using System;
 
-namespace StorEvil.Nunit
+namespace StorEvil.NUnit
 {
     public class TestContextField
     {

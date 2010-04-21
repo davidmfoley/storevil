@@ -11,20 +11,31 @@ using StorEvil.Utility;
 
     [TestFixture]
     
-    public class BasicGrammar_Specs {
+    public class BasicGrammar_Specs : StorEvil.NUnit.StorEvilTestFixtureBase {
 #line 1 "BasicGrammar.feature"
 #line hidden
         private StorEvil.Interpreter.ParameterConverters.ParameterConverter ParameterConverter = new StorEvil.Interpreter.ParameterConverters.ParameterConverter();
         [TestFixtureSetUp]
-        public void WriteStoryToConsole() {
+        public void FixtureSetUp() {
+            base.SetUp();
             Console.WriteLine(@"Learning StorEvil
 
 Basic Grammar
  ");
         }
         
+
+        [TearDown]
+        public void TearDown() {
+            base.CleanUpScenario();
+        }
+
+        [TestFixtureTearDown]
+        public void FixtureTearDown() {
+            base.CleanUpStory();
+        }
         [Test] public void basic_matching_of_plaintext_line(){
-            var contextBasicGrammarContext = new Tutorial.BasicGrammarContext();
+            var contextBasicGrammarContext = GetContext<Tutorial.BasicGrammarContext>();
            System.Console.WriteLine(@"When my name is StorEvil");
 #line 6
 contextBasicGrammarContext.When_my_name_is(@"StorEvil");
@@ -33,7 +44,7 @@ contextBasicGrammarContext.When_my_name_is(@"StorEvil");
 
         }
         [Test] public void a_basic_assertion(){
-            var contextBasicGrammarContext = new Tutorial.BasicGrammarContext();
+            var contextBasicGrammarContext = GetContext<Tutorial.BasicGrammarContext>();
            System.Console.WriteLine(@"When my name is StorEvil");
 #line 9
 contextBasicGrammarContext.When_my_name_is(@"StorEvil");
@@ -46,7 +57,7 @@ contextBasicGrammarContext.I_should_eat_all_other_BDD_frameworks();
 
         }
         [Test] public void assertion_using_the_ShouldXXX_methods(){
-            var contextBasicGrammarContext = new Tutorial.BasicGrammarContext();
+            var contextBasicGrammarContext = GetContext<Tutorial.BasicGrammarContext>();
            System.Console.WriteLine(@"When my name is StorEvil");
 #line 13
 contextBasicGrammarContext.When_my_name_is(@"StorEvil");
@@ -59,7 +70,7 @@ contextBasicGrammarContext.AllOtherBddFrameworksAreEaten.ShouldBe((System.Object
 
         }
         [Test] public void parameterizing_and_adding_a_basic_assertion(){
-            var contextBasicGrammarContext = new Tutorial.BasicGrammarContext();
+            var contextBasicGrammarContext = GetContext<Tutorial.BasicGrammarContext>();
            System.Console.WriteLine(@"When my name is ""Some other BDD framework""");
 #line 17
 contextBasicGrammarContext.When_my_name_is(@"Some other BDD framework");
@@ -72,7 +83,7 @@ contextBasicGrammarContext.AllOtherBddFrameworksAreEaten.ShouldBe((System.Object
 
         }
         [Test] public void matching_with_an_integer_parameter_in_the_middle(){
-            var contextAgeContext = new Tutorial.AgeContext();
+            var contextAgeContext = GetContext<Tutorial.AgeContext>();
            System.Console.WriteLine(@"Given I am 42 years old");
 #line 21
 contextAgeContext.Given_I_am_age_years_old((System.Int32) this.ParameterConverter.Convert(@"42", typeof(System.Int32)));
@@ -95,12 +106,13 @@ namespace StorEvilSpecifications {
 
     [TestFixture]
     
-    public class Chaining_Specs {
+    public class Chaining_Specs : StorEvil.NUnit.StorEvilTestFixtureBase {
 #line 1 "Chaining.feature"
 #line hidden
         private StorEvil.Interpreter.ParameterConverters.ParameterConverter ParameterConverter = new StorEvil.Interpreter.ParameterConverters.ParameterConverter();
         [TestFixtureSetUp]
-        public void WriteStoryToConsole() {
+        public void FixtureSetUp() {
+            base.SetUp();
             Console.WriteLine(@"StorEvil supports chaining calls to methods.
 That is, it allows you to return any type from a method
 and use its methods, fields or properties, as well as any applicable
@@ -108,6 +120,16 @@ extension methods, to match the plain text scenario line.
  ");
         }
         
+
+        [TearDown]
+        public void TearDown() {
+            base.CleanUpScenario();
+        }
+
+        [TestFixtureTearDown]
+        public void FixtureTearDown() {
+            base.CleanUpStory();
+        }
         [Test] public void No_chaining(){
 
 
@@ -144,12 +166,13 @@ namespace StorEvilSpecifications {
 
     [TestFixture]
     
-    public class Tables_Specs {
+    public class Tables_Specs : StorEvil.NUnit.StorEvilTestFixtureBase {
 #line 1 "Tables.feature"
 #line hidden
         private StorEvil.Interpreter.ParameterConverters.ParameterConverter ParameterConverter = new StorEvil.Interpreter.ParameterConverters.ParameterConverter();
         [TestFixtureSetUp]
-        public void WriteStoryToConsole() {
+        public void FixtureSetUp() {
+            base.SetUp();
             Console.WriteLine(@"StorEvil has various different ways you can use tabular data to
 drive a scenario. It supports mapping tables of data to parameters
 on your context methods depending on the type of parameter.
@@ -166,8 +189,18 @@ You can also map name/value pairs (in a table with two columns) to:
  ");
         }
         
+
+        [TearDown]
+        public void TearDown() {
+            base.CleanUpScenario();
+        }
+
+        [TestFixtureTearDown]
+        public void FixtureTearDown() {
+            base.CleanUpStory();
+        }
         [Test] public void A_table_of_data_can_map_to_a_string____(){
-            var contextTableContext = new Tutorial.TableContext();
+            var contextTableContext = GetContext<Tutorial.TableContext>();
            System.Console.WriteLine(@"Given the following competition groups:
 | South Africa| Mexico    | Uruguay     | France   |
 | Argentina   | Nigeria   | South Korea | Greece   |
@@ -191,7 +224,7 @@ contextTableContext.then_team1_and_team2_should_be_in_the_same_group(@"USA", @"E
 
         }
         [Test] public void A_table_of_data_that_maps_to_an_array_of_types(){
-            var contextTableContext = new Tutorial.TableContext();
+            var contextTableContext = GetContext<Tutorial.TableContext>();
            System.Console.WriteLine(@"Given the following teams:
 | Rank | Nation      | Region       |
 | 1    | Spain       | Europe       |
@@ -225,7 +258,7 @@ contextTableContext.then_nation_should_be_ranked_expectedRank(@"Brazil", (System
 
         }
         [Test] public void Setting_attributes_of_a_single_instance_of_any_type(){
-            var contextTableContext = new Tutorial.TableContext();
+            var contextTableContext = GetContext<Tutorial.TableContext>();
            System.Console.WriteLine(@"Given the following team:
 | Rank	 | 18           |
 | Nation | USA          |
@@ -260,7 +293,7 @@ contextTableContext.then_nation_should_be_in_region(@"Ireland", (Tutorial.Region
 
         }
         [Test] public void Using_a_hash_table(){
-            var contextTableContext = new Tutorial.TableContext();
+            var contextTableContext = GetContext<Tutorial.TableContext>();
            System.Console.WriteLine(@"Given the following roster:
 | 7  | Beasley          |
 | 12 | Altidore         |

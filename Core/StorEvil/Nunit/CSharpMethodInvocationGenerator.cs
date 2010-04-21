@@ -5,7 +5,7 @@ using System.Reflection;
 using StorEvil.Context;
 using StorEvil.Interpreter;
 
-namespace StorEvil.Nunit
+namespace StorEvil.NUnit
 {
     /// <summary>
     /// Handles mapping 

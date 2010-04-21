@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace StorEvil.Nunit
+namespace StorEvil.NUnit
 {
     public class NUnitTest
     {

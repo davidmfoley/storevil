@@ -2,7 +2,7 @@ using System;
 using StorEvil.Context;
 using StorEvil.Core;
 
-namespace StorEvil.Nunit
+namespace StorEvil.NUnit
 {
     public class FixtureGenerationStoryHandler : IStoryHandler
     {

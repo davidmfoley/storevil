@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using StorEvil.Utility;
 
-namespace StorEvil.Nunit
+namespace StorEvil.NUnit
 {
     internal class ParameterValueFormatter
     {

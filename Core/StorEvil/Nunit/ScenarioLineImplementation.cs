@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace StorEvil.Nunit
+namespace StorEvil.NUnit
 {
     internal class ScenarioLineImplementation
     {

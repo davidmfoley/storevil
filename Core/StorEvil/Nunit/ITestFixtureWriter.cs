@@ -1,4 +1,4 @@
-namespace StorEvil.Nunit
+namespace StorEvil.NUnit
 {
     public interface ITestFixtureWriter
     {

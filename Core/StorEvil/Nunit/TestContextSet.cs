@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace StorEvil.Nunit
+namespace StorEvil.NUnit
 {
     public class TestContextSet : IEnumerable<TestContextField>
     {

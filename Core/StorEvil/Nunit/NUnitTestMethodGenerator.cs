@@ -5,7 +5,7 @@ using System.Text;
 using StorEvil.Context;
 using StorEvil.Core;
 
-namespace StorEvil.Nunit
+namespace StorEvil.NUnit
 {
     public interface ITestMethodGenerator
     {
@@ -53,7 +53,7 @@ namespace StorEvil.Nunit
         private static string BuildContextDeclarations(IEnumerable<TestContextField> contexts)
         {
             var declarationLines =
-                contexts.Select(x => string.Format("            var {0} = new {1}();", x.Name, x.Type.FullName));
+                contexts.Select(x => string.Format("            var {0} = GetContext<{1}>();", x.Name, x.Type.FullName));
             return string.Join("\r\n", declarationLines.ToArray());
         }
 
