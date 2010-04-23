@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading;
+using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Configuration;
 using StorEvil.Context;
@@ -106,6 +107,23 @@ namespace StorEvil.InPlace
         protected void AssertNoFailures()
         {
             ResultListener.AssertWasNotCalled(x => x.ScenarioFailed(Any<ScenarioFailureInfo>()));
+        }
+
+        protected void AssertAllScenariosSucceeded()
+        {
+            var args = ResultListener.GetArgumentsForCallsMadeOn(x => x.ScenarioFailed(Any<ScenarioFailureInfo>()));
+            if (args.Count > 0)
+            {
+                var message = string.Join("\r\n", args.Select(a => ((ScenarioFailureInfo)a[0]).Message).ToArray());
+
+                Assert.Fail(message);
+            }
+        }
+
+        protected void AssertScenarioSuccessWithName(string name)
+        {
+
+            ResultListener.AssertWasCalled(x => x.ScenarioSucceeded(Arg<Scenario>.Matches(s => s.Name == name)));
         }
     }
 

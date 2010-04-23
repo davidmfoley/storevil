@@ -13,7 +13,7 @@ namespace StorEvil
     {
         Scenario,
         Story,
-        Run
+        Session
     }
 
     public static class ScenarioStatus

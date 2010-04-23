@@ -65,8 +65,6 @@ namespace StorEvil.Console
 
         protected abstract void SetupCustomComponents(Container container);
 
-       
-
         public string GetUsage()
         {
             return SwitchParser.GetUsage();

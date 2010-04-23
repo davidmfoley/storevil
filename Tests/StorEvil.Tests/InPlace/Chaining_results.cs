@@ -47,8 +47,6 @@ namespace StorEvil.InPlace
   
 }
 
-
-
 namespace StorEvil.InPlace.Compiled
 {
     [TestFixture]
@@ -79,6 +77,8 @@ namespace StorEvil.InPlace.NonCompiled
             AssertAllScenariosSucceeded();
         }
     }
+
+  
 }
 
 namespace StorEvil.InPlace
@@ -103,6 +103,8 @@ namespace StorEvil.InPlace
             
         }
     }
+
+    
 
     public abstract class Disposing_contexts_with_story_lifetime : InPlaceRunnerSpec<StoryLifetimeDisposalTestContext>
     {
@@ -147,22 +149,7 @@ namespace StorEvil.InPlace
             AssertAllScenariosSucceeded();
         }
 
-        protected void AssertAllScenariosSucceeded()
-        {
-            var args = ResultListener.GetArgumentsForCallsMadeOn(x => x.ScenarioFailed(Any<ScenarioFailureInfo>()));
-            if (args.Count > 0)
-            {
-                var message = string.Join("\r\n", args.Select(a => ((ScenarioFailureInfo) a[0]).Message).ToArray());
-
-                Assert.Fail(message);
-            }
-        }
-
-        protected void AssertScenarioSuccessWithName(string name)
-        {
-            
-            ResultListener.AssertWasCalled(x => x.ScenarioSucceeded(Arg<Scenario>.Matches(s => s.Name == name)));
-        }
+      
     }
 
     [Context]
