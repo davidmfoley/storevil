@@ -87,6 +87,7 @@
     <Compile Include="InPlace\CompilingRunner\InPlaceDebugContainerConfigurator.cs" />
     <Compile Include="InPlace\InPlaceSettings.cs" />
     <Compile Include="Nunit\NUnitContainerConfigurator.cs" />
+    <EmbeddedResource Include="Resources\ExampleContext.cs" />
     <Compile Include="StubGeneration\StdOutWriter.cs" />
     <Compile Include="StubGeneration\StubGenerationSettings.cs" />
     <Compile Include="Tracing\IDebugListener.cs" />
@@ -173,6 +174,18 @@
     <Compile Include="Nunit\NUnitTestMethodGenerator.cs" />
     <Compile Include="Context\WordFilters\TextMatchWordFilter.cs" />
     <Compile Include="Context\WordFilters\WordFilter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\DefaultConfig.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\DefaultSparkTemplate.spark" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Example.feature" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ReadMe.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

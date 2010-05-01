@@ -41,7 +41,7 @@ namespace StorEvil.Console
         private string GetResource(string resourceName)
         {
             using (
-                var stream = GetType().Assembly.GetManifestResourceStream("StorEvil.Console.Resources." + resourceName))
+                var stream = GetType().Assembly.GetManifestResourceStream("StorEvil.Resources." + resourceName))
             {
                 if (stream == null)
                 {
