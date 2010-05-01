@@ -19,7 +19,7 @@ namespace StorEvil.InPlace
     {
         public void Trace(string message)
         {
-            Console.WriteLine(message);
+            System.Console.WriteLine(message);
         }
     }
 }

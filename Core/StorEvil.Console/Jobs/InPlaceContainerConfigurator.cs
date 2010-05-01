@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
 using Funq;
 using StorEvil.Configuration;
 using StorEvil.Core;
-using StorEvil.Infrastructure;
 using StorEvil.InPlace;
-using StorEvil.ResultListeners;
 using StorEvil.Utility;
 
 namespace StorEvil.Console

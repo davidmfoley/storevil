@@ -56,13 +56,13 @@ namespace StorEvil.ResultListeners
         protected override void DoWrite(ConsoleColor color, params string[] lines)
         {
             if (ColorEnabled)
-                Console.ForegroundColor = color;
+                System.Console.ForegroundColor = color;
 
             foreach (var s in lines)
-                Console.WriteLine(s);
+                System.Console.WriteLine(s);
 
             if (ColorEnabled)
-                Console.ResetColor();
+                System.Console.ResetColor();
         }
 
         public bool ColorEnabled { get; set; }

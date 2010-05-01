@@ -147,9 +147,7 @@ namespace StorEvil.InPlace
         public void All_scenarios_should_succeed()
         {
             AssertAllScenariosSucceeded();
-        }
-
-      
+        }   
     }
 
     [Context]

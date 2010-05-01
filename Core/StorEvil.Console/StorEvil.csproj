@@ -65,7 +65,6 @@
     <Compile Include="ContainerConfigurator.cs" />
     <Compile Include="ContainerConfiguratorFactory.cs" />
     <Compile Include="Jobs\StubGenerationSettings.cs" />
-    <Compile Include="ListenerBuilder.cs" />
     <Compile Include="Jobs\NUnitContainerConfigurator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

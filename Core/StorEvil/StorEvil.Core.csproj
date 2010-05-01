@@ -62,6 +62,7 @@
     <Compile Include="Configuration\ConfigParser.cs" />
     <Compile Include="Configuration\IConfigParser.cs" />
     <Compile Include="Configuration\IConfigSource.cs" />
+    <Compile Include="Configuration\ListenerBuilder.cs" />
     <Compile Include="Configuration\SwitchInfo.cs" />
     <Compile Include="Configuration\switchParser.cs" />
     <Compile Include="ContextAttribute.cs" />
