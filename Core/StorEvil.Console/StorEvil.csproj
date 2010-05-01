@@ -64,7 +64,6 @@
     <Compile Include="Jobs\NUnitContainerSwitchConfigurator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Resources\ExampleContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StorEvil.Assertions\StorEvil.Assertions.csproj">
@@ -78,14 +77,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <EmbeddedResource Include="Resources\Example.feature" />
-    <EmbeddedResource Include="Resources\DefaultSparkTemplate.spark" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\DefaultConfig.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\ReadMe.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
