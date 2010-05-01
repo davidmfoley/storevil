@@ -1,11 +1,15 @@
 using System;
 using System.Diagnostics;
 using System.Reflection;
+using Funq;
 using NUnit.Framework;
+using StorEvil.Configuration;
+using StorEvil.Console;
 using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Interpreter;
 using StorEvil.ResultListeners;
+using StorEvil.Utility;
 
 namespace StorEvil.InPlace
 {
@@ -106,5 +110,16 @@ namespace StorEvil.InPlace
         Passed,
         Failed,
         Pending
+    }
+
+
+    public class InPlaceContainerConfigurator : ContainerConfigurator<InPlaceSettings>
+    {
+        protected override void SetupCustomComponents(Container container, ConfigSettings configSettings, InPlaceSettings customSettings)
+        {
+            container.EasyRegister<IStoryHandler, InPlaceStoryRunner>();
+            container.EasyRegister<IStorEvilJob, StorEvilJob>();
+            container.Register<IStoryFilter>(new TagFilter(customSettings.Tags ?? new string[0]));
+        }
     }
 }

@@ -26,27 +26,5 @@ namespace StorEvil.Console
         }
     }
 
-    public class StubGeneratorContainerConfigurator : ContainerConfigurator<StubGenerationSettings>
-    {
-        protected override void SetupCustomComponents(Container container, ConfigSettings configSettings, StubGenerationSettings customSettings)
-        {
-            container.EasyRegister<IStorEvilJob, StorEvilJob>();
-            container.Register<IStoryHandler>(
-                c => new StubGenerator(c.Resolve<ScenarioInterpreter>(), new ImplementationHelper(), GetWriter(customSettings), c.Resolve<IStoryContextFactory>())
-                );
-
-            container.Register<IStoryFilter>(new IncludeAllFilter());
-        }
-
-        private ITextWriter GetWriter(StubGenerationSettings customSettings)
-        {
-            if (customSettings.WriteToClipboard)
-                return new ClipboardWriter();
-
-            if (!string.IsNullOrEmpty(customSettings.Destination))
-                return new FileWriter(customSettings.Destination, true);
-
-            return new StdOutWriter();
-        }
-    }
+   
 }

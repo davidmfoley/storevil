@@ -21,15 +21,5 @@ namespace StorEvil.Console
 
     }
 
-    internal class InitContainerConfigurator : ContainerConfigurator<InitSettings>
-    {
-        protected override void SetupCustomComponents(Container container, ConfigSettings configSettings, InitSettings customSettings)
-        {
-            container.EasyRegister<IStorEvilJob, InitJob>();
-        }
-    }
-
-    internal class InitSettings
-    {
-    }
+    
 }
