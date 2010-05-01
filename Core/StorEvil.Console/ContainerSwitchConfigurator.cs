@@ -1,3 +1,4 @@
+using System;
 using Funq;
 using StorEvil.Configuration;
 using StorEvil.Context;
@@ -9,24 +10,39 @@ using StorEvil.Utility;
 
 namespace StorEvil.Console
 {
-    public abstract class ContainerConfigurator<settingsT> : IContainerConfigurator where settingsT : new()
+    public abstract class ContainerSwitchConfigurator<settingsT> : IContainerConfigurator where settingsT : new()
     {
         protected readonly SwitchParser<settingsT> SwitchParser;
         protected settingsT CustomSettings;
-
-        protected ContainerConfigurator()
+        protected ContainerConfigurator<settingsT> _configurator;
+        protected ContainerSwitchConfigurator(ContainerConfigurator<settingsT> configurator)
         {
+            _configurator = configurator;
             SwitchParser = new SwitchParser<settingsT>();
             SetupSwitches(SwitchParser);
+        }
+        protected abstract void SetupSwitches(SwitchParser<settingsT> parser);
+
+        public string GetUsage()
+        {
+            return SwitchParser.GetUsage();
         }
 
         public void SetupContainer(Container container, ConfigSettings configSettings, string[] args)
         {
             CustomSettings = new settingsT();
             SwitchParser.Parse(args, CustomSettings);
-            container.Register(CustomSettings);
+
+            _configurator.ConfigureContainer(container, configSettings, CustomSettings);
+        }
+    }
+
+    public abstract class ContainerConfigurator<settingsT> {
+        public void ConfigureContainer(Container container, ConfigSettings configSettings, settingsT customSettings)
+        {
+            container.Register(customSettings);
             SetupCommonComponents(container, configSettings);
-            SetupCustomComponents(container);
+            SetupCustomComponents(container, configSettings, customSettings);
         }
 
         private void SetupCommonComponents(Container container, ConfigSettings settings)
@@ -49,10 +65,10 @@ namespace StorEvil.Console
             container.EasyRegister<InterpreterForTypeFactory>();
             container.EasyRegister<ExtensionMethodHandler>();
 
-            container.Register<IStoryContextFactory>(GetStoryToContextMapper(settings));
+            container.Register<IStoryContextFactory>(GetStoryContextFactory(settings));
         }
 
-        private StoryContextFactory GetStoryToContextMapper(ConfigSettings settings)
+        private StoryContextFactory GetStoryContextFactory(ConfigSettings settings)
         {
             var mapper = new StoryContextFactory();
             foreach (var location in settings.AssemblyLocations)
@@ -63,13 +79,6 @@ namespace StorEvil.Console
             return mapper;
         }
 
-        protected abstract void SetupCustomComponents(Container container);
-
-        public string GetUsage()
-        {
-            return SwitchParser.GetUsage();
-        }
-
-        protected abstract void SetupSwitches(SwitchParser<settingsT> parser);
+        protected abstract void SetupCustomComponents(Container container, ConfigSettings configSettings, settingsT customSettings);      
     }
 }

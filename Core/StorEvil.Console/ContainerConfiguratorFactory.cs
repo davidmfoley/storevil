@@ -23,19 +23,19 @@ namespace StorEvil.Console
                 SanityCheckSettings();
 
             if (command == "nunit")
-                return new NUnitContainerConfigurator();
+                return new NUnitContainerSwitchConfigurator();
 
             if (command == "execute")
-                return new InPlaceContainerConfigurator();
+                return new InPlaceContainerSwitchConfigurator();
 
             if (command == "debug")
-                return new InPlaceDebugContainerConfigurator();
+                return new InPlaceDebugContainerSwitchConfigurator();
 
             if (command == "init")
-                return new InitContainerConfigurator();
+                return new InitContainerSwitchConfigurator();
 
             if (command == "stub")
-                return new StubGeneratorContainerConfigurator();
+                return new StubGeneratorContainerSwitchConfigurator();
 
             return new HelpContainerConfigurator();
         }
