@@ -30,6 +30,8 @@
     <Copy SourceFiles="$(MSBuildProjectDirectory)\InstallationInstructions.txt" DestinationFolder="$(PackageDirectory)" />
     <Copy SourceFiles="$(MSBuildProjectDirectory)\License.txt" DestinationFolder="$(PackageDirectory)" />
     <Copy SourceFiles="$(MSBuildProjectDirectory)\ReleaseNotes.txt" DestinationFolder="$(PackageDirectory)" />
+    <Message Text="StorEvil binaries created:" />
+    <Message Text="$(PackageDirectory)" />
   </Target>
  
   <Target Name="BuildCore">
