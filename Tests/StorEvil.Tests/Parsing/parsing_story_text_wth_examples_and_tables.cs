@@ -32,11 +32,7 @@ Given the following data:
         {
             var scenario = Result.Scenarios.First() as Scenario;
 
-            scenario.Body.First().Text.ShouldContain(
-                @"|1|2|3|
-|4|5|6|
-|7|8|9|
-|10|11|12|");
+            scenario.Body.First().Text.ShouldContain("|1|2|3|\r\n|4|5|6|\r\n|7|8|9|\r\n|10|11|12|");
         }
     }
 
