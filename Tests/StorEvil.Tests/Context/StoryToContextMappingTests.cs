@@ -72,13 +72,12 @@ namespace StorEvil.Context.StoryToContextMapper_Specs
         }
 
         [Test, Ignore]
-        public void Throws_if_no_context_added()
+        public void Returns_a_default_context_with_only_object_if_no_contexts_added()
         {
             var mapper = new StoryContextFactory();
 
-            Expect.ThisToThrow<ConfigurationException>(() => mapper.GetContextForStory(new Story("unknown type",
-                                                                                                 "totally bogus",
-                                                                                                 new List<IScenario>())));
+             var result = mapper.GetContextForStory(new Story("unknown type", "totally bogus", new List<IScenario>()));
+            result.ImplementingTypes.Count().ShouldEqual(1);
         }
     }
 
