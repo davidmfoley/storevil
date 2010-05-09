@@ -40,7 +40,7 @@ namespace StorEvil.Context.WordFilters
         {
             for (int i = 0; i < s.Length; i++)
             {
-                yield return new WordMatch(s.Length - i, string.Join(" ", s.Skip(i).ToArray()));
+                yield return new WordMatch(s.Length - i, string.Join(" ", s.Take(s.Length - i).ToArray()));
             }           
         }
     }

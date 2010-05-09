@@ -220,6 +220,11 @@ namespace StorEvil.InPlace
             MultiWordParam = param;
         }
 
+        public void multi_word_param_should_be(string expected)
+        {
+            MultiWordParam.ShouldBe(expected);
+        }
+
         public InPlaceTestSubContext SubContext()
         {
             return new InPlaceTestSubContext();

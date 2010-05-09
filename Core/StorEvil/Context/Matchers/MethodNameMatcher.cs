@@ -46,64 +46,6 @@ namespace StorEvil.Context.Matchers
             return GetMatchesRecursive(words, words, _wordFilters, paramValues);
         }
 
-        public IEnumerable<NameMatch> GetMatches_(string line)
-        {
-            var words = _scenarioLineParser.ExtractWordsFromScenarioLine(line);
-
-            // can't match if not enough words to fill us up
-            if (words.Count < _wordFilters.Count)
-                return new NameMatch[0];
-
-            var paramValues = new Dictionary<string, object>();
-
-            var wordIndex = 0;
-            List<NameMatch> nameMatches = new List<NameMatch>();
-
-            var wordFilters = _wordFilters;
-
-            // check each word for a match
-            for (int i = 0; i < wordFilters.Count; i++)
-            {
-                var currentFilter = wordFilters[i];
-
-                var wordMatches = currentFilter.GetMatches(words.Skip(wordIndex).ToArray());
-
-                var wordMatch = wordMatches.FirstOrDefault();
-                if (wordMatch == null || !wordMatch.IsMatch)
-                    return new NameMatch[0];
-
-                foreach (var m in wordMatches)
-                {
-                    
-                }
-
-                // if this is a parameter, add to our hash so we can resolve the (string) value later
-                var paramFilter = currentFilter as ParameterMatchWordFilter;
-
-                if (paramFilter != null)
-                    paramValues.Add(paramFilter.ParameterName, wordMatch.Value);
-
-                wordIndex += wordMatch.WordCount;
-            }
-
-            var match = BuildNameMatch(words, paramValues, wordFilters.Count());
-
-
-            if (match != null)
-            {               
-                DebugTrace.Trace("Method name match", "Method = " + _methodInfo.DeclaringType.Name + "." +_methodInfo.Name);
-                if (paramValues.Count() > 0)
-                {
-                    var paramValueString = string.Join(",",
-                                                       match.ParamValues.Select(kvp => kvp.Key + ":" + kvp.Value).
-                                                           ToArray());
-
-                    DebugTrace.Trace("Method name match", "Params= " + paramValueString);
-                }
-            }
-            return new[] { match};
-        }
-
         private IEnumerable<NameMatch> GetMatchesRecursive(IEnumerable<string> allWords, IEnumerable<string> words, IEnumerable<WordFilter> filters,  Dictionary<string, object> paramValues)
         {
             if (!filters.Any())
@@ -113,9 +55,7 @@ namespace StorEvil.Context.Matchers
             }
 
             if (!words.Any())
-            {
                 yield break;
-            }
 
             foreach (var match in filters.First().GetMatches(words.ToArray()) ?? new WordMatch[0])
             {

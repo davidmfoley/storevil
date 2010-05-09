@@ -102,7 +102,7 @@
 
   </Target>
 
-  <!-- runs an example project in both In-place and NUnit modes-->
+  <!-- runs an example project in In-place, Debug, and NUnit modes-->
   <Target Name="RunExample">
     <PropertyGroup>
       <ExpectedFailures Condition=" '$(ExpectedFailures)'=='' ">0</ExpectedFailures>
