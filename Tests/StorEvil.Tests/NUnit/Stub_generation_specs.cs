@@ -19,14 +19,16 @@ namespace StorEvil.NUnit
         private Story TestStory;
         private string Suggestions;
         private ITextWriter FakeWriter;
+        private IAmbiguousMatchResolver FakeResolver;
 
         [SetUp]
         public void SetupContext()
         {
             FakeWriter = MockRepository.GenerateMock<ITextWriter>();
+            FakeResolver = MockRepository.GenerateMock<IAmbiguousMatchResolver>();
 
             Generator =
-                new StubGenerator(new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())),
+                new StubGenerator(new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()), FakeResolver),
                                   new ImplementationHelper(), FakeWriter, new FakeStoryContextFactory());
 
             TestStory = new Story("foo", "", new[]

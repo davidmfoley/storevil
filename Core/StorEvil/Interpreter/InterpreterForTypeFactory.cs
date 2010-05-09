@@ -3,7 +3,12 @@ using System.Collections.Generic;
 
 namespace StorEvil.Interpreter
 {
-    public class InterpreterForTypeFactory
+    public interface IInterpreterForTypeFactory
+    {
+        ScenarioInterpreterForType GetInterpreterForType(Type t);
+    }
+
+    public class InterpreterForTypeFactory : IInterpreterForTypeFactory
     {
         private readonly ExtensionMethodHandler _extensionMethodHandler;
         static readonly Dictionary<Type, ScenarioInterpreterForType> _interpreterCache = new Dictionary<Type, ScenarioInterpreterForType>();

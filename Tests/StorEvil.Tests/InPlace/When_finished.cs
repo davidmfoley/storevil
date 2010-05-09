@@ -42,7 +42,8 @@ namespace StorEvil.InPlace.NonCompiled
         {
             ResultListener = MockRepository.GenerateStub<IResultListener>();
 
-            var inPlaceRunner = new InPlaceStoryRunner(ResultListener, new ScenarioPreprocessor(), new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())), new IncludeAllFilter(), new StoryContextFactory());
+            var scenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()), MockRepository.GenerateStub<IAmbiguousMatchResolver>());
+            var inPlaceRunner = new InPlaceStoryRunner(ResultListener, new ScenarioPreprocessor(), scenarioInterpreter, new IncludeAllFilter(), new StoryContextFactory());
             inPlaceRunner.Finished();
         }
 

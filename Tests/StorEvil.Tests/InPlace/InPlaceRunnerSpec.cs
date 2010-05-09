@@ -64,9 +64,9 @@ namespace StorEvil.InPlace
 
         private InPlaceStoryRunner GetRunner()
         {
+            var scenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()), MockRepository.GenerateStub<IAmbiguousMatchResolver>());
             return new InPlaceStoryRunner(ResultListener, new ScenarioPreprocessor(),
-                                          new ScenarioInterpreter(
-                                              new InterpreterForTypeFactory(new ExtensionMethodHandler())),
+                                          scenarioInterpreter,
                                           new IncludeAllFilter(), new FakeStoryContextFactory(Context));
         }
 

@@ -1,25 +1,37 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using StorEvil.Context;
 using StorEvil.Utility;
 
 namespace StorEvil.Interpreter
 {
+  
+
     public class ScenarioInterpreter
     {
-        private readonly InterpreterForTypeFactory _interpreterFactory;
+        private readonly IInterpreterForTypeFactory _interpreterFactory;
+        private readonly IAmbiguousMatchResolver _resolver;
         private string _lastSignificantFirstWord = null;
 
-        public ScenarioInterpreter(InterpreterForTypeFactory interpreterFactory)
+        public ScenarioInterpreter(IInterpreterForTypeFactory interpreterFactory, IAmbiguousMatchResolver resolver )
         {
             _interpreterFactory = interpreterFactory;
+            _resolver = resolver;
         }
 
-        public InvocationChain GetChain(ScenarioContext storyContext, string line)
+        public InvocationChain GetChain(ScenarioContext context, string line)
         {
             DebugTrace.Trace("Interpreting", line);
-            return GetSelectedChain(storyContext, line);
+            var chains = (GetSelectedChains(context, line) ?? new InvocationChain[0]).ToArray();
+            if (! chains.Any())
+                DebugTrace.Trace(this.GetType().Name, "no match: " + line);
+
+            if (chains.Count() > 1)
+                return _resolver.ResolveMatch(line, chains);
+
+            return chains.FirstOrDefault();
         }
 
         public void NewScenario()
@@ -27,24 +39,22 @@ namespace StorEvil.Interpreter
             _lastSignificantFirstWord = null;
         }
 
-        private InvocationChain GetSelectedChain(ScenarioContext storyContext, string line)
+        private IEnumerable<InvocationChain> GetSelectedChains(ScenarioContext context, string line)
         {
             foreach (var linePermutation in GetPermutations(line))
             {
-                foreach (var type in storyContext.ImplementingTypes)
+                foreach (var type in context.ImplementingTypes)
                 {
                     var interpreter = _interpreterFactory.GetInterpreterForType(type);
 
-                    InvocationChain chain = interpreter.GetChain(linePermutation);
-                    if (chain != null)
+                    IEnumerable<InvocationChain> chains = interpreter.GetChains(linePermutation);
+                    foreach (var invocationChain in chains)
                     {
-                        DebugTrace.Trace(this.GetType().Name, "found match");
-                        return chain;
-                    }
+                        yield return invocationChain;
+                    }                    
                 }
             }
-            DebugTrace.Trace(this.GetType().Name, "no match: " + line);
-            return null;
+           
         }
 
         private IEnumerable<string> GetPermutations(string line)

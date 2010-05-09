@@ -36,8 +36,10 @@ namespace StorEvil
             container.EasyRegister<IFilesystem, Filesystem>();
             container.EasyRegister<IScenarioPreprocessor, ScenarioPreprocessor>();
             container.EasyRegister<ScenarioInterpreter>();
-            container.EasyRegister<InterpreterForTypeFactory>();
+            container.EasyRegister<IInterpreterForTypeFactory, InterpreterForTypeFactory>();
             container.EasyRegister<ExtensionMethodHandler>();
+
+            container.EasyRegister<IAmbiguousMatchResolver, DisallowAmbiguousMatches>();
 
             container.Register<IStoryContextFactory>(GetStoryContextFactory(settings));
         }

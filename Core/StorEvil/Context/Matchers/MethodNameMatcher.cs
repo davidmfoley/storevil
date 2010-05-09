@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -34,35 +35,50 @@ namespace StorEvil.Context.Matchers
 
         public IEnumerable<NameMatch> GetMatches(string line)
         {
-            return new[] {GetMatch(line)};
+            var words = _scenarioLineParser.ExtractWordsFromScenarioLine(line);
+
+            // can't match if not enough words to fill us up
+            if (words.Count < _wordFilters.Count)
+                return new NameMatch[0];
+
+            var paramValues = new Dictionary<string, object>();
+
+            return GetMatchesRecursive(words, words, _wordFilters, paramValues);
         }
 
-        /// <summary>
-        /// Determine whether this member is a full or partial match 
-        /// (or no match) for the set of words that is passed in 
-        /// </summary>
-        /// <param name="line">a set of words that is part of a scenario</param>
-        /// <returns></returns>
-        public NameMatch GetMatch(string line)
+        public IEnumerable<NameMatch> GetMatches_(string line)
         {
             var words = _scenarioLineParser.ExtractWordsFromScenarioLine(line);
 
             // can't match if not enough words to fill us up
             if (words.Count < _wordFilters.Count)
-                return null;
+                return new NameMatch[0];
 
             var paramValues = new Dictionary<string, object>();
 
             var wordIndex = 0;
+            List<NameMatch> nameMatches = new List<NameMatch>();
+
+            var wordFilters = _wordFilters;
+
             // check each word for a match
-            for (int i = 0; i < _wordFilters.Count; i++)
+            for (int i = 0; i < wordFilters.Count; i++)
             {
-                var wordMatch = _wordFilters[i].GetMatch(words.Skip(wordIndex).ToArray());
-                if (!wordMatch.IsMatch)
-                    return null;
+                var currentFilter = wordFilters[i];
+
+                var wordMatches = currentFilter.GetMatches(words.Skip(wordIndex).ToArray());
+
+                var wordMatch = wordMatches.FirstOrDefault();
+                if (wordMatch == null || !wordMatch.IsMatch)
+                    return new NameMatch[0];
+
+                foreach (var m in wordMatches)
+                {
+                    
+                }
 
                 // if this is a parameter, add to our hash so we can resolve the (string) value later
-                var paramFilter = _wordFilters[i] as ParameterMatchWordFilter;
+                var paramFilter = currentFilter as ParameterMatchWordFilter;
 
                 if (paramFilter != null)
                     paramValues.Add(paramFilter.ParameterName, wordMatch.Value);
@@ -70,7 +86,9 @@ namespace StorEvil.Context.Matchers
                 wordIndex += wordMatch.WordCount;
             }
 
-            var match = BuildNameMatch(words, paramValues);
+            var match = BuildNameMatch(words, paramValues, wordFilters.Count());
+
+
             if (match != null)
             {               
                 DebugTrace.Trace("Method name match", "Method = " + _methodInfo.DeclaringType.Name + "." +_methodInfo.Name);
@@ -83,7 +101,44 @@ namespace StorEvil.Context.Matchers
                     DebugTrace.Trace("Method name match", "Params= " + paramValueString);
                 }
             }
-            return match;
+            return new[] { match};
+        }
+
+        private IEnumerable<NameMatch> GetMatchesRecursive(IEnumerable<string> allWords, IEnumerable<string> words, IEnumerable<WordFilter> filters,  Dictionary<string, object> paramValues)
+        {
+            if (!filters.Any())
+            {
+                yield return BuildNameMatch(allWords, paramValues, allWords.Count() - words.Count());
+                yield break;
+            }
+
+            if (!words.Any())
+            {
+                yield break;
+            }
+
+            foreach (var match in filters.First().GetMatches(words.ToArray()) ?? new WordMatch[0])
+            {
+                var paramFilter = filters.First() as ParameterMatchWordFilter;
+                var innerParamValues = paramValues;
+                if (paramFilter != null)
+                {
+                    innerParamValues = CopyAndAdd(paramValues, paramFilter.ParameterName, match.Value);
+                }
+                foreach (
+                    var nameMatch in
+                        GetMatchesRecursive(allWords, words.Skip(match.WordCount), filters.Skip(1), innerParamValues).ToArray())
+                {
+                    yield return nameMatch;
+                }
+            }
+        }
+
+        private Dictionary<string, object> CopyAndAdd(Dictionary<string, object> paramValues, string key, object value)
+        {
+            var copied = new Dictionary<string, object>(paramValues);
+            copied.Add(key, value);
+            return copied;
         }
 
         private void BuildMethodWordFilters()
@@ -137,14 +192,14 @@ namespace StorEvil.Context.Matchers
             paramNameMap.Remove(word);
         }
 
-        private NameMatch BuildNameMatch(IEnumerable<string> words, Dictionary<string, object> paramValues)
+        private NameMatch BuildNameMatch(IEnumerable<string> words, Dictionary<string, object> paramValues, int wordCount)
         {
-            var matchedText = string.Join(" ", words.Take(_wordFilters.Count()).ToArray());
+            var matchedText = string.Join(" ", words.Take(wordCount).ToArray());
 
-            if (words.Count() == _wordFilters.Count)
+            if (words.Count() == wordCount)
                 return new ExactMatch(paramValues, matchedText);
 
-            var remainingText = string.Join(" ", words.Skip(_wordFilters.Count()).ToArray());
+            var remainingText = string.Join(" ", words.Skip(wordCount).ToArray());
 
             if (CanBeAPartialMatch())
                 return new PartialMatch(MemberInfo, paramValues, matchedText, remainingText);

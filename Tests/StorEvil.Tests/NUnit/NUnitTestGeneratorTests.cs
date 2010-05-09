@@ -309,7 +309,7 @@ namespace {1} {{
 
             return
                 new NUnitTestMethodGenerator(
-                    new CSharpMethodInvocationGenerator(new ScenarioInterpreter(new InterpreterForTypeFactory(ext))));
+                    new CSharpMethodInvocationGenerator(new ScenarioInterpreter(new InterpreterForTypeFactory(ext), MockRepository.GenerateStub<IAmbiguousMatchResolver>())));
         }
 
         private static void SetFixtureContext<T>(object fixture, T context)

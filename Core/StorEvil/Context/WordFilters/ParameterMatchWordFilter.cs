@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using StorEvil.Context.Matchers;
@@ -11,12 +12,36 @@ namespace StorEvil.Context.WordFilters
         {
             if (parameterInfo.ParameterType.IsEnum)
                 return new EnumParameterWordFilter(parameterInfo);
+
+            if (parameterInfo.GetCustomAttributes(typeof(MultipleWordsAttribute), false).Any())
+                return new MultipleWordsParameterWordFilter(parameterInfo);
             return new SimpleParameterMatchWordFilter(parameterInfo);
         }
 
         public WordFilter GetTextFilter(string word)
         {
             return new TextMatchWordFilter(word);
+        }
+    }
+
+    public class MultipleWordsParameterWordFilter : ParameterMatchWordFilter
+    {
+        public MultipleWordsParameterWordFilter(ParameterInfo paramInfo)
+            : base(paramInfo)
+        {
+        }
+
+        public bool IsTable
+        {
+            get { return ParamInfo.ParameterType.IsArray; }
+        }
+
+        public override IEnumerable<WordMatch> GetMatches(string[] s)
+        {
+            for (int i = 0; i < s.Length; i++)
+            {
+                yield return new WordMatch(s.Length - i, string.Join(" ", s.Skip(i).ToArray()));
+            }           
         }
     }
 
@@ -28,14 +53,14 @@ namespace StorEvil.Context.WordFilters
         {
         }
 
-        public override WordMatch GetMatch(string[] s)
+        public override IEnumerable<WordMatch> GetMatches(string[] s)
         {
             var enumValues = Enum.GetValues(ParamInfo.ParameterType);
             var joined = string.Join("", s).ToLower();
             foreach (var enumValue in enumValues)
             {
                 if (IsMatch(enumValue, s))
-                    return BuildWordMatch(enumValue.ToString(), s);
+                    return new[] { BuildWordMatch(enumValue.ToString(), s)};
             }
 
             return WordMatch.NoMatch();
@@ -80,14 +105,10 @@ namespace StorEvil.Context.WordFilters
             get { return ParamInfo.ParameterType.IsArray; }
         }
 
-        public bool IsMultipleWordMatcher
+       
+        public override IEnumerable<WordMatch> GetMatches(string[] s)
         {
-            get { return ParamInfo.GetCustomAttributes(typeof (MultipleWordsAttribute), false).Any(); }
-        }
-
-        public override WordMatch GetMatch(string[] s)
-        {
-            return new WordMatch(1, s[0]);
+            return new[] { new WordMatch(1, s[0])};
         }
 
         private bool IsTableString(string paramValue)
@@ -113,6 +134,6 @@ namespace StorEvil.Context.WordFilters
             get { return ParamInfo.Name; }
         }
 
-        public abstract WordMatch GetMatch(string[] s);
+        public abstract IEnumerable<WordMatch> GetMatches(string[] s);
     }
 }

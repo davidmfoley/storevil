@@ -1,10 +1,11 @@
+using System.Collections.Generic;
 using StorEvil.Context.Matchers;
 
 namespace StorEvil.Context.WordFilters
 {
     public interface WordFilter
     {
-        WordMatch GetMatch(string[] s);
+        IEnumerable<WordMatch> GetMatches(string[] s);
        
     }
 }

@@ -70,9 +70,9 @@ namespace StorEvil.Context.Matchers
             int wordIndex = 0;
             for (int filterIndex = 0; filterIndex < _wordFilters.Count; filterIndex++)
             {
-                var match = (_wordFilters[filterIndex].GetMatch(words.Skip(wordIndex).ToArray()));
+                var match = (_wordFilters[filterIndex].GetMatches(words.Skip(wordIndex).ToArray())).FirstOrDefault();
 
-                if (!match.IsMatch)
+                if (match == null || !match.IsMatch)
                     return false;
 
                 wordIndex += match.WordCount;
@@ -118,9 +118,9 @@ namespace StorEvil.Context.Matchers
             get; private set;
         }
 
-        public static WordMatch NoMatch()
+        public static IEnumerable<WordMatch> NoMatch()
         {
-            return new WordMatch(0, "");
+            return new WordMatch[0];
         }
     }
 }

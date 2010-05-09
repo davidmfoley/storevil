@@ -11,13 +11,13 @@ namespace StorEvil.Interpreter
     public class ScenarioInterpreterForType
     {
         private readonly Type _type;
-        private readonly InterpreterForTypeFactory _factory;
+        private readonly IInterpreterForTypeFactory _factory;
         private readonly List<IMemberMatcher> _memberMatchers = new List<IMemberMatcher>();
         private static readonly ParameterConverter _parameterConverter = new ParameterConverter();
 
         public ScenarioInterpreterForType(Type type, 
                                           ExtensionMethodHandler extensionMethodHandler,
-                                          InterpreterForTypeFactory factory)
+                                          IInterpreterForTypeFactory factory)
         {
             _type = type;
             _factory = factory;
@@ -44,7 +44,7 @@ namespace StorEvil.Interpreter
         private MemberInfo[] FilterMembers(MemberInfo[] members)
         {
             var ignore = new[] {"GetType", "ToString", "CompareTo", "GetTypeCode", "Equals", "GetHashCode"};
-            return members.Where(m => !(m.MemberType == MemberTypes.Constructor || ignore.Contains(m.Name))).ToArray();
+            return members.Where(m => !(m.MemberType == MemberTypes.Constructor || m.MemberType == MemberTypes.NestedType || ignore.Contains(m.Name))).ToArray();
         }
 
         private void AddMatchersForExtensionMethods(ExtensionMethodHandler extensionMethodHandler)
@@ -85,20 +85,20 @@ namespace StorEvil.Interpreter
             }
         }
 
-        public InvocationChain GetChain(string line)
+        public IEnumerable<InvocationChain> GetChains(string line)
         {
             DebugTrace.Trace(this.GetType().Name, "Interpreting '" + line + "' with type:" + _type.Name);
               
             var partialMatches = new List<PartialMatch>();
             foreach (var member in _memberMatchers)
             {
-                foreach (var currentMatch in member.GetMatches(line))
+                foreach (var currentMatch in member.GetMatches(line) ?? new NameMatch[0])
                 {
                     if (currentMatch is ExactMatch)
                     {
                         DebugTrace.Trace(this.GetType().Name, "Exact match");
               
-                        return new InvocationChain
+                        yield return new InvocationChain
                                    {Invocations = new[] {BuildInvocation(member.MemberInfo, currentMatch)}};
                     }
                     if (currentMatch is PartialMatch)
@@ -109,22 +109,28 @@ namespace StorEvil.Interpreter
                 }
             }
 
-            return GetPartialMatchChain(line, partialMatches);
+            var partialMatchChains = GetPartialMatchChains(line, partialMatches);
+            foreach (var partialMatchChain in partialMatchChains)
+            {
+                yield return partialMatchChain;
+            }
+            
         }
 
-        private InvocationChain GetPartialMatchChain(string line, IEnumerable<PartialMatch> partialMatches)
+        private IEnumerable<InvocationChain> GetPartialMatchChains(string line, IEnumerable<PartialMatch> partialMatches)
         {
             foreach (var partialMatch in partialMatches)
             {
-                InvocationChain chain = GetChainFromPartialMatch(partialMatch, line);
+                foreach (InvocationChain chain in GetChainsFromPartialMatch(partialMatch, line))
+                {
 
-                if (chain != null)
-                    return chain;
-            }
-            return null;
+                    if (chain != null)
+                        yield return chain;
+                }
+            }           
         }
 
-        private InvocationChain GetChainFromPartialMatch(PartialMatch partialMatch, string line)
+        private IEnumerable<InvocationChain> GetChainsFromPartialMatch(PartialMatch partialMatch, string line)
         {
             var partialChain = new InvocationChain(BuildInvocation(partialMatch.MemberInfo, partialMatch));
 
@@ -145,17 +151,18 @@ namespace StorEvil.Interpreter
             return new Invocation(memberInfo, new string[0], new string[0], currentMatch.MatchedText);
         }
 
-        private InvocationChain TryToRecursivelyExtendPartialMatch(InvocationChain chain, string remainingLine,
+        private IEnumerable<InvocationChain> TryToRecursivelyExtendPartialMatch(InvocationChain chain, string remainingLine,
                                                                    PartialMatch partial)
         {
+            if (partial.TerminatingType == null)
+                yield break;
             var chainedMapper = _factory.GetInterpreterForType(partial.TerminatingType);
-            var childChain = chainedMapper.GetChain(remainingLine);
-            if (childChain == null)
-                return null;
+            foreach (var childChain in chainedMapper.GetChains(remainingLine))
+            {               
+                var union = chain.Invocations.Union(childChain.Invocations);
 
-            var union = chain.Invocations.Union(childChain.Invocations);
-
-            return new InvocationChain(union.ToArray());
+                yield return new InvocationChain(union.ToArray());
+            }
         }
 
         private static IEnumerable<object> BuildParamValues(MethodBase member, Dictionary<string, object> paramValues)

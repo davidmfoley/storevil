@@ -5,7 +5,6 @@ using StorEvil.Utility;
 
 namespace StorEvil.Interpreter.ParameterConverter_Specs
 {
-
     public class parsing_parameter_types
     {
         protected ParameterConverter Converter = new ParameterConverter();
