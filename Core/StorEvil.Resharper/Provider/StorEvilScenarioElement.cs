@@ -40,14 +40,18 @@ namespace StorEvil.Resharper
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return base.Equals(other) && Equals(other._namespace, _namespace);
+            return base.Equals(other) && Equals(other._namespace, _namespace) && Equals(other.Scenario, Scenario);
         }
+
 
         public override int GetHashCode()
         {
             unchecked
             {
-                return (base.GetHashCode()*397) ^ (_namespace != null ? _namespace.GetHashCode() : 0);
+                int result = base.GetHashCode();
+                result = (result*397) ^ (_namespace != null ? _namespace.GetHashCode() : 0);
+                result = (result*397) ^ (Scenario != null ? Scenario.Id.GetHashCode() : 0);
+                return result;
             }
         }
     }

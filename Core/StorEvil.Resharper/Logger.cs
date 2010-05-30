@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace StorEvil.Resharper
@@ -9,12 +10,13 @@ namespace StorEvil.Resharper
 
         public static void Log(string msg)
         {
-            Console.WriteLine(msg);
-
+            System.Console.WriteLine(msg);
+            Debug.WriteLine(msg);
+           
             if (!EnableLogging)
                 return;
 
-            using (var stream = File.AppendText("C:\\storevil.log"))
+            using (var stream = File.AppendText("C:\\projects\\storevil\\logs\\resharper.log"))
             {
                 if (DateTime.Now > _lastLogTime.AddSeconds(2))
                 {
@@ -25,12 +27,10 @@ namespace StorEvil.Resharper
 
                 stream.WriteLine(msg);
 
-                
-
                 _lastLogTime = DateTime.Now;
             }
         }
 
-        protected static bool EnableLogging { get; set; }
+        protected static bool EnableLogging = true;
     }
 }

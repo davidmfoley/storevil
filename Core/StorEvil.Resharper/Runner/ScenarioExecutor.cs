@@ -55,7 +55,9 @@ namespace StorEvil.Resharper
             _listener = new ResharperResultListener(_server, remoteTask);
             IScenarioPreprocessor preprocessor = new ScenarioPreprocessor();
 
-            return new InPlaceStoryRunner(_listener, preprocessor, new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler())), new IncludeAllFilter(), _factory );
+            var interpreterForTypeFactory = new InterpreterForTypeFactory(new ExtensionMethodHandler());
+            var resolver = new DisallowAmbiguousMatches();
+            return new InPlaceStoryRunner(_listener, preprocessor, new ScenarioInterpreter(interpreterForTypeFactory, resolver), new IncludeAllFilter(), _factory );
         }
     }
 }

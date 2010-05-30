@@ -1,5 +1,7 @@
 using System;
+using System.Diagnostics;
 using JetBrains.ReSharper.TaskRunnerFramework;
+using JetBrains.Util;
 using StorEvil.Context;
 using StorEvil.Core;
 
@@ -10,6 +12,10 @@ namespace StorEvil.Resharper
         public StorEvilTaskRunner(IRemoteTaskServer server)
             : base(server)
         {
+            Debugger.Break();          
+            Logger.Log("StorEvilTaskRunner constructed");
+            server.ClientMessage("TaskRunner starting");
+            
             _result = TaskResult.Success;
         }
 
@@ -44,6 +50,8 @@ namespace StorEvil.Resharper
         {
             try
             {
+                Logger.Log("ExecuteRecursive");
+                Logger.Log(node.RemoteTask.RunnerID);
                 _result = ExecuteRecursiveInternal(node).Status;
             }
             catch (Exception ex)

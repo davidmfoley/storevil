@@ -25,6 +25,7 @@ namespace StorEvil.Resharper
         {
             base.SaveXml(element);
             SetXmlAttribute(element, "Id", _id);
+
         }
 
         public bool Equals(RunStoryTask other)

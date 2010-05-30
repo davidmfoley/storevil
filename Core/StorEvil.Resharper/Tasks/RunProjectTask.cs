@@ -16,6 +16,7 @@ namespace StorEvil.Resharper
             Project = element.GetAttribute("Project");
             var assembliesJoined = element.GetAttribute("Assemblies");
             Assemblies = new List<string>(assembliesJoined.Split(new[] { "$$$" }, StringSplitOptions.None));
+           
         }
 
         public RunProjectTask(string project, IEnumerable<string> assemblies, bool explicitly) : base("StorEvil")

@@ -6,13 +6,13 @@ using Microsoft.Build.Framework;
 
 namespace StorEvil.MsBuild
 {
-    public class StorEviTask : ITask
+    public class StorEvilTask : ITask
     {
         public bool Execute()
         {
             return true;
         }
-
+            
         public string Path { get; set; }
 
         public IBuildEngine BuildEngine

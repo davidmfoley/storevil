@@ -21,7 +21,7 @@ namespace StorEvil.Resharper
         public RunScenarioTask(IScenario scenario, bool explicitly)
             : base("StorEvil")
         {
-            Logger.Log("RunScenarioTask - constructed\r\n" + scenario + "\r\n Explicitly:" + explicitly);
+            Logger.Log("RunScenarioTask - constructed\r\n" + scenario.Id + " - " + scenario.Name + "\r\n Explicitly:" + explicitly);
             Explicitly = explicitly;
             Id = scenario.Id;
 
@@ -42,6 +42,8 @@ namespace StorEvil.Resharper
 
         public RunScenarioTask(XmlElement element) : base(element)
         {
+            Logger.Log("RunScenarioTask - constructed from XML\r\n" + element.OuterXml);
+
             var type = GetXmlAttribute(element, "ScenarioType");
             Name = GetXmlAttribute(element, "Name");
             Id = GetXmlAttribute(element, "Id");
@@ -52,7 +54,7 @@ namespace StorEvil.Resharper
             else
                 LoadScenarioOutlineXml(element);
 
-            Logger.Log("RunScenarioTask - constructed from XML\r\n" + element.OuterXml);
+            
         }
 
         private void LoadScenarioXml(XmlElement element)
@@ -76,6 +78,7 @@ namespace StorEvil.Resharper
 
         public override void SaveXml(XmlElement element)
         {
+            Logger.Log("RunScenarioTask - SaveXml");
             base.SaveXml(element);
             SetXmlAttribute(element, "Name", Name);
             SetXmlAttribute(element, "Id", Id);
@@ -84,6 +87,9 @@ namespace StorEvil.Resharper
                 SaveScenarioOutlineXml(element);
             else
                 SaveScenarioXml(element);
+
+            Logger.Log(element.OuterXml);
+        
         }
 
         private void SaveScenarioXml(XmlElement element)

@@ -15,7 +15,7 @@ namespace StorEvil.Resharper
             : base(provider, parent, project, title)
         {
             Assemblies = assemblies;
-            _namespace = new UnitTestNamespace(project.Name + ".namespaceYo");
+            _namespace = new UnitTestNamespace(project.Name + " StorEvil specs");
         }
 
         public IEnumerable<string> Assemblies { get; set; }

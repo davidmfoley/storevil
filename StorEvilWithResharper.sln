@@ -1,15 +1,9 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorEvil.Core", "Core\StorEvil\StorEvil.Core.csproj", "{B86235CA-045F-4222-997C-A65E966C6F9B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorEvil.Tests", "Tests\StorEvil.Tests\StorEvil.Tests.csproj", "{43A7C61E-DD5B-4CC9-A05A-02C00789028F}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{806BC5DE-65B6-4202-8B64-28D4137EAA60}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{963A6FE4-67D6-484D-AC34-A58F8ACD1265}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorEvil", "Core\StorEvil.Console\StorEvil.csproj", "{FBFE96FF-9D88-48DB-80F2-C79840BFDFA2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{5E256EA4-5E05-4735-9937-2B8B1A8DC6AF}"
 	ProjectSection(SolutionItems) = preProject
@@ -22,9 +16,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{5E256EA4-5
 		ToDo.txt = ToDo.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConwaysLife", "Examples\ConwaysLife\ConwaysLife.csproj", "{2CE31BAB-0046-43E0-B58E-585FF8646EF7}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{51EF7085-D82F-45FE-81EC-C604BFC5BB17}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{EE6099F0-03E3-46B9-8F11-13891AEC23CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorEvil.Core", "Core\StorEvil\StorEvil.Core.csproj", "{B86235CA-045F-4222-997C-A65E966C6F9B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorEvil.Tests", "Tests\StorEvil.Tests\StorEvil.Tests.csproj", "{43A7C61E-DD5B-4CC9-A05A-02C00789028F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorEvil", "Core\StorEvil.Console\StorEvil.csproj", "{FBFE96FF-9D88-48DB-80F2-C79840BFDFA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConwaysLife", "Examples\ConwaysLife\ConwaysLife.csproj", "{2CE31BAB-0046-43E0-B58E-585FF8646EF7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pizza", "Examples\Pizza\Pizza.csproj", "{436259FA-036B-466E-A670-F91507C34D0A}"
 EndProject
@@ -39,8 +41,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tutorial.NUnit", "Examples\Tutorial.NUnit\Tutorial.NUnit.csproj", "{7513C08A-D12A-43C1-B5C0-EBC1B1A9FDB5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorEvil.Resharper", "Core\StorEvil.Resharper\StorEvil.Resharper.csproj", "{F6BDC77F-FB15-46A2-89B9-9E66E89DE62D}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{EE6099F0-03E3-46B9-8F11-13891AEC23CB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorEvil.MsBuild", "Build\StorEvil.MsBuild\StorEvil.MsBuild.csproj", "{D0F1AFA9-AC1C-45A3-98D0-BF79866E9DCF}"
 EndProject

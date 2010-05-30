@@ -14,6 +14,7 @@ using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.UnitTestFramework.UI;
 using JetBrains.TreeModels;
 using JetBrains.UI.TreeView;
+using JetBrains.Util;
 using StorEvil.Configuration;
 using StorEvil.Core;
 using StorEvil.Infrastructure;
@@ -24,12 +25,9 @@ namespace StorEvil.Resharper
     [UnitTestProvider]
     public class StorEvilTestProvider : IUnitTestProvider
     {
-        private static readonly AssemblyLoader AssemblyLoader = new AssemblyLoader();
+ 
 
-        static StorEvilTestProvider()
-        {
-            AssemblyLoader.RegisterAssembly(typeof (Scenario).Assembly);
-        }
+        #region IUnitTestProvider Members
 
         public ProviderCustomOptionsControl GetCustomOptionsControl(ISolution solution)
         {
@@ -48,25 +46,20 @@ namespace StorEvil.Resharper
 
         public IList<UnitTestTask> GetTaskSequence(UnitTestElement element, IList<UnitTestElement> explicitElements)
         {
+            if (!(element is StorEvilScenarioElement))
+                return new List<UnitTestTask>();
             var tasks = new List<UnitTestTask>();
+            var storyEl = element.Parent as StorEvilStoryElement;
+            var projectEl = storyEl.Parent as StorEvilProjectElement;
 
-            if (element is StorEvilScenarioElement)
-            {
-                var storyEl = element.Parent as StorEvilStoryElement;
-                var projectEl = storyEl.Parent as StorEvilProjectElement;
+            foreach (string assembly in projectEl.Assemblies)
+                tasks.Add(new UnitTestTask(null, new AssemblyLoadTask(assembly)));
 
-                foreach (var assembly in projectEl.Assemblies)
-                    tasks.Add(new UnitTestTask(null, new AssemblyLoadTask(assembly)));
-
-                tasks.Add(new UnitTestTask(null,
-                                           new RunProjectTask(projectEl.GetNamespace().NamespaceName,
-                                                              projectEl.Assemblies, explicitElements.Contains(projectEl))));
-                tasks.Add(new UnitTestTask(storyEl, new RunStoryTask(storyEl.Id, explicitElements.Contains(storyEl))));
-                tasks.Add(new UnitTestTask(element,
-                                           new RunScenarioTask(((StorEvilScenarioElement) element).Scenario,
-                                                               explicitElements.Contains(element))));
-            }
-
+           // tasks.Add(new UnitTestTask(projectEl,
+           //                            new RunProjectTask(projectEl.GetNamespace().NamespaceName,
+           //                                               projectEl.Assemblies, explicitElements.Contains(projectEl))));
+            //tasks.Add(new UnitTestTask(storyEl, new RunStoryTask(storyEl.Id, explicitElements.Contains(storyEl))));
+            tasks.Add(new UnitTestTask(element,new RunScenarioTask(((StorEvilScenarioElement) element).Scenario, explicitElements.Contains(element))));
             return tasks;
         }
 
@@ -84,10 +77,6 @@ namespace StorEvil.Resharper
             return -1;
         }
 
-        public void ProfferConfiguration(TaskExecutorConfiguration configuration, UnitTestSession session)
-        {
-        }
-
         public string ID
         {
             get { return "StorEvil"; }
@@ -95,7 +84,7 @@ namespace StorEvil.Resharper
 
         public string Name
         {
-            get { return "StorEvil R# runner"; }
+            get { return "StorEvil runner"; }
         }
 
         public Image Icon
@@ -122,16 +111,6 @@ namespace StorEvil.Resharper
             item.RichText = element.ShortName;
         }
 
-        public bool IsUnitTestStuff(IDeclaredElement element)
-        {
-            return false;
-        }
-
-        public bool IsUnitTestElement(IDeclaredElement element)
-        {
-            return false;
-        }
-
         public bool IsElementOfKind(IDeclaredElement declaredElement, UnitTestElementKind elementKind)
         {
             return false;
@@ -156,6 +135,22 @@ namespace StorEvil.Resharper
         {
         }
 
+        #endregion
+
+        public void ProfferConfiguration(TaskExecutorConfiguration configuration, UnitTestSession session)
+        {
+        }
+
+        public bool IsUnitTestStuff(IDeclaredElement element)
+        {
+            return false;
+        }
+
+        public bool IsUnitTestElement(IDeclaredElement element)
+        {
+            return false;
+        }
+
         private void AddProject(IProject project, UnitTestElementConsumer consumer)
         {
             var reader = new FilesystemConfigReader(new Filesystem(), new ConfigParser());
@@ -166,7 +161,7 @@ namespace StorEvil.Resharper
         private void AddStoriesForProject(IProject project, FilesystemConfigReader reader,
                                           UnitTestElementConsumer consumer)
         {
-            var config = GetConfigForProject(project, reader);
+            ConfigSettings config = GetConfigForProject(project, reader);
 
             var projectElement = new StorEvilProjectElement(this, null, project, project.Name, config.AssemblyLocations);
             consumer(projectElement);
@@ -174,9 +169,9 @@ namespace StorEvil.Resharper
             if (config == null || config.StoryBasePath == null)
                 return;
 
-            var stories = GetStoriesForProject(config);
+            IEnumerable<Story> stories = GetStoriesForProject(config);
 
-            foreach (var story in stories)
+            foreach (Story story in stories)
                 AddStoryElement(config, story, project, consumer, projectElement);
         }
 
@@ -185,7 +180,7 @@ namespace StorEvil.Resharper
             if (project.ProjectFile == null)
                 return null;
 
-            var location = project.ProjectFile.ParentFolder.Location;
+            FileSystemPath location = project.ProjectFile.ParentFolder.Location;
 
             if (string.IsNullOrEmpty(location.FullPath))
                 return null;
@@ -207,7 +202,7 @@ namespace StorEvil.Resharper
             var storyElement = new StorEvilStoryElement(this, parent, project, story.Summary, config, story.Id);
             consumer(storyElement);
 
-            foreach (var scenario in story.Scenarios)
+            foreach (IScenario scenario in story.Scenarios)
                 AddScenarioElement(project, consumer, storyElement, scenario);
         }
 
