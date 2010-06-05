@@ -44,9 +44,9 @@ namespace StorEvil
             container.Register<IStoryContextFactory>(GetStoryContextFactory(settings));
         }
 
-        private StoryContextFactory GetStoryContextFactory(ConfigSettings settings)
+        private SessionContext GetStoryContextFactory(ConfigSettings settings)
         {
-            var mapper = new StoryContextFactory();
+            var mapper = new SessionContext();
             foreach (var location in settings.AssemblyLocations)
             {
                 DebugTrace.Trace(this.GetType().Name, "Adding context assembly:" + location);

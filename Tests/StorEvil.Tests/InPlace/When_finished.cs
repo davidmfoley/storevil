@@ -18,7 +18,7 @@ namespace StorEvil.InPlace.Compiled
             ResultListener = MockRepository.GenerateStub<IResultListener>();
             var remoteHandlerFactory = MockRepository.GenerateStub<IRemoteHandlerFactory>();            
 
-            var inPlaceRunner = new InPlaceCompilingStoryRunner(remoteHandlerFactory, ResultListener,new ScenarioPreprocessor(), new IncludeAllFilter(), new StoryContextFactory());
+            var inPlaceRunner = new InPlaceCompilingStoryRunner(remoteHandlerFactory, ResultListener,new ScenarioPreprocessor(), new IncludeAllFilter(), new SessionContext());
             inPlaceRunner.Finished();
         }
 
@@ -43,7 +43,7 @@ namespace StorEvil.InPlace.NonCompiled
             ResultListener = MockRepository.GenerateStub<IResultListener>();
 
             var scenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()), MockRepository.GenerateStub<IAmbiguousMatchResolver>());
-            var inPlaceRunner = new InPlaceStoryRunner(ResultListener, new ScenarioPreprocessor(), scenarioInterpreter, new IncludeAllFilter(), new StoryContextFactory());
+            var inPlaceRunner = new InPlaceStoryRunner(ResultListener, new ScenarioPreprocessor(), scenarioInterpreter, new IncludeAllFilter(), new SessionContext());
             inPlaceRunner.Finished();
         }
 

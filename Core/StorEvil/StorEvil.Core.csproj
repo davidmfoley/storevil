@@ -188,7 +188,7 @@
     <Compile Include="Core\StorEvilJob.cs" />
     <Compile Include="Core\Story.cs" />
     <Compile Include="Parsing\StoryParser.cs" />
-    <Compile Include="Context\StoryContextFactory.cs" />
+    <Compile Include="Context\SessionContext.cs" />
     <Compile Include="Utility\ReflectionExtensions.cs" />
     <Compile Include="Utility\StringUtility.cs" />
     <Compile Include="Nunit\NUnitTestMethodGenerator.cs" />

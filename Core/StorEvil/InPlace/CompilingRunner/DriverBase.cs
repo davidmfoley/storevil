@@ -13,7 +13,7 @@ namespace StorEvil.InPlace
 
         private readonly IResultListener ResultListener;
         private readonly ScenarioLineExecuter LineExecuter;
-        private readonly StoryContextFactory ContextFactory;
+        private readonly SessionContext _context;
 
         private ScenarioContext CurrentScenarioContext;
         private Scenario CurrentScenario;
@@ -24,12 +24,12 @@ namespace StorEvil.InPlace
             
             ScenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()), new DisallowAmbiguousMatches());           
             LineExecuter = new ScenarioLineExecuter(new MemberInvoker(), ScenarioInterpreter, ResultListener);
-            ContextFactory = new StoryContextFactory();            
+            _context = new SessionContext();            
         } 
 
         protected void AddAssembly(string location)
         {
-            ContextFactory.AddAssembly(location);
+            _context.AddAssembly(location);
         }
 
         protected object[] GetContexts()
@@ -71,7 +71,7 @@ namespace StorEvil.InPlace
             ResultListener.ScenarioStarting(scenario);
 
             if (CurrentStoryContext == null)
-                CurrentStoryContext = ContextFactory.GetContextForStory(story);
+                CurrentStoryContext = _context.GetContextForStory(story);
 
             CurrentScenarioContext = CurrentStoryContext.GetScenarioContext();
             CurrentScenario = scenario;

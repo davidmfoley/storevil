@@ -8,20 +8,19 @@ using StorEvil.Utility;
 
 namespace StorEvil.Context.StoryContextFactory_Specs
 {
-    [Context]
-    public class TestMappingContext
-    {
-    }
+    
 
     [TestFixture]
     public class StoryToContextMappingTests
     {
+       
+
         [Test]
         public void Should_Map_By_ContextAttribute()
         {
             var story = new Story("context test", "context test", new List<IScenario>());
 
-            var mapper = new StoryContextFactory();
+            var mapper = new SessionContext();
             mapper.AddContext<TestMappingContext>();
 
             var context = mapper.GetContextForStory(story);
@@ -31,7 +30,7 @@ namespace StorEvil.Context.StoryContextFactory_Specs
         [Test]
         public void Should_Register_Assembly_Types()
         {
-            var mapper = new StoryContextFactory();
+            var mapper = new SessionContext();
             mapper.AddAssembly(GetType().Assembly);
 
             var context = mapper.GetContextForStory(new Story("context test", "context test", new List<IScenario>()));
@@ -41,23 +40,32 @@ namespace StorEvil.Context.StoryContextFactory_Specs
         [Test, Ignore]
         public void Returns_a_default_context_with_only_object_if_no_contexts_added()
         {
-            var mapper = new StoryContextFactory();
+            var mapper = new SessionContext();
 
              var result = mapper.GetContextForStory(new Story("unknown type", "totally bogus", new List<IScenario>()));
             result.ImplementingTypes.Count().ShouldEqual(1);
         }
     }
 
+    [Context]
+    public class TestMappingContext
+    {
+    }
+
     [TestFixture]
     public class Scenario_context_lifetime_rules
     {
+        [Context(Lifetime = ContextLifetime.Scenario)]
+        public class ScenarioLifetimeTestMappingContext
+        {
+        }
         private StoryContext StoryContext;
 
         [SetUp]
         public void SetupContext()
         {
-            var mapper = new StoryContextFactory();
-            mapper.AddContext<TestMappingContext>();
+            var mapper = new SessionContext();
+            mapper.AddContext<ScenarioLifetimeTestMappingContext>();
             StoryContext = mapper.GetContextForStory(new Story("", "", new IScenario[] {}));
         }
 
@@ -66,8 +74,8 @@ namespace StorEvil.Context.StoryContextFactory_Specs
         {
             var context = StoryContext.GetScenarioContext();
 
-            var context1 = context.GetContext(typeof (TestMappingContext));
-            var context2 = context.GetContext(typeof (TestMappingContext));
+            var context1 = context.GetContext(typeof(ScenarioLifetimeTestMappingContext));
+            var context2 = context.GetContext(typeof(ScenarioLifetimeTestMappingContext));
 
             Assert.That(context1, Is.SameAs(context2));
         }
@@ -75,8 +83,8 @@ namespace StorEvil.Context.StoryContextFactory_Specs
         [Test]
         public void Context_classes_for_different_scenarios_are_different_objects()
         {
-            var context1 = StoryContext.GetScenarioContext().GetContext(typeof (TestMappingContext));
-            var context2 = StoryContext.GetScenarioContext().GetContext(typeof (TestMappingContext));
+            var context1 = StoryContext.GetScenarioContext().GetContext(typeof(ScenarioLifetimeTestMappingContext));
+            var context2 = StoryContext.GetScenarioContext().GetContext(typeof(ScenarioLifetimeTestMappingContext));
 
             Assert.That(context1, Is.Not.SameAs(context2));
         }
@@ -96,14 +104,29 @@ namespace StorEvil.Context.StoryContextFactory_Specs
     [TestFixture]
     public class Story_context_lifetime_rules
     {
-        
+        [Context(Lifetime = ContextLifetime.Story)]
+        public class TestStoryLifetimeMappingContext: IDisposable
+        {
+            public static bool WasDisposed;
+
+            public TestStoryLifetimeMappingContext()
+            {
+                WasDisposed = false;
+            }
+
+            public void Dispose()
+            {
+                WasDisposed = true;
+            }
+        }
+
         private readonly Type TestContextType = typeof(TestStoryLifetimeMappingContext);
-        private StoryContextFactory Mapper;
+        private SessionContext Mapper;
 
         [SetUp]
         public void SetupContext()
         {
-            Mapper = new StoryContextFactory();
+            Mapper = new SessionContext();
             Mapper.AddContext<TestStoryLifetimeMappingContext>();            
         }
 
@@ -127,6 +150,17 @@ namespace StorEvil.Context.StoryContextFactory_Specs
             Assert.That(context1, Is.Not.SameAs(context2));
         }
 
+        [Test]
+        public void Context_is_disposed_at_the_end_of_the_story()
+        {
+            var storyContext = GetStoryContext();
+            GetScenarioContext(storyContext);
+
+            storyContext.Dispose();
+      
+            TestStoryLifetimeMappingContext.WasDisposed.ShouldEqual(true);           
+        }
+
         private object GetScenarioContext(StoryContext storyContext)
         {
             return storyContext.GetScenarioContext().GetContext(TestContextType);
@@ -142,12 +176,28 @@ namespace StorEvil.Context.StoryContextFactory_Specs
     public class Session_context_lifetime_rules
     {
         private readonly Type TestContextType = typeof(TestSessionLifetimeMappingContext);
-        private StoryContextFactory Mapper;
+        private SessionContext Mapper;
+
+        [Context(Lifetime = ContextLifetime.Session)]
+        public class TestSessionLifetimeMappingContext : IDisposable
+        {
+            public static bool WasDisposed;
+
+            public TestSessionLifetimeMappingContext()
+            {
+                WasDisposed = false;
+            }
+
+            public void Dispose()
+            {
+                WasDisposed = true;
+            }
+        }
 
         [SetUp]
         public void SetupContext()
         {
-            Mapper = new StoryContextFactory();
+            Mapper = new SessionContext();
             Mapper.AddContext<TestSessionLifetimeMappingContext>();
         }
 
@@ -179,29 +229,9 @@ namespace StorEvil.Context.StoryContextFactory_Specs
         [Test]
         public void Context_class_is_disposed_when_Session_ends()
         {
-            var context = GetStoryContext().GetScenarioContext().GetContext(TestContextType);
+            GetStoryContext().GetScenarioContext().GetContext(TestContextType);
             Mapper.Dispose();
             TestSessionLifetimeMappingContext.WasDisposed.ShouldEqual(true);
-        }
-    }
-    [Context(Lifetime = ContextLifetime.Story)]
-    public class TestStoryLifetimeMappingContext
-    {
-    }
-
-    [Context(Lifetime = ContextLifetime.Session)]
-    public class TestSessionLifetimeMappingContext : IDisposable
-    {
-        public static bool WasDisposed;
-
-        public TestSessionLifetimeMappingContext()
-        {
-            WasDisposed = false;
-        }
-
-        public void Dispose()
-        {
-            WasDisposed = true;
         }
     }
 
@@ -213,7 +243,7 @@ namespace StorEvil.Context.StoryContextFactory_Specs
         [SetUp]
         public void SetupContext()
         {
-            var mapper = new StoryContextFactory();
+            var mapper = new SessionContext();
             mapper.AddContext<TestMappingContext>();
             mapper.AddContext<DependentMappingContext>();
             StoryContext = mapper.GetContextForStory(new Story("", "", new IScenario[] {}));
