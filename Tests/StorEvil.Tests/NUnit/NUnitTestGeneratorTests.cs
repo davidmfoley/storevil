@@ -267,7 +267,7 @@ namespace StorEvil.NUnit
 
             foreach (var sc in GetScenarios(story))
             {
-                var nUnitTest = generator.GetTestFromScenario(sc, new StoryContext(new FakeStoryContextFactory(), typeof(T)));
+                var nUnitTest = generator.GetTestFromScenario(sc, new StoryContext(new FakeSessionContext(), typeof(T)));
                 code += "        " + nUnitTest.Body + "\r\n";
                 namespaces = namespaces.Union(nUnitTest.Namespaces).Distinct();
             }

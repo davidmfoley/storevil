@@ -101,7 +101,7 @@ namespace StorEvil.NUnit
 
         private StoryContext GetContext()
         {
-            return new StoryContext(new FakeStoryContextFactory(), new[] { typeof(TestContext) });
+            return new StoryContext(new FakeSessionContext(), new[] { typeof(TestContext) });
         }
 
         protected static Scenario BuildScenario(string name, params string[] lines)

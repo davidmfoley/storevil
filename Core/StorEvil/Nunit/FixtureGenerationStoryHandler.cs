@@ -8,20 +8,20 @@ namespace StorEvil.NUnit
     {
         private readonly IFixtureGenerator FixtureGenerator;
         private readonly ITestFixtureWriter TestFixtureWriter;
-        private readonly IStoryContextFactory _contextFactory;
+        private readonly ISessionContext _context;
 
         public FixtureGenerationStoryHandler(IFixtureGenerator fixtureGenerator,
                                              ITestFixtureWriter testFixtureWriter,
-                                                IStoryContextFactory contextFactory)
+                                                ISessionContext context)
         {
             FixtureGenerator = fixtureGenerator;
             TestFixtureWriter = testFixtureWriter;
-            _contextFactory = contextFactory;
+            _context = context;
         }
 
         public void HandleStory(Story story)
         {
-            var sourceCode = FixtureGenerator.GenerateFixture(story, _contextFactory.GetContextForStory(story));
+            var sourceCode = FixtureGenerator.GenerateFixture(story, _context.GetContextForStory(story));
 
             TestFixtureWriter.WriteFixture(story.Id, sourceCode);
         }

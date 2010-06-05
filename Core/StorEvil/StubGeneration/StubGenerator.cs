@@ -16,20 +16,20 @@ namespace StorEvil.StubGeneration
         private readonly ScenarioInterpreter _scenarioInterpreter;
         private readonly ImplementationHelper _implementationHelper;
         public readonly ITextWriter SuggestionWriter;
-        private readonly IStoryContextFactory _contextFactory;
+        private readonly ISessionContext _context;
         private readonly List<string> _suggestions = new List<string>();
 
-        public StubGenerator(ScenarioInterpreter scenarioInterpreter, ImplementationHelper implementationHelper, ITextWriter suggestionWriter, IStoryContextFactory contextFactory)
+        public StubGenerator(ScenarioInterpreter scenarioInterpreter, ImplementationHelper implementationHelper, ITextWriter suggestionWriter, ISessionContext context)
         {
             _scenarioInterpreter = scenarioInterpreter;
             SuggestionWriter = suggestionWriter;
-            _contextFactory = contextFactory;
+            _context = context;
             _implementationHelper = implementationHelper;
         }
 
         public void HandleStory(Story story)
         {
-            var context = _contextFactory.GetContextForStory(story);
+            var context = _context.GetContextForStory(story);
             foreach (var scenario in story.Scenarios)
             {
                 var scenarioContext = context .GetScenarioContext();

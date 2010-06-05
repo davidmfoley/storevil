@@ -162,7 +162,7 @@
     <Compile Include="Parsing\StoryInfo.cs" />
     <Compile Include="Interpreter\Invocation.cs" />
     <Compile Include="Interpreter\InvocationChain.cs" />
-    <Compile Include="Context\IStoryContextFactory.cs" />
+    <Compile Include="Context\ISessionContext.cs" />
     <Compile Include="Nunit\NUnitFixtureGenerator.cs" />
     <Compile Include="Utility\Helpers.cs" />
     <Compile Include="Parsing\IStoryParser.cs" />

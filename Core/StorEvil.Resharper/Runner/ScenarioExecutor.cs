@@ -12,10 +12,10 @@ namespace StorEvil.Resharper
     internal class ScenarioExecutor
     {
         private readonly IRemoteTaskServer _server;
-        private readonly IStoryContextFactory _factory;
+        private readonly ISessionContext _factory;
         private ResharperResultListener _listener;
 
-        public ScenarioExecutor(IRemoteTaskServer server, IStoryContextFactory factory)
+        public ScenarioExecutor(IRemoteTaskServer server, ISessionContext factory)
         {
             _server = server;
             _factory = factory;

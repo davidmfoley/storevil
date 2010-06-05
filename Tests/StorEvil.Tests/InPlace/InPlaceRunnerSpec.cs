@@ -24,7 +24,7 @@ namespace StorEvil.InPlace
             ResultListener = MockRepository.GenerateStub<IResultListener>();
             new ExtensionMethodHandler().AddAssembly(typeof(TestExtensionMethods).Assembly);
 
-            Context = new StoryContext(new FakeStoryContextFactory(), typeof (T));
+            Context = new StoryContext(new FakeSessionContext(), typeof (T));
             
             if (UseCompilingRunner())
             {
@@ -57,7 +57,7 @@ namespace StorEvil.InPlace
                 ResultListener, 
                 preprocessor,                                               
                 new IncludeAllFilter(), 
-                new FakeStoryContextFactory(Context));
+                new FakeSessionContext(Context));
             runner.HandleStory(story);
             runner.Finished();
         }
@@ -67,7 +67,7 @@ namespace StorEvil.InPlace
             var scenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()), MockRepository.GenerateStub<IAmbiguousMatchResolver>());
             return new InPlaceStoryRunner(ResultListener, new ScenarioPreprocessor(),
                                           scenarioInterpreter,
-                                          new IncludeAllFilter(), new FakeStoryContextFactory(Context));
+                                          new IncludeAllFilter(), new FakeSessionContext(Context));
         }
 
         private bool UseCompilingRunner()

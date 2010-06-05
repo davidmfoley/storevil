@@ -14,8 +14,8 @@ namespace StorEvil.InPlace
                                   IScenarioPreprocessor preprocessor,
                                   ScenarioInterpreter scenarioInterpreter,
                                   IStoryFilter filter,
-                                  IStoryContextFactory contextFactory)
-              : base(listener, preprocessor, filter, contextFactory)
+                                  ISessionContext context)
+              : base(listener, preprocessor, filter, context)
         {
            
             _scenarioRunner = new InPlaceScenarioRunner(listener,new MemberInvoker(), scenarioInterpreter);

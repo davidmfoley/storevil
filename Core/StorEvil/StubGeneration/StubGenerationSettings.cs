@@ -23,7 +23,7 @@ namespace StorEvil.Console
         {
             container.EasyRegister<IStorEvilJob, StorEvilJob>();
             container.Register<IStoryHandler>(
-                c => new StubGenerator(c.Resolve<ScenarioInterpreter>(), new ImplementationHelper(), GetWriter(customSettings), c.Resolve<IStoryContextFactory>())
+                c => new StubGenerator(c.Resolve<ScenarioInterpreter>(), new ImplementationHelper(), GetWriter(customSettings), c.Resolve<ISessionContext>())
                 );
 
             container.Register<IStoryFilter>(new IncludeAllFilter());

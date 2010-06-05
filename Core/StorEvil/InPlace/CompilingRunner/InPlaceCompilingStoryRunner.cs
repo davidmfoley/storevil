@@ -14,8 +14,8 @@ namespace StorEvil.InPlace
                                            IResultListener listener,
                                            IScenarioPreprocessor preprocessor,                                         
                                            IStoryFilter filter,
-                                           IStoryContextFactory contextFactory)
-            : base(listener, preprocessor, filter, contextFactory)
+                                           ISessionContext context)
+            : base(listener, preprocessor, filter, context)
         {
             
             _factory = factory;     

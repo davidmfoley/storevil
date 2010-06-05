@@ -58,7 +58,7 @@ namespace StorEvil.Interpreter.ParameterConverter_Specs
             ScenarioInterpreter interpreter = new ScenarioInterpreter(factory, FakeResolver);
 
             Result = interpreter.GetChain(
-                new ScenarioContext(new StoryContext(new FakeStoryContextFactory()), new Type[] {typeof (AmbiguousTestClass)},
+                new ScenarioContext(new StoryContext(new FakeSessionContext()), new Type[] {typeof (AmbiguousTestClass)},
                                     new Dictionary<Type, object>()),
                 "Foo bar baz");
         }

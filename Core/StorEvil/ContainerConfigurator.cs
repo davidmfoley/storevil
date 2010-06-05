@@ -41,7 +41,7 @@ namespace StorEvil
 
             container.EasyRegister<IAmbiguousMatchResolver, DisallowAmbiguousMatches>();
 
-            container.Register<IStoryContextFactory>(GetStoryContextFactory(settings));
+            container.Register<ISessionContext>(GetStoryContextFactory(settings));
         }
 
         private SessionContext GetStoryContextFactory(ConfigSettings settings)

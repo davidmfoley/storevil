@@ -171,7 +171,4 @@
           Text="Debug mode failures: Expected $(ExpectedFailures) but got @(DebugExitCode)"
           Condition="'$(ExpectedFailures)' != '@(DebugExitCode)'" />
   </Target>
-  
- 
-
 </Project>

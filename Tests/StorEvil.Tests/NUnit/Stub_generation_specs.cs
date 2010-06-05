@@ -29,7 +29,7 @@ namespace StorEvil.NUnit
 
             Generator =
                 new StubGenerator(new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()), FakeResolver),
-                                  new ImplementationHelper(), FakeWriter, new FakeStoryContextFactory());
+                                  new ImplementationHelper(), FakeWriter, new FakeSessionContext());
 
             TestStory = new Story("foo", "", new[]
                                                  {
