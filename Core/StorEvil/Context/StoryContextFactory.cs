@@ -12,6 +12,7 @@ namespace StorEvil.Context
     {
         private readonly List<Type> _contextTypes = new List<Type>();
         private readonly ExtensionMethodHandler _extensionMethodHandler = new ExtensionMethodHandler();
+        private readonly Dictionary<Type, object> _cache = new Dictionary<Type, object>();      
 
         public void AddContext<T>() where T : class
         {
@@ -46,10 +47,12 @@ namespace StorEvil.Context
 
         public StoryContext GetContextForStory(Story story)
         {
-            //if (_contextTypes.Count() == 0)
-            //    throw new ConfigurationErrorsException("no context types have been registered");
+            return new StoryContext(this, _contextTypes.Union(new[] {typeof (object)}), _cache);
+        }
 
-            return new StoryContext(_contextTypes.Union(new[] {typeof (object)}));
+        public void SetContext(object context)
+        {
+            _cache.Add(context.GetType(), context);
         }
     }
 }

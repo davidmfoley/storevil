@@ -149,7 +149,6 @@ namespace StorEvil.Context.StoryContextFactory_Specs
         {
             Mapper = new StoryContextFactory();
             Mapper.AddContext<TestSessionLifetimeMappingContext>();
-
         }
 
         [Test]

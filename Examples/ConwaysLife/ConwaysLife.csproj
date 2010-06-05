@@ -55,7 +55,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="default.spark" />
-    <None Include="storevil.config" />
+    <None Include="storevil.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Stories\dead_cell.feature" />
     <None Include="Stories\live_cell.feature" />
     <None Include="Stories\multiple_cells.feature" />

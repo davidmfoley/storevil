@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Funq;
 using StorEvil.Core;
 
 namespace StorEvil.Context
@@ -9,17 +8,23 @@ namespace StorEvil.Context
     public interface IStoryContextFactory
     {
         StoryContext GetContextForStory(Story story);
+        void SetContext(object context);
     }
 
     public class StoryContext : IDisposable
     {
-        public StoryContext(params Type[] types)
+        private readonly IStoryContextFactory _parent;
+
+        public StoryContext(IStoryContextFactory parent, params Type[] types)
         {
+            _parent = parent;
             ImplementingTypes = types;
         }
 
-        public StoryContext(IEnumerable<Type> types)
+        public StoryContext(IStoryContextFactory parent, IEnumerable<Type> types, Dictionary<Type, object> cache)
         {
+            _parent = parent;
+            _cache = new Dictionary<Type, object>(cache);
             ImplementingTypes = types;
         }
 
@@ -33,7 +38,12 @@ namespace StorEvil.Context
 
         public void SetContext(object o)
         {
-            _cache.Add(o.GetType(), o);
+            var type = o.GetType();
+            var contextAttribute = (ContextAttribute) type.GetCustomAttributes(typeof(ContextAttribute), true).FirstOrDefault();
+            if (contextAttribute != null && contextAttribute.Lifetime == ContextLifetime.Session)
+                _parent.SetContext(o);
+           
+             _cache.Add(type, o);
         }
 
         public void Dispose()
@@ -71,7 +81,7 @@ namespace StorEvil.Context
                 {
                     _cache.Add(type, CreateContextObject(type));
 
-                    if (HasStoryLifetime(type))
+                    if (HasStoryOrSessionLifetime(type))
                     {
                         _parentContext.SetContext(_cache[type]);
                     }
@@ -84,13 +94,13 @@ namespace StorEvil.Context
             }
         }
 
-        private bool HasStoryLifetime(Type type)
+        private bool HasStoryOrSessionLifetime(Type type)
         {
             var contextAttr = (ContextAttribute) type.GetCustomAttributes(typeof (ContextAttribute), true).FirstOrDefault();
             if (contextAttr == null)
                 return false;
 
-            return contextAttr.Lifetime == ContextLifetime.Story;
+            return contextAttr.Lifetime == ContextLifetime.Story || contextAttr.Lifetime == ContextLifetime.Session;
         }
 
         private object CreateContextObject(Type type)
@@ -120,7 +130,7 @@ namespace StorEvil.Context
         {
             foreach (var context in _cache.Values)
             {
-                if (context is IDisposable && !HasStoryLifetime(context.GetType()))
+                if (context is IDisposable && !HasStoryOrSessionLifetime(context.GetType()))
                     ((IDisposable)context).Dispose();
             }
         }

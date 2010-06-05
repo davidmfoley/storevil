@@ -20,8 +20,13 @@ namespace StorEvil.NUnit
         public StoryContext GetContextForStory(Story story)
         {
             if (_context == null)
-                _context = new StoryContext();
+                _context = new StoryContext(this);
             return  _context;
+        }
+
+        public void SetContext(object context)
+        {
+            
         }
     }
 }

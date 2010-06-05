@@ -24,7 +24,7 @@ namespace StorEvil.InPlace
             ResultListener = MockRepository.GenerateStub<IResultListener>();
             new ExtensionMethodHandler().AddAssembly(typeof(TestExtensionMethods).Assembly);
 
-            Context = new StoryContext(typeof (T));
+            Context = new StoryContext(new FakeStoryContextFactory(), typeof (T));
             
             if (UseCompilingRunner())
             {

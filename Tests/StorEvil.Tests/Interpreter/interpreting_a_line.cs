@@ -5,6 +5,7 @@ using System.Reflection;
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Context;
+using StorEvil.NUnit;
 using StorEvil.Utility;
 
 namespace StorEvil.Interpreter.ParameterConverter_Specs
@@ -57,7 +58,7 @@ namespace StorEvil.Interpreter.ParameterConverter_Specs
             ScenarioInterpreter interpreter = new ScenarioInterpreter(factory, FakeResolver);
 
             Result = interpreter.GetChain(
-                new ScenarioContext(new StoryContext(), new Type[] {typeof (AmbiguousTestClass)},
+                new ScenarioContext(new StoryContext(new FakeStoryContextFactory()), new Type[] {typeof (AmbiguousTestClass)},
                                     new Dictionary<Type, object>()),
                 "Foo bar baz");
         }
