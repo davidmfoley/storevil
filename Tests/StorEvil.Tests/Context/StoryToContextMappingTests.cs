@@ -1,46 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using StorEvil.Core;
-using StorEvil.InPlace;
 using StorEvil.Utility;
 
-namespace StorEvil.Context.StoryToContextMapper_Specs
+namespace StorEvil.Context.StoryContextFactory_Specs
 {
-    [TestFixture]
-    public class Debugging_contexts
-    {
-        private object View;
-        private TestMappingContext _testMappingContext;
-
-        [SetUp]
-        public void SetupContext()
-        {
-            var viewer = new ContextViewer();
-            var dictionary = new Dictionary<Type, object>();
-
-            _testMappingContext = new TestMappingContext();
-            dictionary.Add(typeof(TestMappingContext), _testMappingContext);
-
-            View = viewer.Create(dictionary);
-        }
-        [Test]
-        public void should_have_context_on_type()
-        {            
-            View.GetType().GetProperty("TestMappingContext").ShouldNotBeNull();
-        }
-
-        [Test]
-        public void should_have_property_set()
-        {
-           
-            View.GetWithReflection("TestMappingContext").ShouldBe(_testMappingContext);
-        }
-    }
-
     [Context]
     public class TestMappingContext
     {
@@ -82,7 +49,7 @@ namespace StorEvil.Context.StoryToContextMapper_Specs
     }
 
     [TestFixture]
-    public class Context_lifetime_rules
+    public class Scenario_context_lifetime_rules
     {
         private StoryContext StoryContext;
 
@@ -124,6 +91,100 @@ namespace StorEvil.Context.StoryToContextMapper_Specs
             }
             d.WasDisposed.ShouldEqual(true);
         }
+    }
+
+    [TestFixture]
+    public class Story_context_lifetime_rules
+    {
+        
+        private readonly Type TestContextType = typeof(TestStoryLifetimeMappingContext);
+        private StoryContextFactory Mapper;
+
+        [SetUp]
+        public void SetupContext()
+        {
+            Mapper = new StoryContextFactory();
+            Mapper.AddContext<TestStoryLifetimeMappingContext>();            
+        }
+
+        [Test]
+        public void Context_classes_are_reused_within_different_scenarios_in_the_same_story()
+        {
+            var storyContext = GetStoryContext();           
+
+            var context1 = GetScenarioContext(storyContext);
+            var context2 = GetScenarioContext(storyContext);           
+
+            Assert.That(context1, Is.SameAs(context2));
+        }
+
+        [Test]
+        public void Context_classes_are_not_reused_within_different_stories()
+        {
+            var context1 = GetScenarioContext(GetStoryContext());
+            var context2 = GetScenarioContext(GetStoryContext());
+            
+            Assert.That(context1, Is.Not.SameAs(context2));
+        }
+
+        private object GetScenarioContext(StoryContext storyContext)
+        {
+            return storyContext.GetScenarioContext().GetContext(TestContextType);
+        }
+
+        private StoryContext GetStoryContext()
+        {
+            return Mapper.GetContextForStory(new Story("", "", new IScenario[] { }));
+        }
+    }
+
+    [TestFixture]
+    public class Session_context_lifetime_rules
+    {
+        private readonly Type TestContextType = typeof(TestSessionLifetimeMappingContext);
+        private StoryContextFactory Mapper;
+
+        [SetUp]
+        public void SetupContext()
+        {
+            Mapper = new StoryContextFactory();
+            Mapper.AddContext<TestSessionLifetimeMappingContext>();
+
+        }
+
+        [Test]
+        public void Context_classes_are_reused_within_different_scenarios_in_the_same_story()
+        {
+            var storyContext = GetStoryContext();
+
+            var context1 = storyContext.GetScenarioContext().GetContext(TestContextType);
+            var context2 = storyContext.GetScenarioContext().GetContext(TestContextType);
+
+            Assert.That(context1, Is.SameAs(context2));
+        }
+
+        private StoryContext GetStoryContext()
+        {
+            return Mapper.GetContextForStory(new Story("", "", new IScenario[] { }));
+        }
+
+        [Test]
+        public void Context_classes_are_reused_within_different_stories()
+        {
+            var context1 = GetStoryContext().GetScenarioContext().GetContext(TestContextType);
+            var context2 = GetStoryContext().GetScenarioContext().GetContext(TestContextType);
+
+            Assert.That(context1, Is.SameAs(context2));
+        }
+    }
+    [Context(Lifetime = ContextLifetime.Story)]
+    public class TestStoryLifetimeMappingContext
+    {
+    }
+
+    [Context(Lifetime = ContextLifetime.Session)]
+    public class TestSessionLifetimeMappingContext
+    {
     }
 
     [TestFixture]

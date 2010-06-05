@@ -83,7 +83,9 @@
   <ItemGroup>
     <Compile Include="Console\Job_creation_spec.cs" />
     <Compile Include="Console\InitJob_Specs.cs" />
+    <Compile Include="Context\Debugging_contexts.cs" />
     <Compile Include="Expect.cs" />
+    <Compile Include="InPlace\ContextLifetime.cs" />
     <Compile Include="InPlace\executing_scenario_with_typed_array.cs" />
     <Compile Include="InPlace\Filtering_by_tags.cs" />
     <Compile Include="InPlace\Inplace_assembly_generation.cs" />
