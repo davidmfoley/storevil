@@ -20,7 +20,6 @@ namespace StorEvil.Resharper
           
         }
 
-       
 
         public override IProject GetProject()
         {

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+//using System.Linq;
+using System.Linq;
 using System.Xml;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using StorEvil.Core;
+
 
 namespace StorEvil.Resharper
 {
@@ -12,14 +15,14 @@ namespace StorEvil.Resharper
         public bool Explicitly { get; set; }
         private const string MagicDelimiter = "$*$*$";
 
-        private readonly ScenarioLine[] Body;
+        private TaskScenarioLine[] Body;
         private readonly string Name;
         private bool IsOutline;
         private string[] FieldNames;
         private string[][] Examples;
 
         public RunScenarioTask(IScenario scenario, bool explicitly)
-            : base("StorEvil")
+            : base(StorEvilTaskRunner.RunnerId)
         {
             Logger.Log("RunScenarioTask - constructed\r\n" + scenario.Id + " - " + scenario.Name + "\r\n Explicitly:" + explicitly);
             Explicitly = explicitly;
@@ -29,15 +32,23 @@ namespace StorEvil.Resharper
             if (scenario is Scenario)
             {
                 var s = scenario as Scenario;
-                Body = s.Body;
+               SetBody(s.Body);
             }
             else
             {
                 var so = scenario as ScenarioOutline;
-                Body = so.Scenario.Body;
+                SetBody(so.Scenario.Body);
                 Examples = so.Examples;
                 FieldNames = so.FieldNames;
             }
+        }
+        private void SetBody(ScenarioLine[] lines)
+        {
+            var body = new TaskScenarioLine[lines.Length];
+            for (int i = 0; i < lines.Length; i++)
+                body[i] = new TaskScenarioLine {LineNumber = lines[i].LineNumber, Text = lines[i].Text};
+
+            Body = body;              
         }
 
         public RunScenarioTask(XmlElement element) : base(element)
@@ -110,16 +121,16 @@ namespace StorEvil.Resharper
             SetXmlAttribute(element, "Examples", exampleValue);
         }
 
-        private ScenarioLine[] GetXmlBody(XmlElement element)
+        private TaskScenarioLine[] GetXmlBody(XmlElement element)
         {
-            List<ScenarioLine> lines = new List<ScenarioLine>();
+            var lines = new List<TaskScenarioLine>();
 
             var bodyElement = (XmlElement) element.GetElementsByTagName("Body")[0];
             var lineElements = bodyElement.GetElementsByTagName("Line");
 
             foreach (XmlElement lineElement in lineElements)
             {
-                lines.Add(new ScenarioLine {Text = lineElement.GetAttribute("Text"), LineNumber = int.Parse(lineElement.GetAttribute("LineNumber"))});
+                lines.Add(new TaskScenarioLine { Text = lineElement.GetAttribute("Text"), LineNumber = int.Parse(lineElement.GetAttribute("LineNumber")) });
             }
 
             return lines.ToArray();
@@ -130,7 +141,7 @@ namespace StorEvil.Resharper
             return text.Split(new[] {MagicDelimiter}, StringSplitOptions.None);
         }
 
-        private void SetXmlBody(XmlElement element, IEnumerable<ScenarioLine> body)
+        private void SetXmlBody(XmlElement element, IEnumerable<TaskScenarioLine> body)
         {
             var bodyElement = element.OwnerDocument.CreateElement("Body");
             element.AppendChild(bodyElement);
@@ -149,16 +160,28 @@ namespace StorEvil.Resharper
             return string.Join("$*$*$", new List<string>(values).ToArray());
         }
 
-        public IScenario GetScenario()
+        internal IScenario GetScenario()
         {
             if (IsOutline)
             {
-                return new ScenarioOutline(Id, Name, new Scenario(Name, Body), FieldNames, Examples);
+                return new ScenarioOutline(Id, Name, new Scenario(Name, GetBody()), FieldNames, Examples);
             }
             else
             {
-                return new Scenario(Id, Name, Body);
+                return new Scenario(Id, Name, GetBody());
             }
+        }
+
+        private ScenarioLine[] GetBody()
+        {
+            var lines = new ScenarioLine[Body.Length];
+            for (int i = 0; i < lines.Length; i++)
+            {
+                lines[i] = new ScenarioLine {Text = Body[i].Text, LineNumber = Body[i].LineNumber};
+            }
+
+            return lines;
+            
         }
 
         public bool Equals(RunScenarioTask other)
@@ -202,5 +225,12 @@ namespace StorEvil.Resharper
         {
             return "RunScenarioTask \r\n Id=" + (Id ?? "") + "\r\n Name=" + (Name ?? "");
         }
+    }
+
+    [Serializable]
+    internal class TaskScenarioLine
+    {
+        public string Text;
+        public int LineNumber;
     }
 }

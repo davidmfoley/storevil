@@ -31,6 +31,6 @@ namespace StorEvil.Resharper
             }
         }
 
-        protected static bool EnableLogging = true;
+        protected static bool EnableLogging = false;
     }
 }

@@ -19,7 +19,7 @@ namespace StorEvil.Resharper
            
         }
 
-        public RunProjectTask(string project, IEnumerable<string> assemblies, bool explicitly) : base("StorEvil")
+        public RunProjectTask(string project, IEnumerable<string> assemblies, bool explicitly) : base(StorEvilTaskRunner.RunnerId)
         {
             Project = project;
             Explicitly = explicitly;

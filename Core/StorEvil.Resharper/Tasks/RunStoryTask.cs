@@ -15,7 +15,7 @@ namespace StorEvil.Resharper
             _id = GetXmlAttribute(element, "Id");
         }
 
-        public RunStoryTask(string id, bool explicitly) : base("StorEvil")
+        public RunStoryTask(string id, bool explicitly) : base(StorEvilTaskRunner.RunnerId)
         {
             _id = id;
             _explicitly = explicitly;

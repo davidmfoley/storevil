@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using JetBrains.Application;
 using JetBrains.CommonControls;
 using JetBrains.Metadata.Reader.API;
@@ -25,7 +26,13 @@ namespace StorEvil.Resharper
     [UnitTestProvider]
     public class StorEvilTestProvider : IUnitTestProvider
     {
- 
+        private readonly AssemblyLoader AssemblyLoader = new AssemblyLoader();
+
+        public StorEvilTestProvider()
+        {
+            AssemblyLoader.RegisterAssembly(typeof(Scenario).Assembly);
+            //AssemblyLoader.RegisterPath(Path.GetDirectoryName(typeof(Scenario).Assembly.Location));
+        }
 
         #region IUnitTestProvider Members
 
@@ -36,7 +43,7 @@ namespace StorEvil.Resharper
 
         public RemoteTaskRunnerInfo GetTaskRunnerInfo()
         {
-            return new RemoteTaskRunnerInfo(typeof (StorEvilTaskRunner));
+            return new RemoteTaskRunnerInfo(typeof (StorEvilTaskRunner)) ;
         }
 
         public string Serialize(UnitTestElement element)
@@ -52,13 +59,15 @@ namespace StorEvil.Resharper
             var storyEl = element.Parent as StorEvilStoryElement;
             var projectEl = storyEl.Parent as StorEvilProjectElement;
 
+            //tasks.Add(new UnitTestTask(null, new AssemblyLoadTask(typeof (Scenario).Assembly.Location)));
+
             foreach (string assembly in projectEl.Assemblies)
                 tasks.Add(new UnitTestTask(null, new AssemblyLoadTask(assembly)));
 
-           // tasks.Add(new UnitTestTask(projectEl,
-           //                            new RunProjectTask(projectEl.GetNamespace().NamespaceName,
-           //                                               projectEl.Assemblies, explicitElements.Contains(projectEl))));
-            //tasks.Add(new UnitTestTask(storyEl, new RunStoryTask(storyEl.Id, explicitElements.Contains(storyEl))));
+            tasks.Add(new UnitTestTask(projectEl,
+                                       new RunProjectTask(projectEl.GetNamespace().NamespaceName,
+                                                          projectEl.Assemblies, explicitElements.Contains(projectEl))));
+            tasks.Add(new UnitTestTask(storyEl, new RunStoryTask(storyEl.Id, explicitElements.Contains(storyEl))));
             tasks.Add(new UnitTestTask(element,new RunScenarioTask(((StorEvilScenarioElement) element).Scenario, explicitElements.Contains(element))));
             return tasks;
         }
@@ -79,7 +88,7 @@ namespace StorEvil.Resharper
 
         public string ID
         {
-            get { return "StorEvil"; }
+            get { return StorEvilTaskRunner.RunnerId; }
         }
 
         public string Name
@@ -136,11 +145,6 @@ namespace StorEvil.Resharper
         }
 
         #endregion
-
-        public void ProfferConfiguration(TaskExecutorConfiguration configuration, UnitTestSession session)
-        {
-        }
-
         public bool IsUnitTestStuff(IDeclaredElement element)
         {
             return false;
