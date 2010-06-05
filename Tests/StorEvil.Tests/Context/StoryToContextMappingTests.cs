@@ -175,6 +175,14 @@ namespace StorEvil.Context.StoryContextFactory_Specs
 
             Assert.That(context1, Is.SameAs(context2));
         }
+
+        [Test]
+        public void Context_class_is_disposed_when_Session_ends()
+        {
+            var context = GetStoryContext().GetScenarioContext().GetContext(TestContextType);
+            Mapper.Dispose();
+            TestSessionLifetimeMappingContext.WasDisposed.ShouldEqual(true);
+        }
     }
     [Context(Lifetime = ContextLifetime.Story)]
     public class TestStoryLifetimeMappingContext
@@ -182,8 +190,19 @@ namespace StorEvil.Context.StoryContextFactory_Specs
     }
 
     [Context(Lifetime = ContextLifetime.Session)]
-    public class TestSessionLifetimeMappingContext
+    public class TestSessionLifetimeMappingContext : IDisposable
     {
+        public static bool WasDisposed;
+
+        public TestSessionLifetimeMappingContext()
+        {
+            WasDisposed = false;
+        }
+
+        public void Dispose()
+        {
+            WasDisposed = true;
+        }
     }
 
     [TestFixture]

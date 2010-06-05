@@ -8,7 +8,7 @@ using StorEvil.Interpreter;
 
 namespace StorEvil.Context
 {
-    public class StoryContextFactory : IStoryContextFactory
+    public class StoryContextFactory : IStoryContextFactory, IDisposable
     {
         private readonly List<Type> _contextTypes = new List<Type>();
         private readonly ExtensionMethodHandler _extensionMethodHandler = new ExtensionMethodHandler();
@@ -53,6 +53,17 @@ namespace StorEvil.Context
         public void SetContext(object context)
         {
             _cache.Add(context.GetType(), context);
+        }
+
+        public void Dispose()
+        {
+            foreach (var context in _cache)
+            {
+                var disposable = context.Value as IDisposable;
+                if (disposable!= null)
+                    disposable.Dispose();
+             
+            }
         }
     }
 }
