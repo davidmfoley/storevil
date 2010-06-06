@@ -135,9 +135,11 @@
     <Compile Include="Elements\StorEvilDeclaredElementType.cs" />
     <Compile Include="Provider\StorEvilElementComparer.cs" />
     <Compile Include="Provider\StorEvilFileExplorer.cs" />
+    <Compile Include="Provider\StorEvilProject.cs" />
     <Compile Include="Provider\StorEvilResharperConfigProvider.cs" />
     <Compile Include="Provider\StorEvilScenarioOutlineElement.cs" />
     <Compile Include="Provider\StorEvilTaskFactory.cs" />
+    <Compile Include="Provider\StorEvilTestEnvironment.cs" />
     <Compile Include="Provider\StorEvilUnitTestPresenter.cs" />
     <Compile Include="Runner\ExecutionResult.cs" />
     <Compile Include="Runner\ResharperResultListener.cs" />

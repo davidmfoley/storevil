@@ -24,17 +24,18 @@ namespace StorEvil.Resharper
     {
         private readonly AssemblyLoader _assemblyLoader = new AssemblyLoader();
         private readonly StorEvilAssemblyExplorer _assemblyExplorer;
-        private readonly StorEvilResharperConfigProvider _configProvider;
+
         private readonly StorEvilFileExplorer _storEvilFileExplorer;
         private readonly StorEvilTaskFactory _taskFactory;
         private StorEvilElementComparer _comparer;
         private StorEvilUnitTestPresenter _presenter;
+        private StorEvilTestEnvironment _environment;
 
         public StorEvilTestProvider()
         {
-            _configProvider = new StorEvilResharperConfigProvider();
-            _assemblyExplorer = new StorEvilAssemblyExplorer(this, _configProvider);
-            _storEvilFileExplorer = new StorEvilFileExplorer(this, _configProvider);
+            _environment = new StorEvilTestEnvironment();
+            _assemblyExplorer = new StorEvilAssemblyExplorer(this, _environment);
+            _storEvilFileExplorer = new StorEvilFileExplorer(this, _environment);
             _taskFactory = new StorEvilTaskFactory();
             _comparer = new StorEvilElementComparer();
             _presenter = new StorEvilUnitTestPresenter();

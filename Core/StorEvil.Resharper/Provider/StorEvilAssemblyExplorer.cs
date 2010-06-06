@@ -12,17 +12,18 @@ namespace StorEvil.Resharper.Provider
     class StorEvilAssemblyExplorer
     {
         private StorEvilTestProvider _provider;
+        private readonly StorEvilTestEnvironment _environment;
         private readonly StorEvilResharperConfigProvider _configProvider;
 
-        public StorEvilAssemblyExplorer(StorEvilTestProvider provider, StorEvilResharperConfigProvider configProvider)
+        public StorEvilAssemblyExplorer(StorEvilTestProvider provider, StorEvilTestEnvironment environment)
         {
             _provider = provider;
-            _configProvider = configProvider;
+            _environment = environment;           
         }
 
         public void ExploreProject(IProject project, UnitTestElementConsumer consumer)
         {
-            var config = _configProvider.GetConfigSettingsForProject(project);
+            var config = _environment.GetProject(project).ConfigSettings;
 
             var projectElement = new StorEvilProjectElement(_provider, null, project, project.Name, config.AssemblyLocations);
             consumer(projectElement);

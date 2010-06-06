@@ -51,30 +51,4 @@ namespace StorEvil.Resharper.Elements
         }
     }
 
-    [Serializable]
-    public class ProjectTask : RemoteTask, IEquatable<ProjectTask>
-    {
-        public bool Explicitly { get; set; }
-
-        public ProjectTask(StorEvilProjectElement storEvilProjectElement, bool explicitly) : base("StorEvil")
-        {
-            Explicitly = explicitly;
-            Id = storEvilProjectElement.GetNamespace().NamespaceName;
-        }
-
-        protected string Id { get; set; }
-
-        public bool Equals(ProjectTask other)
-        {
-            return Equals(other.Id, Id) && other.Explicitly == Explicitly;
-        }
-
-        public override bool Equals(RemoteTask other)
-        {
-            if (other is ProjectTask)
-                return Equals((ProjectTask) other);
-
-            return false;
-        }
-    }
 }

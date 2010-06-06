@@ -1,34 +1,32 @@
-﻿using JetBrains.Application;
+﻿using System;
+using System.Collections;
+using JetBrains.Application;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.Util;
-using StorEvil.Infrastructure;
-using StorEvil.Parsing;
 
 namespace StorEvil.Resharper
 {
     internal class StorEvilFileExplorer
     {
-        public StorEvilFileExplorer(StorEvilTestProvider provider, StorEvilResharperConfigProvider configProvider)
+        public StorEvilFileExplorer(StorEvilTestProvider provider, StorEvilTestEnvironment environment)
         {
             _provider = provider;
-            _configProvider = configProvider;
+            _environment = environment;
         }
 
         private readonly StorEvilTestProvider _provider;
-        private StorEvilResharperConfigProvider _configProvider;
+
+        private StorEvilTestEnvironment _environment;
 
         public void ExploreFile(IFile psiFile, UnitTestElementLocationConsumer consumer, CheckForInterrupt interrupted)
         {
-            var config = _configProvider.GetConfigSettingsForProject(psiFile.GetProject());
-            var projectFile = psiFile.GetProjectFile();
-            var storyReader = new SingleFileStoryReader(new Filesystem(), config, projectFile.Location.ToString());
-            var storyProvider = new StoryProvider(storyReader, new StoryParser());
-
-            var stories = storyProvider.GetStories();
+            var project = _environment.GetProject(psiFile.GetProject());
+            
+            var stories = project.GetStories(psiFile.GetProjectFile().Location.ToString());
+            
             foreach (var story in stories)
             {
-
                 var range = new TextRange(0);
                 //UnitTestElementDisposition disposition = new UnitTestElementDisposition(new StorEvilStoryElement(this, Get));
                 //consumer(disposition)
