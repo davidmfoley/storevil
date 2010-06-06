@@ -152,7 +152,7 @@
     <Compile Include="Runner\StorEvilTaskRunner.cs" />
     <Compile Include="Provider\StorEvilTestProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Provider\StorEvilUnitTestElement.cs" />
+    <Compile Include="Elements\StorEvilUnitTestElement.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Debugging.txt" />
