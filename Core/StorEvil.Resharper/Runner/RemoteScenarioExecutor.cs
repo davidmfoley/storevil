@@ -5,8 +5,9 @@ using StorEvil.Core;
 using StorEvil.InPlace;
 using StorEvil.Interpreter;
 using StorEvil.Parsing;
+using StorEvil.Resharper.Tasks;
 
-namespace StorEvil.Resharper
+namespace StorEvil.Resharper.Runner
 {
     internal class RemoteScenarioExecutor
     {

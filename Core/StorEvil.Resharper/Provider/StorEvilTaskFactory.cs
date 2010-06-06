@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.UnitTestFramework;
+using StorEvil.Resharper.Elements;
+using StorEvil.Resharper.Tasks;
 
 namespace StorEvil.Resharper
 {

@@ -6,7 +6,7 @@ using JetBrains.ReSharper.Psi.Resolve;
 using JetBrains.ReSharper.Psi.Search;
 using JetBrains.ReSharper.Psi.Tree;
 
-namespace StorEvil.Resharper
+namespace StorEvil.Resharper.Elements
 {
     public class StorEvilDeclaredElement : IDeclaredElement
     {

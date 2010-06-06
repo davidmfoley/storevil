@@ -1,9 +1,8 @@
-using System;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using StorEvil.Core;
 using StorEvil.InPlace;
 
-namespace StorEvil.Resharper
+namespace StorEvil.Resharper.Runner
 {
     internal class ResharperResultListener : IResultListener
     {

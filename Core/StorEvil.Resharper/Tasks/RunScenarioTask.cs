@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-//using System.Linq;
-using System.Linq;
 using System.Xml;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using StorEvil.Core;
+using StorEvil.Resharper.Runner;
+//using System.Linq;
 
 
-namespace StorEvil.Resharper
+namespace StorEvil.Resharper.Tasks
 {
     [Serializable]
     public class RunScenarioTask : RemoteTask, IEquatable<RunScenarioTask>

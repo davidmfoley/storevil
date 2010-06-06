@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using StorEvil.Resharper.Elements;
 using IProject = JetBrains.ProjectModel.IProject;
 using IProjectFile = JetBrains.ProjectModel.IProjectFile;
 using JetBrains.ReSharper.Psi;

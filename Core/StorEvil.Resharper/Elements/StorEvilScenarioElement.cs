@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using JetBrains.ProjectModel;
+﻿using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
 using StorEvil.Core;
 
-namespace StorEvil.Resharper
+namespace StorEvil.Resharper.Elements
 {
     public class StorEvilScenarioElement : StorEvilUnitTestElement
     {

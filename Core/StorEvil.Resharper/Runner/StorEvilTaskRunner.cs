@@ -1,10 +1,10 @@
 using System;
-using System.Diagnostics;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using StorEvil.Context;
 using StorEvil.Core;
+using StorEvil.Resharper.Tasks;
 
-namespace StorEvil.Resharper
+namespace StorEvil.Resharper.Runner
 {
     public class StorEvilTaskRunner : RecursiveRemoteTaskRunner
     {

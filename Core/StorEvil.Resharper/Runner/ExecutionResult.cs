@@ -1,6 +1,6 @@
 using JetBrains.ReSharper.TaskRunnerFramework;
 
-namespace StorEvil.Resharper
+namespace StorEvil.Resharper.Runner
 {
     internal class ExecutionResult
     {

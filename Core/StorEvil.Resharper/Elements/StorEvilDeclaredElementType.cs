@@ -2,7 +2,7 @@ using System;
 using System.Drawing;
 using JetBrains.ReSharper.Psi;
 
-namespace StorEvil.Resharper
+namespace StorEvil.Resharper.Elements
 {
     public class StorEvilDeclaredElementType : DeclaredElementType
     {

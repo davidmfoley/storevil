@@ -1,8 +1,8 @@
-﻿using System;
-using JetBrains.ReSharper.Psi;
+﻿using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
+using StorEvil.Resharper.Elements;
 
-namespace StorEvil.Resharper
+namespace StorEvil.Resharper.Provider
 {
     internal class StorEvilElementComparer
     {

@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Xml;
 using JetBrains.ReSharper.TaskRunnerFramework;
+using StorEvil.Resharper.Runner;
 
-namespace StorEvil.Resharper
+namespace StorEvil.Resharper.Tasks
 {
     [Serializable]
     public class RunProjectTask : RemoteTask, IEquatable<RunProjectTask>

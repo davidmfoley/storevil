@@ -4,7 +4,7 @@ using JetBrains.ProjectModel;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.UnitTestFramework;
 
-namespace StorEvil.Resharper
+namespace StorEvil.Resharper.Elements
 {
     public class StorEvilProjectElement : StorEvilUnitTestElement
     {

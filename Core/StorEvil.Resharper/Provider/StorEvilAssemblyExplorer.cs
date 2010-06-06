@@ -5,8 +5,9 @@ using StorEvil.Configuration;
 using StorEvil.Core;
 using StorEvil.Infrastructure;
 using StorEvil.Parsing;
+using StorEvil.Resharper.Elements;
 
-namespace StorEvil.Resharper
+namespace StorEvil.Resharper.Provider
 {
     class StorEvilAssemblyExplorer
     {

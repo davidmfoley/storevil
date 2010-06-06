@@ -1,9 +1,8 @@
-using System.Collections.Generic;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
 using StorEvil.Configuration;
 
-namespace StorEvil.Resharper
+namespace StorEvil.Resharper.Elements
 {
     public class StorEvilStoryElement : StorEvilUnitTestElement
     {

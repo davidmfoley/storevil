@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Xml;
 using JetBrains.ReSharper.TaskRunnerFramework;
+using StorEvil.Resharper.Runner;
 
-namespace StorEvil.Resharper
+namespace StorEvil.Resharper.Tasks
 {
     [Serializable]
     public class RunStoryTask : RemoteTask

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using StorEvil.Core;
 
-namespace StorEvil.Resharper
+namespace StorEvil.Resharper.Runner
 {
     internal class SingleScenarioStoryProvider : IStoryProvider
     {
