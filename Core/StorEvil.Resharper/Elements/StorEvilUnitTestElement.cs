@@ -18,9 +18,7 @@ namespace StorEvil.Resharper
         {
             Project = project;
             _title = title;
-          
         }
-
 
         public override IProject GetProject()
         {
@@ -71,7 +69,5 @@ namespace StorEvil.Resharper
         {
             return null;
         }
-
-
     }
 }

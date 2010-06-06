@@ -6,24 +6,19 @@ namespace StorEvil.Resharper
 {
     internal class StorEvilResharperConfigProvider
     {
-        public ConfigSettings GetConfigSettingsForProject(IProject project)
+        public ConfigSettings GetConfigSettingsForProject(string projectFile)
         {
             var reader = new FilesystemConfigReader(new Filesystem(), new ConfigParser());
 
-            return GetConfigForProject(project, reader);
+            return GetConfigForProject(projectFile, reader);
         }
 
-        private static ConfigSettings GetConfigForProject(IProject project, FilesystemConfigReader reader)
+        private static ConfigSettings GetConfigForProject(string projectFile, FilesystemConfigReader reader)
         {
-            if (project.ProjectFile == null)
+            if (string.IsNullOrEmpty(projectFile))
                 return null;
 
-            var location = project.ProjectFile.ParentFolder.Location;
-
-            if (string.IsNullOrEmpty(location.FullPath))
-                return null;
-
-            return reader.GetConfig(location.FullPath);
+            return reader.GetConfig(projectFile);
         }
     }
 }

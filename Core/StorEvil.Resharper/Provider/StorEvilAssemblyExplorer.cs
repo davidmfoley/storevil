@@ -23,18 +23,18 @@ namespace StorEvil.Resharper.Provider
 
         public void ExploreProject(IProject project, UnitTestElementConsumer consumer)
         {
-            var config = _environment.GetProject(project).ConfigSettings;
+            var config = _environment.GetProject(project.ProjectFile.Location.FullPath).ConfigSettings;
 
             var projectElement = new StorEvilProjectElement(_provider, null, project, project.Name, config.AssemblyLocations);
             consumer(projectElement);
 
-            if (config == null || config.StoryBasePath == null)
+            if (config.StoryBasePath == null)
                 return;
 
             var stories = GetStoriesForProject(config);
 
             foreach (Story story in stories)
-                AddStoryElement(config, story, project, consumer, projectElement);
+                AddStoryElement(story, project, consumer, projectElement);
         }
 
         private IEnumerable<Story> GetStoriesForProject(ConfigSettings config)
@@ -45,19 +45,19 @@ namespace StorEvil.Resharper.Provider
             return storyProvider.GetStories();
         }
 
-        private void AddStoryElement(ConfigSettings config, Story story, IProject project,
+        private void AddStoryElement(Story story, IProject project,
                                      UnitTestElementConsumer consumer, StorEvilProjectElement parent)
         {
-            var storyElement = GetStoryElement(parent, project, story, config);
+            var storyElement = GetStoryElement(parent, project, story);
             consumer(storyElement);
 
             foreach (IScenario scenario in story.Scenarios)
                 AddScenarioElement(project, consumer, storyElement, scenario);
         }
 
-        private StorEvilStoryElement GetStoryElement(StorEvilProjectElement parent, IProject project, Story story, ConfigSettings config)
+        private StorEvilStoryElement GetStoryElement(StorEvilProjectElement parent, IProject project, Story story)
         {
-            return new StorEvilStoryElement(_provider, parent, project, story.Summary, config, story.Id);
+            return new StorEvilStoryElement(_provider, parent, project, story.Summary, story.Id);
         }
 
         private void AddScenarioElement(IProject project, UnitTestElementConsumer consumer,

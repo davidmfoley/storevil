@@ -6,15 +6,13 @@ namespace StorEvil.Resharper.Elements
 {
     public class StorEvilStoryElement : StorEvilUnitTestElement
     {
-        public ConfigSettings Config { get; set; }
-        public string Id { get; set; }
+         public string Id { get; set; }
         private readonly UnitTestNamespace _namespace;
 
-        public StorEvilStoryElement(StorEvilTestProvider provider, UnitTestElement parent, IProject project, string title, ConfigSettings config, string id)
+        public StorEvilStoryElement(StorEvilTestProvider provider, UnitTestElement parent, IProject project, string title, string id)
             : base(provider, parent, project, title)
         {
-            Config = config;
-            Id = id;
+        
             _namespace = new UnitTestNamespace(project.Name + " " + title);
         }
 

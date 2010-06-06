@@ -8,12 +8,12 @@ namespace StorEvil.Resharper
         private StorEvilResharperConfigProvider _configProvider = new StorEvilResharperConfigProvider();
         private Dictionary<string, StorEvilProject> _cache = new Dictionary<string, StorEvilProject>();
 
-        public StorEvilProject GetProject(IProject getProject)
+        public StorEvilProject GetProject(string  projectFile)
         {
-            var key = getProject.Name;
+            var key = projectFile;
 
             if (!_cache.ContainsKey(key))
-                _cache.Add(key, new StorEvilProject(_configProvider.GetConfigSettingsForProject(getProject)));
+                _cache.Add(key, new StorEvilProject(_configProvider.GetConfigSettingsForProject(projectFile)));
 
             return _cache[key];
         }
