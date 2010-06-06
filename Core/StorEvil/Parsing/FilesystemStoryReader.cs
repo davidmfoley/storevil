@@ -6,25 +6,67 @@ using StorEvil.Infrastructure;
 
 namespace StorEvil.Parsing
 {
+    internal class FileExtensionFilter
+    {
+        private readonly ConfigSettings _settings;
+
+        public FileExtensionFilter(ConfigSettings settings)
+        {
+            _settings = settings;
+        }
+
+        public bool IsValid(string file)
+        {
+            if (_settings.ScenarioExtensions == null || !_settings.ScenarioExtensions.Any())
+                return true;
+
+            var extension = Path.GetExtension(file);
+            return _settings.ScenarioExtensions.Any(x => extension == x);
+        }
+    }
+
+    public class SingleFileStoryReader : IStoryReader
+    {
+        private readonly IFilesystem _filesystem;
+        private readonly ConfigSettings _settings;
+        private readonly string _filename;
+
+        public SingleFileStoryReader(IFilesystem filesystem, ConfigSettings settings, string filename)
+        {
+            _filesystem = filesystem;
+            _settings = settings;
+            _filename = filename;
+        }
+
+        public IEnumerable<StoryInfo> GetStoryInfos()
+        {
+             var filter = new FileExtensionFilter(_settings);
+
+            if (!filter.IsValid(_filename))
+                return new StoryInfo[0];
+
+            return new [] {new StoryInfo {Location = _filename, Text = _filesystem.GetFileText(_filename)}};
+        }
+    }
+
     /// <summary>
     /// returns all of the stories/specs from a directory
     /// </summary>
     public class FilesystemStoryReader : IStoryReader
     {
-        private readonly ConfigSettings Settings;
+        private readonly ConfigSettings _settings;
 
         public FilesystemStoryReader(IFilesystem filesystem, ConfigSettings settings)
         {
-            Settings = settings;
+            _settings = settings;
             Filesystem = filesystem;
         }
 
-        public IStoryParser Parser { get; set; }
         public IFilesystem Filesystem { get; set; }
 
         public IEnumerable<StoryInfo> GetStoryInfos()
         {
-            return GetStoryInfos(Settings.StoryBasePath);
+            return GetStoryInfos(_settings.StoryBasePath);
         }
 
         private IEnumerable<StoryInfo> GetStoryInfos(string path)
@@ -33,10 +75,11 @@ namespace StorEvil.Parsing
             {
                 return new[] {GetStoryInfo(path)};
             }
+            var filter = new FileExtensionFilter(_settings);
             var stories = Filesystem
                 .GetFilesInFolder(path)
-                .Where(ExtensionIsSupportedByCurrentSettings)
-                .Select(file =>GetStoryInfo(file))                       
+                .Where(filter.IsValid)
+                .Select(GetStoryInfo)                       
                 .ToList();
 
             foreach (var subPath in Filesystem.GetSubFolders(path))
@@ -54,13 +97,6 @@ namespace StorEvil.Parsing
                        };
         }
 
-        private bool ExtensionIsSupportedByCurrentSettings(string file)
-        {
-            if (Settings.ScenarioExtensions == null || ! Settings.ScenarioExtensions.Any())
-                return true;
-
-            var extension = Path.GetExtension(file);
-            return Settings.ScenarioExtensions.Any(x => extension == x);
-        }
+      
     }
 }

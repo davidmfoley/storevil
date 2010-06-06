@@ -1,6 +1,5 @@
 using System;
 using JetBrains.ReSharper.TaskRunnerFramework;
-using StorEvil.Configuration;
 using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.InPlace;
@@ -9,13 +8,13 @@ using StorEvil.Parsing;
 
 namespace StorEvil.Resharper
 {
-    internal class ScenarioExecutor
+    internal class RemoteScenarioExecutor
     {
         private readonly IRemoteTaskServer _server;
         private readonly ISessionContext _factory;
         private ResharperResultListener _listener;
 
-        public ScenarioExecutor(IRemoteTaskServer server, ISessionContext factory)
+        public RemoteScenarioExecutor(IRemoteTaskServer server, ISessionContext factory)
         {
             _server = server;
             _factory = factory;

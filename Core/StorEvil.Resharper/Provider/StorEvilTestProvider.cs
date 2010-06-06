@@ -27,9 +27,16 @@ namespace StorEvil.Resharper
     public class StorEvilTestProvider : IUnitTestProvider
     {
         private readonly AssemblyLoader AssemblyLoader = new AssemblyLoader();
+        private StorEvilFileExplorer _storEvilFileExplorer;
+        private StorEvilAssemblyExplorer _assemblyExplorer;
+        private StorEvilResharperConfigProvider _configProvider;
 
         public StorEvilTestProvider()
         {
+            _configProvider = new StorEvilResharperConfigProvider();
+            _assemblyExplorer = new StorEvilAssemblyExplorer(this, _configProvider);
+            _storEvilFileExplorer = new StorEvilFileExplorer(this, _configProvider);
+
             AssemblyLoader.RegisterAssembly(typeof(Scenario).Assembly);
             //AssemblyLoader.RegisterPath(Path.GetDirectoryName(typeof(Scenario).Assembly.Location));
         }
@@ -127,8 +134,12 @@ namespace StorEvil.Resharper
 
         public void ExploreFile(IFile psiFile, UnitTestElementLocationConsumer consumer, CheckForInterrupt interrupted)
         {
-            Debug.WriteLine("ExploreFile " + psiFile.ProjectFile.Location);
+            _storEvilFileExplorer.ExploreFile(psiFile, consumer, interrupted);
+
+           
         }
+
+      
 
         public void ExploreExternal(UnitTestElementConsumer consumer)
         {
@@ -137,7 +148,7 @@ namespace StorEvil.Resharper
 
         public void ExploreAssembly(IMetadataAssembly assembly, IProject project, UnitTestElementConsumer consumer)
         {
-            ReadLockCookie.Execute(() => { AddProject(project, consumer); });
+            ReadLockCookie.Execute(() => { _assemblyExplorer.ExploreProject(project, consumer); });
         }
 
         public void ExploreSolution(ISolution solution, UnitTestElementConsumer consumer)
@@ -155,41 +166,34 @@ namespace StorEvil.Resharper
             return false;
         }
 
-        private void AddProject(IProject project, UnitTestElementConsumer consumer)
-        {
-            var reader = new FilesystemConfigReader(new Filesystem(), new ConfigParser());
+       
+    }
 
-            AddStoriesForProject(project, reader, consumer);
+    class StorEvilAssemblyExplorer
+    {
+        private StorEvilTestProvider _provider;
+        private readonly StorEvilResharperConfigProvider _configProvider;
+
+        public StorEvilAssemblyExplorer(StorEvilTestProvider provider, StorEvilResharperConfigProvider configProvider)
+        {
+            _provider = provider;
+            _configProvider = configProvider;
         }
 
-        private void AddStoriesForProject(IProject project, FilesystemConfigReader reader,
-                                          UnitTestElementConsumer consumer)
+        public void ExploreProject(IProject project, UnitTestElementConsumer consumer)
         {
-            ConfigSettings config = GetConfigForProject(project, reader);
+            var config = _configProvider.GetConfigSettingsForProject(project);
 
-            var projectElement = new StorEvilProjectElement(this, null, project, project.Name, config.AssemblyLocations);
+            var projectElement = new StorEvilProjectElement(_provider, null, project, project.Name, config.AssemblyLocations);
             consumer(projectElement);
 
             if (config == null || config.StoryBasePath == null)
                 return;
 
-            IEnumerable<Story> stories = GetStoriesForProject(config);
+            var stories = GetStoriesForProject(config);
 
             foreach (Story story in stories)
                 AddStoryElement(config, story, project, consumer, projectElement);
-        }
-
-        private static ConfigSettings GetConfigForProject(IProject project, FilesystemConfigReader reader)
-        {
-            if (project.ProjectFile == null)
-                return null;
-
-            FileSystemPath location = project.ProjectFile.ParentFolder.Location;
-
-            if (string.IsNullOrEmpty(location.FullPath))
-                return null;
-
-            return reader.GetConfig(location.FullPath);
         }
 
         private IEnumerable<Story> GetStoriesForProject(ConfigSettings config)
@@ -203,21 +207,79 @@ namespace StorEvil.Resharper
         private void AddStoryElement(ConfigSettings config, Story story, IProject project,
                                      UnitTestElementConsumer consumer, StorEvilProjectElement parent)
         {
-            var storyElement = new StorEvilStoryElement(this, parent, project, story.Summary, config, story.Id);
+            var storyElement = GetStoryElement(parent, project, story, config);
             consumer(storyElement);
 
             foreach (IScenario scenario in story.Scenarios)
                 AddScenarioElement(project, consumer, storyElement, scenario);
         }
 
+        private StorEvilStoryElement GetStoryElement(StorEvilProjectElement parent, IProject project, Story story, ConfigSettings config)
+        {
+            return new StorEvilStoryElement(_provider, parent, project, story.Summary, config, story.Id);
+        }
+
         private void AddScenarioElement(IProject project, UnitTestElementConsumer consumer,
                                         StorEvilStoryElement storyElement, IScenario scenario)
         {
             if (scenario is Scenario)
-                consumer(new StorEvilScenarioElement(this, storyElement, project, scenario.Name, (Scenario) scenario));
+                consumer(new StorEvilScenarioElement(_provider, storyElement, project, scenario.Name, (Scenario)scenario));
             else
-                consumer(new StorEvilScenarioOutlineElement(this, storyElement, project, scenario.Name,
-                                                            (ScenarioOutline) scenario));
+                consumer(new StorEvilScenarioOutlineElement(_provider, storyElement, project, scenario.Name,
+                                                            (ScenarioOutline)scenario));
+        }
+    }
+
+
+    internal class StorEvilFileExplorer
+    {
+        public StorEvilFileExplorer(StorEvilTestProvider provider, StorEvilResharperConfigProvider configProvider)
+        {
+            _provider = provider;
+            _configProvider = configProvider;
+        }
+
+        private readonly StorEvilTestProvider _provider;
+        private StorEvilResharperConfigProvider _configProvider;
+
+        public void ExploreFile(IFile psiFile, UnitTestElementLocationConsumer consumer, CheckForInterrupt interrupted)
+        {
+            var config = _configProvider.GetConfigSettingsForProject(psiFile.GetProject());
+            var projectFile = psiFile.GetProjectFile();
+            var storyReader = new SingleFileStoryReader(new Filesystem(), config, projectFile.Location.ToString());
+            var storyProvider = new StoryProvider(storyReader, new StoryParser());
+
+            var stories = storyProvider.GetStories();
+            foreach (var story in stories)
+            {
+
+                var range = new TextRange(0);
+                //UnitTestElementDisposition disposition = new UnitTestElementDisposition(new StorEvilStoryElement(this, Get));
+                //consumer(disposition)
+            }
+        }
+    }
+
+    internal class StorEvilResharperConfigProvider
+    {
+        public ConfigSettings GetConfigSettingsForProject(IProject project)
+        {
+            var reader = new FilesystemConfigReader(new Filesystem(), new ConfigParser());
+
+            return GetConfigForProject(project, reader);
+        }
+
+        private static ConfigSettings GetConfigForProject(IProject project, FilesystemConfigReader reader)
+        {
+            if (project.ProjectFile == null)
+                return null;
+
+            var location = project.ProjectFile.ParentFolder.Location;
+
+            if (string.IsNullOrEmpty(location.FullPath))
+                return null;
+
+            return reader.GetConfig(location.FullPath);
         }
     }
 }

@@ -42,7 +42,7 @@ namespace StorEvil.Resharper
         }
 
         private TaskResult _result;
-        private ScenarioExecutor _executor;
+        private RemoteScenarioExecutor _executor;
         public static string RunnerId = "StorEvilRunner";
 
         public override void ExecuteRecursive(TaskExecutionNode node)
@@ -91,7 +91,7 @@ namespace StorEvil.Resharper
             var mapper = new SessionContext();
             projectTask.Assemblies.ForEach(mapper.AddAssembly);
 
-            _executor = new ScenarioExecutor(Server, mapper);
+            _executor = new RemoteScenarioExecutor(Server, mapper);
         }
 
         private ExecutionResult ExecuteChildTasks(TaskExecutionNode node)
