@@ -130,9 +130,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Logger.cs" />
+    <Compile Include="Provider\StorEvilAssemblyExplorer.cs" />
     <Compile Include="Provider\StorEvilDeclaredElement.cs" />
     <Compile Include="Provider\StorEvilDeclaredElementType.cs" />
+    <Compile Include="Provider\StorEvilFileExplorer.cs" />
+    <Compile Include="Provider\StorEvilResharperConfigProvider.cs" />
     <Compile Include="Provider\StorEvilScenarioOutlineElement.cs" />
+    <Compile Include="Provider\StorEvilTaskFactory.cs" />
     <Compile Include="Runner\ExecutionResult.cs" />
     <Compile Include="Runner\ResharperResultListener.cs" />
     <Compile Include="Runner\RemoteScenarioExecutor.cs" />
