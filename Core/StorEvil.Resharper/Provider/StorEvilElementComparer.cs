@@ -1,0 +1,39 @@
+﻿using System;
+using JetBrains.ReSharper.Psi;
+using JetBrains.ReSharper.UnitTestFramework;
+
+namespace StorEvil.Resharper
+{
+    internal class StorEvilElementComparer
+    {
+        public bool IsOfKind(UnitTestElement element, UnitTestElementKind elementKind)
+        {
+            if (element is StorEvilScenarioElement)
+                return elementKind == UnitTestElementKind.Test;
+
+            if (element is StorEvilStoryElement || element is StorEvilProjectElement)
+                return elementKind == UnitTestElementKind.TestContainer;
+
+            return false;
+        }
+
+        public int CompareUnitTestElements(UnitTestElement x, UnitTestElement y)
+        {
+            if (x is StorEvilStoryElement && y is StorEvilStoryElement)
+                return ((StorEvilStoryElement)x).Id == ((StorEvilStoryElement)y).Id ? 0 : -1;
+
+            if (x is StorEvilScenarioElement && y is StorEvilScenarioElement)
+                return ((StorEvilScenarioElement)x).Scenario.Id.CompareTo(((StorEvilScenarioElement)y).Scenario.Id);
+
+            if (x is StorEvilProjectElement && y is StorEvilProjectElement)
+                return x.GetNamespace().NamespaceName.CompareTo(y.GetNamespace().NamespaceName);
+
+            return -1;
+        }
+
+        public bool IsDeclaredElementOfKind(IDeclaredElement declaredElement, UnitTestElementKind elementKind)
+        {
+            return false;
+        }
+    }
+}

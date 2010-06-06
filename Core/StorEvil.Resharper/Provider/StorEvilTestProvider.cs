@@ -20,11 +20,13 @@ namespace StorEvil.Resharper
     [UnitTestProvider]
     public class StorEvilTestProvider : IUnitTestProvider
     {
-        private readonly AssemblyLoader AssemblyLoader = new AssemblyLoader();
+        private readonly AssemblyLoader _assemblyLoader = new AssemblyLoader();
         private readonly StorEvilAssemblyExplorer _assemblyExplorer;
         private readonly StorEvilResharperConfigProvider _configProvider;
         private readonly StorEvilFileExplorer _storEvilFileExplorer;
         private readonly StorEvilTaskFactory _taskFactory;
+        private StorEvilElementComparer _comparer;
+        private StorEvilUnitTestPresenter _presenter;
 
         public StorEvilTestProvider()
         {
@@ -32,12 +34,12 @@ namespace StorEvil.Resharper
             _assemblyExplorer = new StorEvilAssemblyExplorer(this, _configProvider);
             _storEvilFileExplorer = new StorEvilFileExplorer(this, _configProvider);
             _taskFactory = new StorEvilTaskFactory();
+            _comparer = new StorEvilElementComparer();
+            _presenter = new StorEvilUnitTestPresenter();
 
-            AssemblyLoader.RegisterAssembly(typeof (Scenario).Assembly);
+            _assemblyLoader.RegisterAssembly(typeof (Scenario).Assembly);
             //AssemblyLoader.RegisterPath(Path.GetDirectoryName(typeof(Scenario).Assembly.Location));
         }
-
-        #region IUnitTestProvider Members
 
         public ProviderCustomOptionsControl GetCustomOptionsControl(ISolution solution)
         {
@@ -59,19 +61,9 @@ namespace StorEvil.Resharper
             return _taskFactory.GetTasks(element, explicitElements);
         }
 
-
         public int CompareUnitTestElements(UnitTestElement x, UnitTestElement y)
         {
-            if (x is StorEvilStoryElement && y is StorEvilStoryElement)
-                return ((StorEvilStoryElement) x).Id == ((StorEvilStoryElement) y).Id ? 0 : -1;
-
-            if (x is StorEvilScenarioElement && y is StorEvilScenarioElement)
-                return ((StorEvilScenarioElement) x).Scenario.Id.CompareTo(((StorEvilScenarioElement) y).Scenario.Id);
-
-            if (x is StorEvilProjectElement && y is StorEvilProjectElement)
-                return x.GetNamespace().NamespaceName.CompareTo(y.GetNamespace().NamespaceName);
-
-            return -1;
+            return _comparer.CompareUnitTestElements(x, y);           
         }
 
         public string ID
@@ -96,28 +88,23 @@ namespace StorEvil.Resharper
 
         public bool IsElementOfKind(UnitTestElement element, UnitTestElementKind elementKind)
         {
-            throw new NotImplementedException();
+            return _comparer.IsOfKind(element, elementKind);
         }
 
         public void Present(UnitTestElement element, IPresentableItem item, TreeModelNode node, PresentationState state)
         {
-            var testElement = element as StorEvilUnitTestElement;
-            if (testElement == null)
-                return;
-
-            item.RichText = element.ShortName;
+           _presenter.Present(element, item, node, state);          
         }
 
         public bool IsElementOfKind(IDeclaredElement declaredElement, UnitTestElementKind elementKind)
         {
-            return false;
+            return _comparer.IsDeclaredElementOfKind(declaredElement, elementKind);
         }
 
         public void ExploreFile(IFile psiFile, UnitTestElementLocationConsumer consumer, CheckForInterrupt interrupted)
         {
             _storEvilFileExplorer.ExploreFile(psiFile, consumer, interrupted);
         }
-
 
         public void ExploreExternal(UnitTestElementConsumer consumer)
         {
@@ -131,18 +118,6 @@ namespace StorEvil.Resharper
 
         public void ExploreSolution(ISolution solution, UnitTestElementConsumer consumer)
         {
-        }
-
-        #endregion
-
-        public bool IsUnitTestStuff(IDeclaredElement element)
-        {
-            return false;
-        }
-
-        public bool IsUnitTestElement(IDeclaredElement element)
-        {
-            return false;
         }
     }
 }

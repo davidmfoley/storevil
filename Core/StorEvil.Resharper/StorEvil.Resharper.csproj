@@ -131,12 +131,14 @@
   <ItemGroup>
     <Compile Include="Logger.cs" />
     <Compile Include="Provider\StorEvilAssemblyExplorer.cs" />
-    <Compile Include="Provider\StorEvilDeclaredElement.cs" />
-    <Compile Include="Provider\StorEvilDeclaredElementType.cs" />
+    <Compile Include="Elements\StorEvilDeclaredElement.cs" />
+    <Compile Include="Elements\StorEvilDeclaredElementType.cs" />
+    <Compile Include="Provider\StorEvilElementComparer.cs" />
     <Compile Include="Provider\StorEvilFileExplorer.cs" />
     <Compile Include="Provider\StorEvilResharperConfigProvider.cs" />
     <Compile Include="Provider\StorEvilScenarioOutlineElement.cs" />
     <Compile Include="Provider\StorEvilTaskFactory.cs" />
+    <Compile Include="Provider\StorEvilUnitTestPresenter.cs" />
     <Compile Include="Runner\ExecutionResult.cs" />
     <Compile Include="Runner\ResharperResultListener.cs" />
     <Compile Include="Runner\RemoteScenarioExecutor.cs" />
@@ -144,9 +146,9 @@
     <Compile Include="Tasks\RunProjectTask.cs" />
     <Compile Include="Tasks\RunScenarioTask.cs" />
     <Compile Include="Tasks\RunStoryTask.cs" />
-    <Compile Include="Provider\StorEvilProjectElement.cs" />
-    <Compile Include="Provider\StorEvilScenarioElement.cs" />
-    <Compile Include="Provider\StorEvilStoryElement.cs" />
+    <Compile Include="Elements\StorEvilProjectElement.cs" />
+    <Compile Include="Elements\StorEvilScenarioElement.cs" />
+    <Compile Include="Elements\StorEvilStoryElement.cs" />
     <Compile Include="Runner\StorEvilTaskRunner.cs" />
     <Compile Include="Provider\StorEvilTestProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
