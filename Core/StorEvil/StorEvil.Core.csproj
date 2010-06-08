@@ -78,6 +78,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeGeneration\CustomToolGenerator.cs" />
     <Compile Include="Configuration\ConfigParser.cs" />
     <Compile Include="Configuration\IConfigParser.cs" />
     <Compile Include="Configuration\IConfigSource.cs" />

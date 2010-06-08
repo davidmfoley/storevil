@@ -13,6 +13,8 @@ namespace StorEvil.Resharper
             if (testElement == null)
                 return;
 
+           
+
             item.RichText = element.ShortName;
         }
     }

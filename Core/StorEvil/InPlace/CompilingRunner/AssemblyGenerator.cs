@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using StorEvil.Core;
+using StorEvil.InPlace.CompilingRunner;
 
 namespace StorEvil.InPlace
 {
