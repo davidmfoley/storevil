@@ -57,7 +57,9 @@ namespace StorEvil.Resharper.Runner
 
             var interpreterForTypeFactory = new InterpreterForTypeFactory(new ExtensionMethodHandler());
             var resolver = new DisallowAmbiguousMatches();
-            return new InPlaceStoryRunner(_listener, preprocessor, new ScenarioInterpreter(interpreterForTypeFactory, resolver), new IncludeAllFilter(), _factory );
+            var scenarioInterpreter = new ScenarioInterpreter(interpreterForTypeFactory, resolver);
+
+            return new InPlaceStoryRunner(_listener, preprocessor, scenarioInterpreter, new IncludeAllFilter(), _factory );
         }
     }
 }

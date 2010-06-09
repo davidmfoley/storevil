@@ -16,7 +16,7 @@ namespace StorEvil.InPlace
         {
             _listener = listener;
             _scenarioInterpreter = scenarioInterpreter;
-            _lineExecuter = new ScenarioLineExecuter(memberInvoker, scenarioInterpreter, listener);
+            _lineExecuter = new ScenarioLineExecuter(scenarioInterpreter, listener);
         }
 
         public bool ExecuteScenario(Scenario scenario, ScenarioContext storyContext)

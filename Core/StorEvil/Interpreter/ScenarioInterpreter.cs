@@ -1,13 +1,16 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using StorEvil.Context;
 using StorEvil.Utility;
 
 namespace StorEvil.Interpreter
 {
-  
+    public class StandardScenarioInterpreter : ScenarioInterpreter
+    {       
+        public StandardScenarioInterpreter() : base(new InterpreterForTypeFactory(new ExtensionMethodHandler()), new DisallowAmbiguousMatches())
+        {
+        }
+    }
 
     public class ScenarioInterpreter
     {

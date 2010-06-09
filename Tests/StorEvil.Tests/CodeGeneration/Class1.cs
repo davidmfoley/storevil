@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using StorEvil.Core;
 using StorEvil.InPlace;
+using StorEvil.NUnit;
 using StorEvil.Utility;
 
 namespace StorEvil.CodeGeneration
@@ -13,7 +15,7 @@ namespace StorEvil.CodeGeneration
     public abstract class Generating_Code
     {
         private CustomToolCodeGenerator Generator;
-        private string Result;
+        protected string Result;
         private Assembly CompiledAssembly;
         private object Instance;
         protected Type TestFixtureType;
@@ -70,7 +72,7 @@ namespace StorEvil.CodeGeneration
         private ScenarioLine[] GetScenarioBody(params string[] body)
         {
 
-            return body.Select((x, i) => new ScenarioLine {LineNumber = i, Text = x}).ToArray();
+            return body.Select((x, i) => new ScenarioLine {LineNumber =  + 1, Text = x}).ToArray();
         }
 
         [Test]
@@ -89,6 +91,27 @@ namespace StorEvil.CodeGeneration
         public void should_set_class_name_based_on_id_for_now()
         {
             TestFixtureType.Name.ShouldEqual("foo_bar_baz");
+        }
+
+        [Test]
+        public void Should_execute_lines()
+        {
+            //var executedLines = ExecuteMethod("scenario_name");
+
+        }
+
+        private void ExecuteMethod(string scenarioName)
+        {
+            var method = GetTestMethods().First(m => m.Name == scenarioName);
+            var fixtureInstance = (StorEvilTestFixtureBase) Activator.CreateInstance(TestFixtureType);
+            //fixtureInstance.
+            //fixtureInstance.SetWithReflection("_executer", CapturingExecuter);
+        }
+
+        private string GetMethodBody(string name)
+        {
+            Regex finder = new Regex("public void "+ name + "() {(.+?)}", RegexOptions.Singleline);
+            return finder.Match(Result).Groups[1].Value;
         }
 
         private IEnumerable<MethodInfo> GetTestMethods()

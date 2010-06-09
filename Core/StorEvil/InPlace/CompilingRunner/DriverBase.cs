@@ -23,7 +23,7 @@ namespace StorEvil.InPlace
             ResultListener = resultListener;
             
             ScenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()), new DisallowAmbiguousMatches());           
-            LineExecuter = new ScenarioLineExecuter(new MemberInvoker(), ScenarioInterpreter, ResultListener);
+            LineExecuter = new ScenarioLineExecuter(ScenarioInterpreter, ResultListener);
             _context = new SessionContext();            
         } 
 
@@ -71,7 +71,7 @@ namespace StorEvil.InPlace
             ResultListener.ScenarioStarting(scenario);
 
             if (CurrentStoryContext == null)
-                CurrentStoryContext = _context.GetContextForStory(story);
+                CurrentStoryContext = _context.GetContextForStory();
 
             CurrentScenarioContext = CurrentStoryContext.GetScenarioContext();
             CurrentScenario = scenario;
