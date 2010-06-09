@@ -27,5 +27,10 @@ namespace StorEvil.Utility
             var chars = s.ToCharArray().Where(c => char.IsLetterOrDigit(c) || c =='_').ToArray();
             return new string(chars);
         }
+
+        public static string ToCSharpMethodName(this string s)
+        {
+            return s.Replace(" ", "_").ToCSharpName();            
+        }
     }
 }

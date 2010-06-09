@@ -16,7 +16,7 @@ namespace StorEvil.CodeGeneration
         private string Result;
         private Assembly CompiledAssembly;
         private object Instance;
-        private Type TestFixtureType;
+        protected Type TestFixtureType;
 
         [TestFixtureSetUp]
         public void SetUpContext()
@@ -63,14 +63,39 @@ namespace StorEvil.CodeGeneration
         {
             ScenarioLine[] body = GetScenarioBody("when I do something", "then I should see something");
 
-            Scenario scenario = new Scenario("scenario-id", "scenario-name", body);
-            return new Story("foo", "bar",  new IScenario[] {scenario});
+            Scenario scenario = new Scenario("scenario-id", "scenario name", body);
+            return new Story("foo bar baz", "bar",  new IScenario[] {scenario});
         }
 
         private ScenarioLine[] GetScenarioBody(params string[] body)
         {
 
             return body.Select((x, i) => new ScenarioLine {LineNumber = i, Text = x}).ToArray();
+        }
+
+        [Test]
+        public void Should_have_a_single_test_method()
+        {
+            GetTestMethods().Count().ShouldEqual(1);
+        }
+
+        [Test]
+        public void test_name_should_match_scenario_name()
+        {
+            GetTestMethods().First().Name.ShouldEqual("scenario_name");
+        }
+
+        [Test]
+        public void should_set_class_name_based_on_id_for_now()
+        {
+            TestFixtureType.Name.ShouldEqual("foo_bar_baz");
+        }
+
+        private IEnumerable<MethodInfo> GetTestMethods()
+        {
+            return TestFixtureType.GetMethods()
+                .Where(m => m.GetCustomAttributes(typeof (TestAttribute), true)
+                    .Any());
         }
     }
 }
