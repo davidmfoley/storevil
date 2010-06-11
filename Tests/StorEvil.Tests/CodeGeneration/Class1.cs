@@ -96,14 +96,15 @@ namespace StorEvil.CodeGeneration
         [Test]
         public void Should_execute_lines()
         {
-            //var executedLines = ExecuteMethod("scenario_name");
+            var executedLines = ExecuteMethod("scenario_name");
 
         }
 
-        private void ExecuteMethod(string scenarioName)
+        private string[] ExecuteMethod(string scenarioName)
         {
             var method = GetTestMethods().First(m => m.Name == scenarioName);
-            var fixtureInstance = (StorEvilTestFixtureBase) Activator.CreateInstance(TestFixtureType);
+            var fixtureInstance = (TestFixture) Activator.CreateInstance(TestFixtureType);
+            return null;
             //fixtureInstance.
             //fixtureInstance.SetWithReflection("_executer", CapturingExecuter);
         }

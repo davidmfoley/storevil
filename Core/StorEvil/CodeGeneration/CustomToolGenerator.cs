@@ -42,18 +42,17 @@ namespace StorEvil.CodeGeneration
         private SessionContext _sessionContext;
         private Scenario _currentScenario;
 
-        [TestFixtureSetUp]
-        public void FixtureSetUp()
+      
+        protected void BeforeAll()
         {
-            _listener = GetListener();
             _storyContext = GetSessionContext().GetContextForStory();
             _interpreter = new StandardScenarioInterpreter();
             _scenarioLineExecuter = new ScenarioLineExecuter(_interpreter, _listener);
         }
 
-        private IResultListener GetListener()
+        protected void SetListener(IResultListener listener)
         {
-            return new NUnitListener();
+            _listener = listener;
         }
 
         private ISessionContext GetSessionContext()
@@ -64,8 +63,8 @@ namespace StorEvil.CodeGeneration
             return _sessionContext;
         }
 
-        [SetUp]
-        public void SetUpContext()
+
+        protected void BeforeEach()
         {
             _scenarioContext = _storyContext.GetScenarioContext();
          
@@ -78,24 +77,24 @@ namespace StorEvil.CodeGeneration
         }
 
         protected void SetCurrentScenario(string id, string summary)
-        {
+        {   
             _currentScenario = new Scenario(id, summary, new ScenarioLine[0]);
         }
 
-        [TearDown]
-        public void TearDown()
+
+        protected void AfterEach()
         {
             _scenarioContext.Dispose();
         }
 
-        [TestFixtureTearDown]
-        public void FixtureTearDown()
+
+        protected void AfterAll()
         {
             _storyContext.Dispose();
         }
     }
 
-    internal class NUnitListener : IResultListener
+    public class NUnitListener : IResultListener
     {
         public void StoryStarting(Story story)
         {
@@ -144,7 +143,9 @@ namespace StorEvil.CodeGeneration
             var stringBuilder = new StringBuilder();
             var fixtureName = story.Id.ToCSharpMethodName();
             stringBuilder.Append("[NUnit.Framework.TestFixtureAttribute] public class " + fixtureName + " : StorEvil.CodeGeneration.TestFixture {\r\n ");
-
+            
+            AddLifecycleHandlers(stringBuilder);
+            
             foreach (var scenario in story.Scenarios)
             {
                 var name = scenario.Name.ToCSharpMethodName();
@@ -153,6 +154,19 @@ namespace StorEvil.CodeGeneration
             stringBuilder.Append("}");
 
             return stringBuilder.ToString();
+        }
+
+        private void AddLifecycleHandlers(StringBuilder stringBuilder)
+        {
+            AppendHandler(stringBuilder, "SetUp", "base.BeforeEach();");
+            AppendHandler(stringBuilder, "TestFixtureSetUp", "SetListener(new StorEvil.CodeGeneration.NUnitListener()); base.AfterEach();");
+            AppendHandler(stringBuilder, "TearDown", "base.BeforeAll();");
+            AppendHandler(stringBuilder, "TestFixtureTearDown", "base.AfterAll();");
+        }
+
+        private void AppendHandler(StringBuilder stringBuilder, string  name, string code)
+        {
+            stringBuilder.AppendFormat("  [NUnit.Framework.{0}Attribute] public void Handle{0}() {{ {1} }}\r\n", name, code);
         }
 
         private string GetBody(IScenario scenario)
