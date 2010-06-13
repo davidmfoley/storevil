@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 using StorEvil.Core;
 using StorEvil.InPlace;
-using StorEvil.NUnit;
 using StorEvil.Utility;
 
 namespace StorEvil.CodeGeneration
@@ -93,33 +91,32 @@ namespace StorEvil.CodeGeneration
             TestFixtureType.Name.ShouldEqual("foo_bar_baz");
         }
 
-        [Test]
-        public void Should_execute_lines()
-        {
-            var executedLines = ExecuteMethod("scenario_name");
-
-        }
-
-        private string[] ExecuteMethod(string scenarioName)
-        {
-            var method = GetTestMethods().First(m => m.Name == scenarioName);
-            var fixtureInstance = (TestFixture) Activator.CreateInstance(TestFixtureType);
-            return null;
-            //fixtureInstance.
-            //fixtureInstance.SetWithReflection("_executer", CapturingExecuter);
-        }
-
-        private string GetMethodBody(string name)
-        {
-            Regex finder = new Regex("public void "+ name + "() {(.+?)}", RegexOptions.Singleline);
-            return finder.Match(Result).Groups[1].Value;
-        }
 
         private IEnumerable<MethodInfo> GetTestMethods()
         {
             return TestFixtureType.GetMethods()
                 .Where(m => m.GetCustomAttributes(typeof (TestAttribute), true)
                     .Any());
+        }
+    }
+
+    [TestFixture]
+    public class TestSession_Behavior
+    {       
+        [Test]
+        public void returns_same_context_for_multiple_calls()
+        {
+            var context = TestSession.SessionContext;
+            Assert.That(context, Is.SameAs(TestSession.SessionContext));
+        }
+
+        [Test]
+        public void returns_different_context_after_ShutDown()
+        {
+            var context = TestSession.SessionContext;
+            TestSession.ShutDown();
+            
+            Assert.That(context, Is.Not.SameAs(TestSession.SessionContext));
         }
     }
 }

@@ -78,7 +78,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeGeneration\CustomCodeGeneratorStoryProvider.cs" />
+    <Compile Include="CodeGeneration\CustomToolCodeGenerator.cs" />
     <Compile Include="CodeGeneration\CustomToolGenerator.cs" />
+    <Compile Include="CodeGeneration\NUnitListener.cs" />
+    <Compile Include="CodeGeneration\TestFixture.cs" />
+    <Compile Include="CodeGeneration\TestSession.cs" />
     <Compile Include="Configuration\ConfigParser.cs" />
     <Compile Include="Configuration\IConfigParser.cs" />
     <Compile Include="Configuration\IConfigSource.cs" />
