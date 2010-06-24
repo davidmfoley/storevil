@@ -2,9 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using StorEvil.Core;
-using StorEvil.Parsing;
 
-namespace StorEvil.InPlace
+namespace StorEvil.InPlace.CompilingRunner
 {
     public class HandlerCodeGenerator
     {
@@ -36,15 +35,24 @@ namespace StorEvil.InPlace
             var i = 0;
             foreach (var scenario in scenarios)
             {
-                codeBuilder.AppendLine(GetScenarioPreamble(i, story));
-
-                foreach (var line in GetLines(scenario))
-                    codeBuilder.AppendLine(BuildLine(line));
-
-                codeBuilder.AppendLine(GetScenarioEnd());
+                codeBuilder.AppendLine(GetScenarioFunctionBody(i, story, scenario));
 
                 i++;
             }
+        }
+
+        private string GetScenarioFunctionBody(int i, Story story, Scenario scenario)
+        {
+            var scenarioCodeBuilder = new StringBuilder();
+
+            scenarioCodeBuilder.AppendLine(GetScenarioPreamble(i, story));
+
+            foreach (var line in GetLines(scenario))
+                scenarioCodeBuilder.AppendLine(BuildLine(line));
+
+            scenarioCodeBuilder.AppendLine(GetScenarioEnd());
+
+            return scenarioCodeBuilder.ToString();
         }
 
         private string GetScenarioEnd()

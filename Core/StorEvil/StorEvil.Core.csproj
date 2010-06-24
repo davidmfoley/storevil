@@ -49,6 +49,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>StorEvil.Core.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Funq, Version=0.1.226.1, Culture=neutral, PublicKeyToken=e035bc90764f5360, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -78,6 +84,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeGeneration\CustomCodeGeneratorStoryProvider.cs" />
+    <Compile Include="CodeGeneration\CustomToolCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\CustomToolGenerator.cs" />
+    <Compile Include="CodeGeneration\NUnitListener.cs" />
+    <Compile Include="CodeGeneration\TestFixture.cs" />
+    <Compile Include="CodeGeneration\TestSession.cs" />
     <Compile Include="Configuration\ConfigParser.cs" />
     <Compile Include="Configuration\IConfigParser.cs" />
     <Compile Include="Configuration\IConfigSource.cs" />
@@ -223,6 +235,9 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StorEvil.Core.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

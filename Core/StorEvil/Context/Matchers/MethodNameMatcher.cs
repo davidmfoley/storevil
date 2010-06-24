@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using StorEvil.Context.Matches;
 using StorEvil.Context.WordFilters;
-using StorEvil.Interpreter;
 using StorEvil.Parsing;
 
 namespace StorEvil.Context.Matchers

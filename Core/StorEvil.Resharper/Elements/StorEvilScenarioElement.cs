@@ -52,5 +52,11 @@ namespace StorEvil.Resharper.Elements
                 return result;
             }
         }
+
+        public override UnitTestElementDisposition GetDisposition()
+        {
+            var unitTestElementLocations = new UnitTestElementLocation[] {}; //new UnitTestElementLocation(), .Id};
+            return new UnitTestElementDisposition(unitTestElementLocations, this);
+        }
     }
 }

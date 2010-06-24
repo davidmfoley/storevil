@@ -7,7 +7,7 @@ namespace StorEvil.Context
 {
     public interface ISessionContext
     {
-        StoryContext GetContextForStory(Story story);
+        StoryContext GetContextForStory();
         void SetContext(object context);
     }
 

@@ -2,16 +2,16 @@
 
 Scenario: X is first player
 Given a new game
-Then the current player should be X
+Then the current player should be X 
 
-Scenario: Game state, move by move
+Scenario: Game state, move by move 
 	Given a new game
 	When X plays in the top left
 	Then the current player should be O
 	And the board state should be
-	|X| | |
-	| | | |
-	| | | |
+	|X| | | 
+	| | | | 
+	| | | | 
 	When O plays in the bottom right
 	Then the board state should be 
 	|X| | |
@@ -24,7 +24,7 @@ Scenario: O wins
 	|X|O| | 
 	| | | |
 	When O plays in the bottom left
-	Then the winner should be O
+	Then the winner should be X
 
 Scenario: X wins
 	Given the following board:

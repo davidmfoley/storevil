@@ -45,7 +45,7 @@ namespace StorEvil.Context
             _extensionMethodHandler.AddAssembly(a);
         }
 
-        public StoryContext GetContextForStory(Story story)
+        public StoryContext GetContextForStory()
         {
             return new StoryContext(this, _contextTypes.Union(new[] {typeof (object)}), _cache);
         }

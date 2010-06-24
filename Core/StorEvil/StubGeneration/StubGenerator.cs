@@ -29,7 +29,7 @@ namespace StorEvil.StubGeneration
 
         public void HandleStory(Story story)
         {
-            var context = _context.GetContextForStory(story);
+            var context = _context.GetContextForStory();
             foreach (var scenario in story.Scenarios)
             {
                 var scenarioContext = context .GetScenarioContext();

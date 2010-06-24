@@ -21,7 +21,7 @@ namespace StorEvil.NUnit
 
         public void HandleStory(Story story)
         {
-            var sourceCode = FixtureGenerator.GenerateFixture(story, _context.GetContextForStory(story));
+            var sourceCode = FixtureGenerator.GenerateFixture(story, _context.GetContextForStory());
 
             TestFixtureWriter.WriteFixture(story.Id, sourceCode);
         }

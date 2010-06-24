@@ -2,23 +2,14 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using NUnit.Framework;
-using Rhino.Mocks;
-using StorEvil.Context;
 using StorEvil.Core;
-using StorEvil.InPlace;
-using StorEvil.Interpreter;
 using StorEvil.NUnit;
-using StorEvil.Parsing;
 using StorEvil.ResultListeners;
 using StorEvil.Utility;
 
 namespace StorEvil.InPlace.Compiled
 {
-
-
-
     [TestFixture]
     public class Inplace_assembly_generation
     {

@@ -23,7 +23,7 @@ namespace StorEvil.Context.StoryContextFactory_Specs
             var mapper = new SessionContext();
             mapper.AddContext<TestMappingContext>();
 
-            var context = mapper.GetContextForStory(story);
+            var context = mapper.GetContextForStory();
             context.ImplementingTypes.First().ShouldEqual(typeof (TestMappingContext));
         }
 
@@ -33,7 +33,7 @@ namespace StorEvil.Context.StoryContextFactory_Specs
             var mapper = new SessionContext();
             mapper.AddAssembly(GetType().Assembly);
 
-            var context = mapper.GetContextForStory(new Story("context test", "context test", new List<IScenario>()));
+            var context = mapper.GetContextForStory();
             context.ImplementingTypes.ShouldContain(typeof (TestMappingContext));
         }
 
@@ -42,7 +42,7 @@ namespace StorEvil.Context.StoryContextFactory_Specs
         {
             var mapper = new SessionContext();
 
-             var result = mapper.GetContextForStory(new Story("unknown type", "totally bogus", new List<IScenario>()));
+             var result = mapper.GetContextForStory();
             result.ImplementingTypes.Count().ShouldEqual(1);
         }
     }
@@ -66,7 +66,7 @@ namespace StorEvil.Context.StoryContextFactory_Specs
         {
             var mapper = new SessionContext();
             mapper.AddContext<ScenarioLifetimeTestMappingContext>();
-            StoryContext = mapper.GetContextForStory(new Story("", "", new IScenario[] {}));
+            StoryContext = mapper.GetContextForStory();
         }
 
         [Test]
@@ -168,7 +168,7 @@ namespace StorEvil.Context.StoryContextFactory_Specs
 
         private StoryContext GetStoryContext()
         {
-            return Mapper.GetContextForStory(new Story("", "", new IScenario[] { }));
+            return Mapper.GetContextForStory();
         }
     }
 
@@ -214,7 +214,7 @@ namespace StorEvil.Context.StoryContextFactory_Specs
 
         private StoryContext GetStoryContext()
         {
-            return Mapper.GetContextForStory(new Story("", "", new IScenario[] { }));
+            return Mapper.GetContextForStory();
         }
 
         [Test]
@@ -246,7 +246,7 @@ namespace StorEvil.Context.StoryContextFactory_Specs
             var mapper = new SessionContext();
             mapper.AddContext<TestMappingContext>();
             mapper.AddContext<DependentMappingContext>();
-            StoryContext = mapper.GetContextForStory(new Story("", "", new IScenario[] {}));
+            StoryContext = mapper.GetContextForStory();
             ScenarioContext = StoryContext.GetScenarioContext();
         }
 
