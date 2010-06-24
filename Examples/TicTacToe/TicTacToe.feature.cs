@@ -67,7 +67,7 @@ ExecuteLine(@"When O plays in the bottom left");
 #line hidden
 
 #line 27
-ExecuteLine(@"Then the winner should be X");
+ExecuteLine(@"Then the winner should be O");
 #line hidden
   }
   [NUnit.Framework.TestAttribute] public void X_wins() {

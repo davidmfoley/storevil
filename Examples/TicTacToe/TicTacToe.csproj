@@ -39,10 +39,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Core\StorEvil\bin\Debug\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="StorEvil.Core, Version=0.3.3824.37178, Culture=neutral, PublicKeyToken=17eafdf05a988d53, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Core\StorEvil\bin\Debug\StorEvil.Core.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -77,6 +73,10 @@
     <ProjectReference Include="..\..\Core\StorEvil.Assertions\StorEvil.Assertions.csproj">
       <Project>{92312C44-8881-41DD-8075-1284740FFF9F}</Project>
       <Name>StorEvil.Assertions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\StorEvil\StorEvil.Core.csproj">
+      <Project>{B86235CA-045F-4222-997C-A65E966C6F9B}</Project>
+      <Name>StorEvil.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
