@@ -11,11 +11,11 @@ namespace StorEvil.CodeGeneration
             _generator = new CustomToolCodeGenerator();
         }
 
-        public string GenerateCode(string inputFilePath, string inputFileContents)
+        public string GenerateCode(string inputFilePath, string inputFileContents, string defaultNamespace)
         {
             var story = new StoryParser().Parse(inputFileContents, inputFilePath);
 
-            return _generator.Generate(story);
+            return _generator.Generate(story, defaultNamespace);
         }
     }
 }

@@ -11,20 +11,20 @@ using StorEvil.Parsing;
 namespace StorEvil.CustomTool
 {
     [Guid(ClsId)]
-    public class StorEvilCustomTool : IVsSingleFileGenerator 
+    public class StorEvilCustomTool : CustomToolRegistration, IVsSingleFileGenerator 
     {
         public const string ClsId = "EAC0AD56-60E8-4528-A286-87D810F09C55";
 
         public int DefaultExtension(out string pbstrDefaultExtension)
         {
-            pbstrDefaultExtension = ".cs";
+            pbstrDefaultExtension = ".feature.cs";
             return pbstrDefaultExtension.Length;
         }
 
         public int Generate(string inputFilePath, string inputFileContents, string defaultNamespace, IntPtr[] outputFileContents, out uint bytesWritten, IVsGeneratorProgress progress)
         {
             var generator = new FixtureGenerator();
-            var code = generator.GenerateCode(inputFilePath, inputFileContents);
+            var code = generator.GenerateCode(inputFilePath, inputFileContents, defaultNamespace);
 
             var bytes = Encoding.UTF8.GetBytes(code);
             var length = bytes.Length;

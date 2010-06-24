@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using System.Reflection;
+using NUnit.Framework;
 using StorEvil.Configuration;
 using StorEvil.Context;
 using StorEvil.Infrastructure;
@@ -18,9 +21,9 @@ namespace StorEvil.CodeGeneration
             _sessionContext = null;
         }
        
-        public static ISessionContext SessionContext
+        public static ISessionContext SessionContext(string location)
         {
-            get { return _sessionContext = _sessionContext ?? GetSessionContext(); }
+            return _sessionContext = _sessionContext ?? GetSessionContext(location); 
         }
 
         public static bool IsInitialized
@@ -28,14 +31,19 @@ namespace StorEvil.CodeGeneration
             get { return _sessionContext != null; }
         }
 
-        private static SessionContext GetSessionContext()
+        private static SessionContext GetSessionContext(string currentAssemblyLocation)
         {
             _sessionContext = new SessionContext();
-            var configReader = new FilesystemConfigReader(new Filesystem(), new ConfigParser());
-            var currentAssemblyLocation = Assembly.GetExecutingAssembly().Location;
+            var configReader = new FilesystemConfigReader(new Filesystem(), new ConfigParser());     
 
             ConfigSettings settings = configReader.GetConfig(currentAssemblyLocation);
+            if (!settings.AssemblyLocations.Any())
+                settings = configReader.GetConfig(Directory.GetCurrentDirectory());
 
+            if (!settings.AssemblyLocations.Any())
+            {
+                Assert.Ignore("No storevil config file was found.");
+            }
             foreach (var location in settings.AssemblyLocations)
                 _sessionContext.AddAssembly(location);
 

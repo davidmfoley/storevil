@@ -9,12 +9,12 @@ Scenario: Gutter game
   Then my total score should be 0
   
 Scenario: Beginners game
-  Given a new bowling game
+  Given a new bowling game 
   When I roll 2 and 7
   And I roll 3 and 4
   And I roll 8 times 1 and 1
   Then my total score should be 32
-  
+   
 Scenario: Another beginners game
   Given a new bowling game
   When I roll the following series:	2,7,3,4,1,1,5,1,1,1,1,1,1,1,1,1,1,1,5,1

@@ -14,10 +14,11 @@ namespace StorEvil.CodeGeneration
         private IResultListener _listener;
        
         private Scenario _currentScenario;
-      
+        private object _debugContexts;
+
         protected void BeforeAll()
         {
-            _storyContext = TestSession.SessionContext.GetContextForStory();
+            _storyContext = TestSession.SessionContext(GetType().Assembly.Location).GetContextForStory();
             _interpreter = new StandardScenarioInterpreter();
             _scenarioLineExecuter = new ScenarioLineExecuter(_interpreter, _listener);
         }
@@ -34,8 +35,8 @@ namespace StorEvil.CodeGeneration
 
         protected void ExecuteLine(string line)
         {
-            _scenarioLineExecuter.ExecuteLine(_currentScenario, _scenarioContext, line);
-          
+            _debugContexts = null;
+            _scenarioLineExecuter.ExecuteLine(_currentScenario, _scenarioContext, line);          
         }
 
         protected void SetCurrentScenario(string id, string summary)
@@ -43,12 +44,15 @@ namespace StorEvil.CodeGeneration
             _currentScenario = new Scenario(id, summary, new ScenarioLine[0]);
         }
 
-
         protected void AfterEach()
         {
             _scenarioContext.Dispose();
         }
 
+        protected object GetContexts()
+        {
+            return _debugContexts ?? (_debugContexts = new ContextViewer().Create(_scenarioContext.Contexts));
+        }
         protected void AfterAll()
         {
             _storyContext.Dispose();

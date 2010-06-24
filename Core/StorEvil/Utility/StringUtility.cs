@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace StorEvil.Utility
 {
@@ -30,7 +31,10 @@ namespace StorEvil.Utility
 
         public static string ToCSharpMethodName(this string s)
         {
-            return s.Replace(" ", "_").ToCSharpName();            
+            return Regex
+                .Replace(s, @"\\\:\.", "_")
+                .Replace("__", "_")
+                .ToCSharpName();          
         }
     }
 }
