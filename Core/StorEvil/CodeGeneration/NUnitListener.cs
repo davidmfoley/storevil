@@ -28,6 +28,7 @@ namespace StorEvil.CodeGeneration
         {
             var message = "Could not interpret:\r\n" +  scenarioPendingInfo.Line +
                           "\r\nSuggestion:\r\n" + scenarioPendingInfo.Suggestion;
+            Debug.WriteLine(message);
             Assert.Ignore(message);
         }
 

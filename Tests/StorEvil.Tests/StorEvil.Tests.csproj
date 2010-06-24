@@ -133,6 +133,7 @@
     <Compile Include="NUnit\TestContext.cs" />
     <Compile Include="NUnit\TestHelper.cs" />
     <Compile Include="NUnit\NUnitTestGeneratorTests.cs" />
+    <Compile Include="Utility\string_utilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\StorEvil.Assertions\StorEvil.Assertions.csproj">

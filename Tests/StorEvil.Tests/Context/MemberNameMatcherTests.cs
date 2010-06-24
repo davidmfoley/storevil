@@ -105,7 +105,7 @@ namespace StorEvil.Context.Matching_method_names_with_reflection
         }
     }
 
-    public class Matching_words_with_puncutation
+    public class Matching_words_with_punctuation
     {
         private IEnumerable<NameMatch> Matches;
 

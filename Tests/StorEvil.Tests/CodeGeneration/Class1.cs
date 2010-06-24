@@ -25,7 +25,7 @@ namespace StorEvil.CodeGeneration
        
             Story story = GetStory();
 
-            Result = Generator.Generate(story);
+            Result = Generator.Generate(story, "test_namespace");
 
             CompiledAssembly = new CodeCompiler().CompileInMemory(Result, new[] { typeof(Scenario).Assembly, typeof(TestFixtureAttribute).Assembly });
             TestFixtureType = CompiledAssembly.GetTypes().First();
@@ -86,9 +86,9 @@ namespace StorEvil.CodeGeneration
         }
 
         [Test]
-        public void should_set_class_name_based_on_id_for_now()
+        public void should_set_class_name_based_on_summary_for_now()
         {
-            TestFixtureType.Name.ShouldEqual("foo_bar_baz");
+            TestFixtureType.Name.ShouldEqual("bar");
         }
 
 
@@ -106,17 +106,17 @@ namespace StorEvil.CodeGeneration
         [Test]
         public void returns_same_context_for_multiple_calls()
         {
-            var context = TestSession.SessionContext;
-            Assert.That(context, Is.SameAs(TestSession.SessionContext));
+            var context = TestSession.SessionContext("foo");
+            Assert.That(context, Is.SameAs(TestSession.SessionContext("foo")));
         }
 
         [Test]
         public void returns_different_context_after_ShutDown()
         {
-            var context = TestSession.SessionContext;
+            var context = TestSession.SessionContext("foo");
             TestSession.ShutDown();
-            
-            Assert.That(context, Is.Not.SameAs(TestSession.SessionContext));
+
+            Assert.That(context, Is.Not.SameAs(TestSession.SessionContext("foo")));
         }
     }
 }

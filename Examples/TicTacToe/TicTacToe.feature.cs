@@ -1,5 +1,5 @@
 namespace TicTacToe{
-[NUnit.Framework.TestFixtureAttribute] public class StoryTicTacToeRules : StorEvil.CodeGeneration.TestFixture {
+[NUnit.Framework.TestFixtureAttribute] public class Story__Tic_Tac_Toe_Rules : StorEvil.CodeGeneration.TestFixture {
    public object Contexts { get { return base.GetContexts();}}    [NUnit.Framework.SetUpAttribute]
     public void HandleSetUp() { base.BeforeEach(); }
     [NUnit.Framework.TestFixtureSetUpAttribute]
@@ -8,7 +8,7 @@ namespace TicTacToe{
     public void HandleTearDown() { base.AfterEach(); }
     [NUnit.Framework.TestFixtureTearDownAttribute]
     public void HandleTestFixtureTearDown() { base.AfterAll(); }
-  [NUnit.Framework.TestAttribute] public void Xisfirstplayer() {
+  [NUnit.Framework.TestAttribute] public void X_is_first_player() {
 #line 1  "C:\projects\StorEvil\storevil\Examples\TicTacToe\TicTacToe.feature"
 #line hidden
 #line 4
@@ -19,7 +19,7 @@ ExecuteLine(@"Given a new game");
 ExecuteLine(@"Then the current player should be X");
 #line hidden
   }
-  [NUnit.Framework.TestAttribute] public void Gamestatemovebymove() {
+  [NUnit.Framework.TestAttribute] public void Game_state__move_by_move() {
 #line 1  "C:\projects\StorEvil\storevil\Examples\TicTacToe\TicTacToe.feature"
 #line hidden
 #line 8
@@ -52,7 +52,7 @@ ExecuteLine(@"Then the board state should be
 | | |O|");
 #line hidden
   }
-  [NUnit.Framework.TestAttribute] public void Owins() {
+  [NUnit.Framework.TestAttribute] public void O_wins() {
 #line 1  "C:\projects\StorEvil\storevil\Examples\TicTacToe\TicTacToe.feature"
 #line hidden
 #line 22
@@ -67,10 +67,10 @@ ExecuteLine(@"When O plays in the bottom left");
 #line hidden
 
 #line 27
-ExecuteLine(@"Then the winner should be O");
+ExecuteLine(@"Then the winner should be X");
 #line hidden
   }
-  [NUnit.Framework.TestAttribute] public void Xwins() {
+  [NUnit.Framework.TestAttribute] public void X_wins() {
 #line 1  "C:\projects\StorEvil\storevil\Examples\TicTacToe\TicTacToe.feature"
 #line hidden
 #line 30
@@ -88,7 +88,7 @@ ExecuteLine(@"When X plays in the bottom right");
 ExecuteLine(@"Then the winner should be X");
 #line hidden
   }
-  [NUnit.Framework.TestAttribute] public void Catsgame() {
+  [NUnit.Framework.TestAttribute] public void Cat_s_game() {
 #line 1  "C:\projects\StorEvil\storevil\Examples\TicTacToe\TicTacToe.feature"
 #line hidden
 #line 38
@@ -102,7 +102,7 @@ ExecuteLine(@"Given the following board:
 ExecuteLine(@"Then it should be a cat's game");
 #line hidden
   }
-  [NUnit.Framework.TestAttribute] public void horizontalwin() {
+  [NUnit.Framework.TestAttribute] public void horizontal_win() {
 #line 1  "C:\projects\StorEvil\storevil\Examples\TicTacToe\TicTacToe.feature"
 #line hidden
 #line 45
@@ -116,7 +116,7 @@ ExecuteLine(@"Given the following board:
 ExecuteLine(@"Then the winner should be X");
 #line hidden
   }
-  [NUnit.Framework.TestAttribute] public void horizontalwininmiddle() {
+  [NUnit.Framework.TestAttribute] public void horizontal_win_in_middle() {
 #line 1  "C:\projects\StorEvil\storevil\Examples\TicTacToe\TicTacToe.feature"
 #line hidden
 #line 52
@@ -130,7 +130,7 @@ ExecuteLine(@"Given the following board:
 ExecuteLine(@"Then the winner should be X");
 #line hidden
   }
-  [NUnit.Framework.TestAttribute] public void horizontalwininbottom() {
+  [NUnit.Framework.TestAttribute] public void horizontal_win_in_bottom() {
 #line 1  "C:\projects\StorEvil\storevil\Examples\TicTacToe\TicTacToe.feature"
 #line hidden
 #line 59
@@ -144,7 +144,7 @@ ExecuteLine(@"Given the following board:
 ExecuteLine(@"Then the winner should be O");
 #line hidden
   }
-  [NUnit.Framework.TestAttribute] public void verticalwininmiddle() {
+  [NUnit.Framework.TestAttribute] public void vertical_win_in_middle() {
 #line 1  "C:\projects\StorEvil\storevil\Examples\TicTacToe\TicTacToe.feature"
 #line hidden
 #line 66
@@ -158,7 +158,7 @@ ExecuteLine(@"Given the following board:
 ExecuteLine(@"Then the winner should be X");
 #line hidden
   }
-  [NUnit.Framework.TestAttribute] public void verticalwininright() {
+  [NUnit.Framework.TestAttribute] public void vertical_win_in_right() {
 #line 1  "C:\projects\StorEvil\storevil\Examples\TicTacToe\TicTacToe.feature"
 #line hidden
 #line 73
@@ -172,7 +172,7 @@ ExecuteLine(@"Given the following board:
 ExecuteLine(@"Then the winner should be X");
 #line hidden
   }
-  [NUnit.Framework.TestAttribute] public void verticalwininleft() {
+  [NUnit.Framework.TestAttribute] public void vertical_win_in_left() {
 #line 1  "C:\projects\StorEvil\storevil\Examples\TicTacToe\TicTacToe.feature"
 #line hidden
 #line 80
@@ -186,7 +186,7 @@ ExecuteLine(@"Given the following board:
 ExecuteLine(@"Then the winner should be X");
 #line hidden
   }
-  [NUnit.Framework.TestAttribute] public void diagonalwin() {
+  [NUnit.Framework.TestAttribute] public void diagonal_win() {
 #line 1  "C:\projects\StorEvil\storevil\Examples\TicTacToe\TicTacToe.feature"
 #line hidden
 #line 87

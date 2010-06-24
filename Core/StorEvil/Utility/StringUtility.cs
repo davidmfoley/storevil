@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace StorEvil.Utility
 {
-    internal static class StringUtility
+    public static class StringUtility
     {
         public static string StripNonNumericFormatting(this string s)
         {
@@ -24,17 +24,31 @@ namespace StorEvil.Utility
 
         public static string ToCSharpName(this string s)
         {
+            var chars = s                
+                .Replace(' ', '_')
+                .ToCharArray()
+                .Where(c => char.IsLetterOrDigit(c) | c == '_').ToArray();
 
-            var chars = s.ToCharArray().Where(c => char.IsLetterOrDigit(c) || c =='_').ToArray();
-            return new string(chars);
+            return EnsureFirstCharacterLegal(chars);
         }
-
+       
         public static string ToCSharpMethodName(this string s)
         {
-            return Regex
-                .Replace(s, @"\\\:\.", "_")
-                .Replace("__", "_")
-                .ToCSharpName();          
+            var chars = s
+                .Replace('\'', '_')
+                .ToCharArray()
+                .Select(c => char.IsLetterOrDigit(c) ? c : '_').ToArray();
+
+            return EnsureFirstCharacterLegal(chars);    
+        }
+
+        private static string EnsureFirstCharacterLegal(char[] chars)
+        {
+            var result = new string(chars);
+            if (char.IsDigit(result[0]))
+                return "_" + result;
+
+            return result;
         }
     }
 }
