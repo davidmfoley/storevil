@@ -11,8 +11,7 @@ namespace StorEvil.InPlace
 
         private readonly ScenarioLineExecuter _lineExecuter;
 
-        public InPlaceScenarioRunner(IResultListener listener, MemberInvoker memberInvoker,
-                                     ScenarioInterpreter scenarioInterpreter)
+        public InPlaceScenarioRunner(IResultListener listener, ScenarioInterpreter scenarioInterpreter)
         {
             _listener = listener;
             _scenarioInterpreter = scenarioInterpreter;

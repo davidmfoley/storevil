@@ -18,7 +18,7 @@ namespace StorEvil.InPlace
               : base(listener, preprocessor, filter, context)
         {
            
-            _scenarioRunner = new InPlaceScenarioRunner(listener,new MemberInvoker(), scenarioInterpreter);
+            _scenarioRunner = new InPlaceScenarioRunner(listener, scenarioInterpreter);
         }
 
         protected override void Execute(Story story, IEnumerable<Scenario> scenariosMatchingFilter, StoryContext context)
