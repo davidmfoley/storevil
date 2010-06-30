@@ -1,6 +1,5 @@
 using System;
 using StorEvil.Core;
-using StorEvil.ResultListeners;
 
 namespace StorEvil.InPlace
 {

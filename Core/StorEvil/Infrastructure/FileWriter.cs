@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using StorEvil.Interpreter;
 
@@ -13,8 +12,6 @@ namespace StorEvil.Infrastructure
             OutputFile = outputFile;
             if (overwrite)
                 File.Delete(OutputFile);
-
-            
         }
 
         public void Write(string s)

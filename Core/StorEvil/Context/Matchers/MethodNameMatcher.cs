@@ -99,7 +99,7 @@ namespace StorEvil.Context.Matchers
                                                IDictionary<string, ParameterInfo> paramNameMap)
         {
             var unmatchedParameters = parameterInfos.Where(p => paramNameMap.ContainsKey(p.Name));
-            var wordFilters = unmatchedParameters.Select(p => _wordFilterFactory.GetParameterFilter(p)).Cast<WordFilter>();
+            var wordFilters = unmatchedParameters.Select(p => _wordFilterFactory.GetParameterFilter(p));
             _wordFilters.AddRange(wordFilters);
         }
 

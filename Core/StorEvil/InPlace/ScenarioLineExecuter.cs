@@ -1,6 +1,4 @@
 using System;
-using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
 using Funq;
 using NUnit.Framework;
@@ -9,7 +7,6 @@ using StorEvil.Console;
 using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Interpreter;
-using StorEvil.ResultListeners;
 using StorEvil.Utility;
 
 namespace StorEvil.InPlace

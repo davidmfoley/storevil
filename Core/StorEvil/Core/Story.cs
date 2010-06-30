@@ -2,12 +2,7 @@ using System;
 using System.Collections.Generic;
 
 namespace StorEvil.Core
-{
-    /// <summary>
-    /// A story describes some aspect of behavior of the target system.
-    /// 
-    /// The scenarios are what are used to actually generate the test code 
-    /// </summary>
+{ 
     [Serializable]
     public class Story
     {

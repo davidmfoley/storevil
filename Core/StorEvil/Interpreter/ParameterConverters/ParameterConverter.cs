@@ -14,8 +14,8 @@ namespace StorEvil.Interpreter.ParameterConverters
 
         class ConverterInfo
         {
-            public Predicate<ConversionContext> Predicate;
-            public IStorevilConverter Converter;
+            public readonly Predicate<ConversionContext> Predicate;
+            public readonly IStorevilConverter Converter;
 
             public ConverterInfo(Predicate<ConversionContext> predicate, IStorevilConverter converter)
             {
@@ -24,7 +24,7 @@ namespace StorEvil.Interpreter.ParameterConverters
             }
         }
 
-        private static readonly List<ConverterInfo> _typeConverters = new List<ConverterInfo>();
+        private static readonly List<ConverterInfo> TypeConverters = new List<ConverterInfo>();
 
         public ParameterConverter()
         {
@@ -72,16 +72,16 @@ namespace StorEvil.Interpreter.ParameterConverters
 
         private static void AddConverterFilter(Predicate<ConversionContext> predicate, IStorevilConverter converter)
         {
-            _typeConverters.Add( new ConverterInfo(predicate, converter));;
+            TypeConverters.Add( new ConverterInfo(predicate, converter));;
         }
         private static void AddConverter<T>(IStorevilConverter converter)
         {
-            _typeConverters.Add(new ConverterInfo(t => t.ParameterType == typeof (T), converter));
+            TypeConverters.Add(new ConverterInfo(t => t.ParameterType == typeof (T), converter));
         }
 
         private static void AddConverter<T>(Func<string, object> func)
         {
-            _typeConverters.Add( new ConverterInfo(t => t.ParameterType == typeof (T), new SimpleConverter<T>(func)));
+            TypeConverters.Add( new ConverterInfo(t => t.ParameterType == typeof (T), new SimpleConverter<T>(func)));
         }
 
         public object Convert(string paramValue, Type type)
@@ -92,7 +92,7 @@ namespace StorEvil.Interpreter.ParameterConverters
                 Value = paramValue
             };
 
-            foreach (var storevilConverter in _typeConverters)
+            foreach (var storevilConverter in TypeConverters)
             {
                 var predicate = storevilConverter.Predicate;
 

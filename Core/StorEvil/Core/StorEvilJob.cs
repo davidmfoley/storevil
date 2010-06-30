@@ -1,6 +1,3 @@
-using StorEvil.Context;
-using StorEvil.InPlace;
-
 namespace StorEvil.Core
 {
     /// <summary>

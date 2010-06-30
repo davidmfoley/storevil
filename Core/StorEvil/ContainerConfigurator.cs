@@ -49,7 +49,7 @@ namespace StorEvil
             var mapper = new SessionContext();
             foreach (var location in settings.AssemblyLocations)
             {
-                DebugTrace.Trace(this.GetType().Name, "Adding context assembly:" + location);
+                DebugTrace.Trace(GetType().Name, "Adding context assembly:" + location);
                 mapper.AddAssembly(location);
             }
             return mapper;

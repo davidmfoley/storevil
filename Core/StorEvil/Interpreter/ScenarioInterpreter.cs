@@ -16,7 +16,7 @@ namespace StorEvil.Interpreter
     {
         private readonly IInterpreterForTypeFactory _interpreterFactory;
         private readonly IAmbiguousMatchResolver _resolver;
-        private string _lastSignificantFirstWord = null;
+        private string _lastSignificantFirstWord;
 
         public ScenarioInterpreter(IInterpreterForTypeFactory interpreterFactory, IAmbiguousMatchResolver resolver )
         {
@@ -29,7 +29,7 @@ namespace StorEvil.Interpreter
             DebugTrace.Trace("Interpreting", line);
             var chains = (GetSelectedChains(context, line) ?? new InvocationChain[0]).ToArray();
             if (! chains.Any())
-                DebugTrace.Trace(this.GetType().Name, "no match: " + line);
+                DebugTrace.Trace(GetType().Name, "no match: " + line);
 
             if (chains.Count() > 1)
                 return _resolver.ResolveMatch(line, chains);

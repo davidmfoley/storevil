@@ -1,5 +1,3 @@
-using System;
-
 namespace StorEvil.Parsing
 {
     public class StoryInfo

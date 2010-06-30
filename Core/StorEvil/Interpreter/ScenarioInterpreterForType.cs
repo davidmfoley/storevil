@@ -87,23 +87,23 @@ namespace StorEvil.Interpreter
 
         public IEnumerable<InvocationChain> GetChains(string line)
         {
-            DebugTrace.Trace(this.GetType().Name, "Interpreting '" + line + "' with type:" + _type.Name);
+            DebugTrace.Trace(GetType().Name, "Interpreting '" + line + "' with type:" + _type.Name);
               
             var partialMatches = new List<PartialMatch>();
-            foreach (var member in _memberMatchers)
+            foreach (var matcher in _memberMatchers)
             {
-                foreach (var currentMatch in member.GetMatches(line) ?? new NameMatch[0])
+                foreach (var currentMatch in matcher.GetMatches(line) ?? new NameMatch[0])
                 {
                     if (currentMatch is ExactMatch)
                     {
-                        DebugTrace.Trace(this.GetType().Name, "Exact match");
+                        DebugTrace.Trace(GetType().Name, "Exact match");
               
                         yield return new InvocationChain
-                                   {Invocations = new[] {BuildInvocation(member.MemberInfo, currentMatch)}};
+                                   {Invocations = new[] {BuildInvocation(matcher.MemberInfo, currentMatch)}};
                     }
-                    if (currentMatch is PartialMatch)
+                    else if (currentMatch is PartialMatch)
                     {
-                        DebugTrace.Trace(this.GetType().Name, "Partial match -" + currentMatch.MatchedText);
+                        DebugTrace.Trace(GetType().Name, "Partial match -" + currentMatch.MatchedText);
                         partialMatches.Add((PartialMatch) currentMatch);
                     }
                 }
@@ -111,23 +111,15 @@ namespace StorEvil.Interpreter
 
             var partialMatchChains = GetPartialMatchChains(line, partialMatches);
             foreach (var partialMatchChain in partialMatchChains)
-            {
                 yield return partialMatchChain;
-            }
-            
         }
 
         private IEnumerable<InvocationChain> GetPartialMatchChains(string line, IEnumerable<PartialMatch> partialMatches)
         {
             foreach (var partialMatch in partialMatches)
-            {
                 foreach (InvocationChain chain in GetChainsFromPartialMatch(partialMatch, line))
-                {
-
                     if (chain != null)
                         yield return chain;
-                }
-            }           
         }
 
         private IEnumerable<InvocationChain> GetChainsFromPartialMatch(PartialMatch partialMatch, string line)
