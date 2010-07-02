@@ -37,6 +37,29 @@ namespace StorEvil.Context
 
             Assert.That(dependent.DependsOn, Is.SameAs(dependedOn));
         }
+    
+        [Test]
+        public void When_dependent_context_constructor_throws()
+        {
+            Expect.ThisToThrow<Exception>( ()=> ScenarioContext.GetContext(typeof(DependsOnBadContext)));
+        }
+    }
+
+    public class DependsOnBadContext
+    {
+        private readonly BadContextThatThrows _c;
+
+        public DependsOnBadContext(BadContextThatThrows c)
+        {
+            _c = c;
+        }
+    }
+    public class BadContextThatThrows
+    {
+        public BadContextThatThrows()
+        {
+            throw new ApplicationException("test");
+        }
     }
 
     public class DisposableMappingContext : IDisposable

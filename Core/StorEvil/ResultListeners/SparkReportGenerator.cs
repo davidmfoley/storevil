@@ -74,7 +74,7 @@ namespace StorEvil.ResultListeners
             var view = (SparkView) engine.CreateInstance(
                 new SparkViewDescriptor()
                     .AddTemplate(templateName));
-
+            
             view.Model = result;
 
             var sb = new StringBuilder();
@@ -95,7 +95,7 @@ namespace StorEvil.ResultListeners
             return new SparkViewEngine
                        {
                            DefaultPageBaseType = typeof (SparkView).FullName,
-                           ViewFolder = viewFolder.Append(new SubViewFolder(viewFolder, "Shared"))
+                           ViewFolder = viewFolder.Append(new SubViewFolder(viewFolder, "Shared")),
                        };
         }
     }
