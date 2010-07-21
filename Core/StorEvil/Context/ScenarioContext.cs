@@ -14,9 +14,7 @@ namespace StorEvil.Context
                                IDictionary<Type, object> outerContexts)
         {
             _cache = new Dictionary<Type, object>(outerContexts);
-
             _parentContext = parentContext;
-
             ImplementingTypes = implementingTypes;
         }
 
@@ -26,8 +24,6 @@ namespace StorEvil.Context
         {
             get { return _cache; }
         }
-
-        #region IDisposable Members
 
         public void Dispose()
         {
@@ -39,8 +35,6 @@ namespace StorEvil.Context
         {
             return context is IDisposable && !HasStoryOrSessionLifetime(context.GetType());
         }
-
-        #endregion
 
         public object GetContext(Type type)
         {

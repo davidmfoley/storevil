@@ -33,10 +33,10 @@ Call a method with <int> and <string>
 An example should have <int> and <string>
 
 Examples:
-|int|string|
-|1|one|
-|2|two|
-|3|three|
+| int | string |
+| 1   | one    |
+| 2   | two    |
+| 3   | three  |
 ";
 
         [SetUp]
