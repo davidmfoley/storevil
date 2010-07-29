@@ -209,7 +209,7 @@ namespace StorEvil.Parsing
         private void HandleScenarioExampleRow(ScenarioLine line)
         {
             if (_currentScenario != null && line.Text.StartsWith("|"))
-                _currentScenario.RowData.Add(line.Text.Split('|').Skip(1));
+                _currentScenario.RowData.Add(line.Text.Split('|').Skip(1).Select(v=>v.Trim()));
         }
 
         private void FixEmptyScenarioNames()
