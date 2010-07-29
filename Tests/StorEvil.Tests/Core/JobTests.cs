@@ -7,7 +7,6 @@ using StorEvil.Utility;
 
 namespace StorEvil.Core.StorEvilJob_Specs
 {
-
     [TestFixture]
     public class Invoking_members
     {
@@ -35,9 +34,10 @@ namespace StorEvil.Core.StorEvilJob_Specs
 
         private void MemberInvoker_OnMemberInvoked(object sender, MemberInvokedHandlerArgs args)
         {
-            ArgsPassed = args;
+            ArgsPassed = args;  
         }
     }
+
     [TestFixture]
     public class JobTests : TestBase
     {

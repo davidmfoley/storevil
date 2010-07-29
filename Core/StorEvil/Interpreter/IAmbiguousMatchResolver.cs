@@ -15,7 +15,6 @@ namespace StorEvil.Interpreter
     {
         public InvocationChain ResolveMatch(string line, IEnumerable<InvocationChain> invocationChains)
         {
-
             throw new MatchResolutionException(GetMessage(invocationChains));
         }
 
