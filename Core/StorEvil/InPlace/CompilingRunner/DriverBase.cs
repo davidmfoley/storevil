@@ -22,7 +22,7 @@ namespace StorEvil.InPlace
         {
             ResultListener = resultListener;
             
-            ScenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()), new DisallowAmbiguousMatches());           
+            ScenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()), new MostRecentlyUsedContext());           
             LineExecuter = new ScenarioLineExecuter(ScenarioInterpreter, ResultListener);
             _context = new SessionContext();            
         } 

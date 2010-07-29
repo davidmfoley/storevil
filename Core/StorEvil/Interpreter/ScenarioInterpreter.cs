@@ -7,7 +7,7 @@ namespace StorEvil.Interpreter
 {
     public class StandardScenarioInterpreter : ScenarioInterpreter
     {       
-        public StandardScenarioInterpreter() : base(new InterpreterForTypeFactory(new ExtensionMethodHandler()), new DisallowAmbiguousMatches())
+        public StandardScenarioInterpreter() : base(new InterpreterForTypeFactory(new ExtensionMethodHandler()), new MostRecentlyUsedContext())
         {
         }
     }

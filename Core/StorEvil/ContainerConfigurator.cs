@@ -39,7 +39,7 @@ namespace StorEvil
             container.EasyRegister<IInterpreterForTypeFactory, InterpreterForTypeFactory>();
             container.EasyRegister<ExtensionMethodHandler>();
 
-            container.EasyRegister<IAmbiguousMatchResolver, DisallowAmbiguousMatches>();
+            container.EasyRegister<IAmbiguousMatchResolver, MostRecentlyUsedContext>();
 
             container.Register<ISessionContext>(GetStoryContextFactory(settings));
         }

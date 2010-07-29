@@ -17,9 +17,9 @@ namespace StorEvil.Core.StorEvilJob_Specs
         {
             var invoker = new MemberInvoker();
             ArgsPassed = null;
-            MemberInvoker.OnMemberInvoked += MemberInvoker_OnMemberInvoked;
+            StorEvilEvents.OnMemberInvoked += MemberInvoker_OnMemberInvoked;
             invoker.InvokeMember(GetType().GetMethod("ExampleMethod"), new object[] {42}, this);
-            MemberInvoker.OnMemberInvoked -= MemberInvoker_OnMemberInvoked;
+            StorEvilEvents.OnMemberInvoked -= MemberInvoker_OnMemberInvoked;
             ArgsPassed.Parameters.ElementsShouldEqual(42);           
         }
 

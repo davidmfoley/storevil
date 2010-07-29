@@ -15,20 +15,10 @@ namespace StorEvil.Interpreter
     {
         public InvocationChain ResolveMatch(string line, IEnumerable<InvocationChain> invocationChains)
         {
-            throw new MatchResolutionException(GetMessage(invocationChains));
+            throw  MatchResolutionException.Build(invocationChains);
         }
 
-        private string GetMessage(IEnumerable<InvocationChain> invocationChains)
-        {
-            var names = invocationChains.Select(GetInvocationDescription);
-            return "Could not select between\r\n -" + string.Join("\r\n -", names.ToArray());
-        }
-
-        private string GetInvocationDescription(InvocationChain chain)
-        {
-            var members = chain.Invocations.Select(x => x.MemberInfo.DeclaringType.Name + "." + x.MemberInfo.Name);
-            return string.Join(", ", members.ToArray());
-        }
+       
     }
 
     public class MostRecentlyUsedContext : IAmbiguousMatchResolver
@@ -37,7 +27,7 @@ namespace StorEvil.Interpreter
 
         static MostRecentlyUsedContext()
         {
-            MemberInvoker.OnMemberInvoked += MemberInvoker_OnMemberInvoked;
+            StorEvilEvents.OnMemberInvoked += MemberInvoker_OnMemberInvoked;
         }
 
         public static void Reset()
@@ -58,11 +48,9 @@ namespace StorEvil.Interpreter
             var pair = positions.Where(x => x.Position >= 0).OrderBy(x => x.Position).FirstOrDefault();
 
             if (pair == null)
-                throw new MatchResolutionException();
+                throw MatchResolutionException.Build(invocationChains);
 
             return pair.Value;
-
-
         }
 
         private int GetPosition(InvocationChain invocationChain)
@@ -99,6 +87,23 @@ namespace StorEvil.Interpreter
             SerializationInfo info,
             StreamingContext context) : base(info, context)
         {
+        }
+
+        public static Exception Build(IEnumerable<InvocationChain> invocationChains)
+        {
+            return new MatchResolutionException(GetMessage(invocationChains));
+        }
+
+        private static string GetMessage(IEnumerable<InvocationChain> invocationChains)
+        {
+            var names = invocationChains.Select(GetInvocationDescription);
+            return "Could not select between\r\n -" + string.Join("\r\n -", names.ToArray());
+        }
+
+        private static string GetInvocationDescription(InvocationChain chain)
+        {
+            var members = chain.Invocations.Select(x => x.MemberInfo.DeclaringType.Name + "." + x.MemberInfo.Name);
+            return string.Join(", ", members.ToArray());
         }
     }
 }
