@@ -26,7 +26,6 @@ namespace StorEvil.Interpreter.Ambiguous_Match_Resolution
             
             Expect.ThisToThrow<MatchResolutionException>(() => Resolver.ResolveMatch("Ambiguous", invocationChains));
         }
-
         
         [Test]
         public void when_one_candidate_context_has_been_used_it_is_chosen()
@@ -93,47 +92,7 @@ namespace StorEvil.Interpreter.Ambiguous_Match_Resolution
 
     }
 
-    internal class MostRecentlyUsedContext : IAmbiguousMatchResolver
-    {
-        private static List<Type> _mruTypes = new List<Type>();
-
-        static MostRecentlyUsedContext()
-        {
-            MemberInvoker.OnMemberInvoked += MemberInvoker_OnMemberInvoked;
-        }
-
-        public static void Reset()
-        {
-            _mruTypes = new List<Type>();
-        }
-        public static void MemberInvoker_OnMemberInvoked(object sender, MemberInvokedHandlerArgs args)
-        {
-            var type = args.Context.GetType();
-            
-            _mruTypes = new[] {type}.Union(_mruTypes.Where(x => x != type)).ToList();
-        }
-
-        public InvocationChain ResolveMatch(string line, IEnumerable<InvocationChain> invocationChains)
-        {
-            var positions = invocationChains.Select(x => new {Position = GetPosition(x), Value = x});
-
-            var pair = positions.Where(x => x.Position >= 0).OrderBy(x => x.Position).FirstOrDefault();
-
-            if (pair == null)
-                throw new MatchResolutionException();
-
-            return pair.Value;
-
-
-        }
-
-        private int GetPosition(InvocationChain invocationChain)
-        {
-            var declaringType = invocationChain.Invocations.First().MemberInfo.DeclaringType;
-
-            return _mruTypes.IndexOf(declaringType);
-        }
-    }
+    
 
     [TestFixture]
     public class Disallowing_ambiguous_matches
