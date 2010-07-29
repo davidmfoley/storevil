@@ -7,8 +7,11 @@ namespace StorEvil.InPlace
 {
     public class MemberInvoker
     {
+        public static event MemberInvokedHandler OnMemberInvoked;
         public object InvokeMember(MemberInfo info, IEnumerable<object> parameters, object context)
         {
+            RaiseInvocationEvent(info, parameters, context);
+
             if (info.MemberType == MemberTypes.Method)
             {
                 var methodParameters = ConvertParameters(info as MethodInfo, parameters);
@@ -19,7 +22,8 @@ namespace StorEvil.InPlace
                     //context = null;
                 }
 
-                return (info as MethodInfo).Invoke(context, methodParameters.ToArray());
+                
+                return  (info as MethodInfo).Invoke(context, methodParameters.ToArray());
             }
 
             if (info.MemberType == MemberTypes.Property)
@@ -29,6 +33,14 @@ namespace StorEvil.InPlace
                 return (info as FieldInfo).GetValue(context);
             
             return null;
+        }
+
+        private void RaiseInvocationEvent(MemberInfo info, IEnumerable<object> parameters, object context)
+        {
+            if (OnMemberInvoked == null)
+                return;
+            
+            OnMemberInvoked(this, new MemberInvokedHandlerArgs {Member = info, Parameters = parameters.ToArray(), Context = context});
         }
 
         private IEnumerable<object> ConvertParameters(MethodInfo info, IEnumerable<object> parameters)
@@ -54,5 +66,14 @@ namespace StorEvil.InPlace
             Type type = info.DeclaringType;
             return type.IsAbstract;
         }
+    }
+
+    public delegate void MemberInvokedHandler(object sender, MemberInvokedHandlerArgs args);
+
+    public class MemberInvokedHandlerArgs
+    {
+        public MemberInfo Member;
+        public object[] Parameters;
+        public object Context;
     }
 }

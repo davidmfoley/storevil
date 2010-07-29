@@ -122,6 +122,7 @@
     <Compile Include="Interpreter\IAmbiguousMatchResolver.cs" />
     <Compile Include="Nunit\NUnitContainerConfigurator.cs" />
     <EmbeddedResource Include="Resources\ExampleContext.cs" />
+    <Compile Include="ResultListeners\RemoteListener.cs" />
     <Compile Include="StubGeneration\StdOutWriter.cs" />
     <Compile Include="StubGeneration\StubGenerationSettings.cs" />
     <Compile Include="Tracing\IDebugListener.cs" />

@@ -25,10 +25,10 @@ namespace StorEvil
             if (settings.Debug)
             {
                 DebugTrace.Listener = new ConsoleDebugListener();
-            }
+            }       
 
             container.Register(listenerBuilder.GetResultListener());
-
+                
             container.EasyRegister<IStoryParser, StoryParser>();
             container.EasyRegister<IStoryProvider, StoryProvider>();
             container.EasyRegister<IStoryReader, FilesystemStoryReader>();

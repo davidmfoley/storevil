@@ -77,11 +77,11 @@ namespace StorEvil.InPlace
             return true;
         }
 
-        private void InvokeContextMember(ScenarioContext storyContext, Invocation invocation)
+        private void InvokeContextMember(ScenarioContext scenarioContext, Invocation invocation)
         {
             MemberInfo info = invocation.MemberInfo;
             var declaringType = info.DeclaringType;
-            var context = _lastResult ?? storyContext.GetContext(declaringType);
+            var context = _lastResult ?? scenarioContext.GetContext(declaringType);
             _lastResult = _memberInvoker.InvokeMember(info, invocation.ParamValues, context);
         }
 
