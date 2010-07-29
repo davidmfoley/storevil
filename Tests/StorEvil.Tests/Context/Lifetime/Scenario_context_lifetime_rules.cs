@@ -22,7 +22,7 @@ namespace StorEvil.Context.Lifetime
         }
     }
 
-    [StorEvil.Context(Lifetime = ContextLifetime.Session)]
+    [Context(Lifetime = ContextLifetime.Session)]
     public class SessionLifetimeDependingOnScenarioLifetime
     {
         public SessionLifetimeDependingOnScenarioLifetime(ScenarioLifetimeTestMappingContext s)

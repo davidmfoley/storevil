@@ -42,5 +42,12 @@ namespace StorEvil.Parsing
             var words = Parser.ExtractWordsFromScenarioLine("numbers such as 123 can be parsed");
             words.ElementsShouldEqual("numbers", "such", "as", "123", "can", "be", "parsed");
         }
+
+        [Test]
+        public void Should_parse_negative_numbers()
+        {
+            var words = Parser.ExtractWordsFromScenarioLine("numbers such as -123 and -456.98 can be parsed");
+            words.ElementsShouldEqual("numbers", "such", "as", "-123", "and", "-456.98", "can", "be", "parsed");
+        }
     }
 }

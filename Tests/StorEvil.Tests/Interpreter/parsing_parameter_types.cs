@@ -47,6 +47,22 @@ namespace StorEvil.Interpreter.ParameterConverter_Specs
             result.ShouldEqual(TestValues.Foo);
         }
 
+        [Test]
+        public void should_convert_negative_value_to_decimal()
+        {
+            var result = Converter.Convert("-42", typeof (decimal));
+                result.ShouldBeOfType<decimal>();
+            result.ShouldEqual(-42m);
+        }
+
+        [Test]
+        public void should_convert_negative_value_to_int()
+        {
+            var result = Converter.Convert("-42", typeof(int));
+            result.ShouldBeOfType<int>();
+            result.ShouldEqual(-42);
+        }
+
         private enum TestValues
         {
             Foo,

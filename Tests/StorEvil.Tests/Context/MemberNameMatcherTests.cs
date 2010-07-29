@@ -105,6 +105,33 @@ namespace StorEvil.Context.Matching_method_names_with_reflection
         }
     }
 
+    public class Matching_a_numeric_int_parameter
+    {
+        private MethodNameMatcher Matcher;
+
+        [SetUp]
+        public void SetupContext()
+        {
+            Matcher = MethodMatcherTestHelper.GetMatcher<Numeric_matching_test_context>("method_takes_an_int");            
+        }
+
+        [Test]
+        public void should_match_a_negative_int()
+        {
+            var matches = Matcher.GetMatches("method takes an int -42");
+            matches.Count().ShouldBe(1);
+            matches.First().ParamValues.First().Value.ShouldEqual(-42);
+        }
+
+        public class Numeric_matching_test_context
+        {
+            public void method_takes_an_int(int val)
+            {
+                
+            }
+        }
+    }
+
     public class Matching_words_with_punctuation
     {
         private IEnumerable<NameMatch> Matches;
