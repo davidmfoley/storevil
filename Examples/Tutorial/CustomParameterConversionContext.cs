@@ -10,7 +10,7 @@ namespace Tutorial
 
 
         public void we_can_parse_floats_like(float f)
-        {
+        {   
             _float = f;
         }
 

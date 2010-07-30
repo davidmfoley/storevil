@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Text;
 
@@ -32,6 +33,11 @@ namespace StorEvil.NUnit
         {
             // write to target file
             File.WriteAllText(_settings.TargetFilePath, _code.ToString());
+        }
+
+        public void WriteSetUpAndTearDown(string setupTearDown)
+        {
+            _code.AppendLine(setupTearDown);
         }
     }
 

@@ -496,4 +496,11 @@ contextTableContext.then_playerName_should_be_number_expectedNumber(@"Howard", (
         }
 
     }
-}
+}namespace StorEvilSpecifications { [SetUpFixture] public class SetupAndTearDown {
+  [SetUp] public void SetUp() {
+
+  }
+  [TearDown] public void TearDown() {
+  }
+} }
+

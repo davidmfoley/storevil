@@ -139,6 +139,9 @@ namespace StorEvil.Interpreter.ParameterConverters
 
         private static void AddCustomConverter(Type type)
         {
+            if (CustomConverters.Any(x => x.GetType() == type))
+                return;
+
             var converter = Activator.CreateInstance(type) as CustomParameterConverter;
             CustomConverters.Add(converter);
         }

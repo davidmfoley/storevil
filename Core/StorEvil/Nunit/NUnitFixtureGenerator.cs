@@ -163,5 +163,20 @@ namespace {0} {{
             var categories = string.Join("", (story.Tags ?? new string[0]).Select(t => string.Format(@"[Category(""{0}"")]", t)).ToArray());
             return string.Format(FixtureFormat, ns, usings, GetFixtureName(story), tests, writeStoryToConsole, categories, story.Id);
         }
+
+        public string GenerateSetupTearDown(ISessionContext sessionContext)
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("namespace StorEvilSpecifications { [SetUpFixture] public class SetupAndTearDown {");
+            sb.AppendLine("  [SetUp] public void SetUp() {");
+            
+            sb.AppendLine();
+            sb.AppendLine("  }");
+            sb.AppendLine("  [TearDown] public void TearDown() {");
+            sb.AppendLine("  }");
+            sb.AppendLine("} }");
+            return sb.ToString();
+        }
     }
 }

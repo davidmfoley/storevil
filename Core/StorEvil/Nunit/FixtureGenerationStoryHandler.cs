@@ -27,6 +27,7 @@ namespace StorEvil.NUnit
 
         public void Finished()
         {
+            TestFixtureWriter.WriteSetUpAndTearDown(FixtureGenerator.GenerateSetupTearDown(_context));
             TestFixtureWriter.Finished();
         }
 
