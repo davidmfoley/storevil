@@ -25,6 +25,8 @@ namespace StorEvil.Core
         }
 
         public ScenarioLine[] Body { get; set; }
+
+       
     }
 
     [Serializable]
@@ -64,6 +66,8 @@ namespace StorEvil.Core
         public string Name { get; set; }
         public string Id { get; set; }
         public IEnumerable<string> Tags { get; set; }
+
+        public ScenarioLine[] Background { get; set; }
     }
 
     public interface IScenario
@@ -71,5 +75,6 @@ namespace StorEvil.Core
         string Name { get; }
         string Id { get; }
         IEnumerable<string> Tags { get; }
+        ScenarioLine[] Background { get; set; }
     }
 }

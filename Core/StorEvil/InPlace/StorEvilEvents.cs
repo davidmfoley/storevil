@@ -19,7 +19,6 @@ namespace StorEvil.InPlace
                 return;
 
             OnMatchFound(sender, new MatchFoundHandlerArgs { Member = info});
-
         }
     }
 }

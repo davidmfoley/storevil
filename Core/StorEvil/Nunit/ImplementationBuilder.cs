@@ -21,7 +21,7 @@ namespace StorEvil.NUnit
         {
             var impl = new TestImplementation();
 
-            foreach (var line in scenario.Body)
+            foreach (var line in GetLines(scenario))
             {
                 impl.CodeBuilder.Append(BuildConsoleWriteScenarioLine(line.Text));
                 impl.CodeBuilder.AppendLine("#line " + line.LineNumber);
@@ -51,6 +51,11 @@ namespace StorEvil.NUnit
 
             AppendDisposeCalls(impl.CodeBuilder, impl.Contexts);
             return impl;
+        }
+
+        private ScenarioLine[] GetLines(Scenario scenario)
+        {
+            return (scenario.Background ?? new ScenarioLine[0]).Union(scenario.Body).ToArray();
         }
 
         private ScenarioLineImplementation BuildCodeFromScenarioLine(string line, StoryContext storyContext)

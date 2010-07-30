@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace StorEvil.Context
 {
@@ -33,8 +32,10 @@ namespace StorEvil.Context
         public void SetContext(object o)
         {
             var type = o.GetType();
-            var contextAttribute = (ContextAttribute) type.GetCustomAttributes(typeof(ContextAttribute), true).FirstOrDefault();
-            if (contextAttribute != null && contextAttribute.Lifetime == ContextLifetime.Session)
+
+            var contextInfo = type.GetContextInfo();
+
+            if (contextInfo.Lifetime == ContextLifetime.Session)
                 _parent.SetContext(o);
            
             _cache.Add(type, o);
@@ -48,5 +49,10 @@ namespace StorEvil.Context
                     ((IDisposable)context).Dispose();
             }
         }
+    }
+
+    public class ContextInfo
+    {
+        public ContextLifetime Lifetime;
     }
 }

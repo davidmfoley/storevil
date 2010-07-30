@@ -1,3 +1,4 @@
+using System.Linq;
 using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Interpreter;
@@ -23,7 +24,7 @@ namespace StorEvil.InPlace
             _listener.ScenarioStarting(scenario);
             _scenarioInterpreter.NewScenario();
 
-            foreach (var line in scenario.Body)
+            foreach (var line in (scenario.Background ?? new ScenarioLine[0]).Union(scenario.Body))
             {
                 LineStatus status = _lineExecuter.ExecuteLine(scenario, storyContext, line.Text);
                 if (LineStatus.Failed == status)

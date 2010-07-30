@@ -10,7 +10,7 @@ namespace StorEvil.Parsing
     {
         private Story Result;
 
-        private const string testMultiStoryText =
+        private const string testStoryText =
             @"
 As a user I want to do something
 
@@ -25,7 +25,7 @@ Then I should expect some result
         {
             var parser = new StoryParser();
 
-            Result = parser.Parse(testMultiStoryText, null);
+            Result = parser.Parse(testStoryText, null);
         }
 
         [Test]
@@ -33,6 +33,45 @@ Then I should expect some result
         {
             var scenario = Result.Scenarios.First();
             scenario.Name.Length.ShouldBeGreaterThan(0);
+        }
+    }
+
+    [TestFixture]
+    public class parsing_scenario_with_background
+    {
+        private Story Result;
+
+        private const string testBackgroundText =
+            @"
+As a user I want to do something
+
+Background:
+Given some condition
+
+Scenario: 
+When I take some action
+Then I should expect some result
+
+Scenario: 
+When I take some other action
+Then I should expect some other result
+";
+
+        [SetUp]
+        public void SetupContext()
+        {
+            var parser = new StoryParser();
+
+            Result = parser.Parse(testBackgroundText, null);
+        }
+
+        [Test]
+        public void should_set_background()
+        {
+
+            var scenario = Result.Scenarios.First() as Scenario;
+            scenario.ShouldNotBeNull();
+            scenario.Background.Count().ShouldBe(1);
         }
     }
 }

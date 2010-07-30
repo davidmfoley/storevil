@@ -91,9 +91,15 @@ StorEvilContexts = ExecuteLine(@""{1}"");
         private IEnumerable<ScenarioLine> GetLines(IScenario scenario)
         {
             if (scenario is Scenario)
-                return ((Scenario) scenario).Body;
+            {
+                var s = (Scenario) scenario;
+                return (s.Background ?? new ScenarioLine[0]).Union( s.Body);
+            }
             else
-                return ((ScenarioOutline) scenario).Scenario.Body;
+            {
+                var s = ((ScenarioOutline)scenario).Scenario;
+                return (s.Background ?? new ScenarioLine[0]).Union(s.Body);
+            }
         }
 
         private string _sourceCodeTemplate =

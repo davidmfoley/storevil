@@ -26,7 +26,10 @@ namespace StorEvil.Parsing
             {
                 yield return
                     new Scenario(outline.Id + (count++), scenario.Name,
-                                 PreprocessLines(scenario.Body, outline.FieldNames, example).ToArray());
+                                 PreprocessLines(scenario.Body, outline.FieldNames, example).ToArray())
+                        {
+                            Background = scenario.Background
+                        };
             }
         }
 

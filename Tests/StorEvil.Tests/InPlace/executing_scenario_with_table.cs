@@ -1,7 +1,6 @@
 using NUnit.Framework;
-using StorEvil.InPlace;
 using StorEvil.Parsing;
-using StorEvil.Utility;
+
 
 namespace StorEvil.InPlace.Compiled
 {
@@ -9,6 +8,8 @@ namespace StorEvil.InPlace.Compiled
     public class executing_scenario_with_table
         : InPlace.executing_scenario_with_table, UsingCompiledRunner
     {
+
+     
     }
 }
 

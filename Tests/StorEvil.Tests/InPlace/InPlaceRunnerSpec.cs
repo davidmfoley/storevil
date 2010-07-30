@@ -98,6 +98,16 @@ namespace StorEvil.InPlace
             ResultListener.AssertWasCalled(x => x.Success(Any<Scenario>(), Arg<string>.Is.Equal(expectedLine)));
         }
 
+        protected void AssertLineSuccess(string expectedLine, int count)
+        {
+            var args = ResultListener.GetArgumentsForCallsMadeOn(x =>
+                                                          {
+                                                              x.Success(Any<Scenario>(),
+                                                                        Arg<string>.Is.Equal(expectedLine));
+                                                          });
+            args.Where(a=> (string)a[1] == expectedLine).Count().ShouldBe(count);
+        }
+
         protected void AssertScenarioSuccess()
         {
             var args = ResultListener.GetArgumentsForCallsMadeOn(x => x.ScenarioSucceeded(Any<Scenario>()));

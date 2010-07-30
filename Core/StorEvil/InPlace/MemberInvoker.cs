@@ -8,9 +8,7 @@ namespace StorEvil.InPlace
     public class MemberInvoker
     {       
         public object InvokeMember(MemberInfo info, IEnumerable<object> parameters, object context)
-        {
-            //StorEvilEvents.RaiseMatchFound(this, info);
-
+        {            
             if (info.MemberType == MemberTypes.Method)
             {
                 var methodParameters = ConvertParameters(info as MethodInfo, parameters);
@@ -20,7 +18,6 @@ namespace StorEvil.InPlace
                     methodParameters = new[] { context }.Concat(methodParameters.ToArray());
                     //context = null;
                 }
-
                 
                 return  (info as MethodInfo).Invoke(context, methodParameters.ToArray());
             }

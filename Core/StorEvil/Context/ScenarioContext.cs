@@ -33,7 +33,7 @@ namespace StorEvil.Context
 
         private bool ShouldBeDisposedAtScenarioLevel(object context)
         {
-            return context is IDisposable && !HasStoryOrSessionLifetime(context.GetType());
+            return context is IDisposable &&  context.GetType().GetContextInfo().Lifetime == ContextLifetime.Scenario;
         }
 
         public object GetContext(Type type)
@@ -49,22 +49,8 @@ namespace StorEvil.Context
 
             _cache.Add(type, CreateContextObject(type));
 
-            if (HasStoryOrSessionLifetime(type))
+            if (type.GetContextInfo().Lifetime != ContextLifetime.Scenario)
                 _parentContext.SetContext(_cache[type]);
-        }
-
-        private bool HasStoryOrSessionLifetime(Type type)
-        {
-            ContextLifetime contextLifetime = GetLifetime(type);
-
-            return contextLifetime == ContextLifetime.Story || contextLifetime == ContextLifetime.Session;
-        }
-
-        private ContextLifetime GetLifetime(Type type)
-        {
-            var contextAttr =
-                (ContextAttribute) type.GetCustomAttributes(typeof (ContextAttribute), true).FirstOrDefault();
-            return contextAttr == null ? ContextLifetime.Scenario : contextAttr.Lifetime;
         }
 
         private object CreateContextObject(Type type)
@@ -84,9 +70,9 @@ namespace StorEvil.Context
 
         private void DetectConflictingLifetimes(Type dependentType, IEnumerable<Type> dependedOnTypes)
         {
-            ContextLifetime dependentLifetime = GetLifetime(dependentType);
+            ContextLifetime dependentLifetime = dependentType.GetContextInfo().Lifetime;
 
-            IEnumerable<Type> errors = dependedOnTypes.Where(x => GetLifetime(x) < dependentLifetime);
+            IEnumerable<Type> errors = dependedOnTypes.Where(x => x.GetContextInfo().Lifetime < dependentLifetime);
             if (!errors.Any())
                 return;
 

@@ -83,6 +83,65 @@ using StorEvil.Utility;
 
     [TestFixture]
     
+    public class Background_Specs : StorEvil.NUnit.StorEvilTestFixtureBase {
+#line 1 "Background.feature"
+#line hidden
+        private StorEvil.Interpreter.ParameterConverters.ParameterConverter ParameterConverter = new StorEvil.Interpreter.ParameterConverters.ParameterConverter();
+        [TestFixtureSetUp]
+        public void FixtureSetUp() {
+            base.SetUp();
+            Console.WriteLine(@"StorEvil supports Background, which is run once for each scenario
+ ");
+        }
+        
+
+        [TearDown]
+        public void TearDown() {
+            base.CleanUpScenario();
+        }
+
+        [TestFixtureTearDown]
+        public void FixtureTearDown() {
+            base.CleanUpStory();
+        }
+        [Test] public void Background_run_count_should_be_1(){
+            var contextBackgroundContext = GetContext<Tutorial.BackgroundContext>();
+           System.Console.WriteLine(@"Run the background");
+#line 4
+contextBackgroundContext.Run_the_background();
+#line hidden
+           System.Console.WriteLine(@"Background run count should be 1");
+#line 7
+contextBackgroundContext.Background_run_count.ShouldBe((System.Object) this.ParameterConverter.Convert(@"1", typeof(System.Object)));
+#line hidden
+
+
+        }
+        [Test] public void Background_run_count_should_be_2(){
+            var contextBackgroundContext = GetContext<Tutorial.BackgroundContext>();
+           System.Console.WriteLine(@"Run the background");
+#line 4
+contextBackgroundContext.Run_the_background();
+#line hidden
+           System.Console.WriteLine(@"Background run count should be 2");
+#line 10
+contextBackgroundContext.Background_run_count.ShouldBe((System.Object) this.ParameterConverter.Convert(@"2", typeof(System.Object)));
+#line hidden
+
+
+        }
+
+    }
+}
+
+
+namespace StorEvilSpecifications {
+    using Tutorial;
+using StorEvil.Utility;
+    
+
+    [TestFixture]
+    
     public class BasicGrammar_Specs : StorEvil.NUnit.StorEvilTestFixtureBase {
 #line 1 "BasicGrammar.feature"
 #line hidden

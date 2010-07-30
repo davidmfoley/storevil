@@ -43,7 +43,7 @@ namespace StorEvil.ResultListeners
         public void ScenarioSucceeded(Scenario scenario)
         {
             DoWrite(ConsoleColor.Green, "Scenario succeeded");
-        }
+        }   
 
         public void Finished()
         {

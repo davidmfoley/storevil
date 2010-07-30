@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Reflection;
 using Funq;
 using NUnit.Framework;
@@ -30,7 +31,7 @@ namespace StorEvil.InPlace
 
         public LineStatus ExecuteLine(Scenario scenario, ScenarioContext storyContext, string line)
         {
-            // Debug.WriteLine("SLE: " + line);
+            Debug.WriteLine("SLE: " + line);
             InvocationChain chain = GetMatchingChain(storyContext, line);
 
             if (chain == null)

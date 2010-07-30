@@ -32,6 +32,7 @@ namespace StorEvil.Parsing
 
         private Action<ScenarioLine> _currentLineHandler;
         private List<string> _storyTags = new List<string>();
+        private List<ScenarioLine> _background;
 
         public Story Parse(string storyText, string storyId)
         {
@@ -51,6 +52,8 @@ namespace StorEvil.Parsing
         {
             _storyId = storyId;
             _currentLineHandler = AppendToStoryName;
+
+            _background = new List<ScenarioLine>();
         }
 
         private void HandleStoryTextLine(ScenarioLine line)
@@ -59,6 +62,11 @@ namespace StorEvil.Parsing
             if (IsTags(line.Text))
             {
                 HandleTags(line.Text);
+                return;
+            }
+            if (IsBackground(line.Text))
+            {
+                _currentLineHandler = HandleBackgroundRow;
                 return;
             }
             if (IsNewScenarioOrOutline(line.Text))
@@ -85,6 +93,17 @@ namespace StorEvil.Parsing
             }
 
             _currentLineHandler(line);
+        }
+
+        private void HandleBackgroundRow(ScenarioLine line)
+        {
+            if (IsNotCommentOrEmpty(line))
+                _background.Add(line);
+        }
+
+        private bool IsBackground(string text)
+        {
+            return text.ToLower().StartsWith("background:");
         }
 
         private void ApplyTagsFromLastLine()
@@ -175,7 +194,9 @@ namespace StorEvil.Parsing
         {
             return new Scenario(_storyId + "-" + scenarios.Count,
                                 _currentScenario.Name,
-                                _currentScenario.Lines.ToArray()) {Tags = _currentScenario.Tags};
+                                _currentScenario.Lines.ToArray()) {
+                Tags = _currentScenario.Tags,
+                Background = _background.ToArray()};
         }
 
         private void AddScenarioOrOutlineIfExists()
@@ -202,8 +223,13 @@ namespace StorEvil.Parsing
 
         private void HandleScenarioLine(ScenarioLine line)
         {
-            if (!IsComment(line.Text) && line.Text.Trim().Length > 0)
+            if (IsNotCommentOrEmpty(line))
                 _currentScenario.Lines.Add(line);
+        }
+
+        private bool IsNotCommentOrEmpty(ScenarioLine line)
+        {
+            return !IsComment(line.Text) && line.Text.Trim().Length > 0;
         }
 
         private void HandleScenarioExampleRow(ScenarioLine line)

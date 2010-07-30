@@ -33,7 +33,7 @@ namespace StorEvil.Context
       
         private static bool TypeHasContextAttrbiute(Type t)
         {
-            return t.GetCustomAttributes(typeof (ContextAttribute), true).Any();
+            return t.GetCustomAttributes(true).Any(x=>x.GetType().FullName ==  typeof(ContextAttribute).FullName);
         }
 
         public void AddAssembly(string pathToAssembly)
