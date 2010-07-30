@@ -5,33 +5,11 @@ using System.Reflection;
 
 namespace StorEvil.InPlace
 {
-    public delegate void MemberInvokedHandler(object sender, MemberInvokedHandlerArgs args);
-
-    public class MemberInvokedHandlerArgs
-    {
-        public MemberInfo Member;
-        public object[] Parameters;
-        public object Context;
-    }
-
-    public class StorEvilEvents
-    {
-        public static event MemberInvokedHandler OnMemberInvoked;
-        public static void RaiseOnMemberInvoked(object sender,MemberInfo info, IEnumerable<object> parameters, object context)        
-        {
-            if (OnMemberInvoked == null)
-                return;
-
-            OnMemberInvoked(sender, new MemberInvokedHandlerArgs { Member = info, Parameters = parameters.ToArray(), Context = context });
-
-        }
-    }
     public class MemberInvoker
-    {
-       
+    {       
         public object InvokeMember(MemberInfo info, IEnumerable<object> parameters, object context)
         {
-            StorEvilEvents.RaiseOnMemberInvoked(this, info, parameters, context);
+            //StorEvilEvents.RaiseMatchFound(this, info);
 
             if (info.MemberType == MemberTypes.Method)
             {

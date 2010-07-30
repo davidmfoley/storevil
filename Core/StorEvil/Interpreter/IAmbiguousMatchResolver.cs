@@ -27,16 +27,16 @@ namespace StorEvil.Interpreter
 
         static MostRecentlyUsedContext()
         {
-            StorEvilEvents.OnMemberInvoked += MemberInvoker_OnMemberInvoked;
+            StorEvilEvents.OnMatchFound += MemberInvokerOnMatchFound;
         }
 
         public static void Reset()
         {
             _mruTypes = new List<Type>();
         }
-        public static void MemberInvoker_OnMemberInvoked(object sender, MemberInvokedHandlerArgs args)
+        public static void MemberInvokerOnMatchFound(object sender, MatchFoundHandlerArgs args)
         {
-            var type = args.Context.GetType();
+            var type = args.Member.DeclaringType;
 
             _mruTypes = new[] { type }.Union(_mruTypes.Where(x => x != type)).ToList();
         }

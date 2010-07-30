@@ -119,6 +119,7 @@
     <Compile Include="InPlace\CompilingRunner\CodeCompiler.cs" />
     <Compile Include="InPlace\CompilingRunner\InPlaceDebugContainerConfigurator.cs" />
     <Compile Include="InPlace\InPlaceSettings.cs" />
+    <Compile Include="InPlace\StorEvilEvents.cs" />
     <Compile Include="Interpreter\IAmbiguousMatchResolver.cs" />
     <Compile Include="Nunit\NUnitContainerConfigurator.cs" />
     <EmbeddedResource Include="Resources\ExampleContext.cs" />

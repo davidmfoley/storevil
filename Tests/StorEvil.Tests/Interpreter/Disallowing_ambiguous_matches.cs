@@ -57,7 +57,8 @@ namespace StorEvil.Interpreter.Ambiguous_Match_Resolution
 
         private void SimulateInvocation(object context)
         {
-            MostRecentlyUsedContext.MemberInvoker_OnMemberInvoked(this, new MemberInvokedHandlerArgs { Context = context });
+            var method = context.GetType().GetMethod("Ambiguous");
+            MostRecentlyUsedContext.MemberInvokerOnMatchFound(this, new MatchFoundHandlerArgs { Member = method});
         }
 
         private IEnumerable<InvocationChain> GetTestInvocationChains()

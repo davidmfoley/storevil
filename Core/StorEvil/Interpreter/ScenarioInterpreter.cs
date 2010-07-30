@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using StorEvil.Context;
+using StorEvil.InPlace;
 using StorEvil.Utility;
 
 namespace StorEvil.Interpreter
@@ -32,9 +34,30 @@ namespace StorEvil.Interpreter
                 DebugTrace.Trace(GetType().Name, "no match: " + line);
 
             if (chains.Count() > 1)
-                return _resolver.ResolveMatch(line, chains);
+            {
+                var chain = _resolver.ResolveMatch(line, chains);
+                Notify(chain);
+                return chain;
+            }
+            
+            if (chains.Any())
+            {
+                var chain = chains.FirstOrDefault();
+                Notify(chain);
+                return chain;
+            }
 
-            return chains.FirstOrDefault();
+            return null;
+                
+        }
+
+        private void Notify(InvocationChain chain)
+        {
+            foreach (var invocation in chain.Invocations)
+            {
+                StorEvilEvents.RaiseMatchFound(this, invocation.MemberInfo);
+            }
+           
         }
 
         public void NewScenario()

@@ -8,31 +8,32 @@ using StorEvil.Utility;
 namespace StorEvil.Core.StorEvilJob_Specs
 {
     [TestFixture]
-    public class Invoking_members
+    public class StorEvilEvents_Specs
     {
-        private MemberInvokedHandlerArgs ArgsPassed;
+        private MatchFoundHandlerArgs ArgsPassed;
 
         [Test]
         public void When_a_handler_is_attached_it_is_invoked()
         {
             var invoker = new MemberInvoker();
             ArgsPassed = null;
-            StorEvilEvents.OnMemberInvoked += MemberInvoker_OnMemberInvoked;
-            invoker.InvokeMember(GetType().GetMethod("ExampleMethod"), new object[] {42}, this);
-            StorEvilEvents.OnMemberInvoked -= MemberInvoker_OnMemberInvoked;
-            ArgsPassed.Parameters.ElementsShouldEqual(42);           
+            StorEvilEvents.OnMatchFound += MemberInvokerOnMatchFound;
+            StorEvilEvents.RaiseMatchFound(this, GetType().GetMethod("ExampleMethod"));
+            StorEvilEvents.OnMatchFound -= MemberInvokerOnMatchFound;
+            ArgsPassed.Member.Name.ShouldBe("ExampleMethod");           
         }
 
         [Test]
         public void When_no_handler_is_attached_proceeds_as_normal()
         {
-            var invoker = new MemberInvoker();         
-            invoker.InvokeMember(GetType().GetMethod("ExampleMethod"), new object[] { 42 }, this);            
+            var invoker = new MemberInvoker();
+            StorEvilEvents.RaiseMatchFound(this, GetType().GetMethod("ExampleMethod"));
+            // (should not throw)
         }
 
         public void ExampleMethod(int foo) {}
 
-        private void MemberInvoker_OnMemberInvoked(object sender, MemberInvokedHandlerArgs args)
+        private void MemberInvokerOnMatchFound(object sender, MatchFoundHandlerArgs args)
         {
             ArgsPassed = args;  
         }

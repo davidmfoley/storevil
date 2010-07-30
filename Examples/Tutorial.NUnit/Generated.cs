@@ -6,6 +6,78 @@ using StorEvil;
 
 namespace StorEvilSpecifications {
     using Tutorial;
+    
+
+    [TestFixture]
+    
+    public class AmbiguousMatches_Specs : StorEvil.NUnit.StorEvilTestFixtureBase {
+#line 1 "AmbiguousMatches.feature"
+#line hidden
+        private StorEvil.Interpreter.ParameterConverters.ParameterConverter ParameterConverter = new StorEvil.Interpreter.ParameterConverters.ParameterConverter();
+        [TestFixtureSetUp]
+        public void FixtureSetUp() {
+            base.SetUp();
+            Console.WriteLine(@"StorEvil will choose the context member that has been most recently used
+in the case of ambiguous matches
+ ");
+        }
+        
+
+        [TearDown]
+        public void TearDown() {
+            base.CleanUpScenario();
+        }
+
+        [TestFixtureTearDown]
+        public void FixtureTearDown() {
+            base.CleanUpStory();
+        }
+        [Test] public void An_ambiguous_match(){
+            var contextFooContext = GetContext<Tutorial.FooContext>();
+           System.Console.WriteLine(@"using foo context");
+#line 5
+contextFooContext.using_foo_context();
+#line hidden
+           System.Console.WriteLine(@"call an ambiguous method");
+#line 6
+contextFooContext.call_an_ambiguous_method();
+#line hidden
+           System.Console.WriteLine(@"method on foo should have been called");
+#line 7
+contextFooContext.method_on_foo_should_have_been_called();
+#line hidden
+
+
+        }
+        [Test] public void An_ambiguous_match_where_both_are_called(){
+            var contextFooContext = GetContext<Tutorial.FooContext>();
+            var contextBarContext = GetContext<Tutorial.BarContext>();
+           System.Console.WriteLine(@"using foo context");
+#line 10
+contextFooContext.using_foo_context();
+#line hidden
+           System.Console.WriteLine(@"using bar context");
+#line 11
+contextBarContext.using_bar_context();
+#line hidden
+           System.Console.WriteLine(@"call an ambiguous method");
+#line 12
+contextBarContext.call_an_ambiguous_method();
+#line hidden
+           System.Console.WriteLine(@"method on bar should have been called");
+#line 13
+contextBarContext.method_on_bar_should_have_been_called();
+#line hidden
+
+
+        }
+
+    }
+}
+
+
+namespace StorEvilSpecifications {
+    using Tutorial;
 using StorEvil.Utility;
     
 

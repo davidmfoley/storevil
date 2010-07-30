@@ -1,0 +1,1 @@
+msbuild default.build /t:Package $1
