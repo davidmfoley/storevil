@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using StorEvil.Extensibility;
 
 namespace StorEvil.Interpreter.ParameterConverters
 {
@@ -25,6 +28,7 @@ namespace StorEvil.Interpreter.ParameterConverters
         }
 
         private static readonly List<ConverterInfo> TypeConverters = new List<ConverterInfo>();
+        private static List<CustomParameterConverter> CustomConverters = new List<CustomParameterConverter>();
 
         public ParameterConverter()
         {
@@ -75,6 +79,7 @@ namespace StorEvil.Interpreter.ParameterConverters
         {
             TypeConverters.Add( new ConverterInfo(predicate, converter));;
         }
+
         private static void AddConverter<T>(IStorevilConverter converter)
         {
             TypeConverters.Add(new ConverterInfo(t => t.ParameterType == typeof (T), converter));
@@ -92,6 +97,13 @@ namespace StorEvil.Interpreter.ParameterConverters
                 ParameterType = type,
                 Value = paramValue
             };
+
+            foreach (var customConverter in CustomConverters)
+            {
+                object val = customConverter.Convert(type, paramValue);
+                if (! (val is CouldNotParseParameter))
+                    return val;
+            }
 
             foreach (var storevilConverter in TypeConverters)
             {
@@ -112,6 +124,23 @@ namespace StorEvil.Interpreter.ParameterConverters
         private static object ParseEnumValue(string value, Type type)
         {
             return Enum.Parse(type, value.Replace(" ", ""), true);
+        }
+
+        public static void AddCustomConverters(string location)
+        {
+            var assembly = Assembly.LoadFrom(location);
+            var allTypes = assembly.GetTypes();
+            var converterTypes = allTypes.Where(t=>t.GetInterface(typeof(CustomParameterConverter).FullName, true) != null);
+            foreach (var type in converterTypes)
+            {
+                AddCustomConverter(type);
+            }
+        }
+
+        private static void AddCustomConverter(Type type)
+        {
+            var converter = Activator.CreateInstance(type) as CustomParameterConverter;
+            CustomConverters.Add(converter);
         }
     }
 }

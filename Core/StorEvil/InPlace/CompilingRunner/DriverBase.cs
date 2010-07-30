@@ -3,6 +3,7 @@ using System.Linq;
 using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Interpreter;
+using StorEvil.Interpreter.ParameterConverters;
 using StorEvil.Parsing;
 
 namespace StorEvil.InPlace
@@ -30,6 +31,7 @@ namespace StorEvil.InPlace
         protected void AddAssembly(string location)
         {
             _context.AddAssembly(location);
+            ParameterConverter.AddCustomConverters(location);
         }
 
         protected object[] GetContexts()

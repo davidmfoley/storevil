@@ -6,6 +6,7 @@ using NUnit.Framework;
 using StorEvil.Configuration;
 using StorEvil.Context;
 using StorEvil.Infrastructure;
+using StorEvil.Interpreter.ParameterConverters;
 
 namespace StorEvil.CodeGeneration
 {
@@ -45,8 +46,10 @@ namespace StorEvil.CodeGeneration
                 Assert.Ignore("No storevil config file was found.");
             }
             foreach (var location in settings.AssemblyLocations)
+            {
                 _sessionContext.AddAssembly(location);
-
+                ParameterConverter.AddCustomConverters(location);
+            }
             return _sessionContext;
         }
     }

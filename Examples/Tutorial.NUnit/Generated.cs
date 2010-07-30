@@ -297,6 +297,47 @@ namespace StorEvilSpecifications {
 
     [TestFixture]
     
+    public class CustomParameterConversion_Specs : StorEvil.NUnit.StorEvilTestFixtureBase {
+#line 1 "CustomParameterConversion.feature"
+#line hidden
+        private StorEvil.Interpreter.ParameterConverters.ParameterConverter ParameterConverter = new StorEvil.Interpreter.ParameterConverters.ParameterConverter();
+        [TestFixtureSetUp]
+        public void FixtureSetUp() {
+            base.SetUp();
+            Console.WriteLine(@"Custom conversion of parameters
+ ");
+        }
+        
+
+        [TearDown]
+        public void TearDown() {
+            base.CleanUpScenario();
+        }
+
+        [TestFixtureTearDown]
+        public void FixtureTearDown() {
+            base.CleanUpStory();
+        }
+        [Test] public void custom_float_conversion(){
+            var contextCustomParameterConversionContext = GetContext<Tutorial.CustomParameterConversionContext>();
+           System.Console.WriteLine(@"We can parse floats like 3.14159265");
+#line 4
+contextCustomParameterConversionContext.we_can_parse_floats_like((System.Single) this.ParameterConverter.Convert(@"3.14159265", typeof(System.Single)));
+#line hidden
+
+
+        }
+
+    }
+}
+
+
+namespace StorEvilSpecifications {
+    using Tutorial;
+    
+
+    [TestFixture]
+    
     public class Tables_Specs : StorEvil.NUnit.StorEvilTestFixtureBase {
 #line 1 "Tables.feature"
 #line hidden

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
+using StorEvil.Interpreter;
 using StorEvil.Utility;
 
 namespace StorEvil.Parsing
@@ -23,6 +25,7 @@ namespace StorEvil.Parsing
             if (table != null)
                 words.Add(table);
 
+            //DebugTrace.Trace("ScenarioLineParser", "Extracted words :" + string.Join(",", words.Select(w=>"'" + w+ "'").ToArray()));
             return words;
         }
 

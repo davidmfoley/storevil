@@ -108,6 +108,8 @@
     <Compile Include="Context\ScenarioContext.cs" />
     <Compile Include="Context\StoryContext.cs" />
     <Compile Include="Core\JobResult.cs" />
+    <Compile Include="Extensibility\CouldNotParseParameter.cs" />
+    <Compile Include="Extensibility\CustomParameterConverter.cs" />
     <Compile Include="Infrastructure\Filesystem.cs" />
     <Compile Include="Infrastructure\FileWriter.cs" />
     <Compile Include="Init\InitContainerConfigurator.cs" />

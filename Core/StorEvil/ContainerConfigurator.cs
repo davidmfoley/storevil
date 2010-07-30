@@ -5,6 +5,7 @@ using StorEvil.Context;
 using StorEvil.Infrastructure;
 using StorEvil.InPlace;
 using StorEvil.Interpreter;
+using StorEvil.Interpreter.ParameterConverters;
 using StorEvil.Parsing;
 using StorEvil.Utility;
 
@@ -51,6 +52,7 @@ namespace StorEvil
             {
                 DebugTrace.Trace(GetType().Name, "Adding context assembly:" + location);
                 mapper.AddAssembly(location);
+                ParameterConverter.AddCustomConverters(location);
             }
             return mapper;
         }
