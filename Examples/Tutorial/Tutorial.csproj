@@ -54,7 +54,7 @@
     <Compile Include="BackgroundContext.cs" />
     <Compile Include="BasicGrammarContext.cs" />
     <Compile Include="CustomParameterConversionContext.cs" />
-    <Compile Include="DateConverter.cs" />
+    <Compile Include="FloatConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TableContext.cs" />
   </ItemGroup>
