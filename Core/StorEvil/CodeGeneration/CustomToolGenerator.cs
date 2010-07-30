@@ -4,11 +4,11 @@ namespace StorEvil.CodeGeneration
 {
     public class FixtureGenerator
     {
-        private CustomToolCodeGenerator _generator;
+        private TestFixtureClassGenerator _generator;
 
         public FixtureGenerator()           
         {
-            _generator = new CustomToolCodeGenerator();
+            _generator = new TestFixtureClassGenerator();
         }
 
         public string GenerateCode(string inputFilePath, string inputFileContents, string defaultNamespace)

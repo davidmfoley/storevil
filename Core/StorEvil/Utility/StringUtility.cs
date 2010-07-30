@@ -39,7 +39,8 @@ namespace StorEvil.Utility
                 .ToCharArray()
                 .Select(c => char.IsLetterOrDigit(c) ? c : '_').ToArray();
 
-            return EnsureFirstCharacterLegal(chars);    
+            var name =  EnsureFirstCharacterLegal(chars);
+            return name.Length > 100 ? name.Substring(0, 100) : name;
         }
 
         private static string EnsureFirstCharacterLegal(char[] chars)

@@ -85,7 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CodeGeneration\CustomCodeGeneratorStoryProvider.cs" />
-    <Compile Include="CodeGeneration\CustomToolCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\TestFixtureClassGenerator.cs" />
     <Compile Include="CodeGeneration\CustomToolGenerator.cs" />
     <Compile Include="CodeGeneration\NUnitListener.cs" />
     <Compile Include="CodeGeneration\TestFixture.cs" />
@@ -126,6 +126,7 @@
     <Compile Include="Interpreter\IAmbiguousMatchResolver.cs" />
     <Compile Include="Nunit\NUnitContainerConfigurator.cs" />
     <EmbeddedResource Include="Resources\ExampleContext.cs" />
+    <Compile Include="Nunit\StorEvilTestFixtureBase.cs" />
     <Compile Include="ResultListeners\RemoteListener.cs" />
     <Compile Include="StubGeneration\StdOutWriter.cs" />
     <Compile Include="StubGeneration\StubGenerationSettings.cs" />

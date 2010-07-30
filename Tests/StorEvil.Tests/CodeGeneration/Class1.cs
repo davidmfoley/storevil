@@ -12,7 +12,7 @@ namespace StorEvil.CodeGeneration
 {
     public abstract class Generating_Code
     {
-        private CustomToolCodeGenerator Generator;
+        private TestFixtureClassGenerator Generator;
         protected string Result;
         private Assembly CompiledAssembly;
         private object Instance;
@@ -21,7 +21,7 @@ namespace StorEvil.CodeGeneration
         [TestFixtureSetUp]
         public void SetUpContext()
         {
-            Generator = new CustomToolCodeGenerator();
+            Generator = new TestFixtureClassGenerator();
        
             Story story = GetStory();
 
@@ -86,9 +86,9 @@ namespace StorEvil.CodeGeneration
         }
 
         [Test]
-        public void should_set_class_name_based_on_summary_for_now()
+        public void should_set_class_name_based_on_id_for_now()
         {
-            TestFixtureType.Name.ShouldEqual("bar");
+            TestFixtureType.Name.ShouldEqual("foo_bar_baz");
         }
 
 

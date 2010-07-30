@@ -5,13 +5,16 @@ using StorEvil.Utility;
 
 namespace StorEvil.CodeGeneration
 {
-    public class CustomToolCodeGenerator
+    public class TestFixtureClassGenerator
     {
         public string Generate(Story story, string defaultNamespace)
         {
             var stringBuilder = new StringBuilder();
-            var fixtureName = story.Summary.ToCSharpMethodName();
+            string fixtureName = GetFixtureName(story);
             stringBuilder.Append("namespace " + defaultNamespace + "{");
+            var categories = string.Join("", (story.Tags ?? new string[0]).Select(t => string.Format(@"[Category(""{0}"")]", t)).ToArray());
+            stringBuilder.AppendLine(categories);
+        
             stringBuilder.Append("\r\n[NUnit.Framework.TestFixtureAttribute] public class " + fixtureName + " : StorEvil.CodeGeneration.TestFixture {\r\n ");
             stringBuilder.Append("  public object Contexts { get { return base.GetContexts();}}");
             AddLifecycleHandlers(stringBuilder);
@@ -20,6 +23,13 @@ namespace StorEvil.CodeGeneration
             stringBuilder.Append("  }\r\n}");
 
             return stringBuilder.ToString();
+        }
+
+        private string GetFixtureName(Story story)
+        {
+            if (!string.IsNullOrEmpty(story.Id))
+                return story.Id.ToCSharpMethodName();
+            return story.Summary.ToCSharpMethodName();
         }
 
         private void AddScenarios(Story story, StringBuilder stringBuilder)
@@ -55,7 +65,9 @@ namespace StorEvil.CodeGeneration
 
         private string GetScenarioBody(Scenario scenario)
         {
-            var lines = scenario.Body.Select((l, i) => GetScenarioLine(l));
+            var sourceLines = (scenario.Background ?? new ScenarioLine[0]).Union(scenario.Body);
+
+            var lines = sourceLines.Select((l, i) => GetScenarioLine(l));
 
             return string.Join("\r\n", lines.ToArray());
         }

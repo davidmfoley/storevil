@@ -2,78 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using StorEvil.CodeGeneration;
 using StorEvil.Context;
 using StorEvil.Core;
+using StorEvil.Interpreter.ParameterConverters;
 using StorEvil.Parsing;
 using StorEvil.Utility;
 
 namespace StorEvil.NUnit
 {
-
-    public class StorEvilTestFixtureBase
-    {
-        private Dictionary<Type, object> _cache = new Dictionary<Type, object>();
-
-        protected void SetUp()
-        {
-            
-        }
-
-        protected void CleanUpScenario()
-        {
-            var typesToCleanup = _cache.Keys.Where(IsScenarioLifetime) ?? new Type[0];
-
-            DestroyContexts(typesToCleanup);
-        }
-
-        protected void CleanUpStory()
-        {
-            var typesToCleanup = _cache.Keys.Where(IsStoryLifetime);
-
-            DestroyContexts(typesToCleanup);
-        }
-
-        private void DestroyContexts(IEnumerable<Type> typesToCleanup)
-        {
-            foreach (var type in typesToCleanup.ToArray())
-            {
-                var context = _cache[type];
-                if (context is IDisposable)
-                    ((IDisposable)context).Dispose();
-
-                _cache.Remove(type);
-            }
-        }
-
-        private bool IsScenarioLifetime(Type type)
-        {
-            return GetLifetime(type) == ContextLifetime.Scenario;
-        }
-
-        private ContextLifetime GetLifetime(Type type)
-        {
-            var attribute = (StorEvil.ContextAttribute)type.GetCustomAttributes(typeof (StorEvil.ContextAttribute), true).FirstOrDefault();
-            if (attribute == null)
-                return ContextLifetime.Scenario;
-
-            return attribute.Lifetime;
-        }
-
-        private bool IsStoryLifetime(Type type)
-        {
-            return GetLifetime(type) != ContextLifetime.Scenario;
-        }
-
-        protected T GetContext<T>()
-        {
-            var type = typeof (T);
-            if (!_cache.ContainsKey(type))
-                _cache.Add(type, Activator.CreateInstance(type));
-
-            return (T)_cache[type];
-        }
-        
-    }
     /// <summary>
     /// Generates NUnit fixtures
     /// </summary>
@@ -138,6 +75,7 @@ namespace {0} {{
 
         public string GenerateFixture(Story story, StoryContext context)
         {
+            return new TestFixtureClassGenerator().Generate(story, "StorEvilSpecs");
             var tests = new StringBuilder();
 
             var contextSet = new TestContextSet();
@@ -168,15 +106,28 @@ namespace {0} {{
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine("namespace StorEvilSpecifications { [SetUpFixture] public class SetupAndTearDown {");
+            sb.AppendLine("namespace StorEvilSpecs { [SetUpFixture] public class SetupAndTearDown {");
             sb.AppendLine("  [SetUp] public void SetUp() {");
-            
+            AppendAssemblySetup(sb, sessionContext);
             sb.AppendLine();
             sb.AppendLine("  }");
             sb.AppendLine("  [TearDown] public void TearDown() {");
             sb.AppendLine("  }");
             sb.AppendLine("} }");
             return sb.ToString();
+        }
+
+        private void AppendAssemblySetup(StringBuilder sb, ISessionContext sessionContext)
+        {
+            sb.AppendLine("   var eh = new StorEvil.Interpreter.ExtensionMethodHandler();");
+            sb.AppendLine("   // _sessionContext = new SessionContext();");
+            foreach (var assembly in sessionContext.GetAllAssemblies())
+            {
+                var assemblyRef = "typeof(" + assembly.GetTypes().First().FullName + ").Assembly";
+                var assemblyLocation =assemblyRef + ".Location";
+                sb.AppendLine("    eh.AddAssembly(" + assemblyRef + ");");
+                sb.AppendLine(@"    StorEvil.Interpreter.ParameterConverters.ParameterConverter.AddCustomConverters(" + assemblyLocation + @");");
+            }
         }
     }
 }

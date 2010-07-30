@@ -145,7 +145,11 @@ namespace StorEvil.Parsing
 
         private Story GetStory()
         {
-            return new Story(_storyId, _storyName.ToString().Trim(), scenarios) {Tags = _storyTags};
+            if (_storyId == null)
+                _storyId = Guid.NewGuid().ToString();
+
+            var id = _storyId.Length < 120 ? _storyId : _storyId.Substring(0, 120);
+            return new Story(id, _storyName.ToString().Trim(), scenarios) {Tags = _storyTags};
         }
 
         private static bool IsNewScenarioOrOutline(string line)

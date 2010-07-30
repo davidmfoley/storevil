@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 using StorEvil.Context;
 using StorEvil.Core;
 
@@ -25,6 +27,11 @@ namespace StorEvil.NUnit
         public void SetContext(object context)
         {
             
+        }
+
+        public IEnumerable<Assembly> GetAllAssemblies()
+        {
+            return new Assembly[0];
         }
     }
 }

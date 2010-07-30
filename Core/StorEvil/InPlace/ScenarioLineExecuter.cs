@@ -31,7 +31,7 @@ namespace StorEvil.InPlace
 
         public LineStatus ExecuteLine(Scenario scenario, ScenarioContext storyContext, string line)
         {
-            Debug.WriteLine("SLE: " + line);
+            DebugTrace.Trace("ScenarioLineExecter.ExecuteLine", line);
             InvocationChain chain = GetMatchingChain(storyContext, line);
 
             if (chain == null)

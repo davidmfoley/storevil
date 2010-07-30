@@ -18,8 +18,8 @@ namespace StorEvil.NUnit
         [Test]
         public void Should_Create_One_Test_For_A_Single_Scenario()
         {
-            var s = BuildScenario("test", new[] {"When I Do Something"});
-            var story = new Story("test", "summary", new[] {s});
+            var s = BuildScenario("foo", new[] {"When I Do Something"});
+            var story = new Story("foobar", "summary", new[] {s});
 
             Assembly a = BuildTestAssembly(story);
             var fixture = a.GetTypes()[0];
@@ -45,9 +45,9 @@ namespace StorEvil.NUnit
         public void Should_have_category_for_each_tag_on_story()
         {
             var scenario = BuildScenario("test", new[] { "When I Do Something" });
-            var s = new Story("test", "summary", new Scenario[] { scenario }) { Tags = new[] { "foo", "bar" } };
+            var s = new Story("foo", "summary", new Scenario[] { scenario }) { Tags = new[] { "foo", "bar" } };
             Assembly a = BuildTestAssembly(s);
-            var testClass = a.GetTypes().First();
+            var testClass = a.GetTypes().First(x=>x.GetCustomAttributes(typeof(TestFixtureAttribute), true).Any());
             var attributes = testClass
                 .GetCustomAttributes(typeof (CategoryAttribute), true)
                 .Cast<CategoryAttribute>()
@@ -65,7 +65,7 @@ namespace StorEvil.NUnit
 
             Assembly a = BuildTestAssembly(story);
             var fixture = a.GetTypes()[0];
-            fixture.Name.ShouldEqual("Example_Path_To_File_Specs");
+            fixture.Name.ShouldContain("Example_Path_To_File");
         }
 
         private Assembly BuildTestAssembly(Story story)
@@ -106,7 +106,8 @@ namespace StorEvil.NUnit
 
         protected static Scenario BuildScenario(string name, params string[] lines)
         {
-            return new Scenario("test", lines.Select(line => new ScenarioLine { Text = line }).ToArray());
+            int i = 1;
+            return new Scenario("test", lines.Select(line => new ScenarioLine { Text = line, LineNumber = ++i}).ToArray());
         }
     }
 }

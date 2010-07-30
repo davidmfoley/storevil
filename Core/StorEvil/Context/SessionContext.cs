@@ -10,7 +10,8 @@ namespace StorEvil.Context
     {
         private readonly List<Type> _contextTypes = new List<Type>();
         private readonly ExtensionMethodHandler _extensionMethodHandler = new ExtensionMethodHandler();
-        private readonly Dictionary<Type, object> _cache = new Dictionary<Type, object>();      
+        private readonly Dictionary<Type, object> _cache = new Dictionary<Type, object>();
+        private List<Assembly> _assemblies = new List<Assembly>() ;
 
         public void AddContext<T>() where T : class
         {
@@ -26,7 +27,7 @@ namespace StorEvil.Context
         {
             var allTypesInAssembly = a.GetTypes();
             var storEvilContexts = allTypesInAssembly.Where(TypeHasContextAttrbiute);
-
+            _assemblies.Add(a);
             foreach (var t in storEvilContexts)            
                 AddContext(t);
         }
@@ -51,6 +52,11 @@ namespace StorEvil.Context
         public void SetContext(object context)
         {
             _cache.Add(context.GetType(), context);
+        }
+
+        public IEnumerable<Assembly> GetAllAssemblies()
+        {
+            return _contextTypes.Select(x => x.Assembly).Union(_assemblies).Distinct();
         }
 
         public void Dispose()

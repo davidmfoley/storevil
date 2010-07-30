@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace StorEvil.Context
 {
@@ -6,6 +8,7 @@ namespace StorEvil.Context
     {
         StoryContext GetContextForStory();
         void SetContext(object context);
+        IEnumerable<Assembly> GetAllAssemblies();
     }
 
     public class ConflictingLifetimeException : Exception
