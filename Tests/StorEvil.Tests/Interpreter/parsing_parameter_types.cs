@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using StorEvil.Interpreter.ParameterConverters;
@@ -29,6 +30,15 @@ namespace StorEvil.Interpreter.ParameterConverter_Specs
             var result = Converter.Convert("$42.00", typeof (decimal));
             result.ShouldBeOfType<decimal>();
             result.ShouldEqual(42m);
+        }
+
+        [Test]
+        public void should_convert_Guid()
+        {
+            var guid = Guid.NewGuid();
+            var result = Converter.Convert(guid.ToString(), typeof(Guid));
+            result.ShouldBeOfType<Guid>();
+            Assert.AreEqual(guid, result);
         }
 
         [Test]

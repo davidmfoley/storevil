@@ -28,6 +28,7 @@ namespace StorEvil.Interpreter.ParameterConverters
 
         public ParameterConverter()
         {
+            AddConverter<Guid>(x => new Guid(x));
             AddConverter<int>(x => int.Parse(ConvertHelper.StripNonNumeric(x)));
             AddConverter<decimal>(new StorevilDecimalConverter());
             AddConverter<DateTime>(x=>DateTime.Parse(x));
