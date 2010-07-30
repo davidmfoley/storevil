@@ -112,6 +112,7 @@ namespace {0} {{
             sb.AppendLine();
             sb.AppendLine("  }");
             sb.AppendLine("  [TearDown] public void TearDown() {");
+            sb.AppendLine("      StorEvil.CodeGeneration.TestSession.EndSession();");
             sb.AppendLine("  }");
             sb.AppendLine("} }");
             return sb.ToString();
@@ -125,6 +126,7 @@ namespace {0} {{
             {
                 var assemblyRef = "typeof(" + assembly.GetTypes().First().FullName + ").Assembly";
                 var assemblyLocation =assemblyRef + ".Location";
+                sb.AppendLine("    StorEvil.CodeGeneration.TestSession.AddAssembly(" + assemblyRef + ");");
                 sb.AppendLine("    eh.AddAssembly(" + assemblyRef + ");");
                 sb.AppendLine(@"    StorEvil.Interpreter.ParameterConverters.ParameterConverter.AddCustomConverters(" + assemblyLocation + @");");
             }

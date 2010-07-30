@@ -80,7 +80,6 @@ namespace StorEvil.Interpreter
                     }                    
                 }
             }
-           
         }
 
         private IEnumerable<string> GetPermutations(string line)

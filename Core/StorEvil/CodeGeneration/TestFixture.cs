@@ -56,6 +56,9 @@ namespace StorEvil.CodeGeneration
         protected void AfterAll()
         {
             _storyContext.Dispose();
+
+            // hack for now
+            TestSession.EndSession();
         }
     }
 }

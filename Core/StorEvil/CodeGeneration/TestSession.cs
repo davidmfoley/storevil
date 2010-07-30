@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -13,7 +14,7 @@ namespace StorEvil.CodeGeneration
     public class TestSession
     {
         private static SessionContext _sessionContext;
-        
+        private static List<Assembly> _assemblies = new List<Assembly>();
         public static void ShutDown()
         {
             if (_sessionContext != null)
@@ -26,6 +27,20 @@ namespace StorEvil.CodeGeneration
         {
             return _sessionContext = _sessionContext ?? GetSessionContext(location); 
         }
+
+        public static void AddAssembly(Assembly a)
+        {
+            _assemblies.Add(a);    
+        }
+
+        public static void EndSession()
+        {
+            if (_sessionContext == null)
+                return;
+
+            _sessionContext.Dispose();
+            _sessionContext = null;
+        }            
 
         public static bool IsInitialized
         {
@@ -41,15 +56,22 @@ namespace StorEvil.CodeGeneration
             if (!settings.AssemblyLocations.Any())
                 settings = configReader.GetConfig(Directory.GetCurrentDirectory());
 
-            if (!settings.AssemblyLocations.Any())
+            if (!settings.AssemblyLocations.Any() && !_assemblies.Any())
             {
-                Assert.Ignore("No storevil config file was found.");
+                Assert.Ignore("No storevil assemblies were found.");
             }
+   
             foreach (var location in settings.AssemblyLocations)
             {
                 _sessionContext.AddAssembly(location);
                 ParameterConverter.AddCustomConverters(location);
             }
+
+            foreach (var assembly in _assemblies)
+            {
+                _sessionContext.AddAssembly(assembly);
+            }
+
             return _sessionContext;
         }
     }

@@ -323,13 +323,16 @@ ExecuteLine(@"and Howard should be number 1");
   [SetUp] public void SetUp() {
    var eh = new StorEvil.Interpreter.ExtensionMethodHandler();
    // _sessionContext = new SessionContext();
+    StorEvil.CodeGeneration.TestSession.AddAssembly(typeof(Tutorial.AgeContext).Assembly);
     eh.AddAssembly(typeof(Tutorial.AgeContext).Assembly);
     StorEvil.Interpreter.ParameterConverters.ParameterConverter.AddCustomConverters(typeof(Tutorial.AgeContext).Assembly.Location);
+    StorEvil.CodeGeneration.TestSession.AddAssembly(typeof(StorEvil.Utility.TestExtensionMethods).Assembly);
     eh.AddAssembly(typeof(StorEvil.Utility.TestExtensionMethods).Assembly);
     StorEvil.Interpreter.ParameterConverters.ParameterConverter.AddCustomConverters(typeof(StorEvil.Utility.TestExtensionMethods).Assembly.Location);
 
   }
   [TearDown] public void TearDown() {
+      StorEvil.CodeGeneration.TestSession.EndSession();
   }
 } }
 

@@ -26,12 +26,20 @@ namespace StorEvil.Context
         public void AddAssembly(Assembly a)
         {
             var allTypesInAssembly = a.GetTypes();
-            var storEvilContexts = allTypesInAssembly.Where(TypeHasContextAttrbiute);
+            var storEvilContexts = allTypesInAssembly
+                .Where(TypeHasContextAttrbiute)
+                .Where(NotAlreadyLoaded);
+
             _assemblies.Add(a);
             foreach (var t in storEvilContexts)            
                 AddContext(t);
         }
-      
+
+        private  bool NotAlreadyLoaded(Type t)
+        {
+            return !_contextTypes.Contains(t);
+        }
+
         private static bool TypeHasContextAttrbiute(Type t)
         {
             return t.GetCustomAttributes(true).Any(x=>x.GetType().FullName ==  typeof(ContextAttribute).FullName);
