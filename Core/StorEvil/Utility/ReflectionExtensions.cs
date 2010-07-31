@@ -29,13 +29,13 @@ namespace StorEvil.Utility
             return null != fieldInfo ? fieldInfo.FieldType : null;
         }
 
-        public static void SetWithReflection(this object obj, string propertyOrField, object value)
+        public static void ReflectionSet(this object obj, string propertyOrField, object value)
         {
             var setter = obj.GetType().GetSetter(propertyOrField);
             setter(obj, value);
         }
 
-        public static object GetWithReflection(this object obj, string propertyOrField)
+        public static object ReflectionGet(this object obj, string propertyOrField)
         {
             var getter = obj.GetType().GetGetter(propertyOrField);
             return getter(obj);

@@ -20,7 +20,7 @@ namespace StorEvil.InPlace
             var context = Activator.CreateInstance(assembly.GetTypes().First());
             foreach (var type in dictionary.Keys)
             {
-                context.SetWithReflection(type.Name, dictionary[type]);
+                context.ReflectionSet(type.Name, dictionary[type]);
             }
 
             return context;

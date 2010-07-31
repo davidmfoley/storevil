@@ -32,7 +32,7 @@ namespace StorEvil.Context
         [Test]
         public void should_have_property_set()
         {          
-            View.GetWithReflection("TestMappingContext").ShouldBe(_testMappingContext);
+            View.ReflectionGet("TestMappingContext").ShouldBe(_testMappingContext);
         }
     }
 }
