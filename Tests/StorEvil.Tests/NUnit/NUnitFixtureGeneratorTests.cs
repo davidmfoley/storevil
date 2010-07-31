@@ -67,8 +67,7 @@ namespace StorEvil.NUnit
 
         private Assembly BuildTestAssembly(Story story)
         {
-
-            var generator = new NUnitFixtureGenerator(new ScenarioPreprocessor());
+            var generator = new NUnitFixtureGenerator();
             var code = generator.GenerateFixture(story, GetContext());
 
             return CreateTestAssembly(code);

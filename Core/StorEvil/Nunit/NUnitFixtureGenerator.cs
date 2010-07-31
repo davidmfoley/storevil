@@ -3,7 +3,6 @@ using System.Text;
 using StorEvil.CodeGeneration;
 using StorEvil.Context;
 using StorEvil.Core;
-using StorEvil.Parsing;
 
 namespace StorEvil.NUnit
 {
@@ -12,45 +11,6 @@ namespace StorEvil.NUnit
     /// </summary>
     public class NUnitFixtureGenerator : IFixtureGenerator
     {
-        private readonly IScenarioPreprocessor _preprocessor;
-
-        public NUnitFixtureGenerator(IScenarioPreprocessor preprocessor)
-        {
-            _preprocessor = preprocessor;
-        }
-
-        private const string FixtureFormat =
-            @"
-
-namespace {0} {{
-    {1}
-    
-
-    [TestFixture]
-    {5}
-    public class {2} : StorEvil.NUnit.StorEvilTestFixtureBase {{
-#line 1 ""{6}""
-#line hidden
-        private StorEvil.Interpreter.ParameterConverters.ParameterConverter ParameterConverter = new StorEvil.Interpreter.ParameterConverters.ParameterConverter();
-        [TestFixtureSetUp]
-        public void FixtureSetUp() {{
-            base.SetUp();
-            {4}
-        }}
-        
-
-        [TearDown]
-        public void TearDown() {{
-            base.CleanUpScenario();
-        }}
-
-        [TestFixtureTearDown]
-        public void FixtureTearDown() {{
-            base.CleanUpStory();
-        }}
-{3}
-    }}
-}}";
 
         public string GenerateFixture(Story story, StoryContext context)
         {
