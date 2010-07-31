@@ -1,3 +1,30 @@
+----------------------------------------------------------------------------------------
+StorEvil version 0.5 release notes
+----------------------------------------------------------------------------------------
+
+DONE:
+	Context lifetime can now be set (per Session, Story or Scenario) 
+		Enables you "keep around" expensive contexts and do per-run or per-story setup/teardown
+		For example, database setup/teardown or Watin/Selenium session creation/destruction
+
+	Support Context-injection in generated NUnit tests
+	Support for Backgrounds (Gherkin feature: common setup for all scenarios in a file)
+    
+	Support Custom Parameter Conversion by creating classes that inherit CustomParameterConverter in your context assembly
+	Added Guid parsing
+    Support multiple word parameters (via [MultipleWords] attribute)
+	
+    Change: StorEvil now prefers context methods that have been used in the current scenario, rather than throwing MatchResolutionExceptions when a line can match multiple methods.
+    
+	Fixed bugs: negative numbers, outline table parsing, etc.
+
+	Removed a lot of crufty code around NUnit fixture generation 
+
+    Moved StorEvil to Visual Studio 2010
+
+NOTE:
+    This will be the last StorEvil version that runs on .NET 2.0/3.5. 
+	Future versions will require .NET 4.0.
 
 ----------------------------------------------------------------------------------------
 StorEvil version 0.4 release notes
