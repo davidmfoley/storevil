@@ -14,7 +14,7 @@ namespace StorEvil.NUnit
         public SingleFileTestFixtureWriter(TestFixtureGenerationSettings settings)
         {
             _settings = settings;
-
+        
             _code.AppendLine("using NUnit.Framework;");
             _code.AppendLine("using System;");
             _code.AppendLine("using StorEvil;");

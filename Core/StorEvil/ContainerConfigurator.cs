@@ -42,10 +42,10 @@ namespace StorEvil
 
             container.EasyRegister<IAmbiguousMatchResolver, MostRecentlyUsedContext>();
 
-            container.Register<ISessionContext>(GetStoryContextFactory(settings));
+            container.Register<ISessionContext>(GetSessionContext(settings));
         }
 
-        private SessionContext GetStoryContextFactory(ConfigSettings settings)
+        private SessionContext GetSessionContext(ConfigSettings settings)
         {
             var mapper = new SessionContext();
             foreach (var location in settings.AssemblyLocations)

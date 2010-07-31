@@ -4,7 +4,7 @@ using NUnit.Framework;
 using StorEvil.InPlace;
 using StorEvil.Utility;
 
-namespace StorEvil.Context.StoryContextFactory_Specs
+namespace StorEvil.Context
 {
     [TestFixture]
     public class Debugging_contexts
@@ -31,8 +31,7 @@ namespace StorEvil.Context.StoryContextFactory_Specs
 
         [Test]
         public void should_have_property_set()
-        {
-           
+        {          
             View.GetWithReflection("TestMappingContext").ShouldBe(_testMappingContext);
         }
     }
