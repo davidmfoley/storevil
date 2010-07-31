@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using StorEvil.CodeGeneration;
 using StorEvil.Context;
 using StorEvil.Core;
-using StorEvil.Interpreter.ParameterConverters;
 using StorEvil.Parsing;
-using StorEvil.Utility;
 
 namespace StorEvil.NUnit
 {
@@ -18,14 +14,10 @@ namespace StorEvil.NUnit
     {
         private readonly IScenarioPreprocessor _preprocessor;
 
-        public NUnitFixtureGenerator(IScenarioPreprocessor preprocessor, ITestMethodGenerator methodGenerator)
+        public NUnitFixtureGenerator(IScenarioPreprocessor preprocessor)
         {
             _preprocessor = preprocessor;
-            MethodGenerator = methodGenerator;
         }
-
-        public ITestMethodGenerator MethodGenerator { get; set; }
-
 
         private const string FixtureFormat =
             @"
@@ -60,46 +52,9 @@ namespace {0} {{
     }}
 }}";
 
-        private static string GetFixtureName(Story story)
-        {
-            var name = story.Id;
-            if (name.Contains(":\\"))
-                name = name.After(":\\");
-
-            if (name.Contains("."))
-                name = name.Substring(0, name.LastIndexOf("."));
-
-            return name.Replace("\\", "_").Replace(" ", "_") + "_Specs";
-
-        }
-
         public string GenerateFixture(Story story, StoryContext context)
         {
             return new TestFixtureClassGenerator().Generate(story, "StorEvilSpecs");
-            var tests = new StringBuilder();
-
-            var contextSet = new TestContextSet();
-            IEnumerable<string> namespaces = new string[0];
-
-            foreach (var scenario in story.Scenarios)
-            {
-                foreach (var s in _preprocessor.Preprocess(scenario))
-                {
-                    NUnitTest test = MethodGenerator.GetTestFromScenario(s, context);
-                    tests.Append("        " + test.Body);
-                    tests.AppendLine();
-                    contextSet.AddRange(test.ContextTypes);
-                    namespaces = namespaces.Union(test.Namespaces).Distinct();
-                }
-            }            
-            
-            var usingStatements = namespaces.Select(x => string.Format("using {0};", x));
-            var usings = string.Join("\r\n", usingStatements.ToArray());
-
-            var writeStoryToConsole = "Console.WriteLine(@\"" + story.Summary.Replace("\"", "\"\"") + "\r\n" + " \");";
-            const string ns = "StorEvilSpecifications";
-            var categories = string.Join("", (story.Tags ?? new string[0]).Select(t => string.Format(@"[Category(""{0}"")]", t)).ToArray());
-            return string.Format(FixtureFormat, ns, usings, GetFixtureName(story), tests, writeStoryToConsole, categories, story.Id);
         }
 
         public string GenerateSetupTearDown(ISessionContext sessionContext)

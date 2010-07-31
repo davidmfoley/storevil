@@ -10,7 +10,6 @@ namespace Tutorial
     {
         private float _float;
 
-
         public void we_can_parse_floats_like(float f)
         {   
             _float = f;
@@ -19,9 +18,7 @@ namespace Tutorial
         public void And_the_result_should_be_between_a_and_b(decimal a, decimal b)
         {
             Assert.That(a, Is.LessThan(_float));
-            Assert.That(_float, Is.LessThan(b));
-            
+            Assert.That(_float, Is.LessThan(b));            
         }
-
     }
 }

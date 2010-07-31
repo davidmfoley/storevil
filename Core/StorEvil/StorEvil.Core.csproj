@@ -211,7 +211,6 @@
     <Compile Include="Context\SessionContext.cs" />
     <Compile Include="Utility\ReflectionExtensions.cs" />
     <Compile Include="Utility\StringUtility.cs" />
-    <Compile Include="Nunit\NUnitTestMethodGenerator.cs" />
     <Compile Include="Context\WordFilters\TextMatchWordFilter.cs" />
     <Compile Include="Context\WordFilters\WordFilter.cs" />
   </ItemGroup>

@@ -10,7 +10,6 @@ namespace StorEvil.NUnit
         protected override void SetupCustomComponents(Container container, ConfigSettings configSettings, TestFixtureGenerationSettings customSettings)
         {
             container.EasyRegister<IFixtureGenerator, NUnitFixtureGenerator>();
-            container.EasyRegister<ITestMethodGenerator, NUnitTestMethodGenerator>();
             container.EasyRegister<CSharpMethodInvocationGenerator>();
             container.EasyRegister<IStoryHandler, FixtureGenerationStoryHandler>();
             container.EasyRegister<IStorEvilJob, StorEvilJob>();

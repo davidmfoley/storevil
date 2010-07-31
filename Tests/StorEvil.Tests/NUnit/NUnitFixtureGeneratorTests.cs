@@ -1,11 +1,8 @@
-using System;
 using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
-using Rhino.Mocks;
 using StorEvil.Context;
 using StorEvil.Core;
-using StorEvil.NUnit;
 using StorEvil.Parsing;
 using StorEvil.Utility;
 
@@ -70,11 +67,8 @@ namespace StorEvil.NUnit
 
         private Assembly BuildTestAssembly(Story story)
         {
-            return BuildTestAssembly(story, null);
-        }
-        private Assembly BuildTestAssembly(Story story, string[] extraNamespaces)
-        {
-            var generator = new NUnitFixtureGenerator(new ScenarioPreprocessor(), FakeMethodGenerator(extraNamespaces));
+
+            var generator = new NUnitFixtureGenerator(new ScenarioPreprocessor());
             var code = generator.GenerateFixture(story, GetContext());
 
             return CreateTestAssembly(code);
@@ -86,18 +80,7 @@ namespace StorEvil.NUnit
             return TestHelper.CreateAssembly(header + "\r\n" + code);
         }
 
-        private ITestMethodGenerator FakeMethodGenerator(string[] usings)
-        {
-            var gen = Fake<ITestMethodGenerator>();
-            var testName = "Test" + Guid.NewGuid().ToString().Replace("-", "");
-            string body = "\r\n[Test] public void " + testName + "() {}";
-            gen.Stub(x => x.GetTestFromScenario(null, null))
-                .IgnoreArguments()
-                .Return(new NUnitTest(testName, body, new TestContextField[0], usings ?? new string[0]));
-
-            
-            return gen;
-        }
+       
 
         private StoryContext GetContext()
         {
