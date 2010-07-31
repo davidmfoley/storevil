@@ -191,7 +191,6 @@
     <Compile Include="Nunit\ITestFixtureWriter.cs" />
     <Compile Include="Nunit\CSharpMethodInvocationGenerator.cs" />
     <Compile Include="Context\Matches\NameMatch.cs" />
-    <Compile Include="Nunit\NUnitTest.cs" />
     <Compile Include="Nunit\ScenarioLineImplementation.cs" />
     <Compile Include="Nunit\TestContextField.cs" />
     <Compile Include="Nunit\TestContextSet.cs" />
