@@ -151,7 +151,6 @@
     <Compile Include="Interpreter\ParameterConverters\TypedArrayTableConverter.cs" />
     <Compile Include="Interpreter\ParameterConverters\UnknownFieldException.cs" />
     <Compile Include="InPlace\IStoryFilter.cs" />
-    <Compile Include="Nunit\ImplementationBuilder.cs" />
     <Compile Include="Nunit\ParameterValueFormatter.cs" />
     <Compile Include="Context\Matchers\RegexMatcher.cs" />
     <Compile Include="Interpreter\ExtensionMethodHandler.cs" />
@@ -189,7 +188,6 @@
     <Compile Include="Core\IStoryProvider.cs" />
     <Compile Include="Nunit\IFixtureGenerator.cs" />
     <Compile Include="Nunit\ITestFixtureWriter.cs" />
-    <Compile Include="Nunit\CSharpMethodInvocationGenerator.cs" />
     <Compile Include="Context\Matches\NameMatch.cs" />
     <Compile Include="Nunit\ScenarioLineImplementation.cs" />
     <Compile Include="Nunit\TestContextField.cs" />
