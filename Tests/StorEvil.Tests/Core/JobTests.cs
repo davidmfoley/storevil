@@ -1,11 +1,10 @@
-using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.InPlace;
 using StorEvil.Utility;
 
-namespace StorEvil.Core.StorEvilJob_Specs
+namespace StorEvil.Core.Event_Handling
 {
     [TestFixture]
     public class StorEvilEvents_Specs
@@ -15,7 +14,6 @@ namespace StorEvil.Core.StorEvilJob_Specs
         [Test]
         public void When_a_handler_is_attached_it_is_invoked()
         {
-            var invoker = new MemberInvoker();
             ArgsPassed = null;
             StorEvilEvents.OnMatchFound += MemberInvokerOnMatchFound;
             StorEvilEvents.RaiseMatchFound(this, GetType().GetMethod("ExampleMethod"));
@@ -26,7 +24,6 @@ namespace StorEvil.Core.StorEvilJob_Specs
         [Test]
         public void When_no_handler_is_attached_proceeds_as_normal()
         {
-            var invoker = new MemberInvoker();
             StorEvilEvents.RaiseMatchFound(this, GetType().GetMethod("ExampleMethod"));
             // (should not throw)
         }

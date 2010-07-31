@@ -84,7 +84,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CodeGeneration\CustomCodeGeneratorStoryProvider.cs" />
     <Compile Include="CodeGeneration\TestFixtureClassGenerator.cs" />
     <Compile Include="CodeGeneration\CustomToolGenerator.cs" />
     <Compile Include="CodeGeneration\NUnitListener.cs" />

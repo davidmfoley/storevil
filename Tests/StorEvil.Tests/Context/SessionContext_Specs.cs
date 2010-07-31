@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using StorEvil.Core;
 using StorEvil.Utility;
 
 namespace StorEvil.Context
@@ -11,9 +9,7 @@ namespace StorEvil.Context
     {
         [Test]
         public void Should_Map_By_ContextAttribute()
-        {
-            var story = new Story("context test", "context test", new List<IScenario>());
-
+        { 
             var mapper = new SessionContext();
             mapper.AddContext<TestMappingContext>();
 

@@ -4,7 +4,7 @@ namespace StorEvil.CodeGeneration
 {
     public class FixtureGenerator
     {
-        private TestFixtureClassGenerator _generator;
+        private readonly TestFixtureClassGenerator _generator;
 
         public FixtureGenerator()           
         {

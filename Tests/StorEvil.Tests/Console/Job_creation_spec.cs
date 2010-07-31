@@ -120,7 +120,7 @@ namespace StorEvil.Console
         [Test]
         public void Sets_up_story_handler_to_be_generator()
         {
-            var job = Factory.ParseArguments(new[] { "stub" });
+           Factory.ParseArguments(new[] { "stub" });
             StubGenerator generator = GetGenerator();
             generator.ShouldNotBeNull();
         }
@@ -133,15 +133,14 @@ namespace StorEvil.Console
         [Test]
         public void Sets_up_clipboard_writer_when_switch_is_set()
         {
-            var job = Factory.ParseArguments(new[] { "stub", "-b" });
+            Factory.ParseArguments(new[] { "stub", "-b" });
             GetGenerator().SuggestionWriter.ShouldBeOfType<ClipboardWriter>();
-
         }
 
         [Test]
         public void Sets_up_file_writer_when_switch_is_set()
         {
-            var job = Factory.ParseArguments(new[] { "stub", "-d", "foo.txt" });
+            Factory.ParseArguments(new[] { "stub", "-d", "foo.txt" });
             var writer = GetGenerator().SuggestionWriter as FileWriter;
             writer.ShouldNotBeNull();
             writer.OutputFile.ShouldEqual("foo.txt");

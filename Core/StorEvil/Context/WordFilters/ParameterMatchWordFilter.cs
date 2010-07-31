@@ -56,7 +56,7 @@ namespace StorEvil.Context.WordFilters
         public override IEnumerable<WordMatch> GetMatches(string[] s)
         {
             var enumValues = Enum.GetValues(ParamInfo.ParameterType);
-            var joined = string.Join("", s).ToLower();
+            
             foreach (var enumValue in enumValues)
             {
                 if (IsMatch(enumValue, s))

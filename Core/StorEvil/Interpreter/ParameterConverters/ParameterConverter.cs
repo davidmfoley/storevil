@@ -77,7 +77,7 @@ namespace StorEvil.Interpreter.ParameterConverters
 
         private static void AddConverterFilter(Predicate<ConversionContext> predicate, IStorevilConverter converter)
         {
-            TypeConverters.Add( new ConverterInfo(predicate, converter));;
+            TypeConverters.Add( new ConverterInfo(predicate, converter));
         }
 
         private static void AddConverter<T>(IStorevilConverter converter)
