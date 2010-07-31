@@ -95,8 +95,24 @@ namespace StorEvil.Configuration
         public string GetUsage()
         {
             var switchDescriptions = Switches
-                .Select(sw => "[" + string.Join(" | ", sw.Names) + "] \r\n  " + sw.Description.Replace("\r\n", "\r\n  "));
+                .Select(Describe);
             return string.Join("\r\n\r\n", switchDescriptions.ToArray());
+        }
+
+        private string Describe(SwitchInfo<T> sw)
+        {
+            var additionalInfo = "";
+            if (sw.TakesAString)
+                additionalInfo = " {string}";
+            else if (sw.TakesAList)
+                additionalInfo = " {value 1} {value 2} ...";
+            else if (sw.TakesAnEnum)
+            {
+                var enumValues = Enum.GetValues(sw.EnumType).Cast<object>().Select(x=>x.ToString()).ToArray();
+                additionalInfo = " {" + string.Join("|", enumValues) + "}";
+            }
+            return "[" + string.Join(" | ", sw.Names) + "] " + additionalInfo + "\r\n  " 
+                + sw.Description.Replace("\r\n", "\r\n  ");
         }
     }
 

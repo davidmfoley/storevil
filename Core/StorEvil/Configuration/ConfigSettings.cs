@@ -5,7 +5,8 @@ namespace StorEvil.Configuration
     public enum ConsoleMode
     {
         Color,
-        NoColor
+        NoColor,
+        Quiet
     }
 
     public class ConfigSettings
@@ -24,7 +25,6 @@ namespace StorEvil.Configuration
 
         public string OutputFileFormat { get; set; }
 
-        public bool Quiet { get; set; }
 
         public ConsoleMode ConsoleMode { get; set; }
 

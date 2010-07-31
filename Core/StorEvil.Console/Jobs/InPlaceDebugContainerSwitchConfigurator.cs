@@ -17,6 +17,7 @@ namespace StorEvil.Console
         protected override void SetupSwitches(SwitchParser<InPlaceSettings> parser)
         {
             parser.AddSwitch("--tags", "-g")
+                .WithDescription("Selects @tags to include in the session")
                 .SetsField(x => x.Tags);
         }
     }

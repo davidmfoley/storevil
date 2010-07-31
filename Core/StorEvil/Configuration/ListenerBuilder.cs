@@ -9,7 +9,7 @@ namespace StorEvil.Console
     public class ListenerBuilder
     {
         private readonly ConfigSettings _settings;
-
+            
         public ListenerBuilder(ConfigSettings settings)
         {
             _settings = settings;
@@ -19,7 +19,7 @@ namespace StorEvil.Console
         {
             var compositeListener = new CompositeListener();
 
-            if (!_settings.Quiet)
+            if (_settings.ConsoleMode != ConsoleMode.Quiet)
             {
                 compositeListener.AddListener(new ConsoleResultListener
                                                   {

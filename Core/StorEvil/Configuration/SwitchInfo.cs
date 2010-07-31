@@ -39,19 +39,24 @@ namespace StorEvil.Configuration
 
         public SwitchInfo<T> SetsField(Expression<Func<T, string>> func)
         {
+            TakesAString = true;
             SetFieldFromLambda(func, StringParamTransform);
             return this;
         }
 
         public SwitchInfo<T> SetsField(Expression<Func<T, IEnumerable<string>>> func)
         {
+            TakesAList = true;
             SetFieldFromLambda(func, CollectionParamTransform);
             return this;
         }
 
         public SwitchInfo<T> SetsEnumField<enumT>(Expression<Func<T, enumT>> func)
         {
+            
             var t = typeof (enumT);
+            TakesAnEnum = true;
+            EnumType = t;
 
             if (t.IsEnum)
             {
@@ -74,7 +79,7 @@ namespace StorEvil.Configuration
             var switchToParam = GetSwitchToParamTransformation(member);
 
             SetFieldFromMemberInfo(member, switchToParam);
-            return this;
+            return this;    
         }
 
         public SwitchInfo<T> WithDescription(string description)
@@ -84,7 +89,17 @@ namespace StorEvil.Configuration
             return this;
         }
 
-        public string Description { get; set; }
+        private string _description;
+        public bool TakesAString;
+        public bool TakesAList;
+        public bool TakesAnEnum;
+        public Type EnumType;
+
+        public string Description
+        {
+            get { return _description ?? ""; }
+            set { _description = value; }
+        }
 
         private Func<string[], object> GetSwitchToParamTransformation(MemberInfo member)
         {

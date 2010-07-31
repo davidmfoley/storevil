@@ -19,8 +19,8 @@ namespace StorEvil.Console
             if (command == null || command == "help")
                 return new HelpContainerConfigurator();
 
-            if (CommandRequiresValidSettings(command))
-                SanityCheckSettings();
+            //if (CommandRequiresValidSettings(command))
+            //    SanityCheckSettings();
 
             if (command == "nunit")
                 return new NUnitContainerSwitchConfigurator();
