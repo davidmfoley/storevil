@@ -1,9 +1,11 @@
+using System;
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Context;
 using StorEvil.InPlace;
 using StorEvil.Interpreter;
 using StorEvil.Parsing;
+using StorEvil.Utility;
 
 namespace StorEvil.InPlace.Compiled
 {
@@ -12,21 +14,29 @@ namespace StorEvil.InPlace.Compiled
     {
         private IResultListener ResultListener;
 
-        [SetUp]
-        public void SetupContext()
-        {
-            ResultListener = MockRepository.GenerateStub<IResultListener>();
-            var remoteHandlerFactory = MockRepository.GenerateStub<IRemoteHandlerFactory>();            
-
-            var inPlaceRunner = new InPlaceCompilingStoryRunner(remoteHandlerFactory, ResultListener,new ScenarioPreprocessor(), new IncludeAllFilter(), new SessionContext());
-            inPlaceRunner.Finished();
-        }
-
         [Test]
         public void notifies_result_listener()
         {
-            ResultListener.AssertWasCalled(x => x.Finished());
+            ResultListener = MockRepository.GenerateStub<IResultListener>();
+            var remoteHandlerFactory = MockRepository.GenerateStub<IRemoteHandlerFactory>();
+
+            EventBus eventBus = new EventBus();
+            var fakeHandler = new FinishedTestHandler();
+            eventBus.Register(fakeHandler);
+            var inPlaceRunner = new InPlaceCompilingStoryRunner(remoteHandlerFactory, ResultListener,new ScenarioPreprocessor(), new IncludeAllFilter(), new SessionContext(), eventBus);
+            inPlaceRunner.Finished();
+            fakeHandler.FinishedWasCalled.ShouldEqual(true);
         }
+
+        public class FinishedTestHandler : IEventHandler<SessionFinishedEvent>
+        {
+            public bool FinishedWasCalled;
+            public void Handle(SessionFinishedEvent eventToHandle)
+            {
+                FinishedWasCalled = true;
+            }
+        }
+
     }
 }
 
@@ -36,21 +46,22 @@ namespace StorEvil.InPlace.NonCompiled
     public class When_finished_running_all_stories
     {
         private IResultListener ResultListener;
+        private IEventBus FakeEventBus;
 
         [SetUp]
         public void SetupContext()
         {
-            ResultListener = MockRepository.GenerateStub<IResultListener>();
+            FakeEventBus = MockRepository.GenerateStub<IEventBus>();
 
             var scenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()), MockRepository.GenerateStub<IAmbiguousMatchResolver>());
-            var inPlaceRunner = new InPlaceStoryRunner(ResultListener, new ScenarioPreprocessor(), scenarioInterpreter, new IncludeAllFilter(), new SessionContext());
+            var inPlaceRunner = new InPlaceStoryRunner(MockRepository.GenerateStub<IResultListener>(), new ScenarioPreprocessor(), scenarioInterpreter, new IncludeAllFilter(), new SessionContext(), FakeEventBus);
             inPlaceRunner.Finished();
         }
 
         [Test]
         public void notifies_result_listener()
         {
-            ResultListener.AssertWasCalled(x => x.Finished());
+            FakeEventBus.AssertWasCalled(x => x.Raise(Arg<SessionFinishedEvent>.Is.Anything));
         }
     }
 }

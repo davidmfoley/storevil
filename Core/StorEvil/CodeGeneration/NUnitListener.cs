@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using NUnit.Framework;
 using StorEvil.Core;
 using StorEvil.InPlace;
@@ -7,11 +8,6 @@ namespace StorEvil.CodeGeneration
 {
     public class NUnitListener : IResultListener
     {
-        public void StoryStarting(Story story)
-        {
-            
-        }
-
         public void ScenarioStarting(Scenario scenario)
         {
             
@@ -42,9 +38,12 @@ namespace StorEvil.CodeGeneration
             
         }
 
-        public void Finished()
+       
+        public void Handle(StoryStartingEvent eventToHandle)
         {
             
         }
+
+       
     }
 }

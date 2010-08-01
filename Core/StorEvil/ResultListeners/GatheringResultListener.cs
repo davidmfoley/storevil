@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using StorEvil.Core;
@@ -10,7 +11,7 @@ namespace StorEvil.ResultListeners
         void Handle(GatheredResultSet result);
     }
 
-    public class GatheringResultListener : IResultListener
+    public class GatheringResultListener : AutoRegisterForEvents, IResultListener, IEventHandler<SessionFinishedEvent>
     {
         protected GatheringResultListener(IGatheredResultHandler handler)
         {
@@ -71,7 +72,18 @@ namespace StorEvil.ResultListeners
         {
         }
 
-        public void Finished()
+        public void Handle(StoryStartingEvent eventToHandle)
+        {
+            var story = eventToHandle.Story;
+            var storyResult = new StoryResult
+            {
+                Id = story.Id,
+                Summary = story.Summary
+            };
+            Result.Add(storyResult);
+        }
+
+        public void Handle(SessionFinishedEvent eventToHandle)
         {
             Handler.Handle(Result);
         }

@@ -4,12 +4,21 @@ using StorEvil.InPlace;
 
 namespace StorEvil.ResultListeners
 {
-    public class RemoteListener : MarshalByRefObject, IResultListener
+    public class RemoteListener : MarshalByRefObject, IResultListener, IEventHandler<SessionFinishedEvent>
     {
+       
+
         private IResultListener _inner;
-        public void StoryStarting(Story story)
+
+        public void Handle(StoryStartingEvent e)
         {
-            _inner.StoryStarting(story);
+            _inner.Handle(e);
+            //_inner.StoryStarting(story);
+        }
+
+        public void Handle(SessionFinishedEvent eventToHandle)
+        {
+            //_inner.Handle(eventToHandle);
         }
 
         public void ScenarioStarting(Scenario scenario)
@@ -37,14 +46,11 @@ namespace StorEvil.ResultListeners
             _inner.ScenarioSucceeded(scenario);
         }
 
-        public void Finished()
-        {
-            _inner.Finished();
-        }
 
         public RemoteListener(IResultListener inner)
         {
             _inner = inner;
+            StorEvilEvents.Bus.Register(this);
         } 
     }
 }

@@ -21,26 +21,20 @@ namespace StorEvil.Interpreter
        
     }
 
-    public class MostRecentlyUsedContext : IAmbiguousMatchResolver
+    public class MostRecentlyUsedContext : IAmbiguousMatchResolver, IEventHandler<MatchFoundEvent, ScenarioStartingEvent>
     {
         private static List<Type> _mruTypes = new List<Type>();
 
-        static MostRecentlyUsedContext()
+        public MostRecentlyUsedContext()
         {
-            StorEvilEvents.OnMatchFound += MemberInvokerOnMatchFound;
+            StorEvilEvents.Bus.Register(this);
         }
 
         public static void Reset()
         {
             _mruTypes = new List<Type>();
         }
-        public static void MemberInvokerOnMatchFound(object sender, MatchFoundHandlerArgs args)
-        {
-            var type = args.Member.DeclaringType;
-
-            _mruTypes = new[] { type }.Union(_mruTypes.Where(x => x != type)).ToList();
-        }
-
+     
         public InvocationChain ResolveMatch(string line, IEnumerable<InvocationChain> invocationChains)
         {
             var positions = invocationChains.Select(x => new { Position = GetPosition(x), Value = x });
@@ -59,6 +53,22 @@ namespace StorEvil.Interpreter
 
             return _mruTypes.IndexOf(declaringType);
         }
+
+        public void Handle(MatchFoundEvent eventToHandle)
+        {
+            var type = eventToHandle.Member.DeclaringType;
+
+            _mruTypes = new[] { type }.Union(_mruTypes.Where(x => x != type)).ToList();
+        }
+
+        public void Handle(ScenarioStartingEvent eventToHandle)
+        {
+            _mruTypes = new List<Type>();
+        }
+    }
+
+    public class ScenarioStartingEvent
+    {
     }
 
     [Serializable]

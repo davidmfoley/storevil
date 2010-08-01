@@ -5,7 +5,7 @@ using StorEvil.InPlace;
 
 namespace StorEvil.ResultListeners
 {
-    public abstract class WriterListener : IResultListener
+    public abstract class WriterListener : AutoRegisterForEvents, IResultListener, IEventHandler<SessionFinishedEvent>
     {
         protected abstract void DoWrite(ConsoleColor white, params string[] s);
 
@@ -45,7 +45,15 @@ namespace StorEvil.ResultListeners
             DoWrite(ConsoleColor.Green, "Scenario succeeded");
         }   
 
-        public void Finished()
+       
+
+        public void Handle(StoryStartingEvent eventToHandle)
+        {
+            var story = eventToHandle.Story;
+            DoWrite(ConsoleColor.White, "\r\n" + "\r\nSTORY: " + story.Id + "\r\n" + story.Summary);
+        }
+
+        public void Handle(SessionFinishedEvent eventToHandle)
         {
             DoWrite(ConsoleColor.Green, "Finished");
         }

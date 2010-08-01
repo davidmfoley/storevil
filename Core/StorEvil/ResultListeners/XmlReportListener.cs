@@ -1,3 +1,4 @@
+using System;
 using System.Xml;
 using StorEvil.Core;
 using StorEvil.Infrastructure;
@@ -5,8 +6,9 @@ using StorEvil.InPlace;
 
 namespace StorEvil.ResultListeners
 {
-    public class XmlReportListener : IResultListener
+    public class XmlReportListener : AutoRegisterForEvents, IResultListener, IEventHandler<SessionFinishedEvent>
     {
+
         public class StatusNames
         {
             public const string Success = "Passed";
@@ -98,9 +100,29 @@ namespace StorEvil.ResultListeners
             SetStatus(_currentScenarioElement, StatusNames.Success);
         }
 
-        public void Finished()
+      
+
+        public void Handle(StoryStartingEvent eventToHandle)
+        {
+            var story = eventToHandle.Story;
+            _currentStoryElement = _doc.CreateElement(XmlNames.Story);
+            _currentStoryElement.SetAttribute(XmlNames.Id, story.Id);
+            _currentStoryElement.SetAttribute(XmlNames.Summary, story.Summary);
+            SetStatus(_currentStoryElement, StatusNames.Success);
+            _doc.DocumentElement.AppendChild(_currentStoryElement);
+        }
+
+        public void Handle(SessionFinishedEvent eventToHandle)
         {
             _fileWriter.Write(_doc.OuterXml);
+        }
+    }
+
+    public class AutoRegisterForEvents
+    {
+        public AutoRegisterForEvents()
+        {
+            StorEvilEvents.Bus.Register(this);
         }
     }
 }

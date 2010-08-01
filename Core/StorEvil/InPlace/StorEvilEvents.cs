@@ -2,31 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using StorEvil.Core;
 
 namespace StorEvil.InPlace
 {
-
-    public delegate void MatchFoundHandler(object sender, MatchFoundHandlerArgs args);
-
-    public class MatchFoundHandlerArgs
+    public class SessionFinishedEvent
     {
-        public MemberInfo Member;
+    }
+
+    public class MatchFoundEvent
+    {
+        public MemberInfo Member;      
+    }
+
+    public class StoryStartingEvent
+    {
+        public Story Story;
     }
 
     public class StorEvilEvents
-    {
-        public static event MatchFoundHandler OnMatchFound;
-        public static void RaiseMatchFound(object sender, MemberInfo info)        
+    {    
+        static readonly EventBus _bus = new EventBus(); 
+        public static EventBus Bus
         {
-            if (OnMatchFound == null)
-                return;
-
-            OnMatchFound(sender, new MatchFoundHandlerArgs { Member = info});
+            get { return _bus; }
         }
     }
 
-
-    public class EventBus
+    public class EventBus : IEventBus
     {
         private Dictionary<Type, List<object>> _handlers = new Dictionary<Type, List<object>>();
 
@@ -73,6 +76,21 @@ namespace StorEvil.InPlace
 
             return chosenMethod;            
         }
+    }
+
+    public interface IEventBus
+    {
+        void Raise<T>(T e);
+        void Register(object handler);
+    }
+
+
+    public interface IEventHandler<T1, T2, T3, T4>
+    {
+        void Handle(T1 eventToHandle);
+        void Handle(T2 eventToHandle);
+        void Handle(T3 eventToHandle);
+        void Handle(T4 eventToHandle);
     }
 
     public interface IEventHandler<T1, T2, T3>

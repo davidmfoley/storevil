@@ -3,17 +3,19 @@ using StorEvil.Core;
 
 namespace StorEvil.InPlace
 {
-    public interface IResultListener
-    {
-        void StoryStarting(Story story);
+    public interface IResultListener : IEventHandler<StoryStartingEvent>
+    {               
         void ScenarioStarting(Scenario scenario);
+
         void ScenarioFailed(ScenarioFailureInfo scenarioFailureInfo);
         void ScenarioPending(ScenarioPendingInfo scenarioPendingInfo);
         void Success(Scenario scenario, string line);
+
         void ScenarioSucceeded(Scenario scenario);
-        void Finished();
+
+        //void Finished();
     }
-    
+
     [Serializable]
     public class ScenarioFailureInfo
     {
@@ -54,7 +56,6 @@ namespace StorEvil.InPlace
     [Serializable]
     public class ScenarioPendingInfo
     {
-        
         public ScenarioPendingInfo(Scenario scenario, string line)
         {
             Scenario = scenario;

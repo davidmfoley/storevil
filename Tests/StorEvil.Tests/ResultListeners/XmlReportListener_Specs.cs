@@ -5,7 +5,6 @@ using System.Xml;
 using NUnit.Framework;
 using StorEvil.Core;
 using StorEvil.InPlace;
-using StorEvil.NUnit;
 using StorEvil.Utility;
 
 namespace StorEvil.ResultListeners.XmlReportListener_Specs
@@ -73,7 +72,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
         protected override void DoTestSetup(XmlReportListener writer)
         {
             Writer.StoryStarting(new Story("id", "summary", new IScenario[0]));
-            Writer.Finished();
+            Writer.Handle(new SessionFinishedEvent());
         }
 
         [Test]
@@ -118,7 +117,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
             Writer.Success(testScenario, "line1");
             Writer.Success(testScenario, "line2");
             Writer.ScenarioSucceeded(testScenario);
-            Writer.Finished();
+            Writer.Handle(new SessionFinishedEvent());
         }
 
         [Test]
@@ -175,7 +174,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
             Writer.ScenarioStarting(testScenario);
             Writer.Success(testScenario, "line1");
             Writer.ScenarioFailed(new ScenarioFailureInfo(testScenario, "successPart", "failedPart", "failureMessage"));
-            Writer.Finished();
+            Writer.Handle(new SessionFinishedEvent());
         }
 
         [Test]
@@ -233,7 +232,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
             Writer.ScenarioStarting(failureScenario);
             Writer.ScenarioFailed(new ScenarioFailureInfo(failureScenario, "foo", "bar", "failed"));
 
-            Writer.Finished();
+            Writer.Handle(new SessionFinishedEvent());
         }
 
         [Test]
@@ -293,7 +292,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
             Writer.ScenarioStarting(failureScenario);
             Writer.ScenarioFailed(new ScenarioFailureInfo(failureScenario, "foo", "bar", "failed"));
 
-            Writer.Finished();
+            Writer.Handle(new SessionFinishedEvent());
         }
 
         [Test]
@@ -348,7 +347,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
             Writer.Success(scenario, line);
             Writer.ScenarioPending(new ScenarioPendingInfo(scenario, line));
 
-            Writer.Finished();
+            Writer.Handle(new SessionFinishedEvent());
         }
 
         [Test]
@@ -385,7 +384,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
             Writer.Success(sucessScenario, line);
             Writer.ScenarioFailed(new ScenarioFailureInfo(sucessScenario, line, line, line));
 
-            Writer.Finished();
+            Writer.Handle(new SessionFinishedEvent());
         }
 
         [Test]

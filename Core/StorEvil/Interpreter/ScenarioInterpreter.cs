@@ -55,9 +55,8 @@ namespace StorEvil.Interpreter
         {
             foreach (var invocation in chain.Invocations)
             {
-                StorEvilEvents.RaiseMatchFound(this, invocation.MemberInfo);
-            }
-           
+                StorEvilEvents.Bus.Raise(new MatchFoundEvent {Member = invocation.MemberInfo});
+            }           
         }
 
         public void NewScenario()

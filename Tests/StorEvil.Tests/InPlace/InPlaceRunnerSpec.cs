@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using NUnit.Framework;
@@ -17,7 +18,8 @@ namespace StorEvil.InPlace
     public class InPlaceRunnerSpec<T>
     {
         protected IResultListener ResultListener;
-        protected StoryContext Context;       
+        protected StoryContext Context;
+        private CapturingEventBus FakeEventBus;
 
         protected void RunStory(Story story)
         {
@@ -57,17 +59,33 @@ namespace StorEvil.InPlace
                 ResultListener, 
                 preprocessor,                                               
                 new IncludeAllFilter(), 
-                new FakeSessionContext(Context));
+                new FakeSessionContext(Context), MockRepository.GenerateStub<IEventBus>());
             runner.HandleStory(story);
             runner.Finished();
         }
 
         private InPlaceStoryRunner GetRunner()
         {
+            FakeEventBus = new CapturingEventBus();
             var scenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()), MockRepository.GenerateStub<IAmbiguousMatchResolver>());
             return new InPlaceStoryRunner(ResultListener, new ScenarioPreprocessor(),
                                           scenarioInterpreter,
-                                          new IncludeAllFilter(), new FakeSessionContext(Context));
+                                          new IncludeAllFilter(), new FakeSessionContext(Context), FakeEventBus);
+        }
+
+        public class CapturingEventBus : IEventBus
+        {
+            public List<object> CaughtEvents;
+
+            public void Raise<T1>(T1 e)
+            {
+                CaughtEvents.Add(e);
+            }
+
+            public void Register(object handler)
+            {
+               
+            }
         }
 
         private bool UseCompilingRunner()

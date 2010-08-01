@@ -17,7 +17,7 @@ namespace StorEvil.ResultListeners.GatheringResultListener_Specs
         {
             Listener = new TestGatheringResultListener();
             SimulateRunner();
-            Listener.Finished();
+            Listener.Handle(new SessionFinishedEvent());
         }
 
         protected abstract void SimulateRunner();

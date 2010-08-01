@@ -5,7 +5,7 @@ using StorEvil.InPlace;
 
 namespace StorEvil.ResultListeners
 {
-    public class CompositeListener : IResultListener
+    public class CompositeListener : AutoRegisterForEvents, IResultListener
     {
         public List<IResultListener> Listeners = new List<IResultListener>();
 
@@ -24,7 +24,7 @@ namespace StorEvil.ResultListeners
 
         public void StoryStarting(Story story)
         {
-            AllListeners(x => x.StoryStarting(story));
+            // AllListeners(x => x.StoryStarting(story));
         }
 
         public void ScenarioStarting(Scenario scenario)
@@ -51,10 +51,12 @@ namespace StorEvil.ResultListeners
         {
             AllListeners(x => x.ScenarioSucceeded(scenario));
         }
-
-        public void Finished()
+       
+        public void Handle(StoryStartingEvent eventToHandle)
         {
-            AllListeners(x => x.Finished());
+            AllListeners(x => x.Handle(eventToHandle));
         }
+
+       
     }
 }
