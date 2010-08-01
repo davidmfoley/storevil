@@ -75,7 +75,7 @@ namespace StorEvil.InPlace
 
         public class CapturingEventBus : IEventBus
         {
-            public List<object> CaughtEvents;
+            public List<object> CaughtEvents = new List<object>();
 
             public void Raise<T1>(T1 e)
             {

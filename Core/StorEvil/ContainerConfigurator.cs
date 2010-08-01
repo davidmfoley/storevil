@@ -29,7 +29,9 @@ namespace StorEvil
             }       
 
             container.Register(listenerBuilder.GetResultListener());
-                
+
+            container.Register<IEventBus>(StorEvilEvents.Bus);
+
             container.EasyRegister<IStoryParser, StoryParser>();
             container.EasyRegister<IStoryProvider, StoryProvider>();
             container.EasyRegister<IStoryReader, FilesystemStoryReader>();
