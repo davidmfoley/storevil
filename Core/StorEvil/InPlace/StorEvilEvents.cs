@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using StorEvil.Core;
+using StorEvil.Interpreter;
 
 namespace StorEvil.InPlace
 {
@@ -59,13 +60,15 @@ namespace StorEvil.InPlace
 
         public void Raise<T>(T e)
         {
-            
+            DebugTrace.Trace("EventBus", "Raising " + typeof(T).FullName);
             foreach (var handler in GetHandlersForType(typeof(T)))
             {
-               
                 var methodInfo = GetHandleMethod<T>(handler);
                 if (methodInfo != null)
+                {
                     methodInfo.Invoke(handler, new object[] {e});
+                    DebugTrace.Trace("EventBus", " ... handled by: " + handler.GetType().FullName);
+                }
             }
         }
 
