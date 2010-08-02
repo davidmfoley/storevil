@@ -6,49 +6,29 @@ using StorEvil.InPlace;
 
 namespace StorEvil.ResultListeners
 {
-    public abstract class WriterListener : AutoRegisterForEvents, IResultListener, IEventHandler<ScenarioStartingEvent,SessionFinishedEvent>
+    public abstract class WriterListener : 
+        IEventHandler<ScenarioStartingEvent,SessionFinishedEvent, ScenarioSucceededEvent>,
+        IEventHandler<ScenarioFailedEvent, StoryStartingEvent, ScenarioPendingEvent>,
+        IEventHandler<LineInterpretedEvent, LineNotInterpretedEvent>
     {
         protected abstract void DoWrite(ConsoleColor white, params string[] s);
-
-        public void StoryStarting(Story story)
+     
+        public void Handle(ScenarioFailedEvent eventToHandle)
         {
-            DoWrite(ConsoleColor.White, "\r\n" + "\r\nSTORY: " + story.Id + "\r\n" + story.Summary);
+            DoWrite(ConsoleColor.Yellow, eventToHandle.SuccessPart);
+            DoWrite(ConsoleColor.Red, " " + eventToHandle.FailedPart + "\r\nFAILED\r\n",
+                    eventToHandle.Message + "\r\n");
         }
-
-       
-
-        public void ScenarioFailed(ScenarioFailureInfo scenarioFailureInfo)
-        {
-            DoWrite(ConsoleColor.Yellow, scenarioFailureInfo.SuccessPart);
-            DoWrite(ConsoleColor.Red, " " + scenarioFailureInfo.FailedPart + "\r\nFAILED\r\n",
-                    scenarioFailureInfo.Message + "\r\n");
-        }
-
-        public void ScenarioPending(ScenarioPendingInfo scenarioPendingInfo)
-        {
-            var message = scenarioPendingInfo.CouldNotInterpret ? "Could not interpret" : "Pending";
-            DoWrite(ConsoleColor.Yellow, scenarioPendingInfo.Line + " -- " + message);
-
-            if (scenarioPendingInfo.CouldNotInterpret && scenarioPendingInfo.Suggestion != null)
-                DoWrite(ConsoleColor.Gray, scenarioPendingInfo.Suggestion);
-        }
-
-        public void Success(Scenario scenario, string line)
-        {
-            DoWrite(ConsoleColor.Green, line);
-        }
-
-        public void ScenarioSucceeded(Scenario scenario)
-        {
-            DoWrite(ConsoleColor.Green, "Scenario succeeded");
-        }   
-
-       
 
         public void Handle(StoryStartingEvent eventToHandle)
         {
             var story = eventToHandle.Story;
             DoWrite(ConsoleColor.White, "\r\n" + "\r\nSTORY: " + story.Id + "\r\n" + story.Summary);
+        }
+
+        public void Handle(ScenarioPendingEvent eventToHandle)
+        {            
+            DoWrite(ConsoleColor.Yellow, eventToHandle.Line + " -- Pending");        
         }
 
         public void Handle(ScenarioStartingEvent eventToHandle)
@@ -59,6 +39,24 @@ namespace StorEvil.ResultListeners
         public void Handle(SessionFinishedEvent eventToHandle)
         {
             DoWrite(ConsoleColor.Green, "Finished");
+        }
+
+        public void Handle(ScenarioSucceededEvent eventToHandle)
+        {
+            DoWrite(ConsoleColor.Green, "Scenario succeeded");
+        }
+
+        public void Handle(LineInterpretedEvent eventToHandle)
+        {
+            DoWrite(ConsoleColor.Green, eventToHandle.Line);
+        }
+
+        public void Handle(LineNotInterpretedEvent eventToHandle)
+        {
+            DoWrite(ConsoleColor.Yellow, eventToHandle.Line + " -- Could not interpret");
+
+            if (eventToHandle.Suggestion != null)
+                DoWrite(ConsoleColor.Gray, eventToHandle.Suggestion);
         }
     }
 

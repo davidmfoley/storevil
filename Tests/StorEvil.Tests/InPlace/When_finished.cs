@@ -13,18 +13,16 @@ namespace StorEvil.InPlace.Compiled
     [TestFixture]
     public class When_finished_running_all_stories
     {
-        private IResultListener ResultListener;
-
+  
         [Test]
         public void notifies_result_listener()
         {
-            ResultListener = MockRepository.GenerateStub<IResultListener>();
             var remoteHandlerFactory = MockRepository.GenerateStub<IRemoteHandlerFactory>();
 
             EventBus eventBus = new EventBus();
             var fakeHandler = new FinishedTestHandler();
             eventBus.Register(fakeHandler);
-            var inPlaceRunner = new InPlaceCompilingStoryRunner(remoteHandlerFactory, ResultListener,new ScenarioPreprocessor(), new IncludeAllFilter(), new SessionContext(), eventBus);
+            var inPlaceRunner = new InPlaceCompilingStoryRunner(remoteHandlerFactory, new ScenarioPreprocessor(), new IncludeAllFilter(), new SessionContext(), eventBus);
             inPlaceRunner.Finished();
             fakeHandler.FinishedWasCalled.ShouldEqual(true);
         }
@@ -54,7 +52,7 @@ namespace StorEvil.InPlace.NonCompiled
             FakeEventBus = MockRepository.GenerateStub<IEventBus>();
 
             var scenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()), MockRepository.GenerateStub<IAmbiguousMatchResolver>());
-            var inPlaceRunner = new InPlaceStoryRunner(MockRepository.GenerateStub<IResultListener>(), new ScenarioPreprocessor(), scenarioInterpreter, new IncludeAllFilter(), new SessionContext(), FakeEventBus);
+            var inPlaceRunner = new InPlaceStoryRunner(new ScenarioPreprocessor(), scenarioInterpreter, new IncludeAllFilter(), new SessionContext(), FakeEventBus);
             inPlaceRunner.Finished();
         }
 

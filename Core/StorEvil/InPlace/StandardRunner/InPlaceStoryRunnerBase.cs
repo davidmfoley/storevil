@@ -10,15 +10,15 @@ namespace StorEvil.InPlace
 {
     public abstract class InPlaceStoryRunnerBase : IStoryHandler
     {
-        protected readonly IResultListener ResultListener;
+
         private readonly IStoryFilter _filter;
         private readonly ISessionContext _context;
         protected readonly IEventBus EventBus;
         private readonly IScenarioPreprocessor _preprocessor;
 
-        protected InPlaceStoryRunnerBase(IResultListener resultListener, IScenarioPreprocessor preprocessor, IStoryFilter filter, ISessionContext context, IEventBus eventBus)
+        protected InPlaceStoryRunnerBase(IScenarioPreprocessor preprocessor, IStoryFilter filter, ISessionContext context, IEventBus eventBus)
         {
-            ResultListener = resultListener;
+
             _preprocessor = preprocessor;
             _filter = filter;
             _context = context;

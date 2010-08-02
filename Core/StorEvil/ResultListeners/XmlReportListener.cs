@@ -7,7 +7,9 @@ using StorEvil.InPlace;
 
 namespace StorEvil.ResultListeners
 {
-    public class XmlReportListener : AutoRegisterForEvents, IResultListener, IEventHandler<SessionFinishedEvent>
+    public class XmlReportListener : IEventHandler<SessionFinishedEvent>,
+        IEventHandler<ScenarioFailedEvent, ScenarioPendingEvent, LineInterpretedEvent>,
+        IEventHandler<LineNotInterpretedEvent, ScenarioStartingEvent>
     {
 
         public class StatusNames
@@ -40,31 +42,7 @@ namespace StorEvil.ResultListeners
             _fileWriter = fileWriter;
             _doc = new XmlDocument();
             _doc.LoadXml("<" + XmlNames.DocumentElement + "/>");
-        }
-
-        public void StoryStarting(Story story)
-        {
-            _currentStoryElement = _doc.CreateElement(XmlNames.Story);
-            _currentStoryElement.SetAttribute(XmlNames.Id, story.Id);
-            _currentStoryElement.SetAttribute(XmlNames.Summary, story.Summary);
-            SetStatus(_currentStoryElement, StatusNames.Success);
-            _doc.DocumentElement.AppendChild(_currentStoryElement);
-        }
-
-        public void ScenarioStarting(Scenario scenario)
-        {
-            _currentScenarioElement = _doc.CreateElement(XmlNames.Scenario);
-            _currentStoryElement.AppendChild(_currentScenarioElement);
-        }
-
-        public void ScenarioFailed(ScenarioFailureInfo scenarioFailureInfo)
-        {
-            AddLineToCurrentScenario(scenarioFailureInfo.SuccessPart, StatusNames.Success);
-            AddLineToCurrentScenario(scenarioFailureInfo.FailedPart, StatusNames.Failure);
-
-            SetStatus(_currentScenarioElement, StatusNames.Failure);
-            SetStatus(_currentStoryElement, StatusNames.Failure);
-        }
+        }       
 
         private void AddLineToCurrentScenario(string successPart, string success)
         {
@@ -82,26 +60,12 @@ namespace StorEvil.ResultListeners
         private static void SetStatus(XmlElement element, string status)
         {
             element.SetAttribute(XmlNames.Status, status);
-        }
+        }        
 
-        public void ScenarioPending(ScenarioPendingInfo scenarioPendingInfo)
-        {
-            AddLineToCurrentScenario(scenarioPendingInfo.Line, StatusNames.NotUnderstood);
-            SetStatus(_currentScenarioElement, StatusNames.NotUnderstood);
-            SetStatus(_currentStoryElement, StatusNames.Failure);
-        }
-
-        public void Success(Scenario scenario, string line)
-        {
-            AddLineToCurrentScenario(line, StatusNames.Success);
-        }
-
-        public void ScenarioSucceeded(Scenario scenario)
+        public void Handle(ScenarioSucceededEvent eventToHandle)
         {
             SetStatus(_currentScenarioElement, StatusNames.Success);
         }
-
-      
 
         public void Handle(StoryStartingEvent eventToHandle)
         {
@@ -116,6 +80,40 @@ namespace StorEvil.ResultListeners
         public void Handle(SessionFinishedEvent eventToHandle)
         {
             _fileWriter.Write(_doc.OuterXml);
+        }
+
+        public void Handle(ScenarioFailedEvent eventToHandle)
+        {
+            AddLineToCurrentScenario(eventToHandle.SuccessPart, StatusNames.Success);
+            AddLineToCurrentScenario(eventToHandle.FailedPart, StatusNames.Failure);
+
+            SetStatus(_currentScenarioElement, StatusNames.Failure);
+            SetStatus(_currentStoryElement, StatusNames.Failure);
+        }
+
+        public void Handle(ScenarioPendingEvent eventToHandle)
+        {
+            AddLineToCurrentScenario(eventToHandle.Line, StatusNames.NotUnderstood);
+            SetStatus(_currentScenarioElement, StatusNames.NotUnderstood);
+            SetStatus(_currentStoryElement, StatusNames.Failure);
+        }
+
+        public void Handle(LineInterpretedEvent eventToHandle)
+        {
+            AddLineToCurrentScenario(eventToHandle.Line, StatusNames.Success);
+        }
+
+        public void Handle(LineNotInterpretedEvent eventToHandle)
+        {
+            AddLineToCurrentScenario(eventToHandle.Line, StatusNames.NotUnderstood);
+            SetStatus(_currentScenarioElement, StatusNames.NotUnderstood);
+            SetStatus(_currentStoryElement, StatusNames.Failure);
+        }
+
+        public void Handle(ScenarioStartingEvent eventToHandle)
+        {
+            _currentScenarioElement = _doc.CreateElement(XmlNames.Scenario);
+            _currentStoryElement.AppendChild(_currentScenarioElement);
         }
     }
 

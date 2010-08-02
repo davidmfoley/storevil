@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using StorEvil.Core;
 using StorEvil.Events;
-using StorEvil.InPlace;
 
 namespace StorEvil.ResultListeners
 {
@@ -12,79 +10,39 @@ namespace StorEvil.ResultListeners
         void Handle(GatheredResultSet result);
     }
 
-    public class GatheringResultListener : AutoRegisterForEvents, IResultListener, IEventHandler<ScenarioStartingEvent, SessionFinishedEvent, ScenarioFailedEvent>
+    public class GatheringResultListener : AutoRegisterForEvents,
+                                           IEventHandler<ScenarioStartingEvent, SessionFinishedEvent, ScenarioFailedEvent>,
+                                           IEventHandler<ScenarioPendingEvent, LineInterpretedEvent, LineNotInterpretedEvent>
     {
+        protected readonly IGatheredResultHandler Handler;
+        private readonly GatheredResultSet Result = new GatheredResultSet();
+
         protected GatheringResultListener(IGatheredResultHandler handler)
         {
             Handler = handler;
         }
 
-        private readonly GatheredResultSet Result = new GatheredResultSet();
-        protected readonly IGatheredResultHandler Handler;
-
-        public void StoryStarting(Story story)
-        {
-            var storyResult = new StoryResult
-                                  {
-                                      Id = story.Id,
-                                      Summary = story.Summary
-                                  };
-            Result.Add(storyResult);
-        }
-
-      
-
-        private StoryResult CurrentStory()
-        {
-            return Result.Stories.Last();
-        }
-
-        public void ScenarioFailed(ScenarioFailureInfo scenarioFailureInfo)
-        {
-            CurrentScenario().FailureMessage = scenarioFailureInfo.Message;
-            CurrentScenario().Status = ScenarioStatus.Failed;
-            if (!string.IsNullOrEmpty(scenarioFailureInfo.SuccessPart))
-                CurrentScenario().AddLine(ScenarioStatus.Passed, scenarioFailureInfo.SuccessPart);
-            CurrentScenario().AddLine(ScenarioStatus.Failed, scenarioFailureInfo.FailedPart);
-        }
-
-        public void ScenarioPending(ScenarioPendingInfo scenarioPendingInfo)
+        public void Handle(ScenarioPendingEvent eventToHandle)
         {
             CurrentScenario().Status = ScenarioStatus.Pending;
-            CurrentScenario().AddLine(ScenarioStatus.Pending, scenarioPendingInfo.Line);
-            CurrentScenario().CouldNotInterpret = scenarioPendingInfo.CouldNotInterpret;
-            CurrentScenario().Suggestion = scenarioPendingInfo.Suggestion ?? "";
         }
 
-        public void Success(Scenario scenario, string line)
+        public void Handle(LineNotInterpretedEvent eventToHandle)
         {
-            CurrentScenario().AddLine(ScenarioStatus.Passed, line);
+            CurrentScenario().AddLine(ScenarioStatus.Pending, eventToHandle.Line);
+            CurrentScenario().CouldNotInterpret = true;
+            CurrentScenario().Suggestion = eventToHandle.Suggestion ?? "";
         }
 
-        private ScenarioResult CurrentScenario()
+        public void Handle(LineInterpretedEvent eventToHandle)
         {
-            return CurrentStory().Scenarios.Last();
-        }
-
-        public void ScenarioSucceeded(Scenario scenario)
-        {
-        }
-
-        public void Handle(StoryStartingEvent eventToHandle)
-        {
-            var story = eventToHandle.Story;
-            var storyResult = new StoryResult
-            {
-                Id = story.Id,
-                Summary = story.Summary
-            };
-            Result.Add(storyResult);
+            CurrentScenario().AddLine(ScenarioStatus.Passed, eventToHandle.Line);
         }
 
         public void Handle(ScenarioStartingEvent eventToHandle)
         {
-            var scenario = eventToHandle.Scenario;
-            CurrentStory().AddScenario(new ScenarioResult { Name = scenario.Name, Id = scenario.Id });
+            IScenario scenario = eventToHandle.Scenario;
+            CurrentStory().AddScenario(new ScenarioResult {Name = scenario.Name, Id = scenario.Id});
         }
 
         public void Handle(SessionFinishedEvent eventToHandle)
@@ -100,6 +58,29 @@ namespace StorEvil.ResultListeners
                 CurrentScenario().AddLine(ScenarioStatus.Passed, eventToHandle.SuccessPart);
             CurrentScenario().AddLine(ScenarioStatus.Failed, eventToHandle.FailedPart);
         }
+
+        private StoryResult CurrentStory()
+        {
+            return Result.Stories.Last();
+        }
+
+
+        private ScenarioResult CurrentScenario()
+        {
+            return CurrentStory().Scenarios.Last();
+        }
+
+
+        public void Handle(StoryStartingEvent eventToHandle)
+        {
+            Story story = eventToHandle.Story;
+            var storyResult = new StoryResult
+                                  {
+                                      Id = story.Id,
+                                      Summary = story.Summary
+                                  };
+            Result.Add(storyResult);
+        }
     }
 
     public class GatheredResultSet
@@ -114,11 +95,6 @@ namespace StorEvil.ResultListeners
         public int StoryCount
         {
             get { return Stories.Count(); }
-        }
-
-        public void Add(StoryResult storyResult)
-        {
-            _stories.Add(storyResult);
         }
 
         public IList<ScenarioResult> Scenarios
@@ -141,11 +117,6 @@ namespace StorEvil.ResultListeners
             get { return ScenariosByStatus(ScenarioStatus.Passed); }
         }
 
-        public List<ScenarioResult> ScenariosByStatus(ScenarioStatus status)
-        {
-            return Scenarios.Where(s => s.Status == status).ToList();
-        }
-
         public IList<string> Suggestions
         {
             get
@@ -156,6 +127,16 @@ namespace StorEvil.ResultListeners
                     .Distinct()
                     .ToList();
             }
+        }
+
+        public void Add(StoryResult storyResult)
+        {
+            _stories.Add(storyResult);
+        }
+
+        public List<ScenarioResult> ScenariosByStatus(ScenarioStatus status)
+        {
+            return Scenarios.Where(s => s.Status == status).ToList();
         }
 
         public bool HasAnyStories()
@@ -181,16 +162,6 @@ namespace StorEvil.ResultListeners
         public string Id { get; set; }
         public string Summary { get; set; }
 
-        public void AddScenario(ScenarioResult scenarioResult)
-        {
-            _scenarios.Add(scenarioResult);
-        }
-
-        public bool HasAnyScenarios(ScenarioStatus scenarioStatus)
-        {
-            return _scenarios.Any(s => s.Status == scenarioStatus);
-        }
-
         public IList<ScenarioResult> PendingScenarios
         {
             get { return ScenariosByStatus(ScenarioStatus.Pending); }
@@ -206,6 +177,16 @@ namespace StorEvil.ResultListeners
             get { return ScenariosByStatus(ScenarioStatus.Passed); }
         }
 
+        public void AddScenario(ScenarioResult scenarioResult)
+        {
+            _scenarios.Add(scenarioResult);
+        }
+
+        public bool HasAnyScenarios(ScenarioStatus scenarioStatus)
+        {
+            return _scenarios.Any(s => s.Status == scenarioStatus);
+        }
+
         public List<ScenarioResult> ScenariosByStatus(ScenarioStatus status)
         {
             return Scenarios.Where(s => s.Status == status).ToList();
@@ -214,8 +195,8 @@ namespace StorEvil.ResultListeners
 
     public class ScenarioResult
     {
-        public ScenarioStatus Status { get; set; }
         private readonly List<ScenarioLineResult> _lines = new List<ScenarioLineResult>();
+        public ScenarioStatus Status { get; set; }
 
         public IEnumerable<ScenarioLineResult> Lines
         {

@@ -11,13 +11,12 @@ namespace StorEvil.InPlace
     {
         private readonly InPlaceScenarioRunner _scenarioRunner;
  
-        public InPlaceStoryRunner(IResultListener listener,
-                                  IScenarioPreprocessor preprocessor,
+        public InPlaceStoryRunner(IScenarioPreprocessor preprocessor,
                                   ScenarioInterpreter scenarioInterpreter,
                                   IStoryFilter filter,
                                   ISessionContext context, 
                                     IEventBus eventBus)
-            : base(listener, preprocessor, filter, context, eventBus)
+            : base(preprocessor, filter, context, eventBus)
         {
            
             _scenarioRunner = new InPlaceScenarioRunner(eventBus, scenarioInterpreter);

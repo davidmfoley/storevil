@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Configuration;
 using StorEvil.Core;
+using StorEvil.Events;
 using StorEvil.Infrastructure;
 using StorEvil.InPlace;
 using StorEvil.Interpreter;
@@ -169,9 +170,13 @@ namespace StorEvil.Console
                                            "execute", "-o", "foo.xml", "-f", "xml"
                                        });
 
-            var composite = Factory.Container.Resolve<IResultListener>() as CompositeListener;
-            var xmlListener = composite.Listeners.OfType<XmlReportListener>().FirstOrDefault();
-            xmlListener.ShouldNotBeNull();
+            BusShouldHaveRegistered<XmlReportListener>();
+
+        }
+
+        private void BusShouldHaveRegistered<T>()
+        {
+            StorEvilEvents.Bus.Handlers.OfType<T>().Any().ShouldBe(true);
         }
 
         [Test]
@@ -182,9 +187,8 @@ namespace StorEvil.Console
                                            "execute", "-o", "foo.html", "-f", "spark"
                                        });
 
-            var composite = Factory.Container.Resolve<IResultListener>() as CompositeListener;
-            var htmlReportGenerator = composite.Listeners.OfType<SparkReportListener>().FirstOrDefault();
-            htmlReportGenerator.ShouldNotBeNull();
+            BusShouldHaveRegistered<SparkReportListener>();
+           
         }
 
         [Test]

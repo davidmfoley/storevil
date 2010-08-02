@@ -11,8 +11,8 @@ namespace StorEvil.InPlace
         private readonly IRemoteHandlerFactory _factory;   
         
 
-        public InPlaceCompilingStoryRunner(IRemoteHandlerFactory factory, IResultListener listener, IScenarioPreprocessor preprocessor, IStoryFilter filter, ISessionContext context, IEventBus eventBus)
-            : base(listener, preprocessor, filter, context, eventBus)
+        public InPlaceCompilingStoryRunner(IRemoteHandlerFactory factory, IScenarioPreprocessor preprocessor, IStoryFilter filter, ISessionContext context, IEventBus eventBus)
+            : base(preprocessor, filter, context, eventBus)
         {
             
             _factory = factory;

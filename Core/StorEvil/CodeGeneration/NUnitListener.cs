@@ -7,44 +7,36 @@ using StorEvil.InPlace;
 
 namespace StorEvil.CodeGeneration
 {
-    public class NUnitListener : IResultListener
-    {
-        public void ScenarioStarting(Scenario scenario)
+    public class NUnitListener : 
+        IEventHandler<ScenarioFailedEvent, ScenarioPendingEvent, LineInterpretedEvent>,
+        IEventHandler<LineNotInterpretedEvent>
+    {           
+       
+        public void Handle(ScenarioFailedEvent eventToHandle)
         {
-            
+            Debug.Write(eventToHandle.SuccessPart);
+            Debug.WriteLine("{ " + eventToHandle.FailedPart + " -- FAILED }");
+            Assert.Fail(eventToHandle.Message);
         }
 
-        public void ScenarioFailed(ScenarioFailureInfo scenarioFailureInfo)
+        public void Handle(ScenarioPendingEvent eventToHandle)
         {
-            Debug.Write(scenarioFailureInfo.SuccessPart);
-            Debug.WriteLine("{ " + scenarioFailureInfo.FailedPart + " -- FAILED }");
-            Assert.Fail(scenarioFailureInfo.Message);
-        }
-
-        public void ScenarioPending(ScenarioPendingInfo scenarioPendingInfo)
-        {
-            var message = "Could not interpret:\r\n" +  scenarioPendingInfo.Line +
-                          "\r\nSuggestion:\r\n" + scenarioPendingInfo.Suggestion;
+            var message = "Pending :\r\n" + eventToHandle.Line ;
             Debug.WriteLine(message);
             Assert.Ignore(message);
         }
 
-        public void Success(Scenario scenario, string line)
+        public void Handle(LineInterpretedEvent eventToHandle)
         {
-            Debug.WriteLine(line);
+            Debug.WriteLine(eventToHandle.Line);
         }
 
-        public void ScenarioSucceeded(Scenario scenario)
+        public void Handle(LineNotInterpretedEvent eventToHandle)
         {
-            
+            var message = "Could not interpret:\r\n" + eventToHandle.Line +
+                          "\r\nSuggestion:\r\n" + eventToHandle.Suggestion;
+            Debug.WriteLine(message);
+            Assert.Ignore(message);
         }
-
-       
-        public void Handle(StoryStartingEvent eventToHandle)
-        {
-            
-        }
-
-       
     }
 }

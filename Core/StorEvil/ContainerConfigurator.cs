@@ -27,11 +27,13 @@ namespace StorEvil
             if (settings.Debug)
             {
                 DebugTrace.Listener = new ConsoleDebugListener();
-            }       
+            }
 
-            container.Register(listenerBuilder.GetResultListener());
 
-            container.Register<IEventBus>(StorEvilEvents.Bus);
+            var bus = StorEvilEvents.Bus;
+            container.Register<IEventBus>(bus);
+
+            listenerBuilder.SetUpListeners(bus);
 
             container.EasyRegister<IStoryParser, StoryParser>();
             container.EasyRegister<IStoryProvider, StoryProvider>();

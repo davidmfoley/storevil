@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -65,6 +66,31 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
         }
 
         protected abstract void DoTestSetup(XmlReportListener writer);
+
+        protected void SimulateStoryFailed(ScenarioFailureInfo scenarioFailureInfo)
+        {
+            Writer.Handle(new ScenarioFailedEvent { FailedPart = scenarioFailureInfo.FailedPart, SuccessPart = scenarioFailureInfo.SuccessPart, Scenario = scenarioFailureInfo.Scenario, Message = scenarioFailureInfo.Message });
+        }
+
+        protected void SimulateScenarioSucceeded(Scenario scenario)
+        {
+            Writer.Handle(new ScenarioSucceededEvent { Scenario = scenario });
+        }
+
+        protected void SimulateSuccessfulLine(Scenario scenario, string line)
+        {
+            Writer.Handle(new LineInterpretedEvent { Line = line });
+        }
+
+        protected void SimulateScenarioStarting(Scenario scenario)
+        {
+            Writer.Handle(new ScenarioStartingEvent { Scenario = scenario });
+        }
+
+        protected void SimulateStoryStarting(Story story)
+        {
+            Writer.Handle(new StoryStartingEvent { Story = story });
+        }
     }
 
     [TestFixture]
@@ -72,7 +98,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
     {
         protected override void DoTestSetup(XmlReportListener writer)
         {
-            Writer.StoryStarting(new Story("id", "summary", new IScenario[0]));
+            SimulateStoryStarting(new Story("id", "summary", new IScenario[0]));
             Writer.Handle(new SessionFinishedEvent());
         }
 
@@ -113,11 +139,11 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
         protected override void DoTestSetup(XmlReportListener writer)
         {
             Scenario testScenario = new Scenario("scenarioId", "scenarioName", new[] {"line1", "line2"}.Select(l=>new ScenarioLine {Text = l}).ToArray());
-            Writer.StoryStarting(new Story("id", "summary", new IScenario[] {testScenario}));
-            Writer.ScenarioStarting(testScenario);
-            Writer.Success(testScenario, "line1");
-            Writer.Success(testScenario, "line2");
-            Writer.ScenarioSucceeded(testScenario);
+           SimulateStoryStarting(new Story("id", "summary", new IScenario[] {testScenario}));
+            SimulateScenarioStarting(testScenario);
+            SimulateSuccessfulLine(testScenario, "line1");
+            SimulateSuccessfulLine(testScenario, "line2");
+            SimulateScenarioSucceeded(testScenario);
             Writer.Handle(new SessionFinishedEvent());
         }
 
@@ -171,10 +197,10 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
         protected override void DoTestSetup(XmlReportListener writer)
         {
             var testScenario = BuildTestScenario("scenarioId", "scenarioName", new[] {"line1", "line2"});
-            Writer.StoryStarting(new Story("id", "summary", new IScenario[] {testScenario}));
-            Writer.ScenarioStarting(testScenario);
-            Writer.Success(testScenario, "line1");
-            Writer.ScenarioFailed(new ScenarioFailureInfo(testScenario, "successPart", "failedPart", "failureMessage"));
+           SimulateStoryStarting(new Story("id", "summary", new IScenario[] {testScenario}));
+            SimulateScenarioStarting(testScenario);
+            SimulateSuccessfulLine(testScenario, "line1");
+            SimulateStoryFailed(new ScenarioFailureInfo(testScenario, "successPart", "failedPart", "failureMessage"));
             Writer.Handle(new SessionFinishedEvent());
         }
 
@@ -224,14 +250,14 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
             var sucessScenario = BuildTestScenario("successId", "successName", new[] { "successLine" });
             var failureScenario = BuildTestScenario("failureId", "failureName", new[] { "failureLine" });
 
-            Writer.StoryStarting(new Story("id", "summary", new IScenario[] {sucessScenario, failureScenario}));
+            SimulateStoryStarting(new Story("id", "summary", new IScenario[] {sucessScenario, failureScenario}));
 
-            Writer.ScenarioStarting(sucessScenario);
-            Writer.Success(sucessScenario, "line1");
-            Writer.ScenarioSucceeded(sucessScenario);
+            SimulateScenarioStarting(sucessScenario);
+            SimulateSuccessfulLine(sucessScenario, "line1");
+            SimulateScenarioSucceeded(sucessScenario);
 
-            Writer.ScenarioStarting(failureScenario);
-            Writer.ScenarioFailed(new ScenarioFailureInfo(failureScenario, "foo", "bar", "failed"));
+            SimulateScenarioStarting(failureScenario);
+            SimulateStoryFailed(new ScenarioFailureInfo(failureScenario, "foo", "bar", "failed"));
 
             Writer.Handle(new SessionFinishedEvent());
         }
@@ -280,21 +306,23 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
         {
             var sucessScenario = BuildTestScenario("successId", "successName", new[] { "successLine" });
 
-            Writer.StoryStarting(new Story("id", "summary", new IScenario[] {sucessScenario}));
+            SimulateStoryStarting(new Story("id", "summary", new IScenario[] {sucessScenario}));
 
-            Writer.ScenarioStarting(sucessScenario);
-            Writer.Success(sucessScenario, "line1");
-            Writer.ScenarioSucceeded(sucessScenario);
+            SimulateScenarioStarting(sucessScenario);
+            SimulateSuccessfulLine(sucessScenario, "line1");
+            SimulateScenarioSucceeded(sucessScenario);
 
             var failureScenario = BuildTestScenario("failureId", "failureName", new[] { "failureLine" });
 
-            Writer.StoryStarting(new Story("id", "summary", new IScenario[] {failureScenario}));
+            SimulateStoryStarting(new Story("id", "summary", new IScenario[] {failureScenario}));
 
-            Writer.ScenarioStarting(failureScenario);
-            Writer.ScenarioFailed(new ScenarioFailureInfo(failureScenario, "foo", "bar", "failed"));
+            SimulateScenarioStarting(failureScenario);
+            SimulateStoryFailed(new ScenarioFailureInfo(failureScenario, "foo", "bar", "failed"));
 
             Writer.Handle(new SessionFinishedEvent());
         }
+
+
 
         [Test]
         public void Generates_valid_XML()
@@ -341,12 +369,12 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
             var line = "!<%&>/>\"'line1";
             var scenario = BuildTestScenario("<successId&>\"'", "<successName>%&\"'", new[] { line });
 
-            Writer.StoryStarting(new Story("id", "summary", new IScenario[] {scenario}));
+           SimulateStoryStarting(new Story("id", "summary", new IScenario[] {scenario}));
 
-            Writer.ScenarioStarting(scenario);
+            SimulateScenarioStarting(scenario);
 
-            Writer.Success(scenario, line);
-            Writer.ScenarioPending(new ScenarioPendingInfo(scenario, line));
+            SimulateSuccessfulLine(scenario, line);
+            Writer.Handle(new ScenarioPendingEvent{Scenario = scenario, Line = line});
 
             Writer.Handle(new SessionFinishedEvent());
         }
@@ -378,12 +406,12 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
             var line = "!<%&>/>\"'line1";
             var sucessScenario = BuildTestScenario("<successId&>\"'", "<successName>%&\"'", new[] { line });
 
-            Writer.StoryStarting(new Story("id", "summary", new IScenario[] {sucessScenario}));
+           SimulateStoryStarting(new Story("id", "summary", new IScenario[] {sucessScenario}));
 
-            Writer.ScenarioStarting(sucessScenario);
+            SimulateScenarioStarting(sucessScenario);
 
-            Writer.Success(sucessScenario, line);
-            Writer.ScenarioFailed(new ScenarioFailureInfo(sucessScenario, line, line, line));
+            SimulateSuccessfulLine(sucessScenario, line);
+            SimulateStoryFailed(new ScenarioFailureInfo(sucessScenario, line, line, line));
 
             Writer.Handle(new SessionFinishedEvent());
         }

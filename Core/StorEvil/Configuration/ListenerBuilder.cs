@@ -1,5 +1,7 @@
+using System;
 using System.Configuration;
 using StorEvil.Configuration;
+using StorEvil.Events;
 using StorEvil.Infrastructure;
 using StorEvil.InPlace;
 using StorEvil.ResultListeners;
@@ -13,26 +15,9 @@ namespace StorEvil.Console
         public ListenerBuilder(ConfigSettings settings)
         {
             _settings = settings;
-        }
+        }        
 
-        public IResultListener GetResultListener()
-        {
-            var compositeListener = new CompositeListener();
-
-            if (_settings.ConsoleMode != ConsoleMode.Quiet)
-            {
-                compositeListener.AddListener(new ConsoleResultListener
-                                                  {
-                                                      ColorEnabled = _settings.ConsoleMode == ConsoleMode.Color
-                                                  });
-            }
-
-            AddFileWritingListenerIfConfigured(compositeListener);
-
-            return compositeListener;
-        }
-
-        private void AddFileWritingListenerIfConfigured(CompositeListener compositeListener)
+        private void AddFileWritingListenerIfConfigured(EventBus bus)
         {
             if (string.IsNullOrEmpty(_settings.OutputFileFormat))
                 return;
@@ -47,16 +32,31 @@ namespace StorEvil.Console
             switch (_settings.OutputFileFormat.ToLower())
             {
                 case "xml":
-                    compositeListener.AddListener(new XmlReportListener(fileWriter));
+
+                    bus.Register(new XmlReportListener(fileWriter));
                     break;
                 case "spark":
-                    compositeListener.AddListener(new SparkReportListener(fileWriter,
-                                                                          _settings.OutputFileTemplate));
+                    bus.Register(new SparkReportListener(fileWriter, _settings.OutputFileTemplate));
                     break;
                 default:
                     throw new ConfigurationErrorsException(
                         string.Format("'{0} is not a valid output file format.'", _settings.OutputFileFormat));
             }
+        }
+
+        public void SetUpListeners(EventBus bus)
+        {
+            if (_settings.ConsoleMode != ConsoleMode.Quiet)
+            {
+                var consoleListener =new ConsoleResultListener
+                {
+                    ColorEnabled = _settings.ConsoleMode == ConsoleMode.Color
+                };
+
+                bus.Register(consoleListener);
+            }
+
+            AddFileWritingListenerIfConfigured(bus);
         }
     }
 }

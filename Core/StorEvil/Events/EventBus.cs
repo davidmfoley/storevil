@@ -16,10 +16,29 @@ namespace StorEvil.Events
     
     public class EventBus : MarshalByRefObject, IEventBus
     {
-        private Dictionary<Type, List<object>> _handlers = new Dictionary<Type, List<object>>();
+        public EventBus()
+        {
+            _handlers = new List<object>();
+        }
+
+        private Dictionary<Type, List<object>> _handlersByEvent = new Dictionary<Type, List<object>>();
+        private readonly List<object> _handlers;
+
+
+        public IEnumerable<object> Handlers  
+        {
+            get { return _handlers;}        
+        }
 
         public void Register(object handler)
         {
+            if (_handlers.Contains(handler))
+            {
+                DebugTrace.Trace("EventBus", "Tried to add a handler of type " + handler.GetType() + " but it was already registered.");
+                return;
+            }
+
+            _handlers.Add(handler);
             var allInterfaces = handler.GetType().GetInterfaces();
 
             var handlerType = typeof (IEventHandler<>);
@@ -38,10 +57,10 @@ namespace StorEvil.Events
 
         private List<object> GetHandlersForType(Type messageType)
         {
-            if (!_handlers.ContainsKey(messageType))
-                _handlers.Add(messageType, new List<object>());
+            if (!_handlersByEvent.ContainsKey(messageType))
+                _handlersByEvent.Add(messageType, new List<object>());
 
-            return _handlers[messageType];
+            return _handlersByEvent[messageType];
         }
 
         public void Raise<T>(T e)

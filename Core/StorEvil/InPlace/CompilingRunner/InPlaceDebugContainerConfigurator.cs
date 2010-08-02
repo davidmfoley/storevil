@@ -2,6 +2,7 @@ using Funq;
 using StorEvil.Configuration;
 using StorEvil.Console;
 using StorEvil.Core;
+using StorEvil.Events;
 using StorEvil.ResultListeners;
 using StorEvil.Utility;
 
@@ -18,8 +19,10 @@ namespace StorEvil.InPlace
 
             container.Register<IStoryFilter>(new TagFilter(customSettings.Tags ?? new string[0]));
 
-            var listener = container.Resolve<IResultListener>() as CompositeListener;
-            listener.Listeners.Add(new DebugListener());
+            var bus = StorEvilEvents.Bus;
+            container.Register<IEventBus>(bus);
+            bus.Register(new DebugListener());
+
         }
     }
 }

@@ -17,14 +17,12 @@ namespace StorEvil.InPlace
 {
     public class InPlaceRunnerSpec<T>
     {
-        protected IResultListener ResultListener;
         protected StoryContext Context;
         protected CapturingEventBus FakeEventBus;
 
         protected void RunStory(Story story)
         {
             FakeEventBus = new CapturingEventBus();
-            ResultListener = MockRepository.GenerateStub<IResultListener>();
             new ExtensionMethodHandler().AddAssembly(typeof(TestExtensionMethods).Assembly);
 
             Context = new StoryContext(new FakeSessionContext(), typeof (T));
@@ -62,7 +60,6 @@ namespace StorEvil.InPlace
                                      
             var runner = new InPlaceCompilingStoryRunner(
                 remoteHandlerFactory,                                                
-                ResultListener, 
                 preprocessor,                                               
                 new IncludeAllFilter(), 
                 new FakeSessionContext(Context), FakeEventBus);
@@ -74,7 +71,7 @@ namespace StorEvil.InPlace
         {
             FakeEventBus = new CapturingEventBus();
             var scenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()), MockRepository.GenerateStub<IAmbiguousMatchResolver>());
-            return new InPlaceStoryRunner(ResultListener, new ScenarioPreprocessor(),
+            return new InPlaceStoryRunner(new ScenarioPreprocessor(),
                                           scenarioInterpreter,
                                           new IncludeAllFilter(), new FakeSessionContext(Context), FakeEventBus);
         }

@@ -136,7 +136,6 @@
     <Compile Include="Interpreter\IAmbiguousMatchResolver.cs" />
     <Compile Include="Nunit\NUnitContainerConfigurator.cs" />
     <EmbeddedResource Include="Resources\ExampleContext.cs" />
-    <Compile Include="ResultListeners\RemoteListener.cs" />
     <Compile Include="StubGeneration\StdOutWriter.cs" />
     <Compile Include="StubGeneration\StubGenerationSettings.cs" />
     <Compile Include="Tracing\IDebugListener.cs" />
@@ -174,7 +173,6 @@
     <Compile Include="StubGeneration\ClipboardWriter.cs" />
     <Compile Include="StubGeneration\StubGenerator.cs" />
     <Compile Include="Utility\FunqEasyRegistrationHelper.cs" />
-    <Compile Include="ResultListeners\CompositeListener.cs" />
     <Compile Include="ResultListeners\ConsoleResultListener.cs" />
     <Compile Include="MultipleWordsAttribute.cs" />
     <Compile Include="Nunit\FixtureGenerationStoryHandler.cs" />
