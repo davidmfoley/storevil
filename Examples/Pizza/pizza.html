@@ -1,0 +1,256 @@
+<html>
+    <head>
+		<style type="text/css">	
+		body {
+			background: #ddd;
+			font-family: Interstate, "Lucida Grande",  Verdana, Arial, helvetica, sans-serif;
+			font-size:13px;
+			color: black;			
+		}
+		
+		div  {
+			padding:5x;			
+		}
+		
+		h1, h2, h3 {
+			padding:5px;
+			margin:0px;
+		}
+		
+		.story {			
+			background: #eee;
+			padding:5px 5px 10px 15px;
+			outline: 1px solid #ccc;
+			margin-bottom:10px;
+		}
+		.scenario, .suggestions {	
+			background: #fff;
+			outline: 1px solid #ccc;
+			padding:5px 5px 5px 15px;
+		}
+		.summary {
+			padding:10px 10px 5px 10px;
+		}
+		.scenario-failed, .summary-failed	{
+			background-color:#f99;
+		}
+	
+		.scenario-passed,.summary-passed	{
+			background-color:#8d8;
+		}
+		.scenario-pending,.summary-pending	{
+			background-color:#fd7;
+		}
+		
+		.suggestions h3 {
+			background: #ccc;
+		}
+		
+		.line-failed	{
+			color:red;
+			float:left;
+		}
+		
+		.line-passed	{
+			color:green;
+		}
+		
+		.line-pending	{
+			color:#981;
+		}
+		.failure-message {
+			padding:10px;
+			font-weight:bold;
+			color:Red;
+			clear:both;
+		
+		}
+	</style>
+    </head>
+    <body>
+        <h1>StorEvil Run Report</h1>
+		<div class="summary"><div class="summary-passed">
+				11 Passed
+			</div><div class="summary-failed">
+				1 Failed
+			</div><div class="summary-pending">
+				1 Pending
+			</div>
+		</div><div class="stories-wrapper"><div class="story">    
+                <h2>Basic Pricing</h2> 
+				<div class="summary"><div class="summary-passed">
+						6 Passed
+					</div>
+				</div><div class="scenario">
+					<h3 class="scenario-passed">When customer orders a large cheese pizza
+Grand Total should be $15 - Passed</h3>
+						<div class="line-passed">						
+							When customer orders a large cheese pizza<br/>
+						</div>
+						<div class="line-passed">						
+							Grand Total should be $15<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">When customer orders a medium cheese pizza
+Grand Total should be $12 - Passed</h3>
+						<div class="line-passed">						
+							When customer orders a medium cheese pizza<br/>
+						</div>
+						<div class="line-passed">						
+							Grand Total should be $12<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">When customer orders a small cheese pizza
+Grand Total should be $10 - Passed</h3>
+						<div class="line-passed">						
+							When customer orders a small cheese pizza<br/>
+						</div>
+						<div class="line-passed">						
+							Grand Total should be $10<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">When Customer orders a large pizza with 3 toppings
+Grand Total should be $21 - Passed</h3>
+						<div class="line-passed">						
+							When Customer orders a large pizza with 3 toppings<br/>
+						</div>
+						<div class="line-passed">						
+							Grand Total should be $21<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">When Customer orders a medium pizza with 3 toppings
+Grand Total should be $16.50 - Passed</h3>
+						<div class="line-passed">						
+							When Customer orders a medium pizza with 3 toppings<br/>
+						</div>
+						<div class="line-passed">						
+							Grand Total should be $16.50<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">When Customer orders a small pizza with 3 toppings
+Grand Total should be $13.00 - Passed</h3>
+						<div class="line-passed">						
+							When Customer orders a small pizza with 3 toppings<br/>
+						</div>
+						<div class="line-passed">						
+							Grand Total should be $13.00<br/>
+						</div>
+
+				</div>
+<div class="suggestions">
+					<h3>Suggestions for implementing pending steps</h3><div class="suggestion">
+						<code><pre>
+// and has a superduper discount coupon
+public void and_has_a_superduper_discount_coupon()
+{
+    StorEvil.ScenarioStatus.Pending(); 
+}
+						</pre></code>
+					</div>
+				</div>
+            </div><div class="story">    
+                <h2>Discounts</h2> 
+				<div class="summary"><div class="summary-passed">
+						5 Passed
+					</div><div class="summary-failed">
+						1 Failed
+					</div><div class="summary-pending">
+						1 Pending
+					</div>
+				</div><div class="scenario">
+					<h3 class="scenario-passed">two mediums for 20 bucks special - Passed</h3>
+						<div class="line-passed">						
+							When customer orders 2 medium cheese pizzas<br/>
+						</div>
+						<div class="line-passed">						
+							Grand Total should be $20<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">two slices and a soda promo... cheese - Passed</h3>
+						<div class="line-passed">						
+							When customer orders 2 cheese slices and a coke<br/>
+						</div>
+						<div class="line-passed">						
+							Grand total should be $6<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">two slices and a soda promo... combo - Passed</h3>
+						<div class="line-passed">						
+							When customer orders 2 combo slices and a coke<br/>
+						</div>
+						<div class="line-passed">						
+							Grand total should be $6<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">10% discount if ordering 5 or more pizzas - Passed</h3>
+						<div class="line-passed">						
+							When customer orders 5 large cheese pizzas<br/>
+						</div>
+						<div class="line-passed">						
+							Grand total should be $67.50<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-passed">beer should be $4 - Passed</h3>
+						<div class="line-passed">						
+							When customer orders a beer<br/>
+						</div>
+						<div class="line-passed">						
+							Grand total should be $4<br/>
+						</div>
+
+				</div><div class="scenario">
+					<h3 class="scenario-failed">Example of a failure: pizza and beer special should be $6 - Failed</h3>
+						<div class="line-passed">						
+							When customer orders a beer<br/>
+						</div>
+						<div class="line-passed">						
+							and orders a slice<br/>
+						</div>
+						<div class="line-passed">						
+							Grand total<br/>
+						</div>
+						<div class="line-failed">						
+							should be $6<br/>
+						</div>
+<div class="failure-message">
+						  Expected: 6m
+  But was:  6.5m
+
+					</div>
+				</div><div class="scenario">
+					<h3 class="scenario-pending">Example of a pending step - Pending</h3>
+						<div class="line-passed">						
+							When customer orders a beer<br/>
+						</div>
+						<div class="line-passed">						
+							and orders a slice<br/>
+						</div>
+						<div class="line-pending">						
+							and has a superduper discount coupon<br/>
+						</div>
+
+				</div>
+<div class="suggestions">
+					<h3>Suggestions for implementing pending steps</h3><div class="suggestion">
+						<code><pre>
+// and has a superduper discount coupon
+public void and_has_a_superduper_discount_coupon()
+{
+    StorEvil.ScenarioStatus.Pending(); 
+}
+						</pre></code>
+					</div>
+				</div>
+            </div>
+        </div>
+    </body>
+</html>

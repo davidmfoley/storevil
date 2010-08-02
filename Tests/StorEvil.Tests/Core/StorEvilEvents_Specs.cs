@@ -95,7 +95,7 @@ namespace StorEvil.Core.Event_Handling
         }
     }
 
-    public class FooBarBazHandler : IEventHandler<FooEvent, BarEvent, BazEvent>
+    public class FooBarBazHandler : IEventHandler<FooEvent>, IEventHandler<BarEvent>, IEventHandler<BazEvent>
     {
         public List<object> EventsCaught = new List<object>();
         public void Handle(FooEvent eventToHandle)

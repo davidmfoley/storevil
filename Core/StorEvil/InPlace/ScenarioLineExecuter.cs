@@ -1,14 +1,10 @@
 using System;
 using System.Reflection;
-using Funq;
 using NUnit.Framework;
-using StorEvil.Configuration;
-using StorEvil.Console;
 using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Events;
 using StorEvil.Interpreter;
-using StorEvil.Utility;
 
 namespace StorEvil.InPlace
 {
@@ -38,20 +34,28 @@ namespace StorEvil.InPlace
             if (chain == null)
             {
                 var suggestion = _implementationHelper.Suggest(line);
-                _eventBus.Raise(new LineNotInterpretedEvent { Scenario = scenario, Line = line, Suggestion = suggestion });
+
                
+                RaiseNotImplementedEvent(line, suggestion);
                 return LineStatus.Pending;
             }
 
-            if (!ExecuteChain(scenario, storyContext, chain, line))
+            if (!ExecuteChain(storyContext, chain, line))
                 return LineStatus.Failed;
 
-            _eventBus.Raise(new LineInterpretedEvent {Scenario = scenario, Line = line});
+            _eventBus.Raise(new LineExecutedEvent { Status = ExecutionStatus.Passed, Line = line });
 
             return LineStatus.Passed;
         }
 
-        private bool ExecuteChain(Scenario scenario, ScenarioContext storyContext, InvocationChain chain, string line)
+        private void RaiseNotImplementedEvent(string line, string suggestion)
+        {
+            _eventBus.Raise(new LineExecutedEvent { Line = line, Status = ExecutionStatus.Pending, Suggestion = suggestion });
+
+           
+        }
+
+        private bool ExecuteChain(ScenarioContext storyContext, InvocationChain chain, string line)
         {
             string successPart = "";
             _lastResult = null;
@@ -64,23 +68,21 @@ namespace StorEvil.InPlace
                 }
                 catch (TargetInvocationException ex)
                 {
+                   
                     if (ex.InnerException is ScenarioPendingException)
                     {
-                        _eventBus.Raise(new ScenarioPendingEvent {Scenario = scenario, Line = line});
-                        //_listener.ScenarioPending(new ScenarioPendingInfo(scenario, line));
+                        _eventBus.Raise(new LineExecutedEvent {Line = line, Status = ExecutionStatus.Pending});
                     }
                     else
                     {
-                        _eventBus.Raise(new ScenarioFailedEvent { 
-                            Scenario = scenario, 
+                        _eventBus.Raise(new LineExecutedEvent
+                        {   
                             Line = line, 
+                            Status = ExecutionStatus.Failed,
                             SuccessPart = successPart.Trim(),
                             FailedPart = invocation.MatchedText, 
                             Message = GetExceptionMessage(ex) 
                         });
-
-                        //_listener.ScenarioFailed(new ScenarioFailureInfo(scenario, successPart.Trim(),
-                        //                                                 invocation.MatchedText, GetExceptionMessage(ex)));
                     }
 
                     return false;
@@ -123,16 +125,5 @@ namespace StorEvil.InPlace
         Passed,
         Failed,
         Pending
-    }
-
-
-    public class InPlaceContainerConfigurator : ContainerConfigurator<InPlaceSettings>
-    {
-        protected override void SetupCustomComponents(Container container, ConfigSettings configSettings, InPlaceSettings customSettings)
-        {
-            container.EasyRegister<IStoryHandler, InPlaceStoryRunner>();
-            container.EasyRegister<IStorEvilJob, StorEvilJob>();
-            container.Register<IStoryFilter>(new TagFilter(customSettings.Tags ?? new string[0]));
-        }
     }
 }

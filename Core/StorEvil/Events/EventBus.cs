@@ -66,23 +66,12 @@ namespace StorEvil.Events
         public void Raise<T>(T e)
         {
             DebugTrace.Trace("EventBus", "Raising " + typeof(T).FullName);
-            foreach (var handler in GetHandlersForType(typeof(T)))
+            foreach (var handler in GetHandlersForType(typeof(T)).Cast<IEventHandler<T>>())
             {
-                var methodInfo = GetHandleMethod<T>(handler);
-                if (methodInfo != null)
-                {
-                    methodInfo.Invoke(handler, new object[] {e});
-                    DebugTrace.Trace("EventBus", " ... handled by: " + handler.GetType().FullName);
-                }
+                handler.Handle(e);
+                DebugTrace.Trace("EventBus", " ... handled by: " + handler.GetType().FullName);                
             }
         }
 
-        private MethodInfo GetHandleMethod<T>(object handler)
-        {
-            var handleMethods = handler.GetType().GetMethods().Where(m => m.Name == "Handle" &&  m.GetParameters().Count() == 1);
-            var chosenMethod = handleMethods.FirstOrDefault(m => m.GetParameters().First().ParameterType == typeof (T));
-
-            return chosenMethod;            
-        }
     }
 }

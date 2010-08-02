@@ -42,6 +42,10 @@ namespace StorEvil.InPlace
             FakeEventBus.CaughtEvents.OfType<TEvent>().Any().ShouldEqual(true);
         }
 
+        protected void AssertWasRaised<TEvent>(Predicate<TEvent> matching)
+        {
+            FakeEventBus.CaughtEvents.OfType<TEvent>().Any(x=>matching(x)).ShouldEqual(true);
+        }
         private void RunInCompilingRunner(Story story)
         {
             var preprocessor = new ScenarioPreprocessor();
@@ -103,32 +107,33 @@ namespace StorEvil.InPlace
 
         protected void AssertLineSuccess(string expectedLine)
         {
-            var interpretedEvents = FakeEventBus.CaughtEvents.OfType<LineInterpretedEvent>();
-            var matchingLine = interpretedEvents.FirstOrDefault(ev => ev.Line == expectedLine);
-            matchingLine.ShouldNotBeNull();            
+            GetSuccessfulInvocationCount(expectedLine).ShouldBeGreaterThan(0);
+        }
+
+        private int GetSuccessfulInvocationCount(string expectedLine)
+        {
+            var interpretedEvents = FakeEventBus.CaughtEvents.OfType<LineExecutedEvent>();
+            return interpretedEvents.Count(ev => ev.Line == expectedLine && ev.Status == ExecutionStatus.Passed);
         }
 
         protected void AssertLineSuccess(string expectedLine, int count)
         {
-            var matchingEvents = FakeEventBus.CaughtEvents.OfType<LineInterpretedEvent>().Where(ev => ev.Line == expectedLine);
-
-            matchingEvents.Count().ShouldBe(count);
+            GetSuccessfulInvocationCount(expectedLine).ShouldEqual(count);
         }
 
         protected void AssertScenarioSuccess()
         {
-            AssertEventRaised<ScenarioSucceededEvent>();
-            
+            AssertEventRaised<ScenarioFinishedEvent>(x=>x.Status == ExecutionStatus.Passed);            
         }
 
         protected void AssertAllScenariosSucceeded()
         {
-            FakeEventBus.CaughtEvents.OfType<ScenarioFailedEvent>().Any().ShouldBe(false);
+            FakeEventBus.CaughtEvents.OfType<ScenarioFinishedEvent>().Any(x=>x.Status != ExecutionStatus.Passed).ShouldBe(false);
         }
 
         protected void AssertScenarioSuccessWithName(string name)
         {
-            AssertEventRaised<ScenarioSucceededEvent>(x => x.Scenario.Name == name);
+            AssertEventRaised<ScenarioFinishedEvent>(x => x.Status == ExecutionStatus.Passed && x.Scenario.Name == name);                   
         }
 
         protected void AssertEventRaised<TEvent>(Predicate<TEvent> matching)

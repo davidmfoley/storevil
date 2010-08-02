@@ -109,14 +109,12 @@
     <Compile Include="Core\JobResult.cs" />
     <Compile Include="Events\EventBus.cs" />
     <Compile Include="Events\IEventHandler.cs" />
-    <Compile Include="Events\LineInterpretedEvent.cs" />
-    <Compile Include="Events\LineNotInterpretedEvent.cs" />
+    <Compile Include="Events\LineExecutedEvent.cs" />
     <Compile Include="Events\MatchFoundEvent.cs" />
-    <Compile Include="Events\ScenarioFailedEvent.cs" />
-    <Compile Include="Events\ScenarioPendingEvent.cs" />
+    <Compile Include="Events\ScenarioFinishedEvent.cs" />
     <Compile Include="Events\ScenarioStartingEvent.cs" />
-    <Compile Include="Events\ScenarioSucceededEvent.cs" />
     <Compile Include="Events\SessionFinishedEvent.cs" />
+    <Compile Include="Events\SessionStartingEvent.cs" />
     <Compile Include="Events\StoryStartingEvent.cs" />
     <Compile Include="Extensibility\CouldNotParseParameter.cs" />
     <Compile Include="Extensibility\CustomParameterConverter.cs" />
@@ -131,6 +129,7 @@
     <Compile Include="InPlace\CompilingRunner\HandlerCodeGenerator.cs" />
     <Compile Include="InPlace\CompilingRunner\CodeCompiler.cs" />
     <Compile Include="InPlace\CompilingRunner\InPlaceDebugContainerConfigurator.cs" />
+    <Compile Include="InPlace\InPlaceContainerConfigurator.cs" />
     <Compile Include="InPlace\InPlaceSettings.cs" />
     <Compile Include="Events\StorEvilEvents.cs" />
     <Compile Include="Interpreter\IAmbiguousMatchResolver.cs" />

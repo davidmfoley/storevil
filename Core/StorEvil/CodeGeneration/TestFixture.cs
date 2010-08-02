@@ -16,6 +16,7 @@ namespace StorEvil.CodeGeneration
         private Scenario _currentScenario;
         private object _debugContexts;
         private EventBus _eventBus;
+        private LineStatus _lastStatus;
 
         protected void BeforeAll()
         {
@@ -36,12 +37,18 @@ namespace StorEvil.CodeGeneration
         protected void BeforeEach()
         {
             _scenarioContext = _storyContext.GetScenarioContext();
+            _lastStatus = LineStatus.Passed;
         }
 
         protected void ExecuteLine(string line)
         {
+            if (_lastStatus != LineStatus.Passed)
+                return;
+
             _debugContexts = null;
-            _scenarioLineExecuter.ExecuteLine(_currentScenario, _scenarioContext, line);          
+
+            
+            _lastStatus = _scenarioLineExecuter.ExecuteLine(_currentScenario, _scenarioContext, line);          
         }
 
         protected void SetCurrentScenario(string id, string summary)

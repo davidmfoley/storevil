@@ -8,8 +8,7 @@ using StorEvil.InPlace;
 namespace StorEvil.ResultListeners
 {
     public class XmlReportListener : IEventHandler<SessionFinishedEvent>,
-        IEventHandler<ScenarioFailedEvent, ScenarioPendingEvent, LineInterpretedEvent>,
-        IEventHandler<LineNotInterpretedEvent, ScenarioStartingEvent>
+        IEventHandler<LineExecutedEvent>, IEventHandler<ScenarioStartingEvent>
     {
 
         public class StatusNames
@@ -60,11 +59,24 @@ namespace StorEvil.ResultListeners
         private static void SetStatus(XmlElement element, string status)
         {
             element.SetAttribute(XmlNames.Status, status);
-        }        
+        }
 
-        public void Handle(ScenarioSucceededEvent eventToHandle)
+        public void Handle(ScenarioFinishedEvent eventToHandle)
         {
-            SetStatus(_currentScenarioElement, StatusNames.Success);
+            if (eventToHandle.Status == ExecutionStatus.Passed)
+            {
+                SetStatus(_currentScenarioElement, StatusNames.Success);
+            }
+            else if (eventToHandle.Status == ExecutionStatus.Failed)
+            {
+                SetStatus(_currentScenarioElement, StatusNames.Failure);
+                SetStatus(_currentStoryElement, StatusNames.Failure);
+            }
+            else
+            {
+                SetStatus(_currentScenarioElement, StatusNames.NotUnderstood);                
+                SetStatus(_currentStoryElement, StatusNames.Failure);
+            }
         }
 
         public void Handle(StoryStartingEvent eventToHandle)
@@ -81,33 +93,18 @@ namespace StorEvil.ResultListeners
         {
             _fileWriter.Write(_doc.OuterXml);
         }
-
-        public void Handle(ScenarioFailedEvent eventToHandle)
+       
+        public void Handle(LineExecutedEvent eventToHandle)
         {
-            AddLineToCurrentScenario(eventToHandle.SuccessPart, StatusNames.Success);
-            AddLineToCurrentScenario(eventToHandle.FailedPart, StatusNames.Failure);
-
-            SetStatus(_currentScenarioElement, StatusNames.Failure);
-            SetStatus(_currentStoryElement, StatusNames.Failure);
-        }
-
-        public void Handle(ScenarioPendingEvent eventToHandle)
-        {
-            AddLineToCurrentScenario(eventToHandle.Line, StatusNames.NotUnderstood);
-            SetStatus(_currentScenarioElement, StatusNames.NotUnderstood);
-            SetStatus(_currentStoryElement, StatusNames.Failure);
-        }
-
-        public void Handle(LineInterpretedEvent eventToHandle)
-        {
-            AddLineToCurrentScenario(eventToHandle.Line, StatusNames.Success);
-        }
-
-        public void Handle(LineNotInterpretedEvent eventToHandle)
-        {
-            AddLineToCurrentScenario(eventToHandle.Line, StatusNames.NotUnderstood);
-            SetStatus(_currentScenarioElement, StatusNames.NotUnderstood);
-            SetStatus(_currentStoryElement, StatusNames.Failure);
+            if (eventToHandle.Status == ExecutionStatus.Passed)
+                AddLineToCurrentScenario(eventToHandle.Line, StatusNames.Success);
+            else if (eventToHandle.Status == ExecutionStatus.Failed)
+            {
+                AddLineToCurrentScenario(eventToHandle.SuccessPart, StatusNames.Success);
+                AddLineToCurrentScenario(eventToHandle.FailedPart, StatusNames.Failure);
+            }
+            else
+                AddLineToCurrentScenario(eventToHandle.Line, StatusNames.NotUnderstood);
         }
 
         public void Handle(ScenarioStartingEvent eventToHandle)
@@ -115,6 +112,8 @@ namespace StorEvil.ResultListeners
             _currentScenarioElement = _doc.CreateElement(XmlNames.Scenario);
             _currentStoryElement.AppendChild(_currentScenarioElement);
         }
+
+       
     }
 
     public class AutoRegisterForEvents

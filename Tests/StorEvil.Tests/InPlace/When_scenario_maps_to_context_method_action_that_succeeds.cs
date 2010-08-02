@@ -45,13 +45,15 @@ namespace StorEvil.InPlace
         [Test]
         public void Notifies_listener_of_first_line_success()
         {
-            AssertEventRaised<LineInterpretedEvent>(x=>x.Line == "When some action");            
+            AssertLineSuccess("When some action");
         }
+
+       
 
         [Test]
         public void Notifies_listener_of_second_line_success()
         {
-            AssertEventRaised<LineInterpretedEvent>(x => x.Line == "then some action was called should be true");                  
+            AssertLineSuccess("then some action was called should be true");                  
         }
 
         [Test]

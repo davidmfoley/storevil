@@ -30,12 +30,21 @@ namespace StorEvil.InPlace
             {
                 LineStatus status = _lineExecuter.ExecuteLine(scenario, storyContext, line.Text);
                 if (LineStatus.Failed == status)
+                {
+                    _eventBus.Raise(new ScenarioFinishedEvent { Scenario = scenario, Status = ExecutionStatus.Failed });
                     return false;
-                if (LineStatus.Pending ==status)
+                }
+                if (LineStatus.Pending == status)
+                {
+                    _eventBus.Raise(new ScenarioFinishedEvent { Scenario = scenario, Status = ExecutionStatus.Pending });
+             
                     return true;
+                }
             }
 
-            _eventBus.Raise(new ScenarioSucceededEvent { Scenario = scenario });
+            _eventBus.Raise(new ScenarioFinishedEvent { Scenario = scenario, Status = ExecutionStatus.Passed});
+
+            //_eventBus.Raise(new ScenarioSucceededEvent { Scenario = scenario });
             return true;
         }
     }

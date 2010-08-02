@@ -69,17 +69,18 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
 
         protected void SimulateStoryFailed(ScenarioFailureInfo scenarioFailureInfo)
         {
-            Writer.Handle(new ScenarioFailedEvent { FailedPart = scenarioFailureInfo.FailedPart, SuccessPart = scenarioFailureInfo.SuccessPart, Scenario = scenarioFailureInfo.Scenario, Message = scenarioFailureInfo.Message });
+            Writer.Handle(new LineExecutedEvent { FailedPart = scenarioFailureInfo.FailedPart, SuccessPart = scenarioFailureInfo.SuccessPart, Status = ExecutionStatus.Failed, Message = scenarioFailureInfo.Message });
+            Writer.Handle(new ScenarioFinishedEvent { Scenario = scenarioFailureInfo.Scenario, Status = ExecutionStatus.Failed });
         }
 
         protected void SimulateScenarioSucceeded(Scenario scenario)
         {
-            Writer.Handle(new ScenarioSucceededEvent { Scenario = scenario });
+            Writer.Handle(new ScenarioFinishedEvent { Scenario = scenario, Status = ExecutionStatus.Passed});
         }
 
         protected void SimulateSuccessfulLine(Scenario scenario, string line)
         {
-            Writer.Handle(new LineInterpretedEvent { Line = line });
+            Writer.Handle(new LineExecutedEvent { Line = line, Status = ExecutionStatus.Passed});
         }
 
         protected void SimulateScenarioStarting(Scenario scenario)
@@ -374,8 +375,8 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
             SimulateScenarioStarting(scenario);
 
             SimulateSuccessfulLine(scenario, line);
-            Writer.Handle(new ScenarioPendingEvent{Scenario = scenario, Line = line});
-
+            Writer.Handle(new LineExecutedEvent{Status = ExecutionStatus.Pending, Line = line});
+            Writer.Handle(new ScenarioFinishedEvent{Scenario = scenario, Status = ExecutionStatus.Pending});
             Writer.Handle(new SessionFinishedEvent());
         }
 

@@ -27,14 +27,7 @@ namespace StorEvil.InPlace
             _context = new SessionContext();            
         }
 
-        private EventBus EventBus
-        {
-            get
-            {
-                return StorEvilEvents.Bus;
-            }
-        }
-
+       
         protected void AddAssembly(string location)
         {
             _context.AddAssembly(location);
@@ -62,6 +55,9 @@ namespace StorEvil.InPlace
 
         protected object[] ExecuteLine(string line)
         {
+            if (LastStatus != LineStatus.Passed)
+                return GetContexts();
+
             LastStatus = LineExecuter.ExecuteLine(CurrentScenario, CurrentScenarioContext, line);
 
             return GetContexts();
@@ -69,7 +65,7 @@ namespace StorEvil.InPlace
 
         public JobResult GetResult()
         {
-            return Result;
+            return Result;  
         }
 
         protected StoryContext CurrentStoryContext;
@@ -109,15 +105,18 @@ namespace StorEvil.InPlace
             if (LastStatus == LineStatus.Failed)
             {
                 Result.Failed++;
+                _eventBus.Raise(new ScenarioFinishedEvent() { Scenario = CurrentScenario, Status = ExecutionStatus.Failed });     
             } 
             else if (LastStatus == LineStatus.Pending)
             {
                 Result.Pending++;
+                _eventBus.Raise(new ScenarioFinishedEvent() { Scenario = CurrentScenario, Status = ExecutionStatus.Pending });     
+ 
             } 
             else
             {
-                Result.Succeeded++; 
-                _eventBus.Raise(new ScenarioSucceededEvent {Scenario = CurrentScenario});                
+                Result.Succeeded++;
+                _eventBus.Raise(new ScenarioFinishedEvent { Scenario = CurrentScenario, Status = ExecutionStatus.Passed });                
             }
         }
     }
