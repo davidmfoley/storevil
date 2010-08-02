@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using NUnit.Framework;
 using StorEvil.Core;
+using StorEvil.Events;
 using StorEvil.InPlace;
 
 namespace StorEvil.CodeGeneration

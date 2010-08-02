@@ -2,6 +2,7 @@ using System;
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Context;
+using StorEvil.Events;
 using StorEvil.InPlace;
 using StorEvil.Interpreter;
 using StorEvil.Parsing;
@@ -45,7 +46,6 @@ namespace StorEvil.InPlace.NonCompiled
     [TestFixture]
     public class When_finished_running_all_stories
     {
-        private IResultListener ResultListener;
         private IEventBus FakeEventBus;
 
         [SetUp]

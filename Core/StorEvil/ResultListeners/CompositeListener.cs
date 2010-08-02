@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using StorEvil.Core;
+using StorEvil.Events;
 using StorEvil.InPlace;
 
 namespace StorEvil.ResultListeners
@@ -27,10 +28,7 @@ namespace StorEvil.ResultListeners
             // AllListeners(x => x.StoryStarting(story));
         }
 
-        public void ScenarioStarting(Scenario scenario)
-        {
-            AllListeners(x => x.ScenarioStarting(scenario));
-        }
+        
 
         public void ScenarioFailed(ScenarioFailureInfo scenarioFailureInfo)
         {
@@ -54,7 +52,7 @@ namespace StorEvil.ResultListeners
        
         public void Handle(StoryStartingEvent eventToHandle)
         {
-            AllListeners(x => x.Handle(eventToHandle));
+           // AllListeners(x => x.Handle(eventToHandle));
         }
 
        

@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using StorEvil.Context;
 using StorEvil.Core;
+using StorEvil.Events;
 using StorEvil.Interpreter;
 using StorEvil.Interpreter.ParameterConverters;
 using StorEvil.Parsing;
@@ -11,22 +12,28 @@ namespace StorEvil.InPlace
     public abstract class DriverBase : MarshalByRefObject, IStoryHandler
     {
         protected JobResult Result = new JobResult();
-
-        private readonly IResultListener ResultListener;
         private readonly ScenarioLineExecuter LineExecuter;
         private readonly SessionContext _context;
 
         private ScenarioContext CurrentScenarioContext;
         private Scenario CurrentScenario;
         
-        protected DriverBase(IResultListener resultListener)
+        protected DriverBase(IEventBus eventBus)
         {
-            ResultListener = resultListener;
-            
+            //ResultListener = resultListener;
+            _eventBus = eventBus;
             ScenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()), new MostRecentlyUsedContext());           
-            LineExecuter = new ScenarioLineExecuter(ScenarioInterpreter, ResultListener);
+            LineExecuter = new ScenarioLineExecuter(ScenarioInterpreter, _eventBus);
             _context = new SessionContext();            
-        } 
+        }
+
+        private EventBus EventBus
+        {
+            get
+            {
+                return StorEvilEvents.Bus;
+            }
+        }
 
         protected void AddAssembly(string location)
         {
@@ -66,12 +73,13 @@ namespace StorEvil.InPlace
         }
 
         protected StoryContext CurrentStoryContext;
-        
+        private IEventBus _eventBus;
+
 
         protected IDisposable StartScenario(Story story, Scenario scenario)
         {
-            ResultListener.ScenarioStarting(scenario);
-
+            
+            _eventBus.Raise(new ScenarioStartingEvent {Scenario = scenario});
             if (CurrentStoryContext == null)
                 CurrentStoryContext = _context.GetContextForStory();
 
@@ -109,7 +117,7 @@ namespace StorEvil.InPlace
             else
             {
                 Result.Succeeded++; 
-                ResultListener.ScenarioSucceeded(CurrentScenario);
+                _eventBus.Raise(new ScenarioSucceededEvent {Scenario = CurrentScenario});                
             }
         }
     }

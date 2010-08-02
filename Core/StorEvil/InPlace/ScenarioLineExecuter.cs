@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Reflection;
 using Funq;
 using NUnit.Framework;
@@ -7,6 +6,7 @@ using StorEvil.Configuration;
 using StorEvil.Console;
 using StorEvil.Context;
 using StorEvil.Core;
+using StorEvil.Events;
 using StorEvil.Interpreter;
 using StorEvil.Utility;
 
@@ -15,17 +15,18 @@ namespace StorEvil.InPlace
     public class ScenarioLineExecuter
     {
         public ScenarioLineExecuter(ScenarioInterpreter scenarioInterpreter,
-                                    IResultListener listener)
+                                    IEventBus eventBus)
         {
             _memberInvoker = new MemberInvoker();
-            _listener = listener;
+           
             _scenarioInterpreter = scenarioInterpreter;
+            _eventBus = eventBus;
         }
 
-        private readonly IResultListener _listener;
-
+     
         private readonly MemberInvoker _memberInvoker;
         private readonly ScenarioInterpreter _scenarioInterpreter;
+        private readonly IEventBus _eventBus;
         private object _lastResult;
         private readonly ImplementationHelper _implementationHelper = new ImplementationHelper();
 
@@ -37,14 +38,16 @@ namespace StorEvil.InPlace
             if (chain == null)
             {
                 var suggestion = _implementationHelper.Suggest(line);
-                _listener.ScenarioPending(new ScenarioPendingInfo(scenario, line, suggestion));
+                _eventBus.Raise(new LineNotInterpretedEvent { Scenario = scenario, Line = line, Suggestion = suggestion });
+               
                 return LineStatus.Pending;
             }
 
             if (!ExecuteChain(scenario, storyContext, chain, line))
                 return LineStatus.Failed;
 
-            _listener.Success(scenario, line);
+            _eventBus.Raise(new LineInterpretedEvent {Scenario = scenario, Line = line});
+
             return LineStatus.Passed;
         }
 
@@ -63,12 +66,21 @@ namespace StorEvil.InPlace
                 {
                     if (ex.InnerException is ScenarioPendingException)
                     {
-                        _listener.ScenarioPending(new ScenarioPendingInfo(scenario, line));
+                        _eventBus.Raise(new ScenarioPendingEvent {Scenario = scenario, Line = line});
+                        //_listener.ScenarioPending(new ScenarioPendingInfo(scenario, line));
                     }
                     else
                     {
-                        _listener.ScenarioFailed(new ScenarioFailureInfo(scenario, successPart.Trim(),
-                                                                         invocation.MatchedText, GetExceptionMessage(ex)));
+                        _eventBus.Raise(new ScenarioFailedEvent { 
+                            Scenario = scenario, 
+                            Line = line, 
+                            SuccessPart = successPart.Trim(),
+                            FailedPart = invocation.MatchedText, 
+                            Message = GetExceptionMessage(ex) 
+                        });
+
+                        //_listener.ScenarioFailed(new ScenarioFailureInfo(scenario, successPart.Trim(),
+                        //                                                 invocation.MatchedText, GetExceptionMessage(ex)));
                     }
 
                     return false;
@@ -102,6 +114,16 @@ namespace StorEvil.InPlace
             return noStackTrace ? ex.Message : ex.Message + "\r\n" + ex;
         }
     }
+
+    public class ScenarioFailedEvent
+    {
+        public Scenario Scenario;
+        public string Line;
+        public string SuccessPart;
+        public string FailedPart;
+        public string Message;
+    }
+
 
     public enum LineStatus
     {

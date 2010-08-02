@@ -2,6 +2,7 @@ using Funq;
 using StorEvil.Configuration;
 using StorEvil.Console;
 using StorEvil.Context;
+using StorEvil.Events;
 using StorEvil.Infrastructure;
 using StorEvil.InPlace;
 using StorEvil.Interpreter;

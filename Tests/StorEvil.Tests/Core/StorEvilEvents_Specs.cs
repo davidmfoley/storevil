@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using StorEvil.Events;
 using StorEvil.InPlace;
 using StorEvil.Utility;
 
 namespace StorEvil.Core.Event_Handling
 {
-
     [TestFixture]
     public class Event_handling
     {
-
         private EventBus Bus;
         [SetUp]
         public void SetUpContext()

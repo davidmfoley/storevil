@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using StorEvil.Core;
+using StorEvil.Events;
 using StorEvil.InPlace;
 
 namespace StorEvil.ResultListeners
@@ -11,7 +12,7 @@ namespace StorEvil.ResultListeners
         void Handle(GatheredResultSet result);
     }
 
-    public class GatheringResultListener : AutoRegisterForEvents, IResultListener, IEventHandler<SessionFinishedEvent>
+    public class GatheringResultListener : AutoRegisterForEvents, IResultListener, IEventHandler<ScenarioStartingEvent, SessionFinishedEvent, ScenarioFailedEvent>
     {
         protected GatheringResultListener(IGatheredResultHandler handler)
         {
@@ -31,10 +32,7 @@ namespace StorEvil.ResultListeners
             Result.Add(storyResult);
         }
 
-        public void ScenarioStarting(Scenario scenario)
-        {
-            CurrentStory().AddScenario(new ScenarioResult {Name = scenario.Name, Id = scenario.Id});
-        }
+      
 
         private StoryResult CurrentStory()
         {
@@ -83,9 +81,24 @@ namespace StorEvil.ResultListeners
             Result.Add(storyResult);
         }
 
+        public void Handle(ScenarioStartingEvent eventToHandle)
+        {
+            var scenario = eventToHandle.Scenario;
+            CurrentStory().AddScenario(new ScenarioResult { Name = scenario.Name, Id = scenario.Id });
+        }
+
         public void Handle(SessionFinishedEvent eventToHandle)
         {
             Handler.Handle(Result);
+        }
+
+        public void Handle(ScenarioFailedEvent eventToHandle)
+        {
+            CurrentScenario().FailureMessage = eventToHandle.Message;
+            CurrentScenario().Status = ScenarioStatus.Failed;
+            if (!string.IsNullOrEmpty(eventToHandle.SuccessPart))
+                CurrentScenario().AddLine(ScenarioStatus.Passed, eventToHandle.SuccessPart);
+            CurrentScenario().AddLine(ScenarioStatus.Failed, eventToHandle.FailedPart);
         }
     }
 

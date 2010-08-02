@@ -1,6 +1,7 @@
 using System;
 using System.Xml;
 using StorEvil.Core;
+using StorEvil.Events;
 using StorEvil.Infrastructure;
 using StorEvil.InPlace;
 

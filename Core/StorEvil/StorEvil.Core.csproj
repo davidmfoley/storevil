@@ -107,6 +107,13 @@
     <Compile Include="Context\ScenarioContext.cs" />
     <Compile Include="Context\StoryContext.cs" />
     <Compile Include="Core\JobResult.cs" />
+    <Compile Include="Events\EventBus.cs" />
+    <Compile Include="Events\IEventHandler.cs" />
+    <Compile Include="Events\MatchFoundEvent.cs" />
+    <Compile Include="Events\ScenarioStartingEvent.cs" />
+    <Compile Include="Events\ScenarioSucceededEvent.cs" />
+    <Compile Include="Events\SessionFinishedEvent.cs" />
+    <Compile Include="Events\StoryStartingEvent.cs" />
     <Compile Include="Extensibility\CouldNotParseParameter.cs" />
     <Compile Include="Extensibility\CustomParameterConverter.cs" />
     <Compile Include="Infrastructure\Filesystem.cs" />
@@ -121,7 +128,7 @@
     <Compile Include="InPlace\CompilingRunner\CodeCompiler.cs" />
     <Compile Include="InPlace\CompilingRunner\InPlaceDebugContainerConfigurator.cs" />
     <Compile Include="InPlace\InPlaceSettings.cs" />
-    <Compile Include="InPlace\StorEvilEvents.cs" />
+    <Compile Include="Events\StorEvilEvents.cs" />
     <Compile Include="Interpreter\IAmbiguousMatchResolver.cs" />
     <Compile Include="Nunit\NUnitContainerConfigurator.cs" />
     <EmbeddedResource Include="Resources\ExampleContext.cs" />

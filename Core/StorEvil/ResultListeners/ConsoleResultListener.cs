@@ -1,11 +1,12 @@
 using System;
 using System.Diagnostics;
 using StorEvil.Core;
+using StorEvil.Events;
 using StorEvil.InPlace;
 
 namespace StorEvil.ResultListeners
 {
-    public abstract class WriterListener : AutoRegisterForEvents, IResultListener, IEventHandler<SessionFinishedEvent>
+    public abstract class WriterListener : AutoRegisterForEvents, IResultListener, IEventHandler<ScenarioStartingEvent,SessionFinishedEvent>
     {
         protected abstract void DoWrite(ConsoleColor white, params string[] s);
 
@@ -14,10 +15,7 @@ namespace StorEvil.ResultListeners
             DoWrite(ConsoleColor.White, "\r\n" + "\r\nSTORY: " + story.Id + "\r\n" + story.Summary);
         }
 
-        public void ScenarioStarting(Scenario scenario)
-        {
-            DoWrite(ConsoleColor.White, "\r\nSCENARIO: " + scenario.Name);
-        }
+       
 
         public void ScenarioFailed(ScenarioFailureInfo scenarioFailureInfo)
         {
@@ -51,6 +49,11 @@ namespace StorEvil.ResultListeners
         {
             var story = eventToHandle.Story;
             DoWrite(ConsoleColor.White, "\r\n" + "\r\nSTORY: " + story.Id + "\r\n" + story.Summary);
+        }
+
+        public void Handle(ScenarioStartingEvent eventToHandle)
+        {
+            DoWrite(ConsoleColor.White, "\r\nSCENARIO: " + eventToHandle.Scenario.Name);
         }
 
         public void Handle(SessionFinishedEvent eventToHandle)

@@ -1,8 +1,8 @@
 using System.Linq;
 using NUnit.Framework;
 using StorEvil.Core;
+using StorEvil.Events;
 using StorEvil.InPlace;
-using StorEvil.ResultListeners;
 using StorEvil.Utility;
 
 namespace StorEvil.ResultListeners.GatheringResultListener_Specs
@@ -25,21 +25,21 @@ namespace StorEvil.ResultListeners.GatheringResultListener_Specs
         protected void SimulateFailedScenario()
         {
             var failureScenario = new Scenario();
-            Listener.ScenarioStarting(failureScenario);
-            Listener.ScenarioFailed(new ScenarioFailureInfo(failureScenario, "success part", "failed part", "failure message"));
+            Listener.Handle(new ScenarioStartingEvent { Scenario = failureScenario });
+            Listener.Handle(new ScenarioFailedEvent {Scenario = failureScenario, SuccessPart = "success part", FailedPart = "failed part", Message = "failure message"});
         }
 
         protected void SimulatePendingScenario()
         {
             var pendingScenario = new Scenario();
-            Listener.ScenarioStarting(pendingScenario);
+            Listener.Handle(new ScenarioStartingEvent { Scenario = pendingScenario });
             Listener.ScenarioPending(new ScenarioPendingInfo(pendingScenario, "could not inperpret message"));
         }
 
         protected void SimulateSuccessfulScenario(string id, string name, string[] lines)
         {
             var successScenario = new Scenario(id, name, lines.Select(l=> new ScenarioLine{Text = l}).ToArray());
-            Listener.ScenarioStarting(successScenario);
+            Listener.Handle(new ScenarioStartingEvent { Scenario = successScenario });
 
             foreach (var line in lines)
                 Listener.Success(successScenario, line);
@@ -157,7 +157,7 @@ namespace StorEvil.ResultListeners.GatheringResultListener_Specs
         {
             SimulateStoryStarting("storyId", "storySummary");
             var testScenario = new Scenario();
-            Listener.ScenarioStarting(testScenario);
+            Listener.Handle(new ScenarioStartingEvent { Scenario = testScenario });
             Listener.ScenarioFailed(new ScenarioFailureInfo(testScenario, "success-part", "failed-part", "failure-message"));
         }
 
@@ -220,7 +220,7 @@ namespace StorEvil.ResultListeners.GatheringResultListener_Specs
         {
             SimulateStoryStarting("storyId", "storySummary");
             var testScenario = new Scenario();
-            Listener.ScenarioStarting(testScenario);
+            Listener.Handle(new ScenarioStartingEvent { Scenario = testScenario });
             Listener.ScenarioPending(new ScenarioPendingInfo(testScenario, "foo bar baz", TestSuggestion));
         }
 
@@ -251,11 +251,11 @@ namespace StorEvil.ResultListeners.GatheringResultListener_Specs
         {
             SimulateStoryStarting("storyId", "storySummary");
             var pendingScenario = new Scenario();
-            Listener.ScenarioStarting(pendingScenario);
+            Listener.Handle(new ScenarioStartingEvent { Scenario = pendingScenario });
             Listener.ScenarioPending(new ScenarioPendingInfo(pendingScenario, "foo bar baz"));
 
             var failedScenario = new Scenario();
-            Listener.ScenarioStarting(failedScenario);
+            Listener.Handle(new ScenarioStartingEvent { Scenario = failedScenario});
             Listener.ScenarioFailed(new ScenarioFailureInfo(failedScenario, "success-part", "failed-part", "failure-message"));
 
             SimulateSuccessfulScenario("scenario-id", "scenario-name", new[] {"line1", "line2"});

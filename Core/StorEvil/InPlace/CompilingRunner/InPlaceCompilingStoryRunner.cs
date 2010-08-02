@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using StorEvil.Context;
 using StorEvil.Core;
+using StorEvil.Events;
 using StorEvil.Parsing;
 
 namespace StorEvil.InPlace

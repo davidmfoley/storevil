@@ -7,6 +7,7 @@ using Rhino.Mocks;
 using StorEvil.Configuration;
 using StorEvil.Context;
 using StorEvil.Core;
+using StorEvil.Events;
 using StorEvil.Infrastructure;
 using StorEvil.Interpreter;
 using StorEvil.NUnit;

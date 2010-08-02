@@ -1,5 +1,6 @@
 ﻿using StorEvil.Context;
 using StorEvil.Core;
+using StorEvil.Events;
 using StorEvil.InPlace;
 using StorEvil.Interpreter;
 
@@ -11,21 +12,25 @@ namespace StorEvil.CodeGeneration
         private ScenarioContext _scenarioContext;
         private StandardScenarioInterpreter _interpreter;
         private ScenarioLineExecuter _scenarioLineExecuter;
-        private IResultListener _listener;
        
         private Scenario _currentScenario;
         private object _debugContexts;
+        private EventBus _eventBus;
 
         protected void BeforeAll()
         {
+            _eventBus = StorEvilEvents.Bus;
+
             _storyContext = TestSession.SessionContext(GetType().Assembly.Location).GetContextForStory();
             _interpreter = new StandardScenarioInterpreter();
-            _scenarioLineExecuter = new ScenarioLineExecuter(_interpreter, _listener);
+            _scenarioLineExecuter = new ScenarioLineExecuter(_interpreter, _eventBus);
         }
 
-        protected void SetListener(IResultListener listener)
+        protected void SetListener(object listener)
         {
-            _listener = listener;
+            
+            StorEvilEvents.Bus.Register(listener);
+           // _listener = listener;
         }
 
         protected void BeforeEach()

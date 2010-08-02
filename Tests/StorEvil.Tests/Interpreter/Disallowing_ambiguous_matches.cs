@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using StorEvil.Events;
 using StorEvil.InPlace;
 using StorEvil.Interpreter.ParameterConverter_Specs;
 using StorEvil.Utility;

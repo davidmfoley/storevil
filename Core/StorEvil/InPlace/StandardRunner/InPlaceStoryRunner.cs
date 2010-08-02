@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using StorEvil.Context;
 using StorEvil.Core;
+using StorEvil.Events;
 using StorEvil.Interpreter;
 using StorEvil.Parsing;
 
@@ -19,7 +20,7 @@ namespace StorEvil.InPlace
             : base(listener, preprocessor, filter, context, eventBus)
         {
            
-            _scenarioRunner = new InPlaceScenarioRunner(listener, scenarioInterpreter);
+            _scenarioRunner = new InPlaceScenarioRunner(eventBus, scenarioInterpreter);
         }
 
         protected override void Execute(Story story, IEnumerable<Scenario> scenariosMatchingFilter, StoryContext context)

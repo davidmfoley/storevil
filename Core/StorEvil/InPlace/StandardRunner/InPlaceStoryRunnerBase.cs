@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using StorEvil.Context;
 using StorEvil.Core;
+using StorEvil.Events;
 using StorEvil.Parsing;
 
 namespace StorEvil.InPlace

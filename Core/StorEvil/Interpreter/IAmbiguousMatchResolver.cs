@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using StorEvil.Events;
 using StorEvil.InPlace;
 
 namespace StorEvil.Interpreter
@@ -67,9 +68,7 @@ namespace StorEvil.Interpreter
         }
     }
 
-    public class ScenarioStartingEvent
-    {
-    }
+    
 
     [Serializable]
     public class MatchResolutionException : Exception

@@ -3,9 +3,9 @@ using StorEvil.Core;
 
 namespace StorEvil.InPlace
 {
-    public interface IResultListener : IEventHandler<StoryStartingEvent>
+    public interface IResultListener
     {               
-        void ScenarioStarting(Scenario scenario);
+        //void ScenarioStarting(Scenario scenario);
 
         void ScenarioFailed(ScenarioFailureInfo scenarioFailureInfo);
         void ScenarioPending(ScenarioPendingInfo scenarioPendingInfo);
