@@ -75,7 +75,7 @@ namespace StorEvil.InPlace
         protected IDisposable StartScenario(Story story, Scenario scenario)
         {
             
-            _eventBus.Raise(new ScenarioStartingEvent {Scenario = scenario});
+            _eventBus.Raise(new ScenarioStarting {Scenario = scenario});
             if (CurrentStoryContext == null)
                 CurrentStoryContext = _context.GetContextForStory();
 
@@ -105,18 +105,18 @@ namespace StorEvil.InPlace
             if (LastStatus == LineStatus.Failed)
             {
                 Result.Failed++;
-                _eventBus.Raise(new ScenarioFinishedEvent() { Scenario = CurrentScenario, Status = ExecutionStatus.Failed });     
+                _eventBus.Raise(new ScenarioFinished() { Scenario = CurrentScenario, Status = ExecutionStatus.Failed });     
             } 
             else if (LastStatus == LineStatus.Pending)
             {
                 Result.Pending++;
-                _eventBus.Raise(new ScenarioFinishedEvent() { Scenario = CurrentScenario, Status = ExecutionStatus.Pending });     
+                _eventBus.Raise(new ScenarioFinished() { Scenario = CurrentScenario, Status = ExecutionStatus.Pending });     
  
             } 
             else
             {
                 Result.Succeeded++;
-                _eventBus.Raise(new ScenarioFinishedEvent { Scenario = CurrentScenario, Status = ExecutionStatus.Passed });                
+                _eventBus.Raise(new ScenarioFinished { Scenario = CurrentScenario, Status = ExecutionStatus.Passed });                
             }
         }
     }

@@ -59,7 +59,7 @@ namespace StorEvil.Interpreter.Ambiguous_Match_Resolution
         private void SimulateInvocation(object context)
         {
             var method = context.GetType().GetMethod("Ambiguous");
-            StorEvilEvents.Bus.Raise(new MatchFoundEvent {Member = method});
+            StorEvilEvents.Bus.Raise(new MatchingMemberFound {Member = method});
         }
 
         private IEnumerable<InvocationChain> GetTestInvocationChains()

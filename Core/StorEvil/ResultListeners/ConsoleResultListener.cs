@@ -7,15 +7,15 @@ using StorEvil.InPlace;
 namespace StorEvil.ResultListeners
 {
     public abstract class WriterListener :
-        IEventHandler<ScenarioStartingEvent>, IEventHandler<SessionFinishedEvent>, IEventHandler<ScenarioFinishedEvent>,
-        IEventHandler<LineExecutedEvent>,
-        IEventHandler<StoryStartingEvent>
+        IEventHandler<ScenarioStarting>, IEventHandler<SessionFinished>, IEventHandler<ScenarioFinished>,
+        IEventHandler<LineExecuted>,
+        IEventHandler<StoryStarting>
     {
         protected abstract void DoWrite(ConsoleColor white, params string[] s);
      
        
 
-        public void Handle(StoryStartingEvent eventToHandle)
+        public void Handle(StoryStarting eventToHandle)
         {
             var story = eventToHandle.Story;
             DoWrite(ConsoleColor.White, "\r\n" + "\r\nSTORY: " + story.Id + "\r\n" + story.Summary);
@@ -23,23 +23,23 @@ namespace StorEvil.ResultListeners
 
       
 
-        public void Handle(ScenarioStartingEvent eventToHandle)
+        public void Handle(ScenarioStarting eventToHandle)
         {
             DoWrite(ConsoleColor.White, "\r\nSCENARIO: " + eventToHandle.Scenario.Name);
         }
 
-        public void Handle(SessionFinishedEvent eventToHandle)
+        public void Handle(SessionFinished eventToHandle)
         {
             DoWrite(ConsoleColor.Green, "Finished");
         }             
 
-        public void Handle(ScenarioFinishedEvent eventToHandle)
+        public void Handle(ScenarioFinished eventToHandle)
         {
             if (eventToHandle.Status == ExecutionStatus.Passed)
                 DoWrite(ConsoleColor.Green, "Scenario succeeded");
         }
 
-        public void Handle(LineExecutedEvent eventToHandle)
+        public void Handle(LineExecuted eventToHandle)
         {
             if (eventToHandle.Status == ExecutionStatus.Pending)
             {

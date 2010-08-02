@@ -112,7 +112,7 @@ namespace StorEvil.InPlace
 
         private int GetSuccessfulInvocationCount(string expectedLine)
         {
-            var interpretedEvents = FakeEventBus.CaughtEvents.OfType<LineExecutedEvent>();
+            var interpretedEvents = FakeEventBus.CaughtEvents.OfType<LineExecuted>();
             return interpretedEvents.Count(ev => ev.Line == expectedLine && ev.Status == ExecutionStatus.Passed);
         }
 
@@ -123,17 +123,17 @@ namespace StorEvil.InPlace
 
         protected void AssertScenarioSuccess()
         {
-            AssertEventRaised<ScenarioFinishedEvent>(x=>x.Status == ExecutionStatus.Passed);            
+            AssertEventRaised<ScenarioFinished>(x=>x.Status == ExecutionStatus.Passed);            
         }
 
         protected void AssertAllScenariosSucceeded()
         {
-            FakeEventBus.CaughtEvents.OfType<ScenarioFinishedEvent>().Any(x=>x.Status != ExecutionStatus.Passed).ShouldBe(false);
+            FakeEventBus.CaughtEvents.OfType<ScenarioFinished>().Any(x=>x.Status != ExecutionStatus.Passed).ShouldBe(false);
         }
 
         protected void AssertScenarioSuccessWithName(string name)
         {
-            AssertEventRaised<ScenarioFinishedEvent>(x => x.Status == ExecutionStatus.Passed && x.Scenario.Name == name);                   
+            AssertEventRaised<ScenarioFinished>(x => x.Status == ExecutionStatus.Passed && x.Scenario.Name == name);                   
         }
 
         protected void AssertEventRaised<TEvent>(Predicate<TEvent> matching)

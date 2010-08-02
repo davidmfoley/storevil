@@ -11,11 +11,11 @@ namespace StorEvil.ResultListeners
         void Handle(GatheredResultSet result);
     }
 
-    public class GatheringResultListener : IEventHandler<ScenarioStartingEvent>, 
-                                            IEventHandler<SessionFinishedEvent>,
-                                            IEventHandler<ScenarioFinishedEvent>, 
-                                            IEventHandler<LineExecutedEvent>,                                           
-                                           IEventHandler<StoryStartingEvent>
+    public class GatheringResultListener : IEventHandler<ScenarioStarting>, 
+                                            IEventHandler<SessionFinished>,
+                                            IEventHandler<ScenarioFinished>, 
+                                            IEventHandler<LineExecuted>,                                           
+                                           IEventHandler<StoryStarting>
     {
         protected readonly IGatheredResultHandler Handler;
         private readonly GatheredResultSet Result = new GatheredResultSet();
@@ -26,13 +26,13 @@ namespace StorEvil.ResultListeners
         }
 
 
-        public void Handle(ScenarioStartingEvent eventToHandle)
+        public void Handle(ScenarioStarting eventToHandle)
         {
             IScenario scenario = eventToHandle.Scenario;
             CurrentStory().AddScenario(new ScenarioResult {Name = scenario.Name, Id = scenario.Id});
         }
 
-        public void Handle(SessionFinishedEvent eventToHandle)
+        public void Handle(SessionFinished eventToHandle)
         {
             Handler.Handle(Result);
         }
@@ -49,7 +49,7 @@ namespace StorEvil.ResultListeners
         }
 
 
-        public void Handle(StoryStartingEvent eventToHandle)
+        public void Handle(StoryStarting eventToHandle)
         {
             Story story = eventToHandle.Story;
             var storyResult = new StoryResult
@@ -60,7 +60,7 @@ namespace StorEvil.ResultListeners
             Result.Add(storyResult);
         }
 
-        public void Handle(LineExecutedEvent eventToHandle)
+        public void Handle(LineExecuted eventToHandle)
         {
             if (eventToHandle.Status == ExecutionStatus.Failed)
             {
@@ -81,7 +81,7 @@ namespace StorEvil.ResultListeners
             }
         }
 
-        public void Handle(ScenarioFinishedEvent eventToHandle)
+        public void Handle(ScenarioFinished eventToHandle)
         {
             CurrentScenario().Status = eventToHandle.Status;
         }

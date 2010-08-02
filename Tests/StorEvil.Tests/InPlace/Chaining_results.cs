@@ -42,7 +42,7 @@ namespace StorEvil.InPlace
         [Test]
         public void Should_succeed()
         {
-            AssertEventRaised<ScenarioFinishedEvent>(x=>x.Status == ExecutionStatus.Passed);
+            AssertEventRaised<ScenarioFinished>(x=>x.Status == ExecutionStatus.Passed);
             //FakeEventBus.CaughtEvents.OfType<ScenarioSucceededEvent>().Any().ShouldEqual(true);
             
         }

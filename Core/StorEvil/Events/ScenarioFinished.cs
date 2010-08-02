@@ -4,7 +4,7 @@ using StorEvil.Core;
 namespace StorEvil.Events
 {
     [Serializable]
-    public class ScenarioFinishedEvent
+    public class ScenarioFinished
     {
         public Scenario Scenario;
         public ExecutionStatus Status;

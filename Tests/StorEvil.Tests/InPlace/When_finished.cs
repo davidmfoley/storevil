@@ -27,10 +27,10 @@ namespace StorEvil.InPlace.Compiled
             fakeHandler.FinishedWasCalled.ShouldEqual(true);
         }
 
-        public class FinishedTestHandler : IEventHandler<SessionFinishedEvent>
+        public class FinishedTestHandler : IEventHandler<SessionFinished>
         {
             public bool FinishedWasCalled;
-            public void Handle(SessionFinishedEvent eventToHandle)
+            public void Handle(SessionFinished eventToHandle)
             {
                 FinishedWasCalled = true;
             }
@@ -59,7 +59,7 @@ namespace StorEvil.InPlace.NonCompiled
         [Test]
         public void notifies_result_listener()
         {
-            FakeEventBus.AssertWasCalled(x => x.Raise(Arg<SessionFinishedEvent>.Is.Anything));
+            FakeEventBus.AssertWasCalled(x => x.Raise(Arg<SessionFinished>.Is.Anything));
         }
     }
 }

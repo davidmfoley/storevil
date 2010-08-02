@@ -3,7 +3,7 @@
 namespace StorEvil.Events
 {
     [Serializable]
-    public class LineExecutedEvent
+    public class LineExecuted
     {
         public string Line;
         public ExecutionStatus Status;

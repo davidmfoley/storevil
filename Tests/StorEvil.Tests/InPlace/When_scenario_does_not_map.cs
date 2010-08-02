@@ -48,7 +48,7 @@ namespace StorEvil.InPlace
         [Test]
         public void Notifies_listener()
         {
-            AssertEventRaised<LineExecutedEvent>(x=>x.Status == ExecutionStatus.Pending);
+            AssertEventRaised<LineExecuted>(x=>x.Status == ExecutionStatus.Pending);
         }
 
        
@@ -69,7 +69,7 @@ namespace StorEvil.InPlace
         [Test]
         public void Notifies_listener()
         {
-            AssertEventRaised<LineExecutedEvent>(x=>x.Status == ExecutionStatus.Pending);
+            AssertEventRaised<LineExecuted>(x=>x.Status == ExecutionStatus.Pending);
            
         }
     }

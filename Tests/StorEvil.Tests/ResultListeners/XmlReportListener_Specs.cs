@@ -69,28 +69,28 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
 
         protected void SimulateStoryFailed(ScenarioFailureInfo scenarioFailureInfo)
         {
-            Writer.Handle(new LineExecutedEvent { FailedPart = scenarioFailureInfo.FailedPart, SuccessPart = scenarioFailureInfo.SuccessPart, Status = ExecutionStatus.Failed, Message = scenarioFailureInfo.Message });
-            Writer.Handle(new ScenarioFinishedEvent { Scenario = scenarioFailureInfo.Scenario, Status = ExecutionStatus.Failed });
+            Writer.Handle(new LineExecuted { FailedPart = scenarioFailureInfo.FailedPart, SuccessPart = scenarioFailureInfo.SuccessPart, Status = ExecutionStatus.Failed, Message = scenarioFailureInfo.Message });
+            Writer.Handle(new ScenarioFinished { Scenario = scenarioFailureInfo.Scenario, Status = ExecutionStatus.Failed });
         }
 
         protected void SimulateScenarioSucceeded(Scenario scenario)
         {
-            Writer.Handle(new ScenarioFinishedEvent { Scenario = scenario, Status = ExecutionStatus.Passed});
+            Writer.Handle(new ScenarioFinished { Scenario = scenario, Status = ExecutionStatus.Passed});
         }
 
         protected void SimulateSuccessfulLine(Scenario scenario, string line)
         {
-            Writer.Handle(new LineExecutedEvent { Line = line, Status = ExecutionStatus.Passed});
+            Writer.Handle(new LineExecuted { Line = line, Status = ExecutionStatus.Passed});
         }
 
         protected void SimulateScenarioStarting(Scenario scenario)
         {
-            Writer.Handle(new ScenarioStartingEvent { Scenario = scenario });
+            Writer.Handle(new ScenarioStarting { Scenario = scenario });
         }
 
         protected void SimulateStoryStarting(Story story)
         {
-            Writer.Handle(new StoryStartingEvent { Story = story });
+            Writer.Handle(new StoryStarting { Story = story });
         }
     }
 
@@ -100,7 +100,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
         protected override void DoTestSetup(XmlReportListener writer)
         {
             SimulateStoryStarting(new Story("id", "summary", new IScenario[0]));
-            Writer.Handle(new SessionFinishedEvent());
+            Writer.Handle(new SessionFinished());
         }
 
         [Test]
@@ -145,7 +145,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
             SimulateSuccessfulLine(testScenario, "line1");
             SimulateSuccessfulLine(testScenario, "line2");
             SimulateScenarioSucceeded(testScenario);
-            Writer.Handle(new SessionFinishedEvent());
+            Writer.Handle(new SessionFinished());
         }
 
         [Test]
@@ -202,7 +202,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
             SimulateScenarioStarting(testScenario);
             SimulateSuccessfulLine(testScenario, "line1");
             SimulateStoryFailed(new ScenarioFailureInfo(testScenario, "successPart", "failedPart", "failureMessage"));
-            Writer.Handle(new SessionFinishedEvent());
+            Writer.Handle(new SessionFinished());
         }
 
         [Test]
@@ -260,7 +260,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
             SimulateScenarioStarting(failureScenario);
             SimulateStoryFailed(new ScenarioFailureInfo(failureScenario, "foo", "bar", "failed"));
 
-            Writer.Handle(new SessionFinishedEvent());
+            Writer.Handle(new SessionFinished());
         }
 
         [Test]
@@ -320,7 +320,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
             SimulateScenarioStarting(failureScenario);
             SimulateStoryFailed(new ScenarioFailureInfo(failureScenario, "foo", "bar", "failed"));
 
-            Writer.Handle(new SessionFinishedEvent());
+            Writer.Handle(new SessionFinished());
         }
 
 
@@ -375,9 +375,9 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
             SimulateScenarioStarting(scenario);
 
             SimulateSuccessfulLine(scenario, line);
-            Writer.Handle(new LineExecutedEvent{Status = ExecutionStatus.Pending, Line = line});
-            Writer.Handle(new ScenarioFinishedEvent{Scenario = scenario, Status = ExecutionStatus.Pending});
-            Writer.Handle(new SessionFinishedEvent());
+            Writer.Handle(new LineExecuted{Status = ExecutionStatus.Pending, Line = line});
+            Writer.Handle(new ScenarioFinished{Scenario = scenario, Status = ExecutionStatus.Pending});
+            Writer.Handle(new SessionFinished());
         }
 
         [Test]
@@ -414,7 +414,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
             SimulateSuccessfulLine(sucessScenario, line);
             SimulateStoryFailed(new ScenarioFailureInfo(sucessScenario, line, line, line));
 
-            Writer.Handle(new SessionFinishedEvent());
+            Writer.Handle(new SessionFinished());
         }
 
         [Test]

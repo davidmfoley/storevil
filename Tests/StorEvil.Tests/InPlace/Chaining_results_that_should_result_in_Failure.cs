@@ -40,7 +40,7 @@ namespace StorEvil.InPlace
         [Test]
         public void Should_fail()
         {
-            AssertWasRaised<LineExecutedEvent>(x=>x.Status == ExecutionStatus.Failed);            
+            AssertWasRaised<LineExecuted>(x=>x.Status == ExecutionStatus.Failed);            
         }
 
     }

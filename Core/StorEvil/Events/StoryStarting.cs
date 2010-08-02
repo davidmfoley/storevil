@@ -1,9 +1,11 @@
 ﻿using System;
+using StorEvil.Core;
 
 namespace StorEvil.Events
 {
     [Serializable]
-    public class SessionFinishedEvent
+    public class StoryStarting
     {
+        public Story Story;
     }
 }

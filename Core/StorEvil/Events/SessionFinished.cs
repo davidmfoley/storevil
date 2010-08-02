@@ -3,7 +3,7 @@
 namespace StorEvil.Events
 {
     [Serializable]
-    public class SessionStartingEvent
+    public class SessionFinished
     {
     }
 }

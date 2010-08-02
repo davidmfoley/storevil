@@ -48,13 +48,13 @@ namespace StorEvil.InPlace
         [Test]
         public void Notifies_listener_of_failure()
         {
-            AssertEventRaised<LineExecutedEvent>(x=>x.Status == ExecutionStatus.Failed);            
+            AssertEventRaised<LineExecuted>(x=>x.Status == ExecutionStatus.Failed);            
         }
 
         [Test]
         public void Does_not_Notify_listener_of_scenario_success()
         {
-            FakeEventBus.CaughtEvents.OfType<ScenarioFinishedEvent>().Any(x => x.Status == ExecutionStatus.Passed).ShouldBe(false);
+            FakeEventBus.CaughtEvents.OfType<ScenarioFinished>().Any(x => x.Status == ExecutionStatus.Passed).ShouldBe(false);
             
         }
     }

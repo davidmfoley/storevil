@@ -7,8 +7,8 @@ using StorEvil.InPlace;
 
 namespace StorEvil.ResultListeners
 {
-    public class XmlReportListener : IEventHandler<SessionFinishedEvent>,
-        IEventHandler<LineExecutedEvent>, IEventHandler<ScenarioStartingEvent>
+    public class XmlReportListener : IEventHandler<SessionFinished>,
+        IEventHandler<LineExecuted>, IEventHandler<ScenarioStarting>
     {
 
         public class StatusNames
@@ -61,7 +61,7 @@ namespace StorEvil.ResultListeners
             element.SetAttribute(XmlNames.Status, status);
         }
 
-        public void Handle(ScenarioFinishedEvent eventToHandle)
+        public void Handle(ScenarioFinished eventToHandle)
         {
             if (eventToHandle.Status == ExecutionStatus.Passed)
             {
@@ -79,7 +79,7 @@ namespace StorEvil.ResultListeners
             }
         }
 
-        public void Handle(StoryStartingEvent eventToHandle)
+        public void Handle(StoryStarting eventToHandle)
         {
             var story = eventToHandle.Story;
             _currentStoryElement = _doc.CreateElement(XmlNames.Story);
@@ -89,12 +89,12 @@ namespace StorEvil.ResultListeners
             _doc.DocumentElement.AppendChild(_currentStoryElement);
         }
 
-        public void Handle(SessionFinishedEvent eventToHandle)
+        public void Handle(SessionFinished eventToHandle)
         {
             _fileWriter.Write(_doc.OuterXml);
         }
        
-        public void Handle(LineExecutedEvent eventToHandle)
+        public void Handle(LineExecuted eventToHandle)
         {
             if (eventToHandle.Status == ExecutionStatus.Passed)
                 AddLineToCurrentScenario(eventToHandle.Line, StatusNames.Success);
@@ -107,7 +107,7 @@ namespace StorEvil.ResultListeners
                 AddLineToCurrentScenario(eventToHandle.Line, StatusNames.NotUnderstood);
         }
 
-        public void Handle(ScenarioStartingEvent eventToHandle)
+        public void Handle(ScenarioStarting eventToHandle)
         {
             _currentScenarioElement = _doc.CreateElement(XmlNames.Scenario);
             _currentStoryElement.AppendChild(_currentScenarioElement);

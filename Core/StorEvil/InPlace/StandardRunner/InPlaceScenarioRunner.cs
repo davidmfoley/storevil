@@ -23,7 +23,7 @@ namespace StorEvil.InPlace
         public bool ExecuteScenario(Scenario scenario, ScenarioContext storyContext)
         {
             
-            _eventBus.Raise(new ScenarioStartingEvent { Scenario = scenario});
+            _eventBus.Raise(new ScenarioStarting { Scenario = scenario});
             _scenarioInterpreter.NewScenario();
 
             foreach (var line in (scenario.Background ?? new ScenarioLine[0]).Union(scenario.Body))
@@ -31,18 +31,18 @@ namespace StorEvil.InPlace
                 LineStatus status = _lineExecuter.ExecuteLine(scenario, storyContext, line.Text);
                 if (LineStatus.Failed == status)
                 {
-                    _eventBus.Raise(new ScenarioFinishedEvent { Scenario = scenario, Status = ExecutionStatus.Failed });
+                    _eventBus.Raise(new ScenarioFinished { Scenario = scenario, Status = ExecutionStatus.Failed });
                     return false;
                 }
                 if (LineStatus.Pending == status)
                 {
-                    _eventBus.Raise(new ScenarioFinishedEvent { Scenario = scenario, Status = ExecutionStatus.Pending });
+                    _eventBus.Raise(new ScenarioFinished { Scenario = scenario, Status = ExecutionStatus.Pending });
              
                     return true;
                 }
             }
 
-            _eventBus.Raise(new ScenarioFinishedEvent { Scenario = scenario, Status = ExecutionStatus.Passed});
+            _eventBus.Raise(new ScenarioFinished { Scenario = scenario, Status = ExecutionStatus.Passed});
 
             //_eventBus.Raise(new ScenarioSucceededEvent { Scenario = scenario });
             return true;

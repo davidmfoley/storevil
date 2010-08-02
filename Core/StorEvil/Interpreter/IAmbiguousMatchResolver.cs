@@ -22,7 +22,7 @@ namespace StorEvil.Interpreter
        
     }
 
-    public class MostRecentlyUsedContext : IAmbiguousMatchResolver, IEventHandler<MatchFoundEvent>, IEventHandler<ScenarioStartingEvent>
+    public class MostRecentlyUsedContext : IAmbiguousMatchResolver, IEventHandler<MatchingMemberFound>, IEventHandler<ScenarioStarting>
     {
         private static List<Type> _mruTypes = new List<Type>();
 
@@ -55,14 +55,14 @@ namespace StorEvil.Interpreter
             return _mruTypes.IndexOf(declaringType);
         }
 
-        public void Handle(MatchFoundEvent eventToHandle)
+        public void Handle(MatchingMemberFound eventToHandle)
         {
             var type = eventToHandle.Member.DeclaringType;
 
             _mruTypes = new[] { type }.Union(_mruTypes.Where(x => x != type)).ToList();
         }
 
-        public void Handle(ScenarioStartingEvent eventToHandle)
+        public void Handle(ScenarioStarting eventToHandle)
         {
             _mruTypes = new List<Type>();
         }

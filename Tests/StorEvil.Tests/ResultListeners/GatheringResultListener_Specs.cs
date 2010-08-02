@@ -17,7 +17,7 @@ namespace StorEvil.ResultListeners.GatheringResultListener_Specs
         {
             Listener = new TestGatheringResultListener();
             SimulateRunner();
-            Listener.Handle(new SessionFinishedEvent());
+            Listener.Handle(new SessionFinished());
         }
 
         protected abstract void SimulateRunner();
@@ -25,24 +25,24 @@ namespace StorEvil.ResultListeners.GatheringResultListener_Specs
         protected void SimulateFailedScenario()
         {
             var failureScenario = new Scenario();
-            Listener.Handle(new ScenarioStartingEvent { Scenario = failureScenario });
-            Listener.Handle(new LineExecutedEvent {SuccessPart = "success part", FailedPart = "failed part", Message = "failure message", Status = ExecutionStatus.Failed});
+            Listener.Handle(new ScenarioStarting { Scenario = failureScenario });
+            Listener.Handle(new LineExecuted {SuccessPart = "success part", FailedPart = "failed part", Message = "failure message", Status = ExecutionStatus.Failed});
         }
 
         protected void SimulatePendingScenario()
         {
             var pendingScenario = new Scenario();
-            Listener.Handle(new ScenarioStartingEvent { Scenario = pendingScenario });
-            Listener.Handle(new LineExecutedEvent() { Line = "could not interpret message" , Status = ExecutionStatus.Pending});            
+            Listener.Handle(new ScenarioStarting { Scenario = pendingScenario });
+            Listener.Handle(new LineExecuted() { Line = "could not interpret message" , Status = ExecutionStatus.Pending});            
         }
 
         protected void SimulateSuccessfulScenario(string id, string name, string[] lines)
         {
             var successScenario = new Scenario(id, name, lines.Select(l=> new ScenarioLine{Text = l}).ToArray());
-            Listener.Handle(new ScenarioStartingEvent { Scenario = successScenario });
+            Listener.Handle(new ScenarioStarting { Scenario = successScenario });
 
             foreach (var line in lines)
-                Listener.Handle(new LineExecutedEvent{Line = line, Status = ExecutionStatus.Passed});
+                Listener.Handle(new LineExecuted{Line = line, Status = ExecutionStatus.Passed});
                 
            // Listener.Handle(new ScenarioSucceededEvent {Scenario = successScenario});
             
@@ -50,7 +50,7 @@ namespace StorEvil.ResultListeners.GatheringResultListener_Specs
 
         protected void SimulateStoryStarting(string storyId, string storySummary)
         {
-            Listener.Handle(new StoryStartingEvent { Story = new Story(storyId, storySummary, new[] { new Scenario() }) });
+            Listener.Handle(new StoryStarting { Story = new Story(storyId, storySummary, new[] { new Scenario() }) });
         }
 
         protected StoryResult FirstStory()
@@ -158,10 +158,10 @@ namespace StorEvil.ResultListeners.GatheringResultListener_Specs
         {
             SimulateStoryStarting("storyId", "storySummary");
             var testScenario = new Scenario();
-            Listener.Handle(new ScenarioStartingEvent { Scenario = testScenario });
+            Listener.Handle(new ScenarioStarting { Scenario = testScenario });
 
-            Listener.Handle(new LineExecutedEvent { Status = ExecutionStatus.Failed, SuccessPart = "success-part", FailedPart = "failed-part",Message = "failure-message" });            
-            Listener.Handle(new ScenarioFinishedEvent{Status = ExecutionStatus.Failed});
+            Listener.Handle(new LineExecuted { Status = ExecutionStatus.Failed, SuccessPart = "success-part", FailedPart = "failed-part",Message = "failure-message" });            
+            Listener.Handle(new ScenarioFinished{Status = ExecutionStatus.Failed});
         }
 
         [Test]
@@ -223,10 +223,10 @@ namespace StorEvil.ResultListeners.GatheringResultListener_Specs
         {
             SimulateStoryStarting("storyId", "storySummary");
             var testScenario = new Scenario();
-            Listener.Handle(new ScenarioStartingEvent { Scenario = testScenario });
+            Listener.Handle(new ScenarioStarting { Scenario = testScenario });
 
-            Listener.Handle(new LineExecutedEvent { Status = ExecutionStatus.Pending, Line = "foo bar baz", Suggestion = TestSuggestion}  );
-            Listener.Handle(new ScenarioFinishedEvent{Scenario = testScenario, Status = ExecutionStatus.Pending});
+            Listener.Handle(new LineExecuted { Status = ExecutionStatus.Pending, Line = "foo bar baz", Suggestion = TestSuggestion}  );
+            Listener.Handle(new ScenarioFinished{Scenario = testScenario, Status = ExecutionStatus.Pending});
         }
 
         [Test]
@@ -256,14 +256,14 @@ namespace StorEvil.ResultListeners.GatheringResultListener_Specs
         {
             SimulateStoryStarting("storyId", "storySummary");
             var pendingScenario = new Scenario();
-            Listener.Handle(new ScenarioStartingEvent { Scenario = pendingScenario });
-            Listener.Handle(new LineExecutedEvent{Status = ExecutionStatus.Pending, Line= "foo bar baz"});
-            Listener.Handle(new ScenarioFinishedEvent() { Status = ExecutionStatus.Pending});
+            Listener.Handle(new ScenarioStarting { Scenario = pendingScenario });
+            Listener.Handle(new LineExecuted{Status = ExecutionStatus.Pending, Line= "foo bar baz"});
+            Listener.Handle(new ScenarioFinished() { Status = ExecutionStatus.Pending});
 
             var failedScenario = new Scenario();
-            Listener.Handle(new ScenarioStartingEvent { Scenario = failedScenario});
-            Listener.Handle(new LineExecutedEvent {Status = ExecutionStatus.Failed, SuccessPart = "success-part", FailedPart = "failed-part", Message = "failure-message" });
-            Listener.Handle(new ScenarioFinishedEvent() { Status = ExecutionStatus.Failed });
+            Listener.Handle(new ScenarioStarting { Scenario = failedScenario});
+            Listener.Handle(new LineExecuted {Status = ExecutionStatus.Failed, SuccessPart = "success-part", FailedPart = "failed-part", Message = "failure-message" });
+            Listener.Handle(new ScenarioFinished() { Status = ExecutionStatus.Failed });
             SimulateSuccessfulScenario("scenario-id", "scenario-name", new[] {"line1", "line2"});
         }
 
