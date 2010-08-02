@@ -55,7 +55,7 @@ Examples:
         [Test]
         public void should_be_no_failures()
         {
-            AssertNoFailures();
+            AssertAllScenariosSucceeded();
         }
     }
 

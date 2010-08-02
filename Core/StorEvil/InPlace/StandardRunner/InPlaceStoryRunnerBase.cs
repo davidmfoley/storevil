@@ -13,7 +13,7 @@ namespace StorEvil.InPlace
         protected readonly IResultListener ResultListener;
         private readonly IStoryFilter _filter;
         private readonly ISessionContext _context;
-        private readonly IEventBus _eventBus;
+        protected readonly IEventBus EventBus;
         private readonly IScenarioPreprocessor _preprocessor;
 
         protected InPlaceStoryRunnerBase(IResultListener resultListener, IScenarioPreprocessor preprocessor, IStoryFilter filter, ISessionContext context, IEventBus eventBus)
@@ -22,14 +22,14 @@ namespace StorEvil.InPlace
             _preprocessor = preprocessor;
             _filter = filter;
             _context = context;
-            _eventBus = eventBus;
+            EventBus = eventBus;
 
             Result = new JobResult();
         }
 
         public void HandleStory(Story story)
         {
-           _eventBus.Raise(new StoryStartingEvent {Story = story});
+           EventBus.Raise(new StoryStartingEvent {Story = story});
             
             Scenario[] scenariosMatchingFilter = GetScenariosMatchingFilter(story);
 
@@ -53,7 +53,7 @@ namespace StorEvil.InPlace
 
         public void Finished()
         {
-            _eventBus.Raise(new SessionFinishedEvent());
+            EventBus.Raise(new SessionFinishedEvent());
         }
         public JobResult GetResult()
         {

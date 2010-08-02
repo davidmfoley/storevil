@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using NUnit.Framework;
@@ -20,10 +19,11 @@ namespace StorEvil.InPlace
     {
         protected IResultListener ResultListener;
         protected StoryContext Context;
-        private CapturingEventBus FakeEventBus;
+        protected CapturingEventBus FakeEventBus;
 
         protected void RunStory(Story story)
         {
+            FakeEventBus = new CapturingEventBus();
             ResultListener = MockRepository.GenerateStub<IResultListener>();
             new ExtensionMethodHandler().AddAssembly(typeof(TestExtensionMethods).Assembly);
 
@@ -37,6 +37,11 @@ namespace StorEvil.InPlace
             {
                 GetRunner().HandleStory(story);
             }                     
+        }
+
+        protected void AssertWasRaised<TEvent>()
+        {
+            FakeEventBus.CaughtEvents.OfType<TEvent>().Any().ShouldEqual(true);
         }
 
         private void RunInCompilingRunner(Story story)
@@ -60,7 +65,7 @@ namespace StorEvil.InPlace
                 ResultListener, 
                 preprocessor,                                               
                 new IncludeAllFilter(), 
-                new FakeSessionContext(Context), MockRepository.GenerateStub<IEventBus>());
+                new FakeSessionContext(Context), FakeEventBus);
             runner.HandleStory(story);
             runner.Finished();
         }
@@ -74,20 +79,7 @@ namespace StorEvil.InPlace
                                           new IncludeAllFilter(), new FakeSessionContext(Context), FakeEventBus);
         }
 
-        public class CapturingEventBus : IEventBus
-        {
-            public List<object> CaughtEvents = new List<object>();
-
-            public void Raise<T1>(T1 e)
-            {
-                CaughtEvents.Add(e);
-            }
-
-            public void Register(object handler)
-            {
-               
-            }
-        }
+       
 
         private bool UseCompilingRunner()
         {
@@ -114,45 +106,42 @@ namespace StorEvil.InPlace
 
         protected void AssertLineSuccess(string expectedLine)
         {
-            ResultListener.AssertWasCalled(x => x.Success(Any<Scenario>(), Arg<string>.Is.Equal(expectedLine)));
+            var interpretedEvents = FakeEventBus.CaughtEvents.OfType<LineInterpretedEvent>();
+            var matchingLine = interpretedEvents.FirstOrDefault(ev => ev.Line == expectedLine);
+            matchingLine.ShouldNotBeNull();            
         }
 
         protected void AssertLineSuccess(string expectedLine, int count)
         {
-            var args = ResultListener.GetArgumentsForCallsMadeOn(x =>
-                                                          {
-                                                              x.Success(Any<Scenario>(),
-                                                                        Arg<string>.Is.Equal(expectedLine));
-                                                          });
-            args.Where(a=> (string)a[1] == expectedLine).Count().ShouldBe(count);
+            var matchingEvents = FakeEventBus.CaughtEvents.OfType<LineInterpretedEvent>().Where(ev => ev.Line == expectedLine);
+
+            matchingEvents.Count().ShouldBe(count);
         }
 
         protected void AssertScenarioSuccess()
         {
-            var args = ResultListener.GetArgumentsForCallsMadeOn(x => x.ScenarioSucceeded(Any<Scenario>()));
-            args.Count().ShouldBeGreaterThan(0);
-        }
-
-        protected void AssertNoFailures()
-        {
-            ResultListener.AssertWasNotCalled(x => x.ScenarioFailed(Any<ScenarioFailureInfo>()));
+            AssertEventRaised<ScenarioSucceededEvent>();
+            
         }
 
         protected void AssertAllScenariosSucceeded()
         {
-            var args = ResultListener.GetArgumentsForCallsMadeOn(x => x.ScenarioFailed(Any<ScenarioFailureInfo>()));
-            if (args.Count > 0)
-            {
-                var message = string.Join("\r\n", args.Select(a => ((ScenarioFailureInfo)a[0]).Message).ToArray());
-
-                Assert.Fail(message);
-            }
+            FakeEventBus.CaughtEvents.OfType<ScenarioFailedEvent>().Any().ShouldBe(false);
         }
 
         protected void AssertScenarioSuccessWithName(string name)
         {
+            AssertEventRaised<ScenarioSucceededEvent>(x => x.Scenario.Name == name);
+        }
 
-            ResultListener.AssertWasCalled(x => x.ScenarioSucceeded(Arg<Scenario>.Matches(s => s.Name == name)));
+        protected void AssertEventRaised<TEvent>(Predicate<TEvent> matching)
+        {
+            FakeEventBus.CaughtEvents.OfType<TEvent>().Any(x => matching(x)).ShouldEqual(true);
+        }
+
+        protected void AssertEventRaised<TEvent>()
+        {
+            AssertEventRaised<TEvent>(x => true);
         }
     }
 
@@ -161,9 +150,9 @@ namespace StorEvil.InPlace
         public TestRemoteHandlerFactory(AssemblyGenerator assemblyGenerator, 
             ConfigSettings configSettings, Filesystem filesystem) : base(assemblyGenerator,configSettings,filesystem)
         {}
-        public override IRemoteStoryHandler GetHandler(Story story, System.Collections.Generic.IEnumerable<Scenario> scenarios, IResultListener listener)
+        public override IRemoteStoryHandler GetHandler(Story story, System.Collections.Generic.IEnumerable<Scenario> scenarios, IEventBus eventBus)
         {
-            var handler = base.GetHandler(story, scenarios, listener) as RemoteStoryHandler;
+            var handler = base.GetHandler(story, scenarios, eventBus) as RemoteStoryHandler;
             handler.InTest = true;
 
             return handler;

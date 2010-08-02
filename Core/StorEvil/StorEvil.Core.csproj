@@ -109,7 +109,11 @@
     <Compile Include="Core\JobResult.cs" />
     <Compile Include="Events\EventBus.cs" />
     <Compile Include="Events\IEventHandler.cs" />
+    <Compile Include="Events\LineInterpretedEvent.cs" />
+    <Compile Include="Events\LineNotInterpretedEvent.cs" />
     <Compile Include="Events\MatchFoundEvent.cs" />
+    <Compile Include="Events\ScenarioFailedEvent.cs" />
+    <Compile Include="Events\ScenarioPendingEvent.cs" />
     <Compile Include="Events\ScenarioStartingEvent.cs" />
     <Compile Include="Events\ScenarioSucceededEvent.cs" />
     <Compile Include="Events\SessionFinishedEvent.cs" />

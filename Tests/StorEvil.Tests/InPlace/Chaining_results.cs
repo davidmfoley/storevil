@@ -4,7 +4,9 @@ using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using Rhino.Mocks;
 using StorEvil.Core;
+using StorEvil.Events;
 using StorEvil.InPlace;
+using StorEvil.Utility;
 
 namespace StorEvil.InPlace.Compiled
 {
@@ -40,11 +42,10 @@ namespace StorEvil.InPlace
         [Test]
         public void Should_succeed()
         {
-            ResultListener.AssertWasCalled(x => x.Success(Any<Scenario>(), Any<string>()));
+            FakeEventBus.CaughtEvents.OfType<ScenarioSucceededEvent>().Any().ShouldEqual(true);
+            
         }
-    }
-
-  
+    } 
 }
 
 namespace StorEvil.InPlace.Compiled

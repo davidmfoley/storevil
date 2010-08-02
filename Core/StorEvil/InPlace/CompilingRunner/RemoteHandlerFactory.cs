@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using StorEvil.Configuration;
 using StorEvil.Core;
+using StorEvil.Events;
 using StorEvil.Infrastructure;
 using StorEvil.ResultListeners;
 
@@ -9,7 +11,7 @@ namespace StorEvil.InPlace
 
     public interface IRemoteHandlerFactory
     {
-        IRemoteStoryHandler GetHandler(Story story, IEnumerable<Scenario> scenarios, IResultListener listener);
+        IRemoteStoryHandler GetHandler(Story story, IEnumerable<Scenario> scenarios, IEventBus bus);
     }
 
     public class RemoteHandlerFactory : IRemoteHandlerFactory
@@ -25,10 +27,12 @@ namespace StorEvil.InPlace
             _filesystem = filesystem;
         }
 
-        public virtual IRemoteStoryHandler GetHandler(Story story, IEnumerable<Scenario> scenarios, IResultListener listener)
+        public virtual IRemoteStoryHandler GetHandler(Story story, IEnumerable<Scenario> scenarios, IEventBus bus)
         {
             var assemblyLocation = _assemblyGenerator.GenerateAssembly(story, scenarios, _settings.AssemblyLocations);
-            return new RemoteStoryHandler(assemblyLocation, _filesystem, new RemoteListener(listener), _settings.AssemblyLocations);
+            return new RemoteStoryHandler(assemblyLocation, _filesystem, bus, _settings.AssemblyLocations);
         }
     }
+
+    
 }

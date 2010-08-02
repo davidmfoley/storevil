@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Core;
+using StorEvil.Events;
 using StorEvil.Utility;
 
 namespace StorEvil.InPlace.Compiled
@@ -44,19 +45,19 @@ namespace StorEvil.InPlace
         [Test]
         public void Notifies_listener_of_first_line_success()
         {
-            ResultListener.AssertWasCalled(x => x.Success(Any<Scenario>(),  Arg<string>.Is.Equal("When some action")));
+            AssertEventRaised<LineInterpretedEvent>(x=>x.Line == "When some action");            
         }
 
         [Test]
         public void Notifies_listener_of_second_line_success()
         {
-            ResultListener.AssertWasCalled(x => x.Success(Any<Scenario>(), Arg<string>.Is.Equal("then some action was called should be true")));
+            AssertEventRaised<LineInterpretedEvent>(x => x.Line == "then some action was called should be true");                  
         }
 
         [Test]
         public void Notifies_listener_of_scenario_success()
         {
-            ResultListener.AssertWasCalled(x => x.ScenarioSucceeded(Any<Scenario>()));
+            AssertScenarioSuccess();            
         }
     }
 }

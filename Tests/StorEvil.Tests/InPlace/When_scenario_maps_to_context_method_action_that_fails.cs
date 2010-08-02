@@ -1,6 +1,9 @@
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Core;
+using StorEvil.Events;
+using StorEvil.Utility;
 
 
 namespace StorEvil.InPlace.Compiled
@@ -45,14 +48,14 @@ namespace StorEvil.InPlace
         [Test]
         public void Notifies_listener_of_failure()
         {
-            ResultListener.AssertWasCalled(
-                x => x.ScenarioFailed((Any<ScenarioFailureInfo>())));
+            AssertEventRaised<ScenarioFailedEvent>();            
         }
 
         [Test]
         public void Does_not_Notify_listener_of_scenario_success()
         {
-            ResultListener.AssertWasNotCalled(x => x.ScenarioSucceeded(TestScenario));
+            FakeEventBus.CaughtEvents.Any(x => x is ScenarioSucceededEvent).ShouldBe(false);
+            
         }
     }
 

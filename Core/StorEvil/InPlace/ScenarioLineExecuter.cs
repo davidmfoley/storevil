@@ -115,14 +115,7 @@ namespace StorEvil.InPlace
         }
     }
 
-    public class ScenarioFailedEvent
-    {
-        public Scenario Scenario;
-        public string Line;
-        public string SuccessPart;
-        public string FailedPart;
-        public string Message;
-    }
+    
 
 
     public enum LineStatus

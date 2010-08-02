@@ -63,8 +63,9 @@ table row 2 column 1 should be three
         [Test]
         public void no_failures()
         {
-            AssertNoFailures();
-        }  
+            AssertAllScenariosSucceeded();
+        }
+
         [Context]
         public class ScenarioTableTestContext
         {

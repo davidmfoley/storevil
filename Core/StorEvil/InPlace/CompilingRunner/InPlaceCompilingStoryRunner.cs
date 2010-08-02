@@ -15,12 +15,13 @@ namespace StorEvil.InPlace
             : base(listener, preprocessor, filter, context, eventBus)
         {
             
-            _factory = factory;     
+            _factory = factory;
+           
         }
 
         protected override void Execute(Story story, IEnumerable<Scenario> scenarios, StoryContext context)
         {
-            using (var remoteHandler = _factory.GetHandler(story, scenarios, ResultListener))
+            using (var remoteHandler = _factory.GetHandler(story, scenarios, EventBus))
             {
                 var handler = remoteHandler.Handler;
                 handler.HandleStory(story);

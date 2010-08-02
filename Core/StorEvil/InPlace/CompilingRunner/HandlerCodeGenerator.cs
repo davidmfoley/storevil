@@ -112,10 +112,11 @@ namespace StorEvilTestAssembly {{
     using System.Linq;
     using StorEvil.Parsing;
     using StorEvil.ResultListeners;
+    using StorEvil.Events;
     {0}
 
     public class StorEvilDriver : StorEvil.InPlace.DriverBase  {{        
-        public StorEvilDriver(IResultListener listener) : base(listener) {{
+        public StorEvilDriver(IEventBus bus) : base(bus) {{
            
         }}
 

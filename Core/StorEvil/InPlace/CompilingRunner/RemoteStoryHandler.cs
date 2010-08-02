@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using StorEvil.Core;
+using StorEvil.Events;
 using StorEvil.Infrastructure;
 
 namespace StorEvil.InPlace
@@ -18,17 +19,19 @@ namespace StorEvil.InPlace
         private readonly string _assemblyLocation;
         private AppDomain _appDomain;
         private readonly IFilesystem _filesystem;
-        private readonly IResultListener _listener;
+        private readonly IEventBus _eventBus;
+
         private readonly IEnumerable<string> _assemblyLocations;
         private IStoryHandler _handler;
 
-        public RemoteStoryHandler(string assemblyLocation, IFilesystem filesystem, IResultListener listener,
+        public RemoteStoryHandler(string assemblyLocation, IFilesystem filesystem,IEventBus eventBus,
                                   IEnumerable<string> assemblyLocations)
         {
             _assemblyLocation = assemblyLocation;
-            _listener = listener;
+          
             _assemblyLocations = assemblyLocations;
             _filesystem = filesystem;
+            _eventBus = eventBus;
         }
 
         public bool InTest { get; set; }
@@ -66,7 +69,7 @@ namespace StorEvil.InPlace
 
             return _appDomain.CreateInstanceFrom(
                 _assemblyLocation,
-                "StorEvilTestAssembly.StorEvilDriver", true, 0, null, new object[] {_listener},
+                "StorEvilTestAssembly.StorEvilDriver", true, 0, null, new object[] {_eventBus},
                 CultureInfo.CurrentCulture, new object[0], AppDomain.CurrentDomain.Evidence).Unwrap() as IStoryHandler;
         }
 

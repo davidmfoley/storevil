@@ -1,7 +1,11 @@
+using System;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Core;
+using StorEvil.Events;
 using StorEvil.InPlace;
+using StorEvil.Utility;
 
 namespace StorEvil.InPlace.Compiled
 {
@@ -44,8 +48,12 @@ namespace StorEvil.InPlace
         [Test]
         public void Notifies_listener()
         {
-            ResultListener.AssertWasCalled(x => x.ScenarioPending(Any<ScenarioPendingInfo>()));
+            AssertEventRaised<LineNotInterpretedEvent>();
+
+            
         }
+
+       
     }
 
     public abstract class When_scenario_step_is_pending : InPlaceRunnerSpec<InPlaceRunnerTestContext>
@@ -63,7 +71,8 @@ namespace StorEvil.InPlace
         [Test]
         public void Notifies_listener()
         {
-            ResultListener.AssertWasCalled(x => x.ScenarioPending(Any<ScenarioPendingInfo>()));
+            AssertEventRaised<ScenarioPendingEvent>();
+           
         }
     }
 }
