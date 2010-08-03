@@ -11,11 +11,11 @@ namespace StorEvil.ResultListeners
         void Handle(GatheredResultSet result);
     }
 
-    public class GatheringResultListener : IEventHandler<ScenarioStarting>, 
-                                            IEventHandler<SessionFinished>,
-                                            IEventHandler<ScenarioFinished>, 
-                                            IEventHandler<LineExecuted>,                                           
-                                           IEventHandler<StoryStarting>
+    public class GatheringResultListener : IHandle<ScenarioStarting>, 
+                                            IHandle<SessionFinished>,
+                                            IHandle<ScenarioFinished>, 
+                                            IHandle<LineExecuted>,                                           
+                                           IHandle<StoryStarting>
     {
         protected readonly IGatheredResultHandler Handler;
         private readonly GatheredResultSet Result = new GatheredResultSet();

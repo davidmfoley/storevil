@@ -22,7 +22,7 @@ namespace StorEvil.Interpreter
        
     }
 
-    public class MostRecentlyUsedContext : IAmbiguousMatchResolver, IEventHandler<MatchingMemberFound>, IEventHandler<ScenarioStarting>
+    public class MostRecentlyUsedContext : IAmbiguousMatchResolver, IHandle<MatchingMemberFound>, IHandle<ScenarioStarting>
     {
         private static List<Type> _mruTypes = new List<Type>();
 

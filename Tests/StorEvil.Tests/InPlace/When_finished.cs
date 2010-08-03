@@ -27,7 +27,7 @@ namespace StorEvil.InPlace.Compiled
             fakeHandler.FinishedWasCalled.ShouldEqual(true);
         }
 
-        public class FinishedTestHandler : IEventHandler<SessionFinished>
+        public class FinishedTestHandler : IHandle<SessionFinished>
         {
             public bool FinishedWasCalled;
             public void Handle(SessionFinished eventToHandle)

@@ -23,8 +23,8 @@ namespace StorEvil.Core.Event_Handling
             Bus.Register(handler);
             var fooEvent = new FooEvent();
             Bus.Raise(fooEvent);
-            handler.EventsCaught.Count.ShouldEqual(1);
-            handler.EventsCaught.First().ShouldEqual(fooEvent);
+            handler.EventsCaught.ElementsShouldEqual(fooEvent);
+       
         }
 
         [Test]
@@ -34,13 +34,15 @@ namespace StorEvil.Core.Event_Handling
             var handler2 = new FooHandler();
             Bus.Register(handler1);
             Bus.Register(handler2);
+            
             var fooEvent = new FooEvent();
             Bus.Raise(fooEvent);
-            handler1.EventsCaught.Count.ShouldEqual(1);
-            handler1.EventsCaught.First().ShouldEqual(fooEvent);
-            handler2.EventsCaught.Count.ShouldEqual(1);
-            handler2.EventsCaught.First().ShouldEqual(fooEvent);
+
+            handler1.EventsCaught.ElementsShouldEqual(fooEvent);
+            handler2.EventsCaught.ElementsShouldEqual(fooEvent);
         }
+
+      
 
         [Test]
         public void Raising_an_unhandled_event_does_not_cause_an_error()
@@ -84,7 +86,7 @@ namespace StorEvil.Core.Event_Handling
             fooHandler.EventsCaught.ElementsShouldEqual(fooEvent);
         }
 
-        public class FooHandler : IEventHandler<FooEvent>
+        public class FooHandler : IHandle<FooEvent>
         {
             public List<object> EventsCaught = new List<object>();
             public void Handle(FooEvent eventToHandle)
@@ -94,7 +96,7 @@ namespace StorEvil.Core.Event_Handling
         }
     }
 
-    public class FooBarBazHandler : IEventHandler<FooEvent>, IEventHandler<BarEvent>, IEventHandler<BazEvent>
+    public class FooBarBazHandler : IHandle<FooEvent>, IHandle<BarEvent>, IHandle<BazEvent>
     {
         public List<object> EventsCaught = new List<object>();
         public void Handle(FooEvent eventToHandle)

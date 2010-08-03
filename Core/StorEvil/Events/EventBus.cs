@@ -53,7 +53,7 @@ namespace StorEvil.Events
 
         private static IEnumerable<Type> GetHandledEventTypes(object handler)
         {
-            var handlerType = typeof (IEventHandler<>);
+            var handlerType = typeof (IHandle<>);
             var allInterfaces = handler.GetType().GetInterfaces();
             var handlerInterfaces = allInterfaces.Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == handlerType);
             return handlerInterfaces.Select(x => x.GetGenericArguments().First());
@@ -70,7 +70,7 @@ namespace StorEvil.Events
         public void Raise<T>(T e)
         {
             DebugTrace.Trace("EventBus", "Raising " + typeof(T).FullName);
-            foreach (var handler in GetHandlersForType(typeof(T)).Cast<IEventHandler<T>>())
+            foreach (var handler in GetHandlersForType(typeof(T)).Cast<IHandle<T>>())
             {
                 handler.Handle(e);
                 DebugTrace.Trace("EventBus", " ... handled by: " + handler.GetType().FullName);                

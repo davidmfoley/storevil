@@ -7,9 +7,9 @@ using StorEvil.InPlace;
 namespace StorEvil.ResultListeners
 {
     public abstract class WriterListener :
-        IEventHandler<ScenarioStarting>, IEventHandler<SessionFinished>, IEventHandler<ScenarioFinished>,
-        IEventHandler<LineExecuted>,
-        IEventHandler<StoryStarting>
+        IHandle<ScenarioStarting>, IHandle<SessionFinished>, IHandle<ScenarioFinished>,
+        IHandle<LineExecuted>,
+        IHandle<StoryStarting>
     {
         protected abstract void DoWrite(ConsoleColor white, params string[] s);
      

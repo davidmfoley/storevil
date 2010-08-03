@@ -4,7 +4,7 @@ using StorEvil.Events;
 
 namespace StorEvil.CodeGeneration
 {
-    public class NUnitListener : IEventHandler<LineExecuted>
+    public class NUnitListener : IHandle<LineExecuted>
     {                  
         public void Handle(LineExecuted eventToHandle)
         {

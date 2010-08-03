@@ -7,8 +7,8 @@ using StorEvil.InPlace;
 
 namespace StorEvil.ResultListeners
 {
-    public class XmlReportListener : IEventHandler<SessionFinished>,
-        IEventHandler<LineExecuted>, IEventHandler<ScenarioStarting>
+    public class XmlReportListener : IHandle<SessionFinished>,
+        IHandle<LineExecuted>, IHandle<ScenarioStarting>
     {
 
         public class StatusNames
