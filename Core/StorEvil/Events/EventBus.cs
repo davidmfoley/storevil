@@ -15,15 +15,9 @@ namespace StorEvil.Events
 
     
     public class EventBus : MarshalByRefObject, IEventBus
-    {
-        public EventBus()
-        {
-            _handlers = new List<object>();
-        }
-
+    {      
         private Dictionary<Type, List<object>> _handlersByEvent = new Dictionary<Type, List<object>>();
-        private readonly List<object> _handlers;
-
+        private readonly List<object> _handlers = new List<object>();
 
         public IEnumerable<object> Handlers  
         {
@@ -32,27 +26,37 @@ namespace StorEvil.Events
 
         public void Register(object handler)
         {
-            if (_handlers.Contains(handler))
+            if (IsAlreadyRegistered(handler))
             {
                 DebugTrace.Trace("EventBus", "Tried to add a handler of type " + handler.GetType() + " but it was already registered.");
                 return;
             }
 
             _handlers.Add(handler);
-            var allInterfaces = handler.GetType().GetInterfaces();
 
-            var handlerType = typeof (IEventHandler<>);
-            var namePrefix = handlerType.FullName.Until("`");
-            var ifaces = allInterfaces.Where(i => i.FullName.StartsWith(namePrefix));
+            AssociateWithHandledEventTypes(handler);
+        }
 
-            foreach (var iface in ifaces)
+        private bool IsAlreadyRegistered(object handler)
+        {
+            return _handlers.Contains(handler);
+        }
+
+        private void AssociateWithHandledEventTypes(object handler)
+        {
+            foreach (var messageType in GetHandledEventTypes(handler))
             {
-                foreach (var messageType in iface.GetGenericArguments())
-                {
-                    var handlersForType = GetHandlersForType(messageType);
-                    handlersForType.Add(handler);
-                }
+                var handlersForType = GetHandlersForType(messageType);
+                handlersForType.Add(handler);
             }
+        }       
+
+        private static IEnumerable<Type> GetHandledEventTypes(object handler)
+        {
+            var handlerType = typeof (IEventHandler<>);
+            var allInterfaces = handler.GetType().GetInterfaces();
+            var handlerInterfaces = allInterfaces.Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == handlerType);
+            return handlerInterfaces.Select(x => x.GetGenericArguments().First());
         }
 
         private List<object> GetHandlersForType(Type messageType)
@@ -72,6 +76,5 @@ namespace StorEvil.Events
                 DebugTrace.Trace("EventBus", " ... handled by: " + handler.GetType().FullName);                
             }
         }
-
     }
 }

@@ -2,7 +2,6 @@
 using System.Linq;
 using NUnit.Framework;
 using StorEvil.Events;
-using StorEvil.InPlace;
 using StorEvil.Utility;
 
 namespace StorEvil.Core.Event_Handling

@@ -4,6 +4,4 @@
     {
         void Handle(T eventToHandle);
     }
-
-   
 }
