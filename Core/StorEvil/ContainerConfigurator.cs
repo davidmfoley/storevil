@@ -47,19 +47,22 @@ namespace StorEvil
 
             container.EasyRegister<IAmbiguousMatchResolver, MostRecentlyUsedContext>();
 
+           // container.Register<StorEvilSession>(GetSession(settings));
             container.Register<ISessionContext>(GetSessionContext(settings));
         }
 
-        private SessionContext GetSessionContext(ConfigSettings settings)
+        private ISessionContext GetSessionContext(ConfigSettings settings)
         {
-            var mapper = new SessionContext();
+            //var session = new SessionContext(settings);
+
+            var sessionContext = new SessionContext();
             foreach (var location in settings.AssemblyLocations)
             {
                 DebugTrace.Trace(GetType().Name, "Adding context assembly:" + location);
-                mapper.AddAssembly(location);
+                sessionContext.AddAssembly(location);
                 ParameterConverter.AddCustomConverters(location);
             }
-            return mapper;
+            return sessionContext;
         }
 
         protected abstract void SetupCustomComponents(Container container, ConfigSettings configSettings, settingsT customSettings);

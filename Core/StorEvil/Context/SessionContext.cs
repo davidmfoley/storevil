@@ -2,10 +2,40 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using StorEvil.Configuration;
+using StorEvil.Context;
 using StorEvil.Interpreter;
 
 namespace StorEvil.Context
-{
+{   
+
+    public class AssemblyRegistry
+    {
+        private IEnumerable<Type> _allTypes;
+
+        public AssemblyRegistry(IEnumerable<string> assemblyLocations)
+        {
+            _allTypes = assemblyLocations.Select(Assembly.LoadFrom).SelectMany(a => a.GetTypes());
+        }
+
+        public IEnumerable<Type> GetTypesWithCustomAttribute<T>()
+        {
+            return _allTypes.Where(t => TypeHasCustomAttribute(t, typeof (T)));               
+        }
+    
+        private static bool TypeHasCustomAttribute(Type t, Type customAttribute)
+        {
+            // tolerate version differences between runner and target of context assembly
+            return t.GetCustomAttributes(true).Any(x => x.GetType().FullName == customAttribute.FullName);
+        }
+
+        public IEnumerable<Type> GetTypesImplementing<T>()
+        {
+            Type targetType = typeof(T);
+            return _allTypes.Where(t =>  t.IsSubclassOf(targetType) || t.GetInterfaces().Contains(targetType));
+        }
+    }
+
     public class SessionContext : ISessionContext, IDisposable
     {
         private readonly List<Type> _contextTypes = new List<Type>();
@@ -74,7 +104,6 @@ namespace StorEvil.Context
                 var disposable = context.Value as IDisposable;
                 if (disposable!= null)
                     disposable.Dispose();
-             
             }
         }
     }

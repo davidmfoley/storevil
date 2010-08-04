@@ -42,7 +42,6 @@ namespace StorEvil.Core.Event_Handling
             handler2.EventsCaught.ElementsShouldEqual(fooEvent);
         }
 
-      
 
         [Test]
         public void Raising_an_unhandled_event_does_not_cause_an_error()

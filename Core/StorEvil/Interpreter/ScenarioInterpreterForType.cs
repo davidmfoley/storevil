@@ -15,8 +15,8 @@ namespace StorEvil.Interpreter
         private readonly List<IMemberMatcher> _memberMatchers = new List<IMemberMatcher>();
         private static readonly ParameterConverter _parameterConverter = new ParameterConverter();
 
-        public ScenarioInterpreterForType(Type type, 
-                                          ExtensionMethodHandler extensionMethodHandler,
+        public ScenarioInterpreterForType(Type type,
+                                          IEnumerable<MethodInfo> extensionMethodsForType,
                                           IInterpreterForTypeFactory factory)
         {
             _type = type;
@@ -29,8 +29,14 @@ namespace StorEvil.Interpreter
             foreach (MemberInfo member in GetMembers(flags)) 
                 AddMatchers(member);
 
-            // extension methods
-            AddMatchersForExtensionMethods(extensionMethodHandler);
+           
+
+            foreach (var methodInfo in extensionMethodsForType)
+            {
+                DebugTrace.Trace(GetType().Name, "Added extension method matcher: " + methodInfo.Name);
+
+                _memberMatchers.Add(new MethodNameMatcher(methodInfo));
+            }
         }
 
         private MemberInfo[] GetMembers(BindingFlags flags)
@@ -45,16 +51,6 @@ namespace StorEvil.Interpreter
         {
             var ignore = new[] {"GetType", "ToString", "CompareTo", "GetTypeCode", "Equals", "GetHashCode"};
             return members.Where(m => !(m.MemberType == MemberTypes.Constructor || m.MemberType == MemberTypes.NestedType || ignore.Contains(m.Name))).ToArray();
-        }
-
-        private void AddMatchersForExtensionMethods(ExtensionMethodHandler extensionMethodHandler)
-        {
-            foreach (var methodInfo in extensionMethodHandler.GetExtensionMethodsFor(_type))
-            {
-                DebugTrace.Trace(GetType().Name, "Added extension method matcher: " + methodInfo.Name);
-
-                _memberMatchers.Add(new MethodNameMatcher(methodInfo));
-            }
         }
 
         private void AddMatchers(MemberInfo member)

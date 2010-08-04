@@ -24,7 +24,7 @@ namespace StorEvil.Interpreter.Ambiguous_Match_Resolution
 
             var factory = new InterpreterForTypeFactory(new ExtensionMethodHandler());
             ScenarioInterpreterForType fakeInterpreter = new ScenarioInterpreterForType(typeof (AmbiguousTestClass),
-                                                                                        new ExtensionMethodHandler(),
+                                                                                        new MethodInfo[] {},
                                                                                         factory);
 
             ChainReturnedFromResolver = new InvocationChain();
@@ -59,7 +59,7 @@ namespace StorEvil.Interpreter.Ambiguous_Match_Resolution
         [TestFixtureSetUp]
         public void SetupContext()
         {
-            var interpreter = new ScenarioInterpreterForType(typeof(AmbiguousTestClass), new ExtensionMethodHandler(),
+            var interpreter = new ScenarioInterpreterForType(typeof(AmbiguousTestClass), new MethodInfo[] {},
                                                             new InterpreterForTypeFactory(new ExtensionMethodHandler()));
 
            Chains = interpreter.GetChains("Foo bar baz");

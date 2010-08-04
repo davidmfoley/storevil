@@ -21,7 +21,7 @@ namespace StorEvil.Interpreter
         public ScenarioInterpreterForType GetInterpreterForType(Type t)
         {
             if (!_interpreterCache.ContainsKey(t))
-                _interpreterCache[t] = new ScenarioInterpreterForType(t, _extensionMethodHandler, this);
+                _interpreterCache[t] = new ScenarioInterpreterForType(t, _extensionMethodHandler.GetExtensionMethodsFor(t), this);
 
             return _interpreterCache[t];
         }
