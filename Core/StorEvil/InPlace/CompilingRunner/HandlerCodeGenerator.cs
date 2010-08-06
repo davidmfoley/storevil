@@ -26,7 +26,7 @@ namespace StorEvil.InPlace.CompilingRunner
         private string BuildContextFactorySetup(IEnumerable<string> referencedAssemblies)
         {
             var adds =
-                referencedAssemblies.Select(a => string.Format("AddAssembly(@\"{0}\");", a));
+                referencedAssemblies.Select(a => string.Format("yield return @\"{0}\";", a));
             return string.Join("\r\n            ", adds.ToArray());
         }
 
@@ -105,6 +105,7 @@ StorEvilContexts = ExecuteLine(@""{1}"");
         private string _sourceCodeTemplate =
             @"
 namespace StorEvilTestAssembly {{
+    using System.Collections.Generic;
     using StorEvil.Context;
     using StorEvil.Core;
     using StorEvil.Interpreter;
@@ -119,10 +120,12 @@ namespace StorEvilTestAssembly {{
         public StorEvilDriver(IEventBus bus) : base(bus) {{
            
         }}
-
-        public override void HandleStory(Story story) {{
-                                    
+        
+        protected override IEnumerable<string> GetAssemblies() {{
             {1}
+        }}
+
+        public override void HandleStory(Story story) {{                                                
             var scenarios = GetScenarios(story);
             var StorEvilContexts = new object[0];
             Scenario scenario;

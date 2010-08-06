@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using StorEvil.Context;
 
 namespace StorEvil.Interpreter
 {
@@ -35,6 +36,14 @@ namespace StorEvil.Interpreter
         private static readonly List<MethodInfo> _allExtensionMethods = new List<MethodInfo>();
         private static readonly List<Type> _addedTypes = new List<Type>();
 
+        public ExtensionMethodHandler(AssemblyRegistry assemblyRegistry)
+        {
+            foreach (var type in assemblyRegistry.GetStaticClasses())
+            {
+                AddExtensionMethods(type);
+            }
+        }
+
         public IEnumerable<MethodInfo> GetExtensionMethodsFor(Type _type)
         {
             return _allExtensionMethods.Where(m => m.GetParameters()[0].ParameterType.IsAssignableFrom(_type));
@@ -42,16 +51,11 @@ namespace StorEvil.Interpreter
 
         public void AddAssembly(Assembly assembly)
         {
-            var types = assembly.GetTypes().Where(IsStatic);
+            var types = assembly.GetTypes().Where(type => type.IsAbstract && type.IsSealed);
             foreach (var type in types)
             {
                 AddExtensionMethods(type);
             }
-        }
-
-        private bool IsStatic(Type type)
-        {
-            return type.IsAbstract && type.IsSealed;
         }
     }
 }

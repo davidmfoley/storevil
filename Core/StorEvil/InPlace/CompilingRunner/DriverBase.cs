@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using StorEvil.Context;
 using StorEvil.Core;
@@ -22,11 +23,14 @@ namespace StorEvil.InPlace
         {
             //ResultListener = resultListener;
             _eventBus = eventBus;
-            ScenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()), new MostRecentlyUsedContext());           
+            var assemblyRegistry = new AssemblyRegistry(GetAssemblies());
+            ScenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler(assemblyRegistry)), new MostRecentlyUsedContext());           
             LineExecuter = new ScenarioLineExecuter(ScenarioInterpreter, _eventBus);
-            _context = new SessionContext();            
+            _context = new SessionContext(assemblyRegistry);            
         }
 
+        protected abstract IEnumerable<string> GetAssemblies();
+        
        
         protected void AddAssembly(string location)
         {

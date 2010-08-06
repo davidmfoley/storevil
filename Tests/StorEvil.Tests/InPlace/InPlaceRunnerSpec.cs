@@ -23,7 +23,7 @@ namespace StorEvil.InPlace
         protected void RunStory(Story story)
         {
             FakeEventBus = new CapturingEventBus();
-            new ExtensionMethodHandler().AddAssembly(typeof(TestExtensionMethods).Assembly);
+            new ExtensionMethodHandler(new AssemblyRegistry(new[] { typeof(TestExtensionMethods).Assembly}));
 
             Context = new StoryContext(new FakeSessionContext(), typeof (T));
             
@@ -74,7 +74,7 @@ namespace StorEvil.InPlace
         private InPlaceStoryRunner GetRunner()
         {
             FakeEventBus = new CapturingEventBus();
-            var scenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()), MockRepository.GenerateStub<IAmbiguousMatchResolver>());
+            var scenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler(new AssemblyRegistry())), MockRepository.GenerateStub<IAmbiguousMatchResolver>());
             return new InPlaceStoryRunner(new ScenarioPreprocessor(),
                                           scenarioInterpreter,
                                           new IncludeAllFilter(), new FakeSessionContext(Context), FakeEventBus);

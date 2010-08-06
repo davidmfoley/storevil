@@ -51,7 +51,7 @@ namespace StorEvil.InPlace.NonCompiled
         {
             FakeEventBus = MockRepository.GenerateStub<IEventBus>();
 
-            var scenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler()), MockRepository.GenerateStub<IAmbiguousMatchResolver>());
+            var scenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler(new AssemblyRegistry())), MockRepository.GenerateStub<IAmbiguousMatchResolver>());
             var inPlaceRunner = new InPlaceStoryRunner(new ScenarioPreprocessor(), scenarioInterpreter, new IncludeAllFilter(), new SessionContext(), FakeEventBus);
             inPlaceRunner.Finished();
         }

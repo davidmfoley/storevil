@@ -35,16 +35,16 @@ namespace StorEvil.NUnit
 
         private void AppendAssemblySetup(StringBuilder sb, ISessionContext sessionContext)
         {
-            sb.AppendLine("   var eh = new StorEvil.Interpreter.ExtensionMethodHandler();");
+            sb.AppendLine("    var assemblyRegistry = new " + typeof(AssemblyRegistry).FullName +"( new System.Reflection.Assembly[] {");
+            var asses = sessionContext.GetAllAssemblies().Select(x=> "typeof(" + x.GetTypes().First().FullName + ").Assembly");
+            var joined = string.Join(",\r\n        ", asses.ToArray());
+
+            sb.AppendLine(joined);
+            
+            sb.AppendLine("    });");
+
+            sb.AppendLine("   var eh = new StorEvil.Interpreter.ExtensionMethodHandler(assemblyRegistry);");
             sb.AppendLine("   // _sessionContext = new SessionContext();");
-            foreach (var assembly in sessionContext.GetAllAssemblies())
-            {
-                var assemblyRef = "typeof(" + assembly.GetTypes().First().FullName + ").Assembly";
-                var assemblyLocation =assemblyRef + ".Location";
-                sb.AppendLine("    StorEvil.CodeGeneration.TestSession.AddAssembly(" + assemblyRef + ");");
-                sb.AppendLine("    eh.AddAssembly(" + assemblyRef + ");");
-                sb.AppendLine(@"    StorEvil.Interpreter.ParameterConverters.ParameterConverter.AddCustomConverters(" + assemblyLocation + @");");
-            }
         }
     }
 }

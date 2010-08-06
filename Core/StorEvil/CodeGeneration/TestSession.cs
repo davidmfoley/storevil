@@ -7,6 +7,7 @@ using NUnit.Framework;
 using StorEvil.Configuration;
 using StorEvil.Context;
 using StorEvil.Infrastructure;
+using StorEvil.Interpreter;
 using StorEvil.Interpreter.ParameterConverters;
 
 namespace StorEvil.CodeGeneration
@@ -15,6 +16,8 @@ namespace StorEvil.CodeGeneration
     {
         private static SessionContext _sessionContext;
         private static List<Assembly> _assemblies = new List<Assembly>();
+        private static ExtensionMethodHandler _extensionMethodHandler;
+
         public static void ShutDown()
         {
             if (_sessionContext != null)
@@ -49,7 +52,7 @@ namespace StorEvil.CodeGeneration
 
         private static SessionContext GetSessionContext(string currentAssemblyLocation)
         {
-            _sessionContext = new SessionContext();
+           
             var configReader = new FilesystemConfigReader(new Filesystem(), new ConfigParser());     
 
             ConfigSettings settings = configReader.GetConfig(currentAssemblyLocation);
@@ -60,17 +63,21 @@ namespace StorEvil.CodeGeneration
             {
                 Assert.Ignore("No storevil assemblies were found.");
             }
-   
+         
             foreach (var location in settings.AssemblyLocations)
             {
-                _sessionContext.AddAssembly(location);
+                
                 ParameterConverter.AddCustomConverters(location);
             }
 
             foreach (var assembly in _assemblies)
             {
-                _sessionContext.AddAssembly(assembly);
+                ParameterConverter.AddCustomConverters(assembly.Location);
             }
+
+            var assemblyRegistry = new AssemblyRegistry(_assemblies.Select(x=>x.Location).Union(settings.AssemblyLocations));
+            _sessionContext = new SessionContext(assemblyRegistry);
+            _extensionMethodHandler = new ExtensionMethodHandler(assemblyRegistry);
 
             return _sessionContext;
         }

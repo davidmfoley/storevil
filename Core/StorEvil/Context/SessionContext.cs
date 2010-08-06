@@ -13,6 +13,15 @@ namespace StorEvil.Context
     {
         private IEnumerable<Type> _allTypes;
 
+         public AssemblyRegistry()
+         {
+             _allTypes = new Type[0];
+         }
+
+        public AssemblyRegistry(IEnumerable<Assembly> assemblies)
+        {
+            _allTypes = assemblies.SelectMany(a => a.GetTypes());
+        }
         public AssemblyRegistry(IEnumerable<string> assemblyLocations)
         {
             _allTypes = assemblyLocations.Select(Assembly.LoadFrom).SelectMany(a => a.GetTypes());
@@ -34,14 +43,37 @@ namespace StorEvil.Context
             Type targetType = typeof(T);
             return _allTypes.Where(t =>  t.IsSubclassOf(targetType) || t.GetInterfaces().Contains(targetType));
         }
+
+        public IEnumerable<Type> GetStaticClasses()
+        {
+            return _allTypes.Where(IsStatic);
+
+        }
+
+        private bool IsStatic(Type type)
+        {
+            return type.IsAbstract && type.IsSealed;
+        }
     }
 
     public class SessionContext : ISessionContext, IDisposable
     {
         private readonly List<Type> _contextTypes = new List<Type>();
-        private readonly ExtensionMethodHandler _extensionMethodHandler = new ExtensionMethodHandler();
         private readonly Dictionary<Type, object> _cache = new Dictionary<Type, object>();
         private List<Assembly> _assemblies = new List<Assembly>() ;
+
+        public SessionContext(AssemblyRegistry assemblyRegistry)
+        {
+            foreach (var type in assemblyRegistry.GetTypesWithCustomAttribute<ContextAttribute>())
+            {
+                AddContext(type);
+            }
+        }
+
+        public SessionContext()
+        {
+        }
+
 
         public void AddContext<T>() where T : class
         {
@@ -78,8 +110,7 @@ namespace StorEvil.Context
         public void AddAssembly(string pathToAssembly)
         {
             var a = Assembly.LoadFrom(pathToAssembly);
-            AddAssembly(a);
-            _extensionMethodHandler.AddAssembly(a);
+            AddAssembly(a);            
         }
 
         public StoryContext GetContextForStory()
