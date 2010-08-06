@@ -35,8 +35,9 @@ namespace StorEvil.CustomTool
 
         private static string GetPath()
         {
-            if (Is64BitOS()) return PrefixPath64Bit + InnerPath + StorEvilKey;
-            return PrefixPath32Bit + InnerPath + StorEvilKey;
+            var prefix = Is64BitOS() ? PrefixPath64Bit : PrefixPath32Bit;
+
+            return prefix + InnerPath + StorEvilKey;          
         }
 
         /// <summary>
@@ -59,22 +60,15 @@ namespace StorEvil.CustomTool
         [MethodImpl(MethodImplOptions.NoInlining)]
         private static bool InternalCheckIsWow64()
         {
-            if ((Environment.OSVersion.Version.Major == 5 && Environment.OSVersion.Version.Minor >= 1) ||
-                Environment.OSVersion.Version.Major >= 6)
-            {
-                using (Process p = Process.GetCurrentProcess())
-                {
-                    bool retVal;
-                    if (!IsWow64Process(p.Handle, out retVal))
-                    {
-                        return false;
-                    }
-                    return retVal;
-                }
-            }
-            else
-            {
+            var osVersion = Environment.OSVersion.Version;
+
+            if ((osVersion.Major != 5 || osVersion.Minor < 1) && osVersion.Major < 6)
                 return false;
+
+            using (Process p = Process.GetCurrentProcess())
+            {
+                bool retVal;
+                return IsWow64Process(p.Handle, out retVal) && retVal;
             }
         }
     }
