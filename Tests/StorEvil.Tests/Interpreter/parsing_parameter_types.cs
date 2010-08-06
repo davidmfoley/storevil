@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 using StorEvil.Interpreter.ParameterConverters;
 using StorEvil.Utility;
 
@@ -22,6 +23,22 @@ namespace StorEvil.Interpreter.ParameterConverter_Specs
             var result = Converter.Convert("42", typeof (int));
             result.ShouldBeOfType<int>();
             result.ShouldEqual(42);
+        }
+
+        [Test]
+        public void should_convert_negative_int()
+        {
+            var result = Converter.Convert("-42", typeof(int));
+            result.ShouldBeOfType<int>();
+            Assert.That(result, Is.EqualTo(-42));
+        }
+
+        [Test]
+        public void should_convert_negative_decimal()
+        {
+            var result = Converter.Convert("-42", typeof(decimal));
+            result.ShouldBeOfType<decimal>();
+            Assert.That( result, Is.EqualTo(-42m));
         }
 
         [Test]
