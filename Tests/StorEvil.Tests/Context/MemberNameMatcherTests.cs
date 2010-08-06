@@ -108,19 +108,23 @@ namespace StorEvil.Context.Matching_method_names_with_reflection
     public class Matching_a_numeric_int_parameter
     {
         private MethodNameMatcher Matcher;
-
-        [SetUp]
-        public void SetupContext()
-        {
-            Matcher = MethodMatcherTestHelper.GetMatcher<Numeric_matching_test_context>("method_takes_an_int");            
-        }
-
+     
         [Test]
         public void should_match_a_negative_int()
         {
+            Matcher = MethodMatcherTestHelper.GetMatcher<Numeric_matching_test_context>("method_takes_an_int"); 
             var matches = Matcher.GetMatches("method takes an int -42");
             matches.Count().ShouldBe(1);
             matches.First().ParamValues.First().Value.ShouldEqual(-42);
+        }
+
+        [Test]
+        public void should_match_a_negative_decimal()
+        {
+            Matcher = MethodMatcherTestHelper.GetMatcher<Numeric_matching_test_context>("method_takes_a_decimal"); 
+            var matches = Matcher.GetMatches("method takes a decimal -42");
+            matches.Count().ShouldBe(1);
+            matches.First().ParamValues.First().Value.ShouldEqual(-42m);
         }
 
         public class Numeric_matching_test_context
@@ -128,6 +132,10 @@ namespace StorEvil.Context.Matching_method_names_with_reflection
             public void method_takes_an_int(int val)
             {
                 
+            }
+            public void method_takes_a_decimal(decimal val)
+            {
+
             }
         }
     }
