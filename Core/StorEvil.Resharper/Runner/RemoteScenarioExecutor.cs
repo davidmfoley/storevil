@@ -71,10 +71,8 @@ namespace StorEvil.Resharper.Runner
         {
             IScenarioPreprocessor preprocessor = new ScenarioPreprocessor();
 
-            AssemblyRegistry assemblyRegistry = new AssemblyRegistry();
-
-            var interpreterForTypeFactory = new InterpreterForTypeFactory(new ExtensionMethodHandler(assemblyRegistry));
          
+            var interpreterForTypeFactory = new InterpreterForTypeFactory(new ExtensionMethodHandler(_assemblyRegistry));
 
             var scenarioInterpreter = new ScenarioInterpreter(interpreterForTypeFactory, resolver);
 

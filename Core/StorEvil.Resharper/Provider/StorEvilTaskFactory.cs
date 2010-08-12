@@ -30,20 +30,8 @@ namespace StorEvil.Resharper
             //tasks.Add(new UnitTestTask(null, new AssemblyLoadTask(typeof (Scenario).Assembly.Location)));
 
             foreach (string assembly in projectEl.Assemblies)
-            {
-                if (!_registeredAssemblies.Contains(assembly))
-                {
-                    _registeredAssemblies.Add(assembly);
-                    try
-                    {
-                        _assemblyLoader.RegisterAssembly(Assembly.LoadFrom(assembly));
-                        _assemblyLoader.RegisterPath(Directory.GetParent(assembly).FullName);
-                    }
-                    catch
-                    {
-                    }
-                }
-                tasks.Add(new UnitTestTask(null, new AssemblyLoadTask(assembly)));
+            {               
+                tasks.Add(new UnitTestTask(null, new LoadContextAssemblyTask(assembly)));
             }
             tasks.Add(new UnitTestTask(projectEl,
                                        new RunProjectTask(projectEl.GetNamespace().NamespaceName,

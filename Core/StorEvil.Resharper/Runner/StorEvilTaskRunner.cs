@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using StorEvil.Context;
 using StorEvil.Core;
@@ -44,7 +46,8 @@ namespace StorEvil.Resharper.Runner
         private TaskResult _result;
         private RemoteScenarioExecutor _executor;
         public static string RunnerId = "StorEvilRunner";
-
+        private List<string> _loadedAssemblies = new List<string>();
+        private AssemblyLoader _loader = new AssemblyLoader();
         public override void ExecuteRecursive(TaskExecutionNode node)
         {
             try
@@ -67,6 +70,8 @@ namespace StorEvil.Resharper.Runner
             {
                 if (node.RemoteTask is RunProjectTask)
                     SetUpScenarioExecutorForCurrentProject(node);
+                if (node.RemoteTask is LoadContextAssemblyTask)
+                    ExecuteLoadContextAssemblyTask(node);
 
                 if (node.RemoteTask is RunScenarioTask)
                     result = ExecuteScenario(node);
@@ -83,6 +88,19 @@ namespace StorEvil.Resharper.Runner
                 Server.TaskFinished(node.RemoteTask, result.Message, result.Status);
 
             return result;
+        }
+
+        private void ExecuteLoadContextAssemblyTask(TaskExecutionNode node)
+        {
+            var lcat = node.RemoteTask as LoadContextAssemblyTask;
+
+            var path = lcat.AssemblyPath;
+            if (_loadedAssemblies.Contains(path)) 
+                return;
+
+            _loadedAssemblies.Add(path);
+
+            _loader.RegisterAssembly(Assembly.LoadFrom(path));
         }
 
         private void SetUpScenarioExecutorForCurrentProject(TaskExecutionNode node)

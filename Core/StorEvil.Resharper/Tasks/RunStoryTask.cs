@@ -6,6 +6,42 @@ using StorEvil.Resharper.Runner;
 namespace StorEvil.Resharper.Tasks
 {
     [Serializable]
+    public class LoadContextAssemblyTask : RemoteTask
+    {
+        public readonly string AssemblyPath;
+
+        public LoadContextAssemblyTask(XmlElement element) : base(element)
+        {
+            AssemblyPath = GetXmlAttribute(element, "AssemblyPath");
+        }
+
+        public LoadContextAssemblyTask(string assemblyPath)
+            : base(StorEvilTaskRunner.RunnerId)
+        {
+            AssemblyPath = assemblyPath;
+        }
+
+        public override void SaveXml(System.Xml.XmlElement element)
+        {
+            base.SaveXml(element);
+            SetXmlAttribute(element, "AssemblyPath", AssemblyPath);
+
+        }
+
+        public bool Equals(LoadContextAssemblyTask other)
+        {
+            return other != null && other.AssemblyPath == AssemblyPath;
+        }
+
+        public override bool Equals(RemoteTask other)
+        {
+            if (other == null) return false;
+
+            return ReferenceEquals(this, other) ||
+                Equals(other as LoadContextAssemblyTask);
+        }
+    }
+    [Serializable]
     public class RunStoryTask : RemoteTask
     {
         private readonly string _id;
