@@ -4,6 +4,7 @@ using StorEvil.Configuration;
 using StorEvil.Core;
 using StorEvil.Events;
 using StorEvil.Infrastructure;
+using StorEvil.InPlace.CompilingRunner;
 using StorEvil.ResultListeners;
 
 namespace StorEvil.InPlace
@@ -29,7 +30,10 @@ namespace StorEvil.InPlace
 
         public virtual IRemoteStoryHandler GetHandler(Story story, IEnumerable<Scenario> scenarios, IEventBus bus)
         {
-            var assemblyLocation = _assemblyGenerator.GenerateAssembly(story, scenarios, _settings.AssemblyLocations);
+            var spec = new AssemblyGenerationSpec {Assemblies = _settings.AssemblyLocations};
+            spec.AddStory(story, scenarios);
+
+            var assemblyLocation = _assemblyGenerator.GenerateAssembly(spec);
             return new RemoteStoryHandler(assemblyLocation, _filesystem, bus, _settings.AssemblyLocations);
         }
     }

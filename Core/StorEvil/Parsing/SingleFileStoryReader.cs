@@ -16,7 +16,7 @@ namespace StorEvil.Parsing
             _settings = settings;
             _filename = filename;
         }
-
+                    
         public IEnumerable<StoryInfo> GetStoryInfos()
         {
             var filter = new FileExtensionFilter(_settings);

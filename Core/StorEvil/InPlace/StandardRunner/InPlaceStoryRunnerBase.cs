@@ -31,7 +31,7 @@ namespace StorEvil.InPlace
 
         public void HandleStory(Story story)
         {
-           EventBus.Raise(new StoryStarting {Story = story});
+            EventBus.Raise(new StoryStarting {Story = story});
             
             Scenario[] scenariosMatchingFilter = GetScenariosMatchingFilter(story);
 
