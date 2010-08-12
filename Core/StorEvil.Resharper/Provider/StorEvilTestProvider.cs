@@ -36,11 +36,11 @@ namespace StorEvil.Resharper
             _environment = new StorEvilTestEnvironment();
             _assemblyExplorer = new StorEvilAssemblyExplorer(this, _environment);
             _storEvilFileExplorer = new StorEvilFileExplorer(this, _environment);
-            _taskFactory = new StorEvilTaskFactory();
+            _taskFactory = new StorEvilTaskFactory(_assemblyLoader);
             _comparer = new StorEvilElementComparer();
             _presenter = new StorEvilUnitTestPresenter();
 
-            _assemblyLoader.RegisterAssembly(typeof (Scenario).Assembly);
+            //_assemblyLoader.RegisterAssembly(typeof (Scenario).Assembly);
             //AssemblyLoader.RegisterPath(Path.GetDirectoryName(typeof(Scenario).Assembly.Location));
         }
 
@@ -51,7 +51,8 @@ namespace StorEvil.Resharper
 
         public RemoteTaskRunnerInfo GetTaskRunnerInfo()
         {
-            return new RemoteTaskRunnerInfo(typeof (StorEvilTaskRunner));
+            var runnerInfo = new RemoteTaskRunnerInfo(typeof (StorEvilTaskRunner));            
+            return runnerInfo;
         }
 
         public string Serialize(UnitTestElement element)

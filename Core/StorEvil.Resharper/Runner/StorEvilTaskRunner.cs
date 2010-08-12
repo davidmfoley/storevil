@@ -88,10 +88,10 @@ namespace StorEvil.Resharper.Runner
         private void SetUpScenarioExecutorForCurrentProject(TaskExecutionNode node)
         {
             var projectTask = node.RemoteTask as RunProjectTask;
-            var mapper = new SessionContext();
-            projectTask.Assemblies.ForEach(mapper.AddAssembly);
 
-            _executor = new RemoteScenarioExecutor(Server, mapper);
+            var assemblyRegistry = new AssemblyRegistry(projectTask.Assemblies);
+
+            _executor = new RemoteScenarioExecutor(Server, assemblyRegistry);
         }
 
         private ExecutionResult ExecuteChildTasks(TaskExecutionNode node)

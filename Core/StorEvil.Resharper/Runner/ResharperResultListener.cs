@@ -1,49 +1,65 @@
+using System;
 using JetBrains.ReSharper.TaskRunnerFramework;
-using StorEvil.Core;
-using StorEvil.InPlace;
+using StorEvil.Events;
 
 namespace StorEvil.Resharper.Runner
-{
-    internal class ResharperResultListener : IResultListener
+{    
+    internal class ResharperResultListener : IHandle<ScenarioFinished>, IHandle<LineExecuted>
     {
         private readonly IRemoteTaskServer _server;
-        private readonly RemoteTask _remoteTask;
+        private RemoteTask _remoteTask;
 
         public TaskResult Result { get; set; }
 
-        public ResharperResultListener(IRemoteTaskServer server, RemoteTask remoteTask)
+        public ResharperResultListener(IRemoteTaskServer server)
         {
-            _server = server;
-            _remoteTask = remoteTask;
+            _server = server;           
         }
 
-        public void StoryStarting(Story story)
+        public void Handle(ScenarioFinished eventToHandle)
         {
+            if (eventToHandle.Status == ExecutionStatus.Passed)
+            {
+                Result = TaskResult.Success;
+                Output("... ok");
+                
+            }          
+            else if (eventToHandle.Status == ExecutionStatus.Failed)
+            {
+                Result = TaskResult.Error;
+            }
+            else
+            {
+                Result = TaskResult.Skipped;
+            }
         }
 
-        public void ScenarioStarting(Scenario scenario)
+        public void Handle(LineExecuted eventToHandle)
         {
-            Result = TaskResult.Success;
-        }
+            var line = eventToHandle.Line;
 
-        public void ScenarioFailed(ScenarioFailureInfo scenarioFailureInfo)
-        {
+            if (eventToHandle.Status == ExecutionStatus.Pending)
+            {
+                Output("Could not interpret:\r\n" + line);               
+
+                Output("You could try the following:");
+                Output(eventToHandle.Suggestion ?? "");
             
-        }
+                return;
+            }
 
-        public void ScenarioPending(ScenarioPendingInfo scenarioPendingInfo)
-        {
-           
-        }
+            if (eventToHandle.Status == ExecutionStatus.Failed)
+            {
+                Output(eventToHandle.SuccessPart + " [" + eventToHandle.FailedPart + "] -- failed");
+                Output("----------");
+                Output(eventToHandle.Message);
 
-        public void ScenarioFailed(Scenario scenario, string successPart, string failedPart, string message)
-        {
-            Output(successPart + " [" + failedPart + "] -- failed");
-            Output("----------");
-            Output(message);
+                _server.TaskException(_remoteTask, new[] { new TaskException("StorEvil failure", eventToHandle.Message, ""), });
+                Result = TaskResult.Exception;
+                return;
+            }
 
-            _server.TaskException(_remoteTask, new[] {new TaskException("StorEvil failure", message, ""),});
-            Result = TaskResult.Exception;
+            Output(line);
         }
 
         private void Output(string message)
@@ -51,30 +67,9 @@ namespace StorEvil.Resharper.Runner
             _server.TaskOutput(_remoteTask, message + "\r\n", TaskOutputType.STDOUT);
         }
 
-        public void CouldNotInterpret(Scenario scenario, string line)
+        public void SetCurrentTask(RemoteTask remoteTask)
         {
-            Output("Could not interpret:\r\n" + line);
-            var suggestion = new ImplementationHelper().Suggest(line);
-
-            Output("You could try the following:");
-            Output(suggestion);
-
-            Result = TaskResult.Skipped;
-        }
-
-        public void Success(Scenario scenario, string line)
-        {
-            Output(line);
-        }
-
-        public void ScenarioSucceeded(Scenario scenario)
-        {
-            Output("ok");
-        }
-
-        public void Finished()
-        {
-            
+            _remoteTask = remoteTask;
         }
     }
 }
