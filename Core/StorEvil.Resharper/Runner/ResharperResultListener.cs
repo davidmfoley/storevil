@@ -22,15 +22,18 @@ namespace StorEvil.Resharper.Runner
             {
                 Result = TaskResult.Success;
                 Output("... ok");
+                _server.TaskFinished(_remoteTask, "ok", TaskResult.Success);
                 
             }          
             else if (eventToHandle.Status == ExecutionStatus.Failed)
             {
                 Result = TaskResult.Error;
+                _server.TaskFinished(_remoteTask, "failed", TaskResult.Exception);
             }
             else
             {
                 Result = TaskResult.Skipped;
+                _server.TaskFinished(_remoteTask, "skipped", TaskResult.Skipped);
             }
         }
 

@@ -46,6 +46,7 @@ namespace StorEvil.Resharper.Runner
 
                 job.Run();
 
+                
                 return _listener.Result;
             }
             catch (Exception ex)
