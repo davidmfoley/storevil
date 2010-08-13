@@ -42,7 +42,11 @@ namespace StorEvil.Resharper.Elements
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return base.Equals(other) && Equals(other._namespace, _namespace) && Equals(other.Scenario, Scenario);
+            if (!Scenario.Id.Equals(other.Scenario.Id))
+                return false;
+
+            return other.Scenario.Location.Path == Scenario.Location.Path && other.Scenario.Name == Scenario.Name;
+            
         }
 
 
@@ -61,17 +65,18 @@ namespace StorEvil.Resharper.Elements
         {
             var projectFile = GetProjectFile();
             
-            //TextRange range = new TextRange();
-            //var location = new UnitTestElementLocation(projectFile, range, range);
+            TextRange range = new TextRange(Scenario.Location.FromLine, Scenario.Location.ToLine);
+            var location = new UnitTestElementLocation(projectFile, range, range);
 
-            var unitTestElementLocations = new UnitTestElementLocation[] {}; //new UnitTestElementLocation(), .Id};
+            var unitTestElementLocations = new UnitTestElementLocation[] {location}; //new UnitTestElementLocation(), .Id};
             return new UnitTestElementDisposition(unitTestElementLocations, this);
         }
 
         private IProjectFile GetProjectFile()
         {
-            return null;
-            // var item = Project.ParentFolder.FindProjectItemByLocation(this.Scenario.Location.Path)
+           
+            var item =  Project.ParentFolder.FindProjectItemByLocation(new FileSystemPath( Scenario.Location.Path));
+            return item as IProjectFile;
         }
     }
 }
