@@ -1,5 +1,7 @@
-﻿using JetBrains.ProjectModel;
+﻿using System;
+using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
+using JetBrains.Util;
 using StorEvil.Core;
 
 namespace StorEvil.Resharper.Elements
@@ -16,6 +18,8 @@ namespace StorEvil.Resharper.Elements
             _namespace = new UnitTestNamespace(project.Name);
             Scenario = scenario;
         }
+
+      
 
         public override UnitTestNamespace GetNamespace()
         {
@@ -55,8 +59,19 @@ namespace StorEvil.Resharper.Elements
 
         public override UnitTestElementDisposition GetDisposition()
         {
+            var projectFile = GetProjectFile();
+            
+            //TextRange range = new TextRange();
+            //var location = new UnitTestElementLocation(projectFile, range, range);
+
             var unitTestElementLocations = new UnitTestElementLocation[] {}; //new UnitTestElementLocation(), .Id};
             return new UnitTestElementDisposition(unitTestElementLocations, this);
+        }
+
+        private IProjectFile GetProjectFile()
+        {
+            return null;
+            // var item = Project.ParentFolder.FindProjectItemByLocation(this.Scenario.Location.Path)
         }
     }
 }

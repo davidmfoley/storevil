@@ -10,10 +10,10 @@ namespace StorEvil.Parsing
 {
     public class StoryParser : IStoryParser
     {
-        public Story Parse(string storyText, string id)
+        public Story Parse(string storyText, string storyPath)
         {
             var storyParsingJob = new StoryParsingJob();
-            return storyParsingJob.Parse(storyText, id);
+            return storyParsingJob.Parse(storyText, storyPath, storyPath);
         }
     }
 
@@ -33,9 +33,12 @@ namespace StorEvil.Parsing
         private Action<ScenarioLine> _currentLineHandler;
         private List<string> _storyTags = new List<string>();
         private List<ScenarioLine> _background;
+        private string _storyLocation;
 
-        public Story Parse(string storyText, string storyId)
+        public Story Parse(string storyText, string storyId, string storyPath)
         {
+            _storyLocation = storyPath;
+
             InitializeParsing(storyId);
 
             foreach (var line in ParseLines(storyText))
@@ -57,8 +60,7 @@ namespace StorEvil.Parsing
         }
 
         private void HandleStoryTextLine(ScenarioLine line)
-        {
-           
+        {          
             if (IsTags(line.Text))
             {
                 HandleTags(line.Text);
@@ -149,7 +151,7 @@ namespace StorEvil.Parsing
                 _storyId = Guid.NewGuid().ToString();
 
             var id = _storyId.Length < 120 ? _storyId : _storyId.Substring(0, 120);
-            return new Story(id, _storyName.ToString().Trim(), scenarios) {Tags = _storyTags};
+            return new Story(id, _storyName.ToString().Trim(), scenarios) {Tags = _storyTags, Location = _storyLocation};
         }
 
         private static bool IsNewScenarioOrOutline(string line)
@@ -196,7 +198,7 @@ namespace StorEvil.Parsing
 
         private Scenario BuildScenario()
         {
-            return new Scenario(_storyId + "-" + scenarios.Count,
+            return new Scenario(_storyLocation, _storyId + "-" + scenarios.Count,
                                 _currentScenario.Name,
                                 _currentScenario.Lines.ToArray()) {
                 Tags = _currentScenario.Tags,

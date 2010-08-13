@@ -53,7 +53,7 @@ namespace StorEvil.CodeGeneration
 
         protected void SetCurrentScenario(string id, string summary)
         {   
-            _currentScenario = new Scenario(id, summary, new ScenarioLine[0]);
+            _currentScenario = new Scenario("", id, summary, new ScenarioLine[0]);
         }
 
         protected void AfterEach()

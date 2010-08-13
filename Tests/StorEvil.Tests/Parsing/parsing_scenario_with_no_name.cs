@@ -62,7 +62,7 @@ Then I should expect some other result
         {
             var parser = new StoryParser();
 
-            Result = parser.Parse(testBackgroundText, null);
+            Result = parser.Parse(testBackgroundText, "C:\\foo\\bar.feature");
         }
 
         [Test]
@@ -72,6 +72,16 @@ Then I should expect some other result
             var scenario = Result.Scenarios.First() as Scenario;
             scenario.ShouldNotBeNull();
             scenario.Background.Count().ShouldBe(1);
+        }
+
+        [Test]
+        public void should_set_location()
+        {
+            var scenario = Result.Scenarios.First();
+            var location = scenario.Location;
+            location.Path.ShouldEqual("C:\\foo\\bar.feature");
+            location.FromLine.ShouldEqual(8);
+            location.ToLine.ShouldEqual(9);
         }
     }
 }

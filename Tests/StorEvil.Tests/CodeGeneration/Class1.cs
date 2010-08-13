@@ -63,7 +63,7 @@ namespace StorEvil.CodeGeneration
         {
             ScenarioLine[] body = GetScenarioBody("when I do something", "then I should see something");
 
-            Scenario scenario = new Scenario("scenario-id", "scenario name", body);
+            Scenario scenario = new Scenario("", "scenario-id", "scenario name", body);
             return new Story("foo bar baz", "bar",  new IScenario[] {scenario});
         }
 

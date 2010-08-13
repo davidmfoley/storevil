@@ -20,7 +20,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
 
         protected Scenario BuildTestScenario(string id, string name, params string[] body)
         {
-            return new Scenario(id, name, body.Select(x=>new ScenarioLine {Text = x}).ToArray());
+            return new Scenario("", id, name, body.Select(x=>new ScenarioLine {Text = x}).ToArray());
         }
 
         [SetUp]
@@ -139,7 +139,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
     {
         protected override void DoTestSetup(XmlReportListener writer)
         {
-            Scenario testScenario = new Scenario("scenarioId", "scenarioName", new[] {"line1", "line2"}.Select(l=>new ScenarioLine {Text = l}).ToArray());
+            Scenario testScenario = new Scenario("", "scenarioId", "scenarioName", new[] {"line1", "line2"}.Select(l=>new ScenarioLine {Text = l}).ToArray());
            SimulateStoryStarting(new Story("id", "summary", new IScenario[] {testScenario}));
             SimulateScenarioStarting(testScenario);
             SimulateSuccessfulLine(testScenario, "line1");

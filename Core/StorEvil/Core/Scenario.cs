@@ -1,17 +1,21 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace StorEvil.Core
 {
     [Serializable]
     public class Scenario : ScenarioBase, IScenario
     {
+        private readonly string _path;
+
         public Scenario()
         {
         }
 
-        public Scenario(string id, string name, ScenarioLine[] body)
+        public Scenario(string path, string id, string name, ScenarioLine[] body)
         {
+            _path = path;
             Id = id;
             Name = name;
             Body = body;
@@ -26,7 +30,17 @@ namespace StorEvil.Core
 
         public ScenarioLine[] Body { get; set; }
 
-       
+        public ScenarioLocation Location
+        {
+            get
+            {
+                var firstLine = Body.First().LineNumber;
+                var lastLine = Body.Last().LineNumber;
+                var path = _path;
+
+                return new ScenarioLocation { Path = _path, FromLine = firstLine, ToLine = lastLine };
+            }
+        }
     }
 
     [Serializable]
@@ -58,7 +72,15 @@ namespace StorEvil.Core
         public string[][] Examples { get; set; }
 
         public string[] FieldNames { get; set; }
-    }
+
+        public ScenarioLocation Location
+        {
+            get
+            {
+                return Scenario.Location;
+            }
+        }
+     }
 
     [Serializable]
     public class ScenarioBase
@@ -68,6 +90,8 @@ namespace StorEvil.Core
         public IEnumerable<string> Tags { get; set; }
 
         public ScenarioLine[] Background { get; set; }
+
+       
     }
 
     public interface IScenario
@@ -76,5 +100,16 @@ namespace StorEvil.Core
         string Id { get; }
         IEnumerable<string> Tags { get; }
         ScenarioLine[] Background { get; set; }
+        ScenarioLocation Location { get;  }
+    }
+
+    [Serializable]
+    public class ScenarioLocation
+    {
+        public string Path { get; set; }
+
+        public int FromLine { get; set; }
+        public int ToLine { get; set; }
+
     }
 }

@@ -173,7 +173,7 @@ namespace StorEvil.Resharper.Tasks
             }
             else
             {
-                return new Scenario(Id, Name, GetScenarioLines(Body)) { Background = GetScenarioLines(Background) };
+                return new Scenario("", Id, Name, GetScenarioLines(Body)) { Background = GetScenarioLines(Background) };
             }
         }
 

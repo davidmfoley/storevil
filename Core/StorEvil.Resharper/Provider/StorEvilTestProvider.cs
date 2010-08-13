@@ -27,9 +27,9 @@ namespace StorEvil.Resharper
 
         private readonly StorEvilFileExplorer _storEvilFileExplorer;
         private readonly StorEvilTaskFactory _taskFactory;
-        private StorEvilElementComparer _comparer;
-        private StorEvilUnitTestPresenter _presenter;
-        private StorEvilTestEnvironment _environment;
+        private readonly StorEvilElementComparer _comparer;
+        private readonly StorEvilUnitTestPresenter _presenter;
+        private readonly StorEvilTestEnvironment _environment;
 
         public StorEvilTestProvider()
         {
@@ -39,9 +39,6 @@ namespace StorEvil.Resharper
             _taskFactory = new StorEvilTaskFactory(_assemblyLoader);
             _comparer = new StorEvilElementComparer();
             _presenter = new StorEvilUnitTestPresenter();
-
-            //_assemblyLoader.RegisterAssembly(typeof (Scenario).Assembly);
-            //AssemblyLoader.RegisterPath(Path.GetDirectoryName(typeof(Scenario).Assembly.Location));
         }
 
         public ProviderCustomOptionsControl GetCustomOptionsControl(ISolution solution)
