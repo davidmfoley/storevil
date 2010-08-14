@@ -137,7 +137,7 @@
     <Compile Include="Provider\StorEvilFileExplorer.cs" />
     <Compile Include="Provider\StorEvilProject.cs" />
     <Compile Include="Provider\StorEvilResharperConfigProvider.cs" />
-    <Compile Include="Provider\StorEvilScenarioOutlineElement.cs" />
+    <Compile Include="Elements\StorEvilScenarioOutlineElement.cs" />
     <Compile Include="Provider\StorEvilTaskFactory.cs" />
     <Compile Include="Provider\StorEvilTestEnvironment.cs" />
     <Compile Include="Provider\StorEvilUnitTestPresenter.cs" />

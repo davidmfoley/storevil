@@ -57,7 +57,7 @@ namespace StorEvil.Resharper.Provider
 
         private StorEvilStoryElement GetStoryElement(StorEvilProjectElement parent, IProject project, Story story)
         {
-            return new StorEvilStoryElement(_provider, parent, project, story.Summary, story.Id);
+            return new StorEvilStoryElement(_provider, parent, project, story.Summary, story.Location);
         }
 
         private void AddScenarioElement(IProject project, UnitTestElementConsumer consumer,

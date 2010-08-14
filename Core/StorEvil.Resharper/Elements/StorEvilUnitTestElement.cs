@@ -69,5 +69,12 @@ namespace StorEvil.Resharper
         {
             return null;
         }
+
+        protected IProjectFile GetProjectFile(string path)
+        {
+            var item =
+                Project.GetSubItems()[0].ParentFolder.FindProjectItemByLocation(new JetBrains.Util.FileSystemPath(path));
+            return item as IProjectFile;
+        }
     }
 }

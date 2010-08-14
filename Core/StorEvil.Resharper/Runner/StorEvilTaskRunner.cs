@@ -123,9 +123,14 @@ namespace StorEvil.Resharper.Runner
                     var childResult = ExecuteRecursiveInternal(childNode);
 
                     if (childResult.Status != TaskResult.Success)
-                        result = childResult.Status;
+                    {
+                        if (result == TaskResult.Skipped || result == TaskResult.Success)
+                            result = childResult.Status;
+                    }
                 }
             }
+
+            Server.TaskFinished(node.RemoteTask, "", result);
             
             return new ExecutionResult(result, "");
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.Util;
@@ -63,20 +64,29 @@ namespace StorEvil.Resharper.Elements
 
         public override UnitTestElementDisposition GetDisposition()
         {
-            var projectFile = GetProjectFile();
-            
-            TextRange range = new TextRange(Scenario.Location.FromLine, Scenario.Location.ToLine);
+            var projectFile = GetProjectFile(Scenario.Location.Path);
+            var contents = File.ReadAllText(Scenario.Location.Path);
+            TextRange range = new TextRange(LineToOffset(contents, Scenario.Location.FromLine), LineToOffset(contents, Scenario.Location.ToLine));
             var location = new UnitTestElementLocation(projectFile, range, range);
 
             var unitTestElementLocations = new UnitTestElementLocation[] {location}; //new UnitTestElementLocation(), .Id};
             return new UnitTestElementDisposition(unitTestElementLocations, this);
         }
 
-        private IProjectFile GetProjectFile()
+        private int LineToOffset(string contents, int lineNumber)
         {
-           
-            var item =  Project.ParentFolder.FindProjectItemByLocation(new FileSystemPath( Scenario.Location.Path));
-            return item as IProjectFile;
+            var line = 1;
+
+            for (int i = 0; i < contents.Length; i++)
+            {
+                if (line >= lineNumber)
+                    return i;
+                
+                if (contents[i] == '\n')
+                    line++;
+            }
+
+            return 0;
         }
     }
 }
