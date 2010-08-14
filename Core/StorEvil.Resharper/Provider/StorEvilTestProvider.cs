@@ -36,7 +36,7 @@ namespace StorEvil.Resharper
             _environment = new StorEvilTestEnvironment();
             _assemblyExplorer = new StorEvilAssemblyExplorer(this, _environment);
             _storEvilFileExplorer = new StorEvilFileExplorer(this, _environment);
-            _taskFactory = new StorEvilTaskFactory(_assemblyLoader);
+            _taskFactory = new StorEvilTaskFactory();
             _comparer = new StorEvilElementComparer();
             _presenter = new StorEvilUnitTestPresenter();
         }

@@ -68,12 +68,15 @@ namespace StorEvil.Resharper.Tasks
         public bool Equals(RunStoryTask other)
         {
             if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return false;
+            return _id == other._id;
+            
         }
 
         public override bool Equals(RemoteTask other)
         {
+            if (other is RunStoryTask)
+                return Equals((RunStoryTask) other);
+
             return ReferenceEquals(this, other);
         }
 

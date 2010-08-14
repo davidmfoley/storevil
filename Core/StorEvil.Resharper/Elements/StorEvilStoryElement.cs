@@ -1,21 +1,20 @@
-using System.IO;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.Util;
-using StorEvil.Configuration;
 
 namespace StorEvil.Resharper.Elements
 {
     public class StorEvilStoryElement : StorEvilUnitTestElement
     {
         private readonly string _path;
-        public string Id { get; set; }
+        public string Id { get { return _path; } }
         private readonly UnitTestNamespace _namespace;
 
         public StorEvilStoryElement(StorEvilTestProvider provider, UnitTestElement parent, IProject project, string title, string path)
             : base(provider, parent, project, title)
         {
             _path = path;
+            
 
             _namespace = new UnitTestNamespace(project.Name + " " + title);
         }
@@ -57,7 +56,7 @@ namespace StorEvil.Resharper.Elements
             var range = new TextRange(0, 0);
             var location = new UnitTestElementLocation(projectFile, range, range);
 
-            var unitTestElementLocations = new[] { location }; //new UnitTestElementLocation(), .Id};
+            var unitTestElementLocations = new[] { location }; 
             return new UnitTestElementDisposition(unitTestElementLocations, this);
         }
 
