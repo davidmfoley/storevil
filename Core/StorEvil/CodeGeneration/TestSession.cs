@@ -61,21 +61,17 @@ namespace StorEvil.CodeGeneration
 
             if (!settings.AssemblyLocations.Any() && !_assemblies.Any())
             {
-                Assert.Ignore("No storevil assemblies were found.");
-            }
-         
-            foreach (var location in settings.AssemblyLocations)
-            {
-                
-                ParameterConverter.AddCustomConverters(location);
-            }
+                var message = "No storevil assemblies were found.\r\nCurrent location:"
+                    + currentAssemblyLocation + "\r\nCurrent directory:"
+                    + Directory.GetCurrentDirectory(); 
 
-            foreach (var assembly in _assemblies)
-            {
-                ParameterConverter.AddCustomConverters(assembly.Location);
+                Assert.Ignore(message);
             }
 
             var assemblyRegistry = new AssemblyRegistry(_assemblies.Select(x=>x.Location).Union(settings.AssemblyLocations));
+
+            ParameterConverter.AddCustomConverters(assemblyRegistry);
+
             _sessionContext = new SessionContext(assemblyRegistry);
             _extensionMethodHandler = new ExtensionMethodHandler(assemblyRegistry);
 

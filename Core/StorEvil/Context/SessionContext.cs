@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using StorEvil.Configuration;
@@ -27,7 +28,20 @@ namespace StorEvil.Context
         public AssemblyRegistry(IEnumerable<string> assemblyLocations)
         {
             _assemblyLocations = assemblyLocations;
-            _allTypes = assemblyLocations.Select(Assembly.LoadFrom).SelectMany(a => a.GetTypes());
+            _allTypes = assemblyLocations.Select(LoadAssembly).SelectMany(a => a.GetTypes());
+        }
+
+        private static Assembly LoadAssembly(string location)
+        {
+            if (File.Exists(location))
+                return Assembly.LoadFrom(location);
+
+            var inWorkingDirectory = Path.GetFileName(location);
+
+            if (File.Exists(inWorkingDirectory))
+                return Assembly.LoadFrom(inWorkingDirectory);
+
+            throw new StorEvilException("Could not load assembly: " + location);
         }
 
         public IEnumerable<Type> GetTypesWithCustomAttribute<T>()

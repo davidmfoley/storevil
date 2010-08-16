@@ -105,6 +105,7 @@
     <Compile Include="Context\Matches\ExactMatch.cs" />
     <Compile Include="Context\Matchers\MethodNameMatcher.cs" />
     <Compile Include="Context\ScenarioContext.cs" />
+    <Compile Include="Context\StorEvilException.cs" />
     <Compile Include="Context\StoryContext.cs" />
     <Compile Include="Core\JobResult.cs" />
     <Compile Include="Events\EventBus.cs" />

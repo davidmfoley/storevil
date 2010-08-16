@@ -26,17 +26,11 @@ namespace StorEvil.InPlace
             var assemblyRegistry = new AssemblyRegistry(GetAssemblies());
             ScenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler(assemblyRegistry)), new MostRecentlyUsedContext());           
             LineExecuter = new ScenarioLineExecuter(ScenarioInterpreter, _eventBus);
-            _context = new SessionContext(assemblyRegistry);            
+            _context = new SessionContext(assemblyRegistry);
+            ParameterConverter.AddCustomConverters(assemblyRegistry);
         }
 
-        protected abstract IEnumerable<string> GetAssemblies();
-        
-       
-        protected void AddAssembly(string location)
-        {
-            _context.AddAssembly(location);
-            ParameterConverter.AddCustomConverters(location);
-        }
+        protected abstract IEnumerable<string> GetAssemblies();      
 
         protected object[] GetContexts()
         {

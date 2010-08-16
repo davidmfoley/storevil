@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using StorEvil.Context;
 using StorEvil.Extensibility;
 
 namespace StorEvil.Interpreter.ParameterConverters
@@ -131,6 +132,15 @@ namespace StorEvil.Interpreter.ParameterConverters
             var assembly = Assembly.LoadFrom(location);
             var allTypes = assembly.GetTypes();
             var converterTypes = allTypes.Where(t=>t.GetInterface(typeof(CustomParameterConverter).FullName, true) != null);
+            foreach (var type in converterTypes)
+            {
+                AddCustomConverter(type);
+            }
+        }
+
+        public static void AddCustomConverters(AssemblyRegistry registry)
+        {
+            var converterTypes = registry.GetTypesImplementing<CustomParameterConverter>();
             foreach (var type in converterTypes)
             {
                 AddCustomConverter(type);
