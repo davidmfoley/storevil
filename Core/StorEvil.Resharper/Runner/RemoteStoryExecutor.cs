@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using StorEvil.Context;
 using StorEvil.Core;
@@ -38,6 +39,28 @@ namespace StorEvil.Resharper.Runner
             _eventBus.Register(_listener);
         }
 
+        public ExecutionResult Execute(IEnumerable<TaskExecutionNode> storyNodes)
+        {
+            var stories = new List<Story>();
+            _runner = BuildInPlaceRunner(_resolver);
+            foreach (var storyNode in storyNodes)
+            {
+                var rst = storyNode.RemoteTask as RunStoryTask;
+
+                var scenarios = new List<IScenario>();
+                foreach (var sc in storyNode.Children )
+                {
+                    var scenarioTask = sc.RemoteTask as RunScenarioTask;
+                    scenarios.Add(scenarioTask.GetScenario());
+                }
+                stories.Add(new Story(rst.Id, rst.Id, scenarios));
+            }
+
+            _runner.HandleStories(stories);
+
+            return new ExecutionResult(TaskResult.Success, "");
+        }
+
         public TaskResult Execute(RemoteTask remoteTask)
         {
             try
@@ -74,12 +97,12 @@ namespace StorEvil.Resharper.Runner
             IScenarioPreprocessor preprocessor = new ScenarioPreprocessor();
 
          
-            var interpreterForTypeFactory = new InterpreterForTypeFactory(new ExtensionMethodHandler(_assemblyRegistry));
+            //var interpreterForTypeFactory = new InterpreterForTypeFactory(new ExtensionMethodHandler(_assemblyRegistry));
 
-            var scenarioInterpreter = new ScenarioInterpreter(interpreterForTypeFactory, resolver);
+            //var scenarioInterpreter = new ScenarioInterpreter(interpreterForTypeFactory, resolver);
 
-            return new InPlaceStoryRunner(preprocessor, scenarioInterpreter, new IncludeAllFilter(), _sessionContext, _eventBus );
-            //return new InPlaceCompilingStoryRunner(new RemoteHandlerFactory(new AssemblyGenerator(), _assemblyRegistry, new Filesystem()),  preprocessor, new IncludeAllFilter(), _sessionContext, _eventBus);
+            //return new InPlaceStoryRunner(preprocessor, scenarioInterpreter, new IncludeAllFilter(), _sessionContext, _eventBus );
+            return new InPlaceCompilingStoryRunner(new RemoteHandlerFactory(new AssemblyGenerator(), _assemblyRegistry, new Filesystem()),  preprocessor, new IncludeAllFilter(), _sessionContext, _eventBus);
         }
 
     }

@@ -11,18 +11,6 @@ namespace StorEvil.InPlace
 {
     public class InPlaceCompilingStoryRunner : IStoryHandler
     {
-
-
-
-
-
-
-
-
-
-
-
-
         private readonly IRemoteHandlerFactory _factory;
         private readonly IScenarioPreprocessor _preprocessor;
         private readonly IStoryFilter _filter;

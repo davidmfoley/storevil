@@ -62,7 +62,8 @@ namespace StorEvil.InPlace
                 domainSetup.ApplicationBase = Environment.CurrentDirectory;
                 domainSetup.DisallowBindingRedirects = false;
             }
-            domainSetup.ShadowCopyDirectories = GetDirectories(_assemblyLocations);
+            domainSetup.ShadowCopyFiles = "true";
+            //domainSetup.ShadowCopyDirectories = GetDirectories(_assemblyLocations);
             domainSetup.ConfigurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
 
             // Create the second AppDomain.

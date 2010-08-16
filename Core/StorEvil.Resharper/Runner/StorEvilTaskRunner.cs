@@ -73,17 +73,18 @@ namespace StorEvil.Resharper.Runner
             Server.TaskStarting(node.RemoteTask);
             Logger.Log(_logIndent+ "ExecuteRecursiveInternal: " + node.RemoteTask.GetType());
             _logIndent += " ";
-            ExecutionResult result;
+            ExecutionResult result = null;
             try
             {
                 if (node.RemoteTask is RunProjectTask)
+                {
                     SetUpScenarioExecutorForCurrentProject(node);
-
-                if (node.RemoteTask is LoadContextAssemblyTask)
+                    _executor.Execute(node.Children);
+                }
+                else if (node.RemoteTask is LoadContextAssemblyTask)
+                {
                     ExecuteLoadContextAssemblyTask(node);
-
-                if (node.RemoteTask is RunScenarioTask)
-                    result = ExecuteScenario(node);
+                }
                 else
                     result = ExecuteChildTasks(node);
             }
@@ -106,7 +107,7 @@ namespace StorEvil.Resharper.Runner
 
             return result;
         }
-
+        
         private void ExecuteLoadContextAssemblyTask(TaskExecutionNode node)
         {
             var lcat = node.RemoteTask as LoadContextAssemblyTask;

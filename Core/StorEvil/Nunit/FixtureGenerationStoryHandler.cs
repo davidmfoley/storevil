@@ -20,18 +20,13 @@ namespace StorEvil.NUnit
             _context = context;
         }
 
-        public void HandleStory(Story story)
-        {
-            var sourceCode = FixtureGenerator.GenerateFixture(story, _context.GetContextForStory());
-
-            TestFixtureWriter.WriteFixture(story.Id, sourceCode);
-        }
-
         public void HandleStories(IEnumerable<Story> stories)
         {
             foreach (var story in stories)
             {
-                HandleStory(story);
+                var sourceCode = FixtureGenerator.GenerateFixture(story, _context.GetContextForStory());
+
+                TestFixtureWriter.WriteFixture(story.Id, sourceCode);
             }
         }
 
