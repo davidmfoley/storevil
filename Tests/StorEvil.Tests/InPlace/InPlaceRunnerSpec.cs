@@ -150,7 +150,7 @@ namespace StorEvil.InPlace
     internal class TestRemoteHandlerFactory : RemoteHandlerFactory
     {
         public TestRemoteHandlerFactory(AssemblyGenerator assemblyGenerator, 
-            ConfigSettings configSettings, Filesystem filesystem) : base(assemblyGenerator,configSettings,filesystem)
+            ConfigSettings configSettings, Filesystem filesystem) : base(assemblyGenerator, new AssemblyRegistry(configSettings.AssemblyLocations), filesystem)
         {}
         public override IRemoteStoryHandler GetHandler(Story story, System.Collections.Generic.IEnumerable<Scenario> scenarios, IEventBus eventBus)
         {

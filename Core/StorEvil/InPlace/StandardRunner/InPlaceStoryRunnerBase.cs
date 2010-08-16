@@ -53,10 +53,8 @@ namespace StorEvil.InPlace
             return story.Scenarios.SelectMany(scenario => _preprocessor.Preprocess(scenario)).ToArray();
         }
 
-        public void Finished()
-        {
-            EventBus.Raise(new SessionFinished());
-        }
+        public abstract void Finished();
+
         public JobResult GetResult()
         {
             return Result;

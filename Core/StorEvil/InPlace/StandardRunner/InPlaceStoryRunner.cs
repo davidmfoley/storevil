@@ -36,5 +36,10 @@ namespace StorEvil.InPlace
 
             Result.Failed = Result.Failed + failed;
         }
+
+        public override void Finished()
+        {
+            EventBus.Raise(new SessionFinished());
+        }
     }
 }

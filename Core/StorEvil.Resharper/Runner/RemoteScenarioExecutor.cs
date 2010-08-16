@@ -3,6 +3,7 @@ using JetBrains.ReSharper.TaskRunnerFramework;
 using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Events;
+using StorEvil.Infrastructure;
 using StorEvil.InPlace;
 using StorEvil.Interpreter;
 using StorEvil.Parsing;
@@ -17,7 +18,7 @@ namespace StorEvil.Resharper.Runner
         private readonly ISessionContext _sessionContext;
         private ResharperResultListener _listener;
         private EventBus _eventBus;
-        private InPlaceStoryRunner _runner;
+        private IStoryHandler _runner;
         private MostRecentlyUsedContext _resolver;
 
         public RemoteScenarioExecutor(IRemoteTaskServer server, AssemblyRegistry assemblyRegistry)
@@ -68,7 +69,7 @@ namespace StorEvil.Resharper.Runner
             return new StorEvilJob(provider, _runner);
         }
 
-        private InPlaceStoryRunner BuildInPlaceRunner(IAmbiguousMatchResolver resolver)
+        private IStoryHandler BuildInPlaceRunner(IAmbiguousMatchResolver resolver)
         {
             IScenarioPreprocessor preprocessor = new ScenarioPreprocessor();
 
@@ -78,6 +79,12 @@ namespace StorEvil.Resharper.Runner
             var scenarioInterpreter = new ScenarioInterpreter(interpreterForTypeFactory, resolver);
 
             return new InPlaceStoryRunner(preprocessor, scenarioInterpreter, new IncludeAllFilter(), _sessionContext, _eventBus );
+            //return new InPlaceCompilingStoryRunner(new RemoteHandlerFactory(new AssemblyGenerator(), _assemblyRegistry, new Filesystem()),  preprocessor, new IncludeAllFilter(), _sessionContext, _eventBus);
+        }
+
+        public void SetCurrentStoryId(string id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

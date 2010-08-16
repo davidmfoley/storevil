@@ -16,7 +16,7 @@ namespace StorEvil.InPlace
         {
             
             _factory = factory;
-           
+          
         }
 
         protected override void Execute(Story story, IEnumerable<Scenario> scenarios, StoryContext context)
@@ -27,6 +27,11 @@ namespace StorEvil.InPlace
                 handler.HandleStory(story);
                 Result += handler.GetResult();
             }
+        }
+
+        public override void Finished()
+        {
+            EventBus.Raise(new SessionFinished());
         }
     }
 }

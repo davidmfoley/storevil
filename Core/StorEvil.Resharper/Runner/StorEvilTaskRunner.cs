@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using StorEvil.Context;
@@ -15,6 +16,7 @@ namespace StorEvil.Resharper.Runner
         {
             Logger.Log("StorEvilTaskRunner constructed");
             server.ClientMessage("TaskRunner starting");
+            //_isDebug = server.GetConfiguration().IsInInternalDebug;
             
             _result = TaskResult.Success;
         }
@@ -49,6 +51,7 @@ namespace StorEvil.Resharper.Runner
         private readonly List<string> _loadedAssemblies = new List<string>();
         private readonly AssemblyLoader _loader = new AssemblyLoader();
         private string _logIndent = " ";
+        private bool _isDebug;
 
         public override void ExecuteRecursive(TaskExecutionNode node)
         {
@@ -120,7 +123,7 @@ namespace StorEvil.Resharper.Runner
         {
             var projectTask = node.RemoteTask as RunProjectTask;
 
-            var assemblyRegistry = new AssemblyRegistry(projectTask.Assemblies);
+            var assemblyRegistry = new AssemblyRegistry(projectTask.Assemblies.Union(new[] {typeof(Scenario).Assembly.Location}));
 
             _executor = new RemoteScenarioExecutor(Server, assemblyRegistry);
         }

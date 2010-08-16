@@ -12,18 +12,21 @@ namespace StorEvil.Context
     public class AssemblyRegistry
     {
         private IEnumerable<Type> _allTypes;
+        private IEnumerable<string> _assemblyLocations;
 
-         public AssemblyRegistry()
+        public AssemblyRegistry()
          {
              _allTypes = new Type[0];
          }
 
         public AssemblyRegistry(IEnumerable<Assembly> assemblies)
         {
+            _assemblyLocations = assemblies.Select(x => x.Location);
             _allTypes = assemblies.SelectMany(a => a.GetTypes());
         }
         public AssemblyRegistry(IEnumerable<string> assemblyLocations)
         {
+            _assemblyLocations = assemblyLocations;
             _allTypes = assemblyLocations.Select(Assembly.LoadFrom).SelectMany(a => a.GetTypes());
         }
 
@@ -53,6 +56,11 @@ namespace StorEvil.Context
         private bool IsStatic(Type type)
         {
             return type.IsAbstract && type.IsSealed;
+        }
+
+        public IEnumerable<string> GetAssemblyLocations()
+        {
+            return _assemblyLocations;
         }
     }
 

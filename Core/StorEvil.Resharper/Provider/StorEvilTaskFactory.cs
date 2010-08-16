@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using JetBrains.ReSharper.UnitTestFramework;
+using StorEvil.Core;
 using StorEvil.Resharper.Elements;
 using StorEvil.Resharper.Tasks;
 
@@ -19,7 +20,7 @@ namespace StorEvil.Resharper
             if (element is StorEvilProjectElement)
             {
                 var projectEl = element as StorEvilProjectElement;
-                //tasks.Add(new UnitTestTask(null, new AssemblyLoadTask(typeof (Scenario).Assembly.Location)));
+                tasks.Add(new UnitTestTask(null, new LoadContextAssemblyTask(typeof(Scenario).Assembly.Location)));
 
                 foreach (string assembly in projectEl.Assemblies)
                 {

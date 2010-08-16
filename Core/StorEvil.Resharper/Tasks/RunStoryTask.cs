@@ -44,31 +44,32 @@ namespace StorEvil.Resharper.Tasks
     [Serializable]
     public class RunStoryTask : RemoteTask
     {
-        private readonly string _id;
+        public string Id { get; private set; }
+
         private readonly bool _explicitly;
 
         public RunStoryTask(XmlElement element) : base(element)
         {
-            _id = GetXmlAttribute(element, "Id");
+            Id = GetXmlAttribute(element, "Id");
         }
 
         public RunStoryTask(string id, bool explicitly) : base(StorEvilTaskRunner.RunnerId)
         {
-            _id = id;
+            Id = id;
             _explicitly = explicitly;
         }
 
         public override void SaveXml(System.Xml.XmlElement element)
         {
             base.SaveXml(element);
-            SetXmlAttribute(element, "Id", _id);
+            SetXmlAttribute(element, "Id", Id);
 
         }
 
         public bool Equals(RunStoryTask other)
         {
             if (ReferenceEquals(null, other)) return false;
-            return _id == other._id;
+            return Id == other.Id;
             
         }
 
@@ -92,7 +93,7 @@ namespace StorEvil.Resharper.Tasks
             unchecked
             {
                 int result = base.GetHashCode();
-                result = (result*397) ^ (_id != null ? _id.GetHashCode() : 0);
+                result = (result*397) ^ (Id != null ? Id.GetHashCode() : 0);
                 result = (result*397) ^ _explicitly.GetHashCode();
                 return result;
             }
