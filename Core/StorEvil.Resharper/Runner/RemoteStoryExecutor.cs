@@ -82,9 +82,5 @@ namespace StorEvil.Resharper.Runner
             //return new InPlaceCompilingStoryRunner(new RemoteHandlerFactory(new AssemblyGenerator(), _assemblyRegistry, new Filesystem()),  preprocessor, new IncludeAllFilter(), _sessionContext, _eventBus);
         }
 
-        public void SetCurrentStoryId(string id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

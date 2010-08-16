@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using StorEvil.Context;
 using StorEvil.Core;
 
@@ -23,6 +25,14 @@ namespace StorEvil.NUnit
             var sourceCode = FixtureGenerator.GenerateFixture(story, _context.GetContextForStory());
 
             TestFixtureWriter.WriteFixture(story.Id, sourceCode);
+        }
+
+        public void HandleStories(IEnumerable<Story> stories)
+        {
+            foreach (var story in stories)
+            {
+                HandleStory(story);
+            }
         }
 
         public void Finished()

@@ -1,37 +1,80 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Events;
+using StorEvil.InPlace.CompilingRunner;
 using StorEvil.Parsing;
 
 namespace StorEvil.InPlace
 {
-    public class InPlaceCompilingStoryRunner : InPlaceStoryRunnerBase
+    public class InPlaceCompilingStoryRunner : IStoryHandler
     {
-        private readonly IRemoteHandlerFactory _factory;   
-        
+
+
+
+
+
+
+
+
+
+
+
+
+        private readonly IRemoteHandlerFactory _factory;
+        private readonly IScenarioPreprocessor _preprocessor;
+        private readonly IStoryFilter _filter;
+        private readonly IEventBus _eventBus;
+        private JobResult _result = new JobResult();
+
 
         public InPlaceCompilingStoryRunner(IRemoteHandlerFactory factory, IScenarioPreprocessor preprocessor, IStoryFilter filter, ISessionContext context, IEventBus eventBus)
-            : base(preprocessor, filter, context, eventBus)
+
         {
-            
             _factory = factory;
-          
+            _preprocessor = preprocessor;
+            _filter = filter;
+            _eventBus = eventBus;
         }
 
-        protected override void Execute(Story story, IEnumerable<Scenario> scenarios, StoryContext context)
+        public void HandleStories(IEnumerable<Story> stories)
         {
-            using (var remoteHandler = _factory.GetHandler(story, scenarios, EventBus))
+            var s = GetStories(stories);
+            using (var remoteHandler = _factory.GetHandler(s, _eventBus))
             {
-                var handler = remoteHandler.Handler;
-                handler.HandleStory(story);
-                Result += handler.GetResult();
+                remoteHandler.Handler.HandleStories(s.ToArray());
+
+                _result += remoteHandler.Handler.GetResult();
             }
         }
 
-        public override void Finished()
+        private IEnumerable<Story> GetStories(IEnumerable<Story> stories)
         {
-            EventBus.Raise(new SessionFinished());
+            foreach (var story in  stories)
+            {
+                var scenarios = GetScenarios(story).ToArray();
+                yield return new Story (story.Id, story.Summary, scenarios);
+            }
+        }
+
+        private IEnumerable<IScenario> GetScenarios(Story story)
+        {
+            var filtered = story.Scenarios.Where(x => _filter.Include(story, x));
+
+            return filtered.SelectMany(x => _preprocessor.Preprocess(x)).Cast<IScenario>();
+        }
+
+
+        public void Finished()
+        {
+            _eventBus.Raise(new SessionFinished());
+        }
+
+        public JobResult GetResult()
+        {
+            return _result;
         }
     }
 }

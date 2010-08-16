@@ -8,7 +8,7 @@ namespace StorEvil.Core
     {
         public string Id { get; set; }
 
-        public string Summary { get; private set; }
+        public string Summary { get; set; }
 
         public IEnumerable<string> Tags { get; set;}
 

@@ -41,6 +41,16 @@ namespace StorEvil.InPlace
             }
         }
 
+        public void HandleStories(IEnumerable<Story> stories)
+        {
+          
+
+            foreach (var story in stories)
+            {
+                HandleStory(story);
+            }
+        }
+
         protected abstract void Execute(Story story, IEnumerable<Scenario> scenariosMatchingFilter, StoryContext context);
 
         private Scenario[] GetScenariosMatchingFilter(Story story)

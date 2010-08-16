@@ -34,7 +34,7 @@ namespace StorEvil.Interpreter.ParameterConverters
         public ParameterConverter()
         {
             AddConverter<Guid>(x => new Guid(x));
-            AddConverter<int>(x => int.Parse(ConvertHelper.StripNonNumeric(x)));
+            AddConverter<int>(x => ParseInt(x));
             AddConverter<decimal>(new StorevilDecimalConverter());
             AddConverter<DateTime>(x=>DateTime.Parse(x));
            
@@ -43,6 +43,11 @@ namespace StorEvil.Interpreter.ParameterConverters
             AddConverterFilter(IsCommaSeparatedArray, new SimpleArrayConverter(this));
             AddConverterFilter(IsDictionary, new DictionaryConverter(this));
             AddConverterFilter(IsCustomTypeWithTable, new TableToTypeConverter(this));    
+        }
+
+        private int ParseInt(string x)
+        {
+            return int.Parse(ConvertHelper.StripNonNumeric(x));
         }
 
         private bool IsArrayOfArrays(ConversionContext context)

@@ -33,7 +33,7 @@ namespace StorEvil.Core
             job.StoryProvider.Stub(x => x.GetStories()).Return(new[] {story});
             job.Handler.Stub(x => x.GetResult()).Return(new JobResult());
             job.Run();
-            job.Handler.AssertWasCalled(x => x.HandleStory(story));
+            job.Handler.AssertWasCalled(x => x.HandleStories( new [] {story}));
         }
 
         [Test]

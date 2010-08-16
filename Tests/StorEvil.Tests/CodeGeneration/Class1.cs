@@ -95,8 +95,7 @@ namespace StorEvil.CodeGeneration
         private IEnumerable<MethodInfo> GetTestMethods()
         {
             return TestFixtureType.GetMethods()
-                .Where(m => m.GetCustomAttributes(typeof (TestAttribute), true)
-                    .Any());
+                .Where(m => m.GetCustomAttributes(typeof (TestAttribute), true).Any());
         }
     }
 

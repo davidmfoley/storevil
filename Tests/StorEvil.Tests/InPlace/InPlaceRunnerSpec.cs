@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using NUnit.Framework;
@@ -67,7 +68,8 @@ namespace StorEvil.InPlace
                 preprocessor,                                               
                 new IncludeAllFilter(), 
                 new FakeSessionContext(Context), FakeEventBus);
-            runner.HandleStory(story);
+
+            runner.HandleStories(new[] { story});
             runner.Finished();
         }
 
@@ -152,9 +154,9 @@ namespace StorEvil.InPlace
         public TestRemoteHandlerFactory(AssemblyGenerator assemblyGenerator, 
             ConfigSettings configSettings, Filesystem filesystem) : base(assemblyGenerator, new AssemblyRegistry(configSettings.AssemblyLocations), filesystem)
         {}
-        public override IRemoteStoryHandler GetHandler(Story story, System.Collections.Generic.IEnumerable<Scenario> scenarios, IEventBus eventBus)
+        public override IRemoteStoryHandler GetHandler(IEnumerable<Story> stories, IEventBus eventBus)
         {
-            var handler = base.GetHandler(story, scenarios, eventBus) as RemoteStoryHandler;
+            var handler = base.GetHandler(stories, eventBus) as RemoteStoryHandler;
             handler.InTest = true;
 
             return handler;

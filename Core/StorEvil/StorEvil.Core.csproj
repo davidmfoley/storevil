@@ -108,6 +108,7 @@
     <Compile Include="Context\StorEvilException.cs" />
     <Compile Include="Context\StoryContext.cs" />
     <Compile Include="Core\JobResult.cs" />
+    <Compile Include="Core\ScenarioOutline.cs" />
     <Compile Include="Events\EventBus.cs" />
     <Compile Include="Events\IHandle.cs" />
     <Compile Include="Events\LineExecuted.cs" />

@@ -10,7 +10,7 @@ namespace StorEvil.InPlace
 
     public interface IRemoteHandlerFactory
     {
-        IRemoteStoryHandler GetHandler(Story story, IEnumerable<Scenario> scenarios, IEventBus bus);
+        IRemoteStoryHandler GetHandler(IEnumerable<Story> stories, IEventBus bus);
     }
 
     public class RemoteHandlerFactory : IRemoteHandlerFactory
@@ -28,10 +28,14 @@ namespace StorEvil.InPlace
             _filesystem = filesystem;
         }
 
-        public virtual IRemoteStoryHandler GetHandler(Story story, IEnumerable<Scenario> scenarios, IEventBus bus)
+        public virtual IRemoteStoryHandler GetHandler(IEnumerable<Story> stories, IEventBus bus)
         {
             var spec = new AssemblyGenerationSpec { Assemblies = _assemblyRegistry.GetAssemblyLocations() };
-            spec.AddStory(story, scenarios);
+            foreach (var story in stories)
+            {
+                spec.AddStory(story, story.Scenarios);    
+            }
+            
 
             var assemblyLocation = _assemblyGenerator.GenerateAssembly(spec);
             return new RemoteStoryHandler(assemblyLocation, _filesystem, bus, _assemblyRegistry.GetAssemblyLocations());

@@ -25,13 +25,9 @@ namespace StorEvil.InPlace
 
         public string GenerateAssembly(AssemblyGenerationSpec spec)
         {
-            var sourceCode = new StringBuilder();
-            spec.Stories.ToList().ForEach(
-                s => sourceCode.AppendLine(_handlerGenerator.GetSourceCode(spec)));
+            var sourceCode =_handlerGenerator.GetSourceCode(spec);
 
-            return _compiler.CompileToFile(sourceCode.ToString(), spec.Assemblies, GetAssemblyLocation());
+            return _compiler.CompileToFile(sourceCode, spec.Assemblies, GetAssemblyLocation());
         }
     }
-
-   
 }

@@ -27,11 +27,9 @@ namespace StorEvil.InPlace.CompilingRunner
                 driverBuilder.AppendLine(driverCode);
             }
 
-            return string.Format(_sourceCodeTemplate, "", driverBuilder.ToString(), selectionBuilder.ToString());
+            return string.Format(_sourceCodeTemplate, "", driverBuilder, selectionBuilder);
           
         }
-
-
 
         private string FormatStoryId(Story story)
         {
@@ -45,7 +43,7 @@ namespace StorEvil.InPlace.CompilingRunner
             return string.Join("\r\n            ", adds.ToArray());
         }
 
-        private void AppendStoryCode(StringBuilder codeBuilder, Story story, Scenario[] scenarios)
+        private void AppendStoryCode(StringBuilder codeBuilder, Story story, IScenario[] scenarios)
         {
             var i = 0;
             foreach (var scenario in scenarios)
@@ -56,7 +54,7 @@ namespace StorEvil.InPlace.CompilingRunner
             }
         }
 
-        private string GetScenarioFunctionBody(int i, Story story, Scenario scenario)
+        private string GetScenarioFunctionBody(int i, Story story, IScenario scenario)
         {
             var scenarioCodeBuilder = new StringBuilder();
 
@@ -117,6 +115,7 @@ StorEvilContexts = ExecuteLine(@""{1}"");
             }
         }
 
+        
         private string _driverSelectionClause = @"
             if (story.Id == @""{0}"") {{                
                 var handler = new StorEvilDriver_{1}(_bus);
@@ -150,7 +149,13 @@ namespace StorEvilTestAssembly {{
            _bus = bus;
         }}
 
-        public void HandleStory(Story story) {{                                                
+        public void HandleStories(IEnumerable<Story> stories) {{
+            foreach(var story in stories)
+                HandleStory(story);
+        }}
+
+        public void HandleStory(Story story) {{   
+            _bus.Raise(new StoryStarting {{Story = story}});                                             
             {2}
 
             throw new ApplicationException(""StorEvil internal error! Could not handle story with ID: "" + story.Id);
@@ -188,7 +193,7 @@ namespace StorEvilTestAssembly {{
         private readonly List<StoryGenerationSpec> _stories = new List<StoryGenerationSpec>();
         public IEnumerable<string> Assemblies { get; set; }
 
-        public void AddStory(Story story, IEnumerable<Scenario> scenarios)
+        public void AddStory(Story story, IEnumerable<IScenario> scenarios)
         {
             _stories.Add(new StoryGenerationSpec(story, scenarios));
         }
@@ -204,9 +209,9 @@ namespace StorEvilTestAssembly {{
     public class StoryGenerationSpec
     {
         public Story Story { get; set; }
-        public IEnumerable<Scenario> Scenarios { get; set; }
+        public IEnumerable<IScenario> Scenarios { get; set; }
 
-        public StoryGenerationSpec(Story story, IEnumerable<Scenario> scenarios)
+        public StoryGenerationSpec(Story story, IEnumerable<IScenario> scenarios)
         {
             Story = story;
             Scenarios = scenarios;

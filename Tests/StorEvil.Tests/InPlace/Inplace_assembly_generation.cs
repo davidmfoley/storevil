@@ -28,7 +28,7 @@ namespace StorEvil.InPlace.Compiled
                              };
             
             var spec = new AssemblyGenerationSpec {Assemblies = new[] {this.GetType().Assembly.Location}};
-            spec.AddStory(new Story("foo", "bar", _scenarios), _scenarios.Cast<Scenario>());
+            spec.AddStory(new Story("foo", "bar", _scenarios), _scenarios);
             
             GeneratedAssemblyPath = Generator.GenerateAssembly(spec);
 

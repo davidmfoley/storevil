@@ -46,6 +46,16 @@ namespace StorEvil.InPlace
 
         public abstract void HandleStory(Story story);
 
+        public void HandleStories(IEnumerable<Story> stories)
+        {
+            foreach (var story in stories)
+            {
+                _eventBus.Raise(new StoryStarting { Story = story });
+                HandleStory(story);
+                //_eventBus.Raise(new StoryFinished { Story = story });
+            }
+        }
+
         public void Finished()
         {          
             CurrentStoryContext.Dispose();
