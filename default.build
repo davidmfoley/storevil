@@ -16,6 +16,7 @@
   <Target Name="All">
     <CallTarget Targets="CleanOutput" />
     <CallTarget Targets="BuildCore" />
+    <CallTarget Targets="BuildTools" />
     <CallTarget Targets="Tests" />
     <CallTarget Targets="RunExamples" />
     <CallTarget Targets="Package" />    
@@ -39,6 +40,13 @@
     <MSBuild
   Projects="Core\StorEvil\StorEvil.Core.csproj;Core\StorEvil.Assertions\StorEvil.Assertions.csproj;Core\StorEvil.Console\StorEvil.csproj"
   Properties="OutputPath=$(OutputPath)\Core"
+        />
+  </Target>
+
+  <Target Name="BuildTools">
+    <MSBuild
+    Projects="Core\StorEvil\StorEvil.Core.csproj;Tools\StorEvil.TeamCity\StorEvil.TeamCity.csproj;Tools\StorEvil.CustomTool\StorEvil.CustomTool.csproj"
+    Properties="OutputPath=$(OutputPath)\Tools"
         />
   </Target>
 

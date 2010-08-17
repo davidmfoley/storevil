@@ -94,6 +94,7 @@
     <Compile Include="Configuration\switchParser.cs" />
     <Compile Include="ContainerConfigurator.cs" />
     <Compile Include="ContextAttribute.cs" />
+    <Compile Include="Context\AssemblyRegistry.cs" />
     <Compile Include="Context\ContextAttributeHelper.cs" />
     <Compile Include="Context\Matchers\ContextMemberNameSplitter.cs" />
     <Compile Include="ContextRegexAttribute.cs" />
