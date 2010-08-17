@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using NUnit.Framework;
+using StorEvil.Assertions;
 using StorEvil.InPlace;
 using StorEvil.Utility;
 

@@ -39,6 +39,7 @@ namespace StorEvil.Resharper
             _taskFactory = new StorEvilTaskFactory();
             _comparer = new StorEvilElementComparer();
             _presenter = new StorEvilUnitTestPresenter();
+
         }
 
         public ProviderCustomOptionsControl GetCustomOptionsControl(ISolution solution)

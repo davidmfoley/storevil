@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using StorEvil.Assertions;
 using StorEvil.Core;
 using StorEvil.InPlace;
 using StorEvil.Utility;

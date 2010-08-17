@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using StorEvil.Assertions;
 using StorEvil.InPlace;
 using StorEvil.Utility;
 

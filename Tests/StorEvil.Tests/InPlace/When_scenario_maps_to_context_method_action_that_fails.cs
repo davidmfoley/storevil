@@ -1,6 +1,7 @@
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using StorEvil.Assertions;
 using StorEvil.Core;
 using StorEvil.Events;
 using StorEvil.Utility;

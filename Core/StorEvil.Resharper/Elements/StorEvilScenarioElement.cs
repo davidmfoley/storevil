@@ -20,8 +20,6 @@ namespace StorEvil.Resharper.Elements
             Scenario = scenario;
         }
 
-      
-
         public override UnitTestNamespace GetNamespace()
         {
             return _namespace;

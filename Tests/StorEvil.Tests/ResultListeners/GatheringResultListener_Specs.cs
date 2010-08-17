@@ -1,5 +1,6 @@
 using System.Linq;
 using NUnit.Framework;
+using StorEvil.Assertions;
 using StorEvil.Core;
 using StorEvil.Events;
 using StorEvil.InPlace;

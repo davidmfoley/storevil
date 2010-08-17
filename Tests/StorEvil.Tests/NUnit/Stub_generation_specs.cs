@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using NUnit.Framework;
 using Rhino.Mocks;
+using StorEvil.Assertions;
 using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Infrastructure;

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using StorEvil;
+using StorEvil.Assertions;
 using StorEvil.Utility;
 
 namespace TicTacToe
