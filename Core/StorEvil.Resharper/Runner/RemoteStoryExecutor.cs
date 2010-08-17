@@ -29,9 +29,10 @@ namespace StorEvil.Resharper.Runner
             _sessionContext = new SessionContext(assemblyRegistry);
 
             _eventBus = new EventBus();
+
+            new EventBusAutoRegistrar(_assemblyRegistry).InstallTo(_eventBus);
             _listener = new ResharperResultListener(_server);
           
-
             _resolver = new MostRecentlyUsedContext();
             _runner = BuildInPlaceRunner(_resolver);
 
