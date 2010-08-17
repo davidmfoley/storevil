@@ -159,7 +159,6 @@
     <Compile Include="Interpreter\ParameterConverters\TypedArrayTableConverter.cs" />
     <Compile Include="Interpreter\ParameterConverters\UnknownFieldException.cs" />
     <Compile Include="InPlace\IStoryFilter.cs" />
-    <Compile Include="Nunit\ParameterValueFormatter.cs" />
     <Compile Include="Context\Matchers\RegexMatcher.cs" />
     <Compile Include="Interpreter\ExtensionMethodHandler.cs" />
     <Compile Include="Interpreter\InterpreterForTypeFactory.cs" />
@@ -177,7 +176,6 @@
     <Compile Include="MultipleWordsAttribute.cs" />
     <Compile Include="Nunit\FixtureGenerationStoryHandler.cs" />
     <Compile Include="InPlace\StandardRunner\InPlaceStoryRunner.cs" />
-    <Compile Include="ResultListeners\IResultListener.cs" />
     <Compile Include="Parsing\IScenarioPreprocessor.cs" />
     <Compile Include="InPlace\MemberInvoker.cs" />
     <Compile Include="Parsing\ScenarioPreprocessor.cs" />
@@ -196,8 +194,6 @@
     <Compile Include="Nunit\IFixtureGenerator.cs" />
     <Compile Include="Nunit\ITestFixtureWriter.cs" />
     <Compile Include="Context\Matches\NameMatch.cs" />
-    <Compile Include="Nunit\TestContextField.cs" />
-    <Compile Include="Nunit\TestContextSet.cs" />
     <Compile Include="Context\WordFilters\ParameterMatchWordFilter.cs" />
     <Compile Include="Context\Matches\PartialMatch.cs" />
     <Compile Include="Configuration\BadSettingNameException.cs" />
