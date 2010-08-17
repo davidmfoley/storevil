@@ -13,7 +13,6 @@ using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.UnitTestFramework.UI;
 using JetBrains.TreeModels;
 using JetBrains.UI.TreeView;
-using StorEvil.Core;
 using StorEvil.Resharper.Provider;
 using StorEvil.Resharper.Runner;
 
@@ -22,7 +21,6 @@ namespace StorEvil.Resharper
     [UnitTestProvider]
     public class StorEvilTestProvider : IUnitTestProvider
     {
-        private readonly AssemblyLoader _assemblyLoader = new AssemblyLoader();
         private readonly StorEvilAssemblyExplorer _assemblyExplorer;
 
         private readonly StorEvilFileExplorer _storEvilFileExplorer;

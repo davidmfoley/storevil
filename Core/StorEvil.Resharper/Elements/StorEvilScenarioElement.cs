@@ -64,11 +64,9 @@ namespace StorEvil.Resharper.Elements
         {
             var projectFile = GetProjectFile(Scenario.Location.Path);
             var contents = File.ReadAllText(Scenario.Location.Path);
-            TextRange range = new TextRange(LineToOffset(contents, Scenario.Location.FromLine), LineToOffset(contents, Scenario.Location.ToLine));
-            var location = new UnitTestElementLocation(projectFile, range, range);
-
-            var unitTestElementLocations = new UnitTestElementLocation[] {location}; //new UnitTestElementLocation(), .Id};
-            return new UnitTestElementDisposition(unitTestElementLocations, this);
+            var range = new TextRange(LineToOffset(contents, Scenario.Location.FromLine), LineToOffset(contents, Scenario.Location.ToLine));
+            
+            return new UnitTestElementDisposition(this, projectFile, range, new TextRange(0));
         }
 
         private int LineToOffset(string contents, int lineNumber)

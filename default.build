@@ -4,6 +4,7 @@
     <OutputPath>$(MSBuildProjectDirectory)\_build</OutputPath>
     <ExamplesDirectory>$(MSBuildProjectDirectory)\Examples</ExamplesDirectory>
     <PackageDirectory>$(OutputPath)\Package</PackageDirectory>
+    <ResharperBinPath>C:\Program Files (x86)\JetBrains\ReSharper\v5.0\Bin</ResharperBinPath>
   </PropertyGroup>
 
   <Target Name="Default">
@@ -48,7 +49,7 @@
     <MakeDir Directories="$(OutputPath)\ReSharper"/>
     <Copy SourceFiles="@(DllFiles)" DestinationFolder="$(PackageDirectory)" />
     <MSBuild
-  Projects="Core\StorEvil\StorEvil.Core.csproj;Core\StorEvil.Assertions\StorEvil.Assertions.csproj;Core\StorEvil.Console\StorEvil.csproj;Core/StorEvil.Resharper/StorEvil.Resharper.csproj"
+  Projects="Core\StorEvil\StorEvil.Core.csproj;Core/StorEvil.Resharper/StorEvil.Resharper.csproj"
   Properties="OutputPath=$(OutputPath)\Resharper"
         />
   </Target>

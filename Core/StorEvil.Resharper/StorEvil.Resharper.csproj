@@ -51,81 +51,36 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="JetBrains.Platform.ReSharper.DocumentManager, Version=5.0.1618.49, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\JetBrains\JetBrains.Platform.ReSharper.DocumentManager.dll</HintPath>
-    </Reference>
-    <Reference Include="JetBrains.Platform.ReSharper.IDE, Version=5.0.1618.49, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\JetBrains\JetBrains.Platform.ReSharper.IDE.dll</HintPath>
-    </Reference>
-    <Reference Include="JetBrains.Platform.ReSharper.Metadata, Version=5.0.1618.49, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="JetBrains.Platform.ReSharper.Metadata">
       <HintPath>..\..\Lib\JetBrains\JetBrains.Platform.ReSharper.Metadata.dll</HintPath>
     </Reference>
-    <Reference Include="JetBrains.Platform.ReSharper.ProjectModel, Version=5.0.1618.49, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="JetBrains.Platform.ReSharper.ProjectModel">
       <HintPath>..\..\Lib\JetBrains\JetBrains.Platform.ReSharper.ProjectModel.dll</HintPath>
     </Reference>
-    <Reference Include="JetBrains.Platform.ReSharper.Shell, Version=5.0.1618.49, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="JetBrains.Platform.ReSharper.Shell">
       <HintPath>..\..\Lib\JetBrains\JetBrains.Platform.ReSharper.Shell.dll</HintPath>
     </Reference>
-    <Reference Include="JetBrains.Platform.ReSharper.UI, Version=5.0.1618.49, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="JetBrains.Platform.ReSharper.UI">
       <HintPath>..\..\Lib\JetBrains\JetBrains.Platform.ReSharper.UI.dll</HintPath>
     </Reference>
-    <Reference Include="JetBrains.Platform.ReSharper.Util, Version=5.0.1648.10, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="JetBrains.Platform.ReSharper.Util">
       <HintPath>..\..\Lib\JetBrains\JetBrains.Platform.ReSharper.Util.dll</HintPath>
     </Reference>
-    <Reference Include="JetBrains.Platform.ReSharper.VSIntegration, Version=5.0.1618.49, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\JetBrains\JetBrains.Platform.ReSharper.VSIntegration.dll</HintPath>
-    </Reference>
-    <Reference Include="JetBrains.ReSharper.Features.Common, Version=5.0.1618.49, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\JetBrains\JetBrains.ReSharper.Features.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="JetBrains.ReSharper.Psi, Version=5.0.1618.49, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="JetBrains.ReSharper.Psi">
       <HintPath>..\..\Lib\JetBrains\JetBrains.ReSharper.Psi.dll</HintPath>
     </Reference>
-    <Reference Include="JetBrains.ReSharper.TaskRunnerFramework, Version=5.0.1618.49, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="JetBrains.ReSharper.TaskRunnerFramework">
       <HintPath>..\..\Lib\JetBrains\JetBrains.ReSharper.TaskRunnerFramework.dll</HintPath>
     </Reference>
-    <Reference Include="JetBrains.ReSharper.TestFramework, Version=5.0.1618.49, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\JetBrains\JetBrains.ReSharper.TestFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="JetBrains.ReSharper.UnitTestExplorer, Version=5.0.1618.49, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\JetBrains\JetBrains.ReSharper.UnitTestExplorer.dll</HintPath>
-    </Reference>
-    <Reference Include="JetBrains.ReSharper.UnitTestFramework, Version=5.0.1618.49, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="JetBrains.ReSharper.UnitTestFramework">
       <HintPath>..\..\Lib\JetBrains\JetBrains.ReSharper.UnitTestFramework.dll</HintPath>
     </Reference>
-    <Reference Include="JetBrains.ReSharper.UnitTestProvider.nUnit, Version=5.0.1618.49, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\JetBrains\JetBrains.ReSharper.UnitTestProvider.nUnit.dll</HintPath>
-    </Reference>
-    <Reference Include="JetBrains.ReSharper.UnitTestRunner.nUnit, Version=5.0.1618.49, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\JetBrains\JetBrains.ReSharper.UnitTestRunner.nUnit.dll</HintPath>
-    </Reference>
-    <Reference Include="JetBrains.ReSharper.VS, Version=5.0.1618.49, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="JetBrains.ReSharper.VS">
       <HintPath>..\..\Lib\JetBrains\JetBrains.ReSharper.VS.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
