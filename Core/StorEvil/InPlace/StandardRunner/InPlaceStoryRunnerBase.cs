@@ -39,6 +39,8 @@ namespace StorEvil.InPlace
             {
                 Execute(story, scenariosMatchingFilter, contextForStory);
             }
+
+            EventBus.Raise(new StoryFinished { Story = story });
         }
 
         public void HandleStories(IEnumerable<Story> stories)

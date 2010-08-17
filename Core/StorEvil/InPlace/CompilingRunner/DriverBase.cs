@@ -52,7 +52,7 @@ namespace StorEvil.InPlace
             {
                 _eventBus.Raise(new StoryStarting { Story = story });
                 HandleStory(story);
-                //_eventBus.Raise(new StoryFinished { Story = story });
+                _eventBus.Raise(new StoryFinished { Story = story });
             }
         }
 

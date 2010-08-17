@@ -121,7 +121,7 @@ StorEvilContexts = ExecuteLine(@""{1}"");
                 var handler = new StorEvilDriver_{1}(_bus);
                 handler.HandleStory(story);
                 _result += handler.GetResult();
-                return;
+                
             }}";
 
         private string _sourceCodeTemplate =
@@ -158,7 +158,7 @@ namespace StorEvilTestAssembly {{
             _bus.Raise(new StoryStarting {{Story = story}});                                             
             {2}
 
-            throw new ApplicationException(""StorEvil internal error! Could not handle story with ID: "" + story.Id);
+            _bus.Raise(new StoryFinished {{Story = story}});   
         }}
         public void Finished() {{}}
         public JobResult GetResult() {{ return _result;}}

@@ -42,20 +42,29 @@ namespace StorEvil.Resharper.Runner
         public ExecutionResult Execute(IEnumerable<TaskExecutionNode> storyNodes)
         {
             var stories = new List<Story>();
-            _runner = BuildInPlaceRunner(_resolver);
+
+            var scenarioTasks = new List<RemoteTask>();
+            var storyTasks = new List<RemoteTask>();
+          
             foreach (var storyNode in storyNodes)
             {
                 var rst = storyNode.RemoteTask as RunStoryTask;
-
+                storyTasks.Add(rst);
+                _server.TaskStarting(storyNode.RemoteTask);
                 var scenarios = new List<IScenario>();
                 foreach (var sc in storyNode.Children )
                 {
                     var scenarioTask = sc.RemoteTask as RunScenarioTask;
                     scenarios.Add(scenarioTask.GetScenario());
+                    
+                    scenarioTasks.Add(scenarioTask);
                 }
+
+               
                 stories.Add(new Story(rst.Id, rst.Id, scenarios));
             }
 
+            _listener.SetScenarioTasks(storyTasks, scenarioTasks);
             _runner.HandleStories(stories);
 
             return new ExecutionResult(TaskResult.Success, "");
