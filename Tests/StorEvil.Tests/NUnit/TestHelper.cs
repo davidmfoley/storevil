@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.CSharp;
 using NUnit.Framework;
+using StorEvil.Assertions;
 using StorEvil.Core;
 using StorEvil.Utility;
 

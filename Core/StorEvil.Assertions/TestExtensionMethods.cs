@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
 using StorEvil.Interpreter.ParameterConverters;
 
-namespace StorEvil.Utility
+namespace StorEvil.Assertions
 {
     /// <summary>
     /// An (obviously) incomplete set of extension methods that encapsulate assertions
@@ -66,7 +65,7 @@ namespace StorEvil.Utility
 
         public static void ShouldBeOfType<T>(this object actual)
         {
-            Assert.IsInstanceOfType(typeof (T), actual);
+            Assert.IsTrue(actual is T, "Expected type " +  typeof(T).Name + " but got " + (actual == null ? "null" : actual.GetType().Name));
         }
 
         public static void ElementsShouldEqual<T>(this IEnumerable<T> collection, params T[] expected)
@@ -120,5 +119,51 @@ namespace StorEvil.Utility
         }
     }
 
-   
+    static class Assert
+    {
+        public static void IsTrue(bool isMatch, string message)
+        {
+            if (!isMatch)
+                throw new AssertionException(message);
+        }
+
+        public static void IsFalse(bool isMatch, string message)
+        {
+            IsTrue(!isMatch, message);
+        }
+
+        public static void That(bool b)
+        {
+            IsTrue(b, "");
+        }
+
+        public static void AreEqual(object a, object b)
+        {
+            IsTrue(a.Equals(b), "");
+        }
+
+        public static void IsNull(object actual)
+        {
+            IsTrue(actual == null, "Excpected null but got " + actual);
+        }
+
+        public static void IsNotNull(object actual)
+        {
+            IsTrue(actual != null, "Excpected not null");        
+        }
+
+        public static void Fail()
+        {
+            throw new AssertionException("Failed");
+        }
+    }
+
+    [Serializable]
+    public class AssertionException : Exception
+    {
+        public AssertionException(string message) : base(message)
+        {
+            
+        }
+    }
 }

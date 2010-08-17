@@ -6,49 +6,6 @@ using StorEvil.Infrastructure;
 
 namespace StorEvil.Parsing
 {
-    internal class FileExtensionFilter
-    {
-        private readonly ConfigSettings _settings;
-
-        public FileExtensionFilter(ConfigSettings settings)
-        {
-            _settings = settings;
-        }
-
-        public bool IsValid(string file)
-        {
-            if (_settings.ScenarioExtensions == null || !_settings.ScenarioExtensions.Any())
-                return true;
-
-            var extension = Path.GetExtension(file);
-            return _settings.ScenarioExtensions.Any(x => extension == x);
-        }
-    }
-
-    public class SingleFileStoryReader : IStoryReader
-    {
-        private readonly IFilesystem _filesystem;
-        private readonly ConfigSettings _settings;
-        private readonly string _filename;
-
-        public SingleFileStoryReader(IFilesystem filesystem, ConfigSettings settings, string filename)
-        {
-            _filesystem = filesystem;
-            _settings = settings;
-            _filename = filename;
-        }
-
-        public IEnumerable<StoryInfo> GetStoryInfos()
-        {
-             var filter = new FileExtensionFilter(_settings);
-
-            if (!filter.IsValid(_filename))
-                return new StoryInfo[0];
-
-            return new [] {new StoryInfo {Location = _filename, Text = _filesystem.GetFileText(_filename)}};
-        }
-    }
-
     /// <summary>
     /// returns all of the stories/specs from a directory
     /// </summary>
@@ -92,7 +49,7 @@ namespace StorEvil.Parsing
         {
             return new StoryInfo
                        {
-                           Location = Path.GetFileName(file),
+                           Location = file,
                            Text = Filesystem.GetFileText(file)
                        };
         }

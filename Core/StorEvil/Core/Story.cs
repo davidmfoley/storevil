@@ -8,9 +8,11 @@ namespace StorEvil.Core
     {
         public string Id { get; set; }
 
-        public string Summary { get; private set; }
+        public string Summary { get; set; }
 
-        public IEnumerable<string> Tags { get; set;}       
+        public IEnumerable<string> Tags { get; set;}
+
+        public string Location { get; set; }
 
         public Story(string id, string summary, IEnumerable<IScenario> scenarios)
         {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using StorEvil.Assertions;
 using StorEvil.Core;
 using StorEvil.InPlace;
 using StorEvil.Utility;
@@ -63,7 +64,7 @@ namespace StorEvil.CodeGeneration
         {
             ScenarioLine[] body = GetScenarioBody("when I do something", "then I should see something");
 
-            Scenario scenario = new Scenario("scenario-id", "scenario name", body);
+            Scenario scenario = new Scenario("", "scenario-id", "scenario name", body);
             return new Story("foo bar baz", "bar",  new IScenario[] {scenario});
         }
 
@@ -95,8 +96,7 @@ namespace StorEvil.CodeGeneration
         private IEnumerable<MethodInfo> GetTestMethods()
         {
             return TestFixtureType.GetMethods()
-                .Where(m => m.GetCustomAttributes(typeof (TestAttribute), true)
-                    .Any());
+                .Where(m => m.GetCustomAttributes(typeof (TestAttribute), true).Any());
         }
     }
 

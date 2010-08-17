@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using StorEvil.Context;
 using StorEvil.Core;
 
@@ -18,11 +20,14 @@ namespace StorEvil.NUnit
             _context = context;
         }
 
-        public void HandleStory(Story story)
+        public void HandleStories(IEnumerable<Story> stories)
         {
-            var sourceCode = FixtureGenerator.GenerateFixture(story, _context.GetContextForStory());
+            foreach (var story in stories)
+            {
+                var sourceCode = FixtureGenerator.GenerateFixture(story, _context.GetContextForStory());
 
-            TestFixtureWriter.WriteFixture(story.Id, sourceCode);
+                TestFixtureWriter.WriteFixture(story.Id, sourceCode);
+            }
         }
 
         public void Finished()

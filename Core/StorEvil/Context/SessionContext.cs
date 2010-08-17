@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using StorEvil.Configuration;
@@ -12,19 +13,35 @@ namespace StorEvil.Context
     public class AssemblyRegistry
     {
         private IEnumerable<Type> _allTypes;
+        private IEnumerable<string> _assemblyLocations;
 
-         public AssemblyRegistry()
+        public AssemblyRegistry()
          {
              _allTypes = new Type[0];
          }
 
         public AssemblyRegistry(IEnumerable<Assembly> assemblies)
         {
+            _assemblyLocations = assemblies.Select(x => x.Location);
             _allTypes = assemblies.SelectMany(a => a.GetTypes());
         }
         public AssemblyRegistry(IEnumerable<string> assemblyLocations)
         {
-            _allTypes = assemblyLocations.Select(Assembly.LoadFrom).SelectMany(a => a.GetTypes());
+            _assemblyLocations = assemblyLocations;
+            _allTypes = assemblyLocations.Select(LoadAssembly).SelectMany(a => a.GetTypes());
+        }
+
+        private static Assembly LoadAssembly(string location)
+        {
+            if (File.Exists(location))
+                return Assembly.LoadFrom(location);
+
+            var inWorkingDirectory = Path.GetFileName(location);
+
+            if (File.Exists(inWorkingDirectory))
+                return Assembly.LoadFrom(inWorkingDirectory);
+
+            throw new StorEvilException("Could not load assembly: " + location);
         }
 
         public IEnumerable<Type> GetTypesWithCustomAttribute<T>()
@@ -53,6 +70,11 @@ namespace StorEvil.Context
         private bool IsStatic(Type type)
         {
             return type.IsAbstract && type.IsSealed;
+        }
+
+        public IEnumerable<string> GetAssemblyLocations()
+        {
+            return _assemblyLocations;
         }
     }
 

@@ -137,13 +137,13 @@
     <Compile Include="Provider\StorEvilFileExplorer.cs" />
     <Compile Include="Provider\StorEvilProject.cs" />
     <Compile Include="Provider\StorEvilResharperConfigProvider.cs" />
-    <Compile Include="Provider\StorEvilScenarioOutlineElement.cs" />
+    <Compile Include="Elements\StorEvilScenarioOutlineElement.cs" />
     <Compile Include="Provider\StorEvilTaskFactory.cs" />
     <Compile Include="Provider\StorEvilTestEnvironment.cs" />
     <Compile Include="Provider\StorEvilUnitTestPresenter.cs" />
     <Compile Include="Runner\ExecutionResult.cs" />
     <Compile Include="Runner\ResharperResultListener.cs" />
-    <Compile Include="Runner\RemoteScenarioExecutor.cs" />
+    <Compile Include="Runner\RemoteStoryExecutor.cs" />
     <Compile Include="Runner\SingleScenarioStoryProvider.cs" />
     <Compile Include="Tasks\RunProjectTask.cs" />
     <Compile Include="Tasks\RunScenarioTask.cs" />

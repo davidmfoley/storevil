@@ -76,6 +76,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="storevil.config" />
     <None Include="Stories\BasicPricing.feature" />
     <None Include="Stories\Discounts.feature" />
   </ItemGroup>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 using Rhino.Mocks;
+using StorEvil.Assertions;
 using StorEvil.Context;
 using StorEvil.NUnit;
 using StorEvil.Utility;

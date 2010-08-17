@@ -22,7 +22,6 @@ namespace StorEvil.InPlace
 
         public bool ExecuteScenario(Scenario scenario, ScenarioContext storyContext)
         {
-            
             _eventBus.Raise(new ScenarioStarting { Scenario = scenario});
             _scenarioInterpreter.NewScenario();
 

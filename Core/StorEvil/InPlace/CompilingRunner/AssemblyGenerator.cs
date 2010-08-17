@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
 using StorEvil.Core;
 using StorEvil.InPlace.CompilingRunner;
 
@@ -16,15 +18,16 @@ namespace StorEvil.InPlace
         private readonly HandlerCodeGenerator _handlerGenerator;
         private readonly CodeCompiler _compiler;
 
-        public string GenerateAssembly(Story story, IEnumerable<Scenario> scenarios, IEnumerable<string> referencedAssemblies)
-        {
-            var sourceCode = _handlerGenerator.GetSourceCode(story, scenarios, referencedAssemblies);
-            return _compiler.CompileToFile(sourceCode, referencedAssemblies, GetAssemblyLocation());
-        }
-
         private static string GetAssemblyLocation()
         {
             return Path.GetTempFileName();
+        }
+
+        public string GenerateAssembly(AssemblyGenerationSpec spec)
+        {
+            var sourceCode =_handlerGenerator.GetSourceCode(spec);
+
+            return _compiler.CompileToFile(sourceCode, spec.Assemblies, GetAssemblyLocation());
         }
     }
 }

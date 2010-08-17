@@ -54,13 +54,8 @@ namespace StorEvil
         private ISessionContext GetSessionContext(ConfigSettings settings)
         {
             var assemblyRegistry = new AssemblyRegistry(settings.AssemblyLocations);
+            ParameterConverter.AddCustomConverters(assemblyRegistry);
 
-            foreach (var location in settings.AssemblyLocations)
-            {
-                DebugTrace.Trace(GetType().Name, "Adding context assembly:" + location);
-               
-                ParameterConverter.AddCustomConverters(location);
-            }
             var sessionContext = new SessionContext(assemblyRegistry);
             return sessionContext;
         }

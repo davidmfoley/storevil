@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using StorEvil.Core;
 using StorEvil.Events;
 using StorEvil.Infrastructure;
@@ -53,7 +54,7 @@ namespace StorEvil.InPlace
         }
 
         private IStoryHandler GetHandler()
-        {
+        {         
             // Construct and initialize settings for a second AppDomain.
             var domainSetup = new AppDomainSetup();
             if (InTest)
@@ -61,12 +62,18 @@ namespace StorEvil.InPlace
                 domainSetup.ApplicationBase = Environment.CurrentDirectory;
                 domainSetup.DisallowBindingRedirects = false;
             }
+            else
+            {
+                domainSetup.ApplicationBase = Path.GetDirectoryName(_assemblyLocations.First());
+                domainSetup.DisallowBindingRedirects = false;
+            }
+            domainSetup.ShadowCopyFiles = "true";
             domainSetup.ShadowCopyDirectories = GetDirectories(_assemblyLocations);
             domainSetup.ConfigurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
 
             // Create the second AppDomain.
             _appDomain = AppDomain.CreateDomain("TestDomain", null, domainSetup);
-
+          
             return _appDomain.CreateInstanceFrom(
                 _assemblyLocation,
                 "StorEvilTestAssembly.StorEvilDriver", true, 0, null, new object[] {_eventBus},

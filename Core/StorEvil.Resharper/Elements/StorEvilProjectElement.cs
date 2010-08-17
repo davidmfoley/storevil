@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using JetBrains.ProjectModel;
-using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.UnitTestFramework;
 
 namespace StorEvil.Resharper.Elements
@@ -15,7 +13,7 @@ namespace StorEvil.Resharper.Elements
             : base(provider, parent, project, title)
         {
             Assemblies = assemblies;
-            _namespace = new UnitTestNamespace(project.Name + " StorEvil specs");
+            _namespace = new UnitTestNamespace(project.Name + ": StorEvil specifications");
         }
 
         public IEnumerable<string> Assemblies { get; set; }

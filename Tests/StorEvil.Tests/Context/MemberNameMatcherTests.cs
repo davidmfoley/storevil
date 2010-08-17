@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using NUnit.Framework;
+using StorEvil.Assertions;
 using StorEvil.Context.Matchers;
 using StorEvil.Context.Matches;
 using StorEvil.Utility;

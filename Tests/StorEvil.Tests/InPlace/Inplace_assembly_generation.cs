@@ -3,9 +3,10 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
+using StorEvil.Assertions;
 using StorEvil.Core;
+using StorEvil.InPlace.CompilingRunner;
 using StorEvil.NUnit;
-using StorEvil.ResultListeners;
 using StorEvil.Utility;
 
 namespace StorEvil.InPlace.Compiled
@@ -26,8 +27,12 @@ namespace StorEvil.InPlace.Compiled
                                  TestHelper.BuildScenario("foo", "When I do seomthing",
                                                           "something else should happen")
                              };
-            GeneratedAssemblyPath = Generator.GenerateAssembly(new Story("foo", "bar", _scenarios), _scenarios.Cast<Scenario>(),
-                                                           new[] {this.GetType().Assembly.Location});
+            
+            var spec = new AssemblyGenerationSpec {Assemblies = new[] {this.GetType().Assembly.Location}};
+            spec.AddStory(new Story("foo", "bar", _scenarios), _scenarios);
+            
+            GeneratedAssemblyPath = Generator.GenerateAssembly(spec);
+
         }
 
         [Test]
@@ -41,7 +46,7 @@ namespace StorEvil.InPlace.Compiled
         {
             var handle = Activator.CreateInstanceFrom(
                 GeneratedAssemblyPath,
-                "StorEvilTestAssembly.StorEvilDriver", true, 0, null, new object[] {new CapturingEventBus()},CultureInfo.CurrentCulture, new object[0], AppDomain.CurrentDomain.Evidence );
+                "StorEvilTestAssembly.StorEvilDriver_foo", true, 0, null, new object[] {new CapturingEventBus()},CultureInfo.CurrentCulture, new object[0], AppDomain.CurrentDomain.Evidence );
 
             var driver = handle.Unwrap() as IStoryHandler;
 
@@ -55,4 +60,5 @@ namespace StorEvil.InPlace.Compiled
         }
     }
 
+  
 }

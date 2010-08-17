@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using StorEvil.Core;
 
 namespace StorEvil.Parsing
@@ -24,7 +25,7 @@ namespace StorEvil.Parsing
                 if (null == (story = _parser.Parse(storyInfo.Text, storyInfo.Location)))
                     continue;
 
-                story.Id = storyInfo.Location;
+                story.Id = Path.GetFileName(storyInfo.Location);
                 stories.Add(story);
             }
             return stories;

@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using StorEvil.Assertions;
 using StorEvil.Utility;
 
 namespace StorEvil

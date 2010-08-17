@@ -4,6 +4,6 @@ namespace StorEvil.Parsing
 {
     public interface IStoryParser
     {
-        Story Parse(string storyText, string id);
+        Story Parse(string storyText, string storyPath);
     }
 }

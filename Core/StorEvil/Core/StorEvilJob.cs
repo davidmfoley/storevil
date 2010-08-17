@@ -18,11 +18,9 @@ namespace StorEvil.Core
         }
 
         public int Run()
-        {            
-            foreach (var story in StoryProvider.GetStories())
-            {      
-                Handler.HandleStory(story);
-            }
+        {       
+            Handler.HandleStories(StoryProvider.GetStories());
+            
 
             Handler.Finished();
             var results = Handler.GetResult();

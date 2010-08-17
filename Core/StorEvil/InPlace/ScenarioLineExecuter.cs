@@ -34,7 +34,6 @@ namespace StorEvil.InPlace
             if (chain == null)
             {
                 var suggestion = _implementationHelper.Suggest(line);
-
                
                 RaiseNotImplementedEvent(line, suggestion);
                 return LineStatus.Pending;
@@ -51,8 +50,6 @@ namespace StorEvil.InPlace
         private void RaiseNotImplementedEvent(string line, string suggestion)
         {
             _eventBus.Raise(new LineExecuted { Line = line, Status = ExecutionStatus.Pending, Suggestion = suggestion });
-
-           
         }
 
         private bool ExecuteChain(ScenarioContext storyContext, InvocationChain chain, string line)
@@ -116,9 +113,6 @@ namespace StorEvil.InPlace
             return noStackTrace ? ex.Message : ex.Message + "\r\n" + ex;
         }
     }
-
-    
-
 
     public enum LineStatus
     {

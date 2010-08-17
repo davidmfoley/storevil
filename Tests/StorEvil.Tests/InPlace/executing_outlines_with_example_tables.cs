@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using StorEvil.Assertions;
 using StorEvil.Parsing;
 using StorEvil.Utility;
 

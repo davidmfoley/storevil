@@ -31,13 +31,25 @@ namespace StorEvil.InPlace
 
         public void HandleStory(Story story)
         {
-           EventBus.Raise(new StoryStarting {Story = story});
+            EventBus.Raise(new StoryStarting {Story = story});
             
             Scenario[] scenariosMatchingFilter = GetScenariosMatchingFilter(story);
 
             using (StoryContext contextForStory = _context.GetContextForStory())
             {
                 Execute(story, scenariosMatchingFilter, contextForStory);
+            }
+
+            EventBus.Raise(new StoryFinished { Story = story });
+        }
+
+        public void HandleStories(IEnumerable<Story> stories)
+        {
+          
+
+            foreach (var story in stories)
+            {
+                HandleStory(story);
             }
         }
 
@@ -53,10 +65,8 @@ namespace StorEvil.InPlace
             return story.Scenarios.SelectMany(scenario => _preprocessor.Preprocess(scenario)).ToArray();
         }
 
-        public void Finished()
-        {
-            EventBus.Raise(new SessionFinished());
-        }
+        public abstract void Finished();
+
         public JobResult GetResult()
         {
             return Result;

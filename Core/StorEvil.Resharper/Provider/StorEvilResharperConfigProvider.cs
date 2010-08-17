@@ -1,4 +1,5 @@
-﻿using JetBrains.ProjectModel;
+﻿using System.IO;
+using JetBrains.ProjectModel;
 using StorEvil.Configuration;
 using StorEvil.Infrastructure;
 
@@ -18,7 +19,7 @@ namespace StorEvil.Resharper
             if (string.IsNullOrEmpty(projectFile))
                 return null;
 
-            return reader.GetConfig(projectFile);
+            return reader.GetConfig(Directory.GetParent(projectFile).FullName);
         }
     }
 }

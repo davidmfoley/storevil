@@ -1,5 +1,8 @@
-﻿using JetBrains.ProjectModel;
+﻿using System;
+using System.IO;
+using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
+using JetBrains.Util;
 using StorEvil.Core;
 
 namespace StorEvil.Resharper.Elements
@@ -38,7 +41,11 @@ namespace StorEvil.Resharper.Elements
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return base.Equals(other) && Equals(other._namespace, _namespace) && Equals(other.Scenario, Scenario);
+            if (!Scenario.Id.Equals(other.Scenario.Id))
+                return false;
+
+            return other.Scenario.Location.Path == Scenario.Location.Path && other.Scenario.Name == Scenario.Name;
+            
         }
 
 
@@ -55,8 +62,29 @@ namespace StorEvil.Resharper.Elements
 
         public override UnitTestElementDisposition GetDisposition()
         {
-            var unitTestElementLocations = new UnitTestElementLocation[] {}; //new UnitTestElementLocation(), .Id};
+            var projectFile = GetProjectFile(Scenario.Location.Path);
+            var contents = File.ReadAllText(Scenario.Location.Path);
+            TextRange range = new TextRange(LineToOffset(contents, Scenario.Location.FromLine), LineToOffset(contents, Scenario.Location.ToLine));
+            var location = new UnitTestElementLocation(projectFile, range, range);
+
+            var unitTestElementLocations = new UnitTestElementLocation[] {location}; //new UnitTestElementLocation(), .Id};
             return new UnitTestElementDisposition(unitTestElementLocations, this);
+        }
+
+        private int LineToOffset(string contents, int lineNumber)
+        {
+            var line = 1;
+
+            for (int i = 0; i < contents.Length; i++)
+            {
+                if (line >= lineNumber)
+                    return i;
+                
+                if (contents[i] == '\n')
+                    line++;
+            }
+
+            return 0;
         }
     }
 }

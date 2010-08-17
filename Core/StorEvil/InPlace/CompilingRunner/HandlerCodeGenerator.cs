@@ -1,26 +1,39 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using StorEvil.Core;
+using StorEvil.Utility;
 
 namespace StorEvil.InPlace.CompilingRunner
 {
     public class HandlerCodeGenerator
     {
-        public string GetSourceCode(Story story, IEnumerable<Scenario> scenarios,
-                                    IEnumerable<string> referencedAssemblies)
+
+        public string GetSourceCode(AssemblyGenerationSpec spec)
         {
-            var codeBuilder = new StringBuilder();
+            var driverBuilder = new StringBuilder();
+            var selectionBuilder = new StringBuilder();
 
-            codeBuilder.AppendLine("// " + story.Id);
-            AppendStoryCode(codeBuilder, story, scenarios.ToArray());
+            foreach (var story in spec.Stories)
+            {
+                var codeBuilder = new StringBuilder();
+                codeBuilder.AppendLine("// " + story.Story.Id);
+                AppendStoryCode(codeBuilder, story.Story, story.Scenarios.ToArray());
+                selectionBuilder.AppendFormat(_driverSelectionClause, story.Story.Id,
+                                              story.Story.Id.ToCSharpMethodName());
 
-            return BuildSourceCode(codeBuilder, referencedAssemblies);
+                var driverCode = string.Format(_driverTemplate, FormatStoryId(story.Story), BuildContextFactorySetup(spec.Assemblies), codeBuilder);
+                driverBuilder.AppendLine(driverCode);
+            }
+
+            return string.Format(_sourceCodeTemplate, "", driverBuilder, selectionBuilder);
+          
         }
 
-        private string BuildSourceCode(StringBuilder codeBuilder, IEnumerable<string> referencedAssemblies)
+        private string FormatStoryId(Story story)
         {
-            return string.Format(_sourceCodeTemplate, "", BuildContextFactorySetup(referencedAssemblies), codeBuilder);
+            return story.Id.ToCSharpMethodName();
         }
 
         private string BuildContextFactorySetup(IEnumerable<string> referencedAssemblies)
@@ -30,7 +43,7 @@ namespace StorEvil.InPlace.CompilingRunner
             return string.Join("\r\n            ", adds.ToArray());
         }
 
-        private void AppendStoryCode(StringBuilder codeBuilder, Story story, Scenario[] scenarios)
+        private void AppendStoryCode(StringBuilder codeBuilder, Story story, IScenario[] scenarios)
         {
             var i = 0;
             foreach (var scenario in scenarios)
@@ -41,7 +54,7 @@ namespace StorEvil.InPlace.CompilingRunner
             }
         }
 
-        private string GetScenarioFunctionBody(int i, Story story, Scenario scenario)
+        private string GetScenarioFunctionBody(int i, Story story, IScenario scenario)
         {
             var scenarioCodeBuilder = new StringBuilder();
 
@@ -102,9 +115,19 @@ StorEvilContexts = ExecuteLine(@""{1}"");
             }
         }
 
+        
+        private string _driverSelectionClause = @"
+            if (story.Id == @""{0}"") {{                
+                var handler = new StorEvilDriver_{1}(_bus);
+                handler.HandleStory(story);
+                _result += handler.GetResult();
+                
+            }}";
+
         private string _sourceCodeTemplate =
             @"
 namespace StorEvilTestAssembly {{
+    using System;
     using System.Collections.Generic;
     using StorEvil.Context;
     using StorEvil.Core;
@@ -116,8 +139,36 @@ namespace StorEvilTestAssembly {{
     using StorEvil.Events;
     {0}
 
-    public class StorEvilDriver : StorEvil.InPlace.DriverBase  {{        
-        public StorEvilDriver(IEventBus bus) : base(bus) {{
+    {1}
+
+    public class StorEvilDriver : MarshalByRefObject, IStoryHandler {{
+        private readonly IEventBus _bus;
+        private JobResult _result = new JobResult();
+
+        public StorEvilDriver(IEventBus bus) {{
+           _bus = bus;
+        }}
+
+        public void HandleStories(IEnumerable<Story> stories) {{
+            foreach(var story in stories)
+                HandleStory(story);
+        }}
+
+        public void HandleStory(Story story) {{   
+            _bus.Raise(new StoryStarting {{Story = story}});                                             
+            {2}
+
+            _bus.Raise(new StoryFinished {{Story = story}});   
+        }}
+        public void Finished() {{}}
+        public JobResult GetResult() {{ return _result;}}
+    }}
+}}";
+
+        private string _driverTemplate =
+            @"
+ public class StorEvilDriver_{0} : StorEvil.InPlace.DriverBase  {{        
+        public StorEvilDriver_{0}(IEventBus bus) : base(bus) {{
            
         }}
         
@@ -134,7 +185,36 @@ namespace StorEvilTestAssembly {{
 
             return;
         }}
-    }}
-}}";
+    }}";
+    }
+
+    public class AssemblyGenerationSpec
+    {
+        private readonly List<StoryGenerationSpec> _stories = new List<StoryGenerationSpec>();
+        public IEnumerable<string> Assemblies { get; set; }
+
+        public void AddStory(Story story, IEnumerable<IScenario> scenarios)
+        {
+            _stories.Add(new StoryGenerationSpec(story, scenarios));
+        }
+
+        public IEnumerable<StoryGenerationSpec> Stories
+        {
+            get
+            {
+                return _stories;
+            }
+        }
+    }
+    public class StoryGenerationSpec
+    {
+        public Story Story { get; set; }
+        public IEnumerable<IScenario> Scenarios { get; set; }
+
+        public StoryGenerationSpec(Story story, IEnumerable<IScenario> scenarios)
+        {
+            Story = story;
+            Scenarios = scenarios;
+        }
     }
 }

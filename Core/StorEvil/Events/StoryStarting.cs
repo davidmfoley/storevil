@@ -8,4 +8,10 @@ namespace StorEvil.Events
     {
         public Story Story;
     }
+
+    [Serializable]
+    public class StoryFinished
+    {
+        public Story Story;
+    }
 }

@@ -127,6 +127,9 @@
         TaskParameter="ExitCode"
         ItemName="DebugExitCode" />
     </Exec>
+    <Exec
+   WorkingDirectory="$(ExampleProjectDirectory)"
+   Command="copy $(ExampleProjectDirectory)\storevil.config $(OutputPath)\Examples\"/>
 
     <Message Text="Executing in-place: $(ExampleProjectDirectory)/$(ExampleProject)"/>
     <Exec

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
 using StorEvil.Configuration;
@@ -13,7 +14,7 @@ namespace StorEvil.Resharper.Provider
     {
         private StorEvilTestProvider _provider;
         private readonly StorEvilTestEnvironment _environment;
-        private readonly StorEvilResharperConfigProvider _configProvider;
+
 
         public StorEvilAssemblyExplorer(StorEvilTestProvider provider, StorEvilTestEnvironment environment)
         {
@@ -25,13 +26,13 @@ namespace StorEvil.Resharper.Provider
         {
             var config = _environment.GetProject(project.ProjectFile.Location.FullPath).ConfigSettings;
 
-            var projectElement = new StorEvilProjectElement(_provider, null, project, project.Name, config.AssemblyLocations);
-            consumer(projectElement);
-
             if (config.StoryBasePath == null)
                 return;
 
             var stories = GetStoriesForProject(config);
+
+            var projectElement = new StorEvilProjectElement(_provider, null, project, project.Name, config.AssemblyLocations);
+            consumer(projectElement);
 
             foreach (Story story in stories)
                 AddStoryElement(story, project, consumer, projectElement);
@@ -57,7 +58,7 @@ namespace StorEvil.Resharper.Provider
 
         private StorEvilStoryElement GetStoryElement(StorEvilProjectElement parent, IProject project, Story story)
         {
-            return new StorEvilStoryElement(_provider, parent, project, story.Summary, story.Id);
+            return new StorEvilStoryElement(_provider, parent, project, story.Summary, story.Location);
         }
 
         private void AddScenarioElement(IProject project, UnitTestElementConsumer consumer,

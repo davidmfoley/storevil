@@ -44,6 +44,14 @@ namespace StorEvil.StubGeneration
             }
         }
 
+        public void HandleStories(IEnumerable<Story> stories)
+        {
+            foreach (var story in stories)
+            {
+                HandleStory(story);
+            }
+        }
+
         private void AddSuggestion(string suggestedCode)
         {
             string existingSuggestion = ExistingSuggestion(suggestedCode);

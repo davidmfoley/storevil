@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using StorEvil.Context;
 using StorEvil.Core;
@@ -13,6 +16,7 @@ namespace StorEvil.Resharper.Runner
         {
             Logger.Log("StorEvilTaskRunner constructed");
             server.ClientMessage("TaskRunner starting");
+            //_isDebug = server.GetConfiguration().IsInInternalDebug;
             
             _result = TaskResult.Success;
         }
@@ -44,6 +48,10 @@ namespace StorEvil.Resharper.Runner
         private TaskResult _result;
         private RemoteScenarioExecutor _executor;
         public static string RunnerId = "StorEvilRunner";
+        private readonly List<string> _loadedAssemblies = new List<string>();
+        private readonly AssemblyLoader _loader = new AssemblyLoader();
+        private string _logIndent = " ";
+        private bool _isDebug;
 
         public override void ExecuteRecursive(TaskExecutionNode node)
         {
@@ -52,6 +60,7 @@ namespace StorEvil.Resharper.Runner
                 Logger.Log("ExecuteRecursive");
                 Logger.Log(node.RemoteTask.RunnerID);
                 _result = ExecuteRecursiveInternal(node).Status;
+                
             }
             catch (Exception ex)
             {
@@ -62,14 +71,20 @@ namespace StorEvil.Resharper.Runner
         private ExecutionResult ExecuteRecursiveInternal(TaskExecutionNode node)
         {
             Server.TaskStarting(node.RemoteTask);
-            ExecutionResult result;
+            Logger.Log(_logIndent+ "ExecuteRecursiveInternal: " + node.RemoteTask.GetType());
+            _logIndent += " ";
+            ExecutionResult result = null;
             try
             {
                 if (node.RemoteTask is RunProjectTask)
+                {
                     SetUpScenarioExecutorForCurrentProject(node);
-
-                if (node.RemoteTask is RunScenarioTask)
-                    result = ExecuteScenario(node);
+                    _executor.Execute(node.Children);
+                }
+                else if (node.RemoteTask is LoadContextAssemblyTask)
+                {
+                    ExecuteLoadContextAssemblyTask(node);
+                }
                 else
                     result = ExecuteChildTasks(node);
             }
@@ -77,21 +92,41 @@ namespace StorEvil.Resharper.Runner
             {
                 Logger.Log(ex.ToString());
                 Server.TaskOutput(node.RemoteTask, ex + "\r\n", TaskOutputType.STDOUT);
+                Server.TaskError(node.RemoteTask, ex.ToString());
                 result = new ExecutionResult(TaskResult.Error, ex.ToString());
             }
-            if (!(node.RemoteTask is RunProjectTask))
+
+            if (result != null)
                 Server.TaskFinished(node.RemoteTask, result.Message, result.Status);
+            else
+                Server.TaskFinished(node.RemoteTask, "", TaskResult.Success);
+
+            _logIndent = _logIndent.Substring(0, _logIndent.Length - 1);
+
+            Logger.Log(_logIndent + "ExecuteRecursiveInternal finished: " + node.RemoteTask.GetType()+ " result:" + (result != null ? result.Status.ToString() : "unknown"));
 
             return result;
+        }
+        
+        private void ExecuteLoadContextAssemblyTask(TaskExecutionNode node)
+        {
+            var lcat = node.RemoteTask as LoadContextAssemblyTask;
+
+            var path = lcat.AssemblyPath;
+            if (!_loadedAssemblies.Contains(path))
+            {               
+                _loadedAssemblies.Add(path);
+                _loader.RegisterAssembly(Assembly.LoadFrom(path));
+            }
         }
 
         private void SetUpScenarioExecutorForCurrentProject(TaskExecutionNode node)
         {
             var projectTask = node.RemoteTask as RunProjectTask;
-            var mapper = new SessionContext();
-            projectTask.Assemblies.ForEach(mapper.AddAssembly);
 
-            _executor = new RemoteScenarioExecutor(Server, mapper);
+            var assemblyRegistry = new AssemblyRegistry(projectTask.Assemblies.Union(new[] {typeof(Scenario).Assembly.Location}));
+
+            _executor = new RemoteScenarioExecutor(Server, assemblyRegistry);
         }
 
         private ExecutionResult ExecuteChildTasks(TaskExecutionNode node)
@@ -105,7 +140,10 @@ namespace StorEvil.Resharper.Runner
                     var childResult = ExecuteRecursiveInternal(childNode);
 
                     if (childResult.Status != TaskResult.Success)
-                        result = childResult.Status;
+                    {
+                        if (result == TaskResult.Skipped || result == TaskResult.Success)
+                            result = childResult.Status;
+                    }
                 }
             }
             

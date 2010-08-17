@@ -1,6 +1,7 @@
 using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using StorEvil.Assertions;
 using StorEvil.Context;
 using StorEvil.Events;
 using StorEvil.InPlace;

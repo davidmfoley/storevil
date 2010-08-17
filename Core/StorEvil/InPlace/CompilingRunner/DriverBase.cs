@@ -26,17 +26,11 @@ namespace StorEvil.InPlace
             var assemblyRegistry = new AssemblyRegistry(GetAssemblies());
             ScenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler(assemblyRegistry)), new MostRecentlyUsedContext());           
             LineExecuter = new ScenarioLineExecuter(ScenarioInterpreter, _eventBus);
-            _context = new SessionContext(assemblyRegistry);            
+            _context = new SessionContext(assemblyRegistry);
+            ParameterConverter.AddCustomConverters(assemblyRegistry);
         }
 
-        protected abstract IEnumerable<string> GetAssemblies();
-        
-       
-        protected void AddAssembly(string location)
-        {
-            _context.AddAssembly(location);
-            ParameterConverter.AddCustomConverters(location);
-        }
+        protected abstract IEnumerable<string> GetAssemblies();      
 
         protected object[] GetContexts()
         {
@@ -51,6 +45,16 @@ namespace StorEvil.InPlace
         protected ScenarioInterpreter ScenarioInterpreter;
 
         public abstract void HandleStory(Story story);
+
+        public void HandleStories(IEnumerable<Story> stories)
+        {
+            foreach (var story in stories)
+            {
+                _eventBus.Raise(new StoryStarting { Story = story });
+                HandleStory(story);
+                _eventBus.Raise(new StoryFinished { Story = story });
+            }
+        }
 
         public void Finished()
         {          
