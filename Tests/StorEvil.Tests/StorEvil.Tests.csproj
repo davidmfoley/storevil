@@ -101,6 +101,7 @@
     <Compile Include="Integration\Class1.cs" />
     <Compile Include="Interpreter\Disallowing_ambiguous_matches.cs" />
     <Compile Include="Interpreter\ambiguous_match_resolution.cs" />
+    <Compile Include="NUnit\Invoking_NUnit_via_reflection.cs" />
     <Compile Include="NUnit\Stub_generation_specs.cs" />
     <Compile Include="NUnit\FakeSessionContext.cs" />
     <Compile Include="Parsing\ScenarioLineParser_Specs.cs" />

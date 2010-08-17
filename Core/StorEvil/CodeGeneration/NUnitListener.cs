@@ -1,18 +1,19 @@
 ﻿using System.Diagnostics;
-using NUnit.Framework;
 using StorEvil.Events;
 
 namespace StorEvil.CodeGeneration
 {
     public class NUnitListener : IHandle<LineExecuted>
     {                  
+        private NUnitAssertWrapper _assertWrapper = new NUnitAssertWrapper();
         public void Handle(LineExecuted eventToHandle)
         {
             if (eventToHandle.Status == ExecutionStatus.Failed)
             {
                 Debug.Write(eventToHandle.SuccessPart);
                 Debug.WriteLine("{ " + eventToHandle.FailedPart + " -- FAILED }");
-                Assert.Fail(eventToHandle.Message);
+
+                _assertWrapper.Fail(eventToHandle.Message);
             }
             else if (eventToHandle.Status == ExecutionStatus.Passed)
             {

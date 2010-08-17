@@ -1,4 +1,7 @@
 using System;
+using System.Reflection;
+using StorEvil.Context;
+using StorEvil.Utility;
 
 namespace StorEvil.NUnit
 {

@@ -1,6 +1,5 @@
 using System;
 using System.Reflection;
-using NUnit.Framework;
 using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Events;
@@ -108,7 +107,7 @@ namespace StorEvil.InPlace
         {
             var ex = exception.InnerException ?? exception;
 
-            var noStackTrace = ex is AssertionException;
+            var noStackTrace = ex.GetType().Name.Contains("Assertion");
 
             return noStackTrace ? ex.Message : ex.Message + "\r\n" + ex;
         }

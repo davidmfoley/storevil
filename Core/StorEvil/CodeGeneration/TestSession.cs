@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using NUnit.Framework;
 using StorEvil.Configuration;
 using StorEvil.Context;
 using StorEvil.Infrastructure;
@@ -17,6 +16,8 @@ namespace StorEvil.CodeGeneration
         private static SessionContext _sessionContext;
         private static List<Assembly> _assemblies = new List<Assembly>();
         private static ExtensionMethodHandler _extensionMethodHandler;
+
+        private static NUnitAssertWrapper _nunitAssertWrapper = new NUnitAssertWrapper();
 
         public static void ShutDown()
         {
@@ -63,9 +64,9 @@ namespace StorEvil.CodeGeneration
             {
                 var message = "No storevil assemblies were found.\r\nCurrent location:"
                     + currentAssemblyLocation + "\r\nCurrent directory:"
-                    + Directory.GetCurrentDirectory(); 
+                    + Directory.GetCurrentDirectory();
 
-                Assert.Ignore(message);
+                _nunitAssertWrapper.Ignore(message);
             }
 
             var assemblyRegistry = new AssemblyRegistry(_assemblies.Select(x=>x.Location).Union(settings.AssemblyLocations));
