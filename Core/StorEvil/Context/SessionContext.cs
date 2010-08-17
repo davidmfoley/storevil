@@ -3,13 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using StorEvil.Configuration;
-using StorEvil.Context;
-using StorEvil.Interpreter;
 
 namespace StorEvil.Context
 {   
-
     public class AssemblyRegistry
     {
         private IEnumerable<Type> _allTypes;
@@ -55,9 +51,9 @@ namespace StorEvil.Context
             return t.GetCustomAttributes(true).Any(x => x.GetType().FullName == customAttribute.FullName);
         }
 
-        public IEnumerable<Type> GetTypesImplementing<T>()
+        public virtual IEnumerable<Type> GetTypesImplementing(Type targetType)
         {
-            Type targetType = typeof(T);
+
             return _allTypes.Where(t =>  t.IsSubclassOf(targetType) || t.GetInterfaces().Contains(targetType));
         }
 
@@ -82,7 +78,7 @@ namespace StorEvil.Context
     {
         private readonly List<Type> _contextTypes = new List<Type>();
         private readonly Dictionary<Type, object> _cache = new Dictionary<Type, object>();
-        private List<Assembly> _assemblies = new List<Assembly>() ;
+        private List<Assembly> _assemblies = new List<Assembly>();
 
         public SessionContext(AssemblyRegistry assemblyRegistry)
         {
@@ -99,7 +95,7 @@ namespace StorEvil.Context
 
         public void AddContext<T>() where T : class
         {
-            AddContext(typeof (T));
+            AddContext(typeof(T));
         }
 
         private void AddContext(Type t)
@@ -115,29 +111,29 @@ namespace StorEvil.Context
                 .Where(NotAlreadyLoaded);
 
             _assemblies.Add(a);
-            foreach (var t in storEvilContexts)            
+            foreach (var t in storEvilContexts)
                 AddContext(t);
         }
 
-        private  bool NotAlreadyLoaded(Type t)
+        private bool NotAlreadyLoaded(Type t)
         {
             return !_contextTypes.Contains(t);
         }
 
         private static bool TypeHasContextAttrbiute(Type t)
         {
-            return t.GetCustomAttributes(true).Any(x=>x.GetType().FullName ==  typeof(ContextAttribute).FullName);
+            return t.GetCustomAttributes(true).Any(x => x.GetType().FullName == typeof(ContextAttribute).FullName);
         }
 
         public void AddAssembly(string pathToAssembly)
         {
             var a = Assembly.LoadFrom(pathToAssembly);
-            AddAssembly(a);            
+            AddAssembly(a);
         }
 
         public StoryContext GetContextForStory()
         {
-            return new StoryContext(this, _contextTypes.Union(new[] {typeof (object)}), _cache);
+            return new StoryContext(this, _contextTypes.Union(new[] { typeof(object) }), _cache);
         }
 
         public void SetContext(object context)
@@ -155,7 +151,7 @@ namespace StorEvil.Context
             foreach (var context in _cache)
             {
                 var disposable = context.Value as IDisposable;
-                if (disposable!= null)
+                if (disposable != null)
                     disposable.Dispose();
             }
         }

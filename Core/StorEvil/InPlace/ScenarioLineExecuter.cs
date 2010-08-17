@@ -33,25 +33,20 @@ namespace StorEvil.InPlace
             if (chain == null)
             {
                 var suggestion = _implementationHelper.Suggest(line);
-               
-                RaiseNotImplementedEvent(line, suggestion);
+
+                _eventBus.Raise(new LineExecuted {Scenario = scenario, Line = line, Status = ExecutionStatus.Pending, Suggestion = suggestion });
                 return LineStatus.Pending;
             }
 
-            if (!ExecuteChain(storyContext, chain, line))
+            if (!ExecuteChain(scenario, storyContext, chain, line))
                 return LineStatus.Failed;
 
-            _eventBus.Raise(new LineExecuted { Status = ExecutionStatus.Passed, Line = line });
+            _eventBus.Raise(new LineExecuted { Scenario = scenario, Status = ExecutionStatus.Passed, Line = line });
 
             return LineStatus.Passed;
         }
 
-        private void RaiseNotImplementedEvent(string line, string suggestion)
-        {
-            _eventBus.Raise(new LineExecuted { Line = line, Status = ExecutionStatus.Pending, Suggestion = suggestion });
-        }
-
-        private bool ExecuteChain(ScenarioContext storyContext, InvocationChain chain, string line)
+        private bool ExecuteChain(Scenario scenario, ScenarioContext storyContext, InvocationChain chain, string line)
         {
             string successPart = "";
             _lastResult = null;
@@ -67,12 +62,13 @@ namespace StorEvil.InPlace
                    
                     if (ex.InnerException is ScenarioPendingException)
                     {
-                        _eventBus.Raise(new LineExecuted {Line = line, Status = ExecutionStatus.Pending});
+                        _eventBus.Raise(new LineExecuted { Scenario = scenario, Line = line, Status = ExecutionStatus.Pending });
                     }
                     else
                     {
                         _eventBus.Raise(new LineExecuted
-                        {   
+                        {
+                            Scenario = scenario,
                             Line = line, 
                             Status = ExecutionStatus.Failed,
                             SuccessPart = successPart.Trim(),

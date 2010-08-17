@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Events;
-using StorEvil.InPlace.CompilingRunner;
 using StorEvil.Parsing;
 
 namespace StorEvil.InPlace
@@ -32,9 +30,8 @@ namespace StorEvil.InPlace
             var s = GetStories(stories);
             using (var remoteHandler = _factory.GetHandler(s, _eventBus))
             {
-                remoteHandler.Handler.HandleStories(s.ToArray());
+                _result = remoteHandler.HandleStories(s.ToArray());
 
-                _result += remoteHandler.Handler.GetResult();
             }
         }
 

@@ -182,6 +182,13 @@ namespace StorEvil.InPlace
         {
             get { return _handler; }
         }
+
+        public JobResult HandleStories(Story[] stories)
+        {
+            Handler.HandleStories(stories);
+            Handler.Finished();
+            return Handler.GetResult();
+        }
     }
 
     internal interface UsingCompiledRunner

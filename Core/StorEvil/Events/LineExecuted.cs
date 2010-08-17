@@ -1,4 +1,5 @@
 ﻿using System;
+using StorEvil.Core;
 
 namespace StorEvil.Events
 {
@@ -12,5 +13,6 @@ namespace StorEvil.Events
         public string FailedPart = "";
         public string Message = "";
         public string Suggestion = "";
+        public Scenario Scenario;
     }
 }

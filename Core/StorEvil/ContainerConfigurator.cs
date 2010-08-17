@@ -35,6 +35,11 @@ namespace StorEvil
 
             listenerBuilder.SetUpListeners(bus);
 
+            var assemblyRegistry = new AssemblyRegistry(settings.AssemblyLocations);
+            container.Register(assemblyRegistry);
+
+            new EventBusAutoRegistrar(assemblyRegistry).InstallTo(bus);
+
             container.EasyRegister<IStoryParser, StoryParser>();
             container.EasyRegister<IStoryProvider, StoryProvider>();
             container.EasyRegister<IStoryReader, FilesystemStoryReader>();
@@ -46,7 +51,7 @@ namespace StorEvil
             container.EasyRegister<ExtensionMethodHandler>();
 
             container.EasyRegister<IAmbiguousMatchResolver, MostRecentlyUsedContext>();
-            container.Register(new AssemblyRegistry(settings.AssemblyLocations));
+            
            // container.Register<StorEvilSession>(GetSession(settings));
             container.Register<ISessionContext>(GetSessionContext(settings));
         }

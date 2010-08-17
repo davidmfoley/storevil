@@ -145,7 +145,7 @@ namespace StorEvil.Interpreter.ParameterConverters
 
         public static void AddCustomConverters(AssemblyRegistry registry)
         {
-            var converterTypes = registry.GetTypesImplementing<CustomParameterConverter>();
+            var converterTypes = registry.GetTypesImplementing(typeof(CustomParameterConverter));
             foreach (var type in converterTypes)
             {
                 AddCustomConverter(type);

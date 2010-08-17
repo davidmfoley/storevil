@@ -128,9 +128,12 @@
         TaskParameter="ExitCode"
         ItemName="DebugExitCode" />
     </Exec>
+    <Exec       
+       Command="copy $(MSBuildProjectDirectory)\Lib\Test\nunit.framework.dll $(OutputPath)\Examples\"/>
+
     <Exec
-   WorkingDirectory="$(ExampleProjectDirectory)"
-   Command="copy $(ExampleProjectDirectory)\storevil.config $(OutputPath)\Examples\"/>
+      WorkingDirectory="$(ExampleProjectDirectory)"
+      Command="copy $(ExampleProjectDirectory)\storevil.config $(OutputPath)\Examples\"/>
 
     <Message Text="Executing in-place: $(ExampleProjectDirectory)/$(ExampleProject)"/>
     <Exec

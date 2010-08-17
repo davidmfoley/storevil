@@ -12,7 +12,9 @@ namespace StorEvil.InPlace
 {
     public interface IRemoteStoryHandler : IDisposable
     {
-        IStoryHandler Handler { get; }
+        //IStoryHandler Handler { get; }
+
+        JobResult HandleStories(Story[] stories);
     }
 
     public class RemoteStoryHandler : IRemoteStoryHandler
@@ -51,6 +53,13 @@ namespace StorEvil.InPlace
                     _handler = GetHandler();
                 return _handler;
             }
+        }
+
+        public JobResult HandleStories(Story[] stories)
+        {
+            Handler.HandleStories(stories);
+            Handler.Finished();
+            return Handler.GetResult();
         }
 
         private IStoryHandler GetHandler()

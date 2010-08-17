@@ -1,16 +1,57 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using StorEvil.Assertions;
+using StorEvil.Context;
 using StorEvil.Events;
-using StorEvil.Utility;
 
 namespace StorEvil.Core.Event_Handling
 {
     [TestFixture]
+    public class Automatic_registration_of_user_defined_handlers
+    {
+        private IEventBus Bus = new EventBus();
+
+        [Test]
+        public void Registers_handlers()
+        {
+            var registry = new FakeAssemblyRegistry();
+
+            var registrar = new EventBusAutoRegistrar(registry);
+            registrar.InstallTo(Bus);
+
+            var testEvent = new FooEvent();
+            Bus.Raise(testEvent);
+
+            TestHandler.EventsCaught.ShouldContain(testEvent);
+        }
+
+        public class FakeAssemblyRegistry : AssemblyRegistry
+        {
+            public override IEnumerable<Type> GetTypesImplementing(Type t)
+            {
+                return new[] { typeof(TestHandler) };
+            }
+        }
+
+        public class TestHandler : IHandle<FooEvent>
+        {
+            public static List<object> EventsCaught = new List<object>();
+            public void Handle(FooEvent eventToHandle)
+            {
+                EventsCaught.Add(eventToHandle);
+            }
+        }
+    }
+   
+   
+
+
+    [TestFixture]
     public class Event_handling
     {
         private EventBus Bus;
+
         [SetUp]
         public void SetUpContext()
         {
