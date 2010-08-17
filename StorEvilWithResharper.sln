@@ -32,6 +32,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorEvil.MsBuild", "Build\S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorEvil.CustomTool", "Tools\StorEvil.CustomTool\StorEvil.CustomTool.csproj", "{2071CFD6-C0A6-4305-86B0-178B8F5F9902}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", "{E5AD113B-0500-4579-A89D-089013ECB407}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorEvil.TeamCity", "Tools\StorEvil.TeamCity\StorEvil.TeamCity.csproj", "{E2C420AC-F5AC-4AC2-AA31-B498F040EDB9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -66,6 +70,10 @@ Global
 		{2071CFD6-C0A6-4305-86B0-178B8F5F9902}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2071CFD6-C0A6-4305-86B0-178B8F5F9902}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2071CFD6-C0A6-4305-86B0-178B8F5F9902}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2C420AC-F5AC-4AC2-AA31-B498F040EDB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2C420AC-F5AC-4AC2-AA31-B498F040EDB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2C420AC-F5AC-4AC2-AA31-B498F040EDB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2C420AC-F5AC-4AC2-AA31-B498F040EDB9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -77,5 +85,6 @@ Global
 		{F6BDC77F-FB15-46A2-89B9-9E66E89DE62D} = {806BC5DE-65B6-4202-8B64-28D4137EAA60}
 		{43A7C61E-DD5B-4CC9-A05A-02C00789028F} = {963A6FE4-67D6-484D-AC34-A58F8ACD1265}
 		{D0F1AFA9-AC1C-45A3-98D0-BF79866E9DCF} = {EE6099F0-03E3-46B9-8F11-13891AEC23CB}
+		{E2C420AC-F5AC-4AC2-AA31-B498F040EDB9} = {E5AD113B-0500-4579-A89D-089013ECB407}
 	EndGlobalSection
 EndGlobal
