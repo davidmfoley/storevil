@@ -24,9 +24,44 @@ namespace StorEvil.Context.Matching_method_names_with_reflection
             return typeof(T).GetMethod(name);
         }
 
-        public static MethodNameMatcher GetMatcher<T>(string methodName)
+        public static MethodNameMatcher GetMethodNameMatcher<T>(string methodName)
         {
             return new MethodNameMatcher(GetMethod<T>(methodName));
+        }
+
+        public static PropertyOrFieldNameMatcher GetPropertyMatcher<T>(string propertyName)
+        {
+            return new PropertyOrFieldNameMatcher(typeof(T).GetMember(propertyName).First());
+        }
+    }
+
+    [TestFixture]
+    public class Matching_field_names
+    {
+       
+        [Test]
+        public void should_match_property()
+        {
+            var matcher = MethodMatcherTestHelper.GetPropertyMatcher<PropertyAndFieldTestContext>("Foo_property");
+            var matches = matcher.GetMatches("Foo property");
+            matches.Count().ShouldBe(1);
+            matches.First().MatchedText.ShouldBe("Foo property");
+        }
+
+        [Test]
+        public void should_match_field()
+        {
+
+            var matcher = MethodMatcherTestHelper.GetPropertyMatcher<PropertyAndFieldTestContext>("BarField");
+            var matches = matcher.GetMatches("bar field");
+            matches.Count().ShouldBe(1);
+            matches.First().MatchedText.ShouldBe("bar field");
+        }
+
+        public class PropertyAndFieldTestContext
+        {
+            public object Foo_property { get; set; }
+            public string BarField;
         }
     }
 
@@ -39,7 +74,7 @@ namespace StorEvil.Context.Matching_method_names_with_reflection
         [SetUp]
         public void SetupContext()
         {
-            Matcher = MethodMatcherTestHelper.GetMatcher<EnumTestContext>("Test_parsing_of_enumValue");
+            Matcher = MethodMatcherTestHelper.GetMethodNameMatcher<EnumTestContext>("Test_parsing_of_enumValue");
         }
 
         private NameMatch GetMatch(string s)
@@ -86,7 +121,7 @@ namespace StorEvil.Context.Matching_method_names_with_reflection
         [SetUp]
         public void SetupContext()
         {
-            var matcher = MethodMatcherTestHelper.GetMatcher<Table_matching_test_context>("method_takes_a_table");
+            var matcher = MethodMatcherTestHelper.GetMethodNameMatcher<Table_matching_test_context>("method_takes_a_table");
             Match = matcher.GetMatches("Method takes a table\r\n|1|2|\r\n|3|4|\r\n|5|6|").FirstOrDefault();
         }
 
@@ -113,7 +148,7 @@ namespace StorEvil.Context.Matching_method_names_with_reflection
         [Test]
         public void should_match_a_negative_int()
         {
-            Matcher = MethodMatcherTestHelper.GetMatcher<Numeric_matching_test_context>("method_takes_an_int"); 
+            Matcher = MethodMatcherTestHelper.GetMethodNameMatcher<Numeric_matching_test_context>("method_takes_an_int"); 
             var matches = Matcher.GetMatches("method takes an int -42");
             matches.Count().ShouldBe(1);
             matches.First().ParamValues.First().Value.ShouldEqual(-42);
@@ -122,7 +157,7 @@ namespace StorEvil.Context.Matching_method_names_with_reflection
         [Test]
         public void should_match_a_negative_decimal()
         {
-            Matcher = MethodMatcherTestHelper.GetMatcher<Numeric_matching_test_context>("method_takes_a_decimal"); 
+            Matcher = MethodMatcherTestHelper.GetMethodNameMatcher<Numeric_matching_test_context>("method_takes_a_decimal"); 
             var matches = Matcher.GetMatches("method takes a decimal -42");
             matches.Count().ShouldBe(1);
             matches.First().ParamValues.First().Value.ShouldEqual(-42m);
@@ -148,7 +183,7 @@ namespace StorEvil.Context.Matching_method_names_with_reflection
         [SetUp]
         public void SetupContext()
         {
-            var matcher = MethodMatcherTestHelper.GetMatcher<Punctuation_test_context>("its_good_to_handle_apostrophes");
+            var matcher = MethodMatcherTestHelper.GetMethodNameMatcher<Punctuation_test_context>("its_good_to_handle_apostrophes");
             Matches = matcher.GetMatches("It's good to handle apostrophes");
         }
 
@@ -180,7 +215,7 @@ namespace StorEvil.Context.Matching_method_names_with_reflection
         [SetUp]
         public void SetupContext()
         {
-            var matcher = MethodMatcherTestHelper.GetMatcher<Typed_table_test_context>("method_takes_a_typed_array");
+            var matcher = MethodMatcherTestHelper.GetMethodNameMatcher<Typed_table_test_context>("method_takes_a_typed_array");
             Match = matcher.GetMatches("Method takes a typed array\r\n|IntParam|StringParam|\r\n|1|2|\r\n|3|4|\r\n|5|6|").FirstOrDefault();
             ParamValue = Match.ParamValues["values"];
         }
@@ -212,7 +247,7 @@ namespace StorEvil.Context.Matching_method_names_with_reflection
         [SetUp]
         public void SetupContext()
         {
-            var matcher = MethodMatcherTestHelper.GetMatcher<Partial_match_test_context>("when_a_user_named");
+            var matcher = MethodMatcherTestHelper.GetMethodNameMatcher<Partial_match_test_context>("when_a_user_named");
             Match = matcher.GetMatches("when a user named foo does something").FirstOrDefault();
         }
 
@@ -257,7 +292,7 @@ namespace StorEvil.Context.Matching_method_names_with_reflection
         [SetUp]
         public void SetupContext()
         {
-            Matcher = MethodMatcherTestHelper.GetMatcher<MultiWordTestContext>("Foo");
+            Matcher = MethodMatcherTestHelper.GetMethodNameMatcher<MultiWordTestContext>("Foo");
             FoundMatches =  Matcher.GetMatches("Foo Bar Baz");
             Partial = FoundMatches.OfType<PartialMatch>().FirstOrDefault();
             Exact = FoundMatches.OfType<ExactMatch>().FirstOrDefault();
