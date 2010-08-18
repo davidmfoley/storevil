@@ -73,7 +73,8 @@ namespace StorEvil.InPlace
                             Status = ExecutionStatus.Failed,
                             SuccessPart = successPart.Trim(),
                             FailedPart = invocation.MatchedText, 
-                            Message = GetExceptionMessage(ex) 
+                            Message = GetExceptionMessage(ex),
+                            Exception = ex
                         });
                     }
 
