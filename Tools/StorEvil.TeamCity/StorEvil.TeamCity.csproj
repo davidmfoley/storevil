@@ -39,6 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ITeamCityMessageWriter.cs" />
+    <Compile Include="TeamCityMessageWriter.cs" />
     <Compile Include="TeamCityResultListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
