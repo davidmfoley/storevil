@@ -74,7 +74,7 @@ namespace StorEvil.InPlace
                             SuccessPart = successPart.Trim(),
                             FailedPart = invocation.MatchedText, 
                             Message = GetExceptionMessage(ex),
-                            Exception = ex
+                            Exception = GetRootException(ex)
                         });
                     }
 
@@ -83,6 +83,11 @@ namespace StorEvil.InPlace
             }
 
             return true;
+        }
+
+        private Exception GetRootException(TargetInvocationException targetInvocationException)
+        {
+            return targetInvocationException.InnerException ?? targetInvocationException;
         }
 
         private void InvokeContextMember(ScenarioContext scenarioContext, Invocation invocation)
