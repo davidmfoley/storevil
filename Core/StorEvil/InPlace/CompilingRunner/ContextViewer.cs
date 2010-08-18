@@ -16,7 +16,7 @@ namespace StorEvil.InPlace
             var propertySource = string.Join("\r\n", lines);
             var source = "public class DebugContext { \r\n" + propertySource + "\r\n}";
 
-            var assembly = _compiler.CompileInMemory(source, GetReferencedAssemblies(dictionary));
+            var assembly = _compiler.CompileInMemory(source, GetReferencedAssemblies(dictionary).Select(a=>a.Location));
             var context = Activator.CreateInstance(assembly.GetTypes().First());
             foreach (var type in dictionary.Keys)
             {

@@ -24,9 +24,9 @@ namespace StorEvil.InPlace
             return assemblyLocation;
         }
 
-        public Assembly CompileInMemory(string sourceCode, IEnumerable<Assembly> referencedAssemblies)
+        public Assembly CompileInMemory(string sourceCode, IEnumerable<string> referencedAssemblies)
         {
-            var compilerParams = BuildCompilerParams(referencedAssemblies.Select(a =>a.Location));
+            var compilerParams = BuildCompilerParams(referencedAssemblies);
             compilerParams.GenerateInMemory = true;
 
             var results = Compile(compilerParams, sourceCode);

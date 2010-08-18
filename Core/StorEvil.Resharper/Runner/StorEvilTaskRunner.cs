@@ -27,16 +27,7 @@ namespace StorEvil.Resharper.Runner
         }
 
         public override TaskResult Execute(TaskExecutionNode node)
-        {
-            if (node.RemoteTask is RunScenarioTask)
-            {
-                var result = ExecuteScenario(node);
-                if (result.Status != TaskResult.Success)
-                    _result = result.Status;
-                return result.Status;
-            }
-           
-
+        {            
             return TaskResult.Success;
         }
 

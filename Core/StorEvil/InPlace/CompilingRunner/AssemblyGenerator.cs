@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using StorEvil.Core;
 using StorEvil.InPlace.CompilingRunner;
@@ -28,6 +29,13 @@ namespace StorEvil.InPlace
             var sourceCode =_handlerGenerator.GetSourceCode(spec);
 
             return _compiler.CompileToFile(sourceCode, spec.Assemblies, GetAssemblyLocation());
+        }
+
+        public Assembly GenerateAssemblyInMemory(AssemblyGenerationSpec spec)
+        {
+            var sourceCode = _handlerGenerator.GetSourceCode(spec);
+
+            return _compiler.CompileInMemory(sourceCode,  spec.Assemblies);
         }
     }
 }

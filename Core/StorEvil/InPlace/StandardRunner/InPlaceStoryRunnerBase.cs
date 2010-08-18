@@ -43,7 +43,7 @@ namespace StorEvil.InPlace
             EventBus.Raise(new StoryFinished { Story = story });
         }
 
-        public void HandleStories(IEnumerable<Story> stories)
+        public JobResult HandleStories(IEnumerable<Story> stories)
         {
           
 
@@ -51,6 +51,10 @@ namespace StorEvil.InPlace
             {
                 HandleStory(story);
             }
+
+            Finished();
+
+            return GetResult();
         }
 
         protected abstract void Execute(Story story, IEnumerable<Scenario> scenariosMatchingFilter, StoryContext context);

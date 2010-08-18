@@ -44,12 +44,14 @@ namespace StorEvil.StubGeneration
             }
         }
 
-        public void HandleStories(IEnumerable<Story> stories)
+        public JobResult HandleStories(IEnumerable<Story> stories)
         {
             foreach (var story in stories)
             {
                 HandleStory(story);
             }
+            PrintSuggestions();
+            return new JobResult();
         }
 
         private void AddSuggestion(string suggestedCode)
@@ -87,7 +89,7 @@ namespace StorEvil.StubGeneration
             return ((ScenarioOutline)scenario).Scenario.Body.Select(x => x.Text);
         }
 
-        public void Finished()
+        private void PrintSuggestions()
         {
             var joined = "        " + string.Join("\r\n", _suggestions.OrderBy(x=>x).ToArray()).Replace("\r\n", "\r\n        ");
             
@@ -104,11 +106,6 @@ namespace Your.Namespace.Here
             var classDefinition = string.Format(classFormat, joined);
             SuggestionWriter.Write(classDefinition);
 
-        }
-
-        public JobResult GetResult()
-        {
-            return new JobResult();
         }
     }
 }

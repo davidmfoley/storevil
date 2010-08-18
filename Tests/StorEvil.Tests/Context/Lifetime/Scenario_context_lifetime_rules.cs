@@ -1,8 +1,5 @@
-﻿using System;
-using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
+﻿using NUnit.Framework;
 using StorEvil.Assertions;
-using StorEvil.Utility;
 
 namespace StorEvil.Context.Lifetime
 {

@@ -37,6 +37,14 @@ namespace StorEvil.InPlace
             return CurrentScenarioContext.Contexts.Values.ToArray();
         }
 
+        public object Contexts
+        {
+            get
+            {
+                return new ContextViewer().Create(CurrentScenarioContext.Contexts);
+            }
+        }
+
         protected Scenario[] GetScenarios(Story story)
         {           
             return story.Scenarios.SelectMany(s=> new ScenarioPreprocessor().Preprocess(s)).ToArray();
@@ -46,7 +54,7 @@ namespace StorEvil.InPlace
 
         public abstract void HandleStory(Story story);
 
-        public void HandleStories(IEnumerable<Story> stories)
+        public JobResult HandleStories(IEnumerable<Story> stories)
         {
             foreach (var story in stories)
             {
@@ -54,6 +62,10 @@ namespace StorEvil.InPlace
                 HandleStory(story);
                 _eventBus.Raise(new StoryFinished { Story = story });
             }
+
+            Finished();
+
+            return Result;
         }
 
         public void Finished()

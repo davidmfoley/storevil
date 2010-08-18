@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace StorEvil.InPlace
 {
@@ -13,8 +14,7 @@ namespace StorEvil.InPlace
             {
                 var methodParameters = ConvertParameters(info as MethodInfo, parameters);
                 if (IsExtensionMethod(info))
-                {
-                   
+                {  
                     methodParameters = new[] { context }.Concat(methodParameters.ToArray());
                     //context = null;
                 }
@@ -50,9 +50,13 @@ namespace StorEvil.InPlace
         }
         private static bool IsExtensionMethod(MemberInfo info)
         {
-            // TODO: there must be a better way
-            Type type = info.DeclaringType;
-            return type.IsAbstract;
+            if (info is MethodInfo)
+            {
+                return info.GetCustomAttributes(typeof (ExtensionAttribute), true).Any()
+                       && info.DeclaringType.GetCustomAttributes(typeof (ExtensionAttribute), true).Any();
+            }
+
+            return false;
         }
     }
 

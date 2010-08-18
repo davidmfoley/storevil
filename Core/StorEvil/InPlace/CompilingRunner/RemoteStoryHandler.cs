@@ -10,12 +10,7 @@ using StorEvil.Infrastructure;
 
 namespace StorEvil.InPlace
 {
-    public interface IRemoteStoryHandler : IDisposable
-    {
-        //IStoryHandler Handler { get; }
-
-        JobResult HandleStories(Story[] stories);
-    }
+    public interface IRemoteStoryHandler : IStoryHandler, IDisposable { }
 
     public class RemoteStoryHandler : IRemoteStoryHandler
     {
@@ -45,7 +40,7 @@ namespace StorEvil.InPlace
             return string.Join(";", dirs.ToArray());
         }
 
-        public virtual IStoryHandler Handler
+        private IStoryHandler Handler
         {
             get
             {
@@ -55,15 +50,19 @@ namespace StorEvil.InPlace
             }
         }
 
-        public JobResult HandleStories(Story[] stories)
+        public JobResult HandleStories(IEnumerable<Story> stories)
         {
-            Handler.HandleStories(stories);
-            Handler.Finished();
-            return Handler.GetResult();
+            return Handler.HandleStories(stories);            
         }
 
         private IStoryHandler GetHandler()
-        {         
+        {
+            //return
+            //    Activator.CreateInstanceFrom(
+            //        _assemblyLocation,
+            //        "StorEvilTestAssembly.StorEvilDriver", true, 0, null, new object[] {_eventBus},
+            //        CultureInfo.CurrentCulture, new object[0], AppDomain.CurrentDomain.Evidence) as IStoryHandler;
+
             // Construct and initialize settings for a second AppDomain.
             var domainSetup = new AppDomainSetup();
             if (InTest)

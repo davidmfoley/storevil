@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 using StorEvil.Assertions;
 using StorEvil.Core;
 using StorEvil.InPlace;
-using StorEvil.Utility;
 
 namespace StorEvil.CodeGeneration
 {
@@ -28,7 +26,7 @@ namespace StorEvil.CodeGeneration
 
             Result = Generator.Generate(story, "test_namespace");
 
-            CompiledAssembly = new CodeCompiler().CompileInMemory(Result, new[] { typeof(Scenario).Assembly, typeof(TestFixtureAttribute).Assembly });
+            CompiledAssembly = new CodeCompiler().CompileInMemory(Result, new[] { typeof(Scenario).Assembly.Location, typeof(TestFixtureAttribute).Assembly.Location });
             TestFixtureType = CompiledAssembly.GetTypes().First();
             Instance = Activator.CreateInstance(TestFixtureType);
         }

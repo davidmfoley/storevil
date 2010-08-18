@@ -1,7 +1,6 @@
 ﻿
 using System;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 using StorEvil.Core;
 
 namespace StorEvil.InPlace

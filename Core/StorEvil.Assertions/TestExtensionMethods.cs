@@ -134,22 +134,22 @@ namespace StorEvil.Assertions
 
         public static void That(bool b)
         {
-            IsTrue(b, "");
+            IsTrue(b, "Failed");
         }
 
         public static void AreEqual(object a, object b)
         {
-            IsTrue(a.Equals(b), "");
+            IsTrue(a.Equals(b), "Not Equal!\r\n Actual: " + b + "\r\n Expected:" + a);
         }
 
         public static void IsNull(object actual)
         {
-            IsTrue(actual == null, "Excpected null but got " + actual);
+            IsTrue(actual == null, "Expected null but got " + actual);
         }
 
         public static void IsNotNull(object actual)
         {
-            IsTrue(actual != null, "Excpected not null");        
+            IsTrue(actual != null, "Expected not null");        
         }
 
         public static void Fail()

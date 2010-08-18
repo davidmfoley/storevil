@@ -39,9 +39,8 @@ namespace StorEvil.NUnit
                                                       TestHelper.BuildScenario("", new[] { "this line's weird, punctuation! should be: handled"})
                                                  });
 
-            Generator.HandleStory(TestStory);
-            Generator.Finished();
-
+            Generator.HandleStories(new[] {TestStory});
+          
             Suggestions = (string) FakeWriter.GetArgumentsForCallsMadeOn(x => x.Write(Arg<string>.Is.Anything))[0][0];            
         }
 

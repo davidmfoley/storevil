@@ -25,14 +25,15 @@ namespace StorEvil.InPlace
             _eventBus = eventBus;
         }
 
-        public void HandleStories(IEnumerable<Story> stories)
+        public JobResult HandleStories(IEnumerable<Story> stories)
         {
             var s = GetStories(stories);
+
             using (var remoteHandler = _factory.GetHandler(s, _eventBus))
-            {
                 _result = remoteHandler.HandleStories(s.ToArray());
 
-            }
+            Finished();
+            return GetResult();
         }
 
         private IEnumerable<Story> GetStories(IEnumerable<Story> stories)
