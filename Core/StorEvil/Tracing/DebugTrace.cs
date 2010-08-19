@@ -12,5 +12,11 @@ namespace StorEvil.Interpreter
             if (Listener != null)
                 Listener.Trace(string.Format("[{0}] - {1}", area, message));
         }
+
+        [DebuggerStepThrough]
+        public static void Trace(object area, string message)
+        {
+            Trace(area.GetType().Name, message);
+        }
     }
 }

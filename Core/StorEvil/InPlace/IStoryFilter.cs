@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using StorEvil.Core;
+using StorEvil.Interpreter;
 
 namespace StorEvil
 {
@@ -20,10 +21,16 @@ namespace StorEvil
 
         public bool Include(Story story, IScenario scenario)
         {
+            DebugTrace.Trace(this, "story: " + story.Location );
+            DebugTrace.Trace(this, "scenario: " + scenario.Name);
             if (_tags.Count() == 0)
                 return true;
 
-            return AnyTagMatches(story.Tags) || AnyTagMatches(scenario.Tags);
+            bool include = AnyTagMatches(story.Tags) || AnyTagMatches(scenario.Tags);
+
+            DebugTrace.Trace(this, "include: " + include);
+
+            return include;
         }
 
         private bool AnyTagMatches(IEnumerable<string> tags)

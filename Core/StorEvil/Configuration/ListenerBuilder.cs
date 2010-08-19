@@ -48,7 +48,7 @@ namespace StorEvil.Console
         {
             if (_settings.ConsoleMode != ConsoleMode.Quiet)
             {
-                var consoleListener =new ConsoleResultListener
+                var consoleListener = new ConsoleResultListener
                 {
                     ColorEnabled = _settings.ConsoleMode == ConsoleMode.Color
                 };
