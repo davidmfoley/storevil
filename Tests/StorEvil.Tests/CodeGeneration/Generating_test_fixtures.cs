@@ -97,24 +97,4 @@ namespace StorEvil.CodeGeneration
                 .Where(m => m.GetCustomAttributes(typeof (TestAttribute), true).Any());
         }
     }
-
-    [TestFixture]
-    public class TestSession_Behavior
-    {       
-        [Test]
-        public void returns_same_context_for_multiple_calls()
-        {
-            var context = TestSession.SessionContext("foo");
-            Assert.That(context, Is.SameAs(TestSession.SessionContext("foo")));
-        }
-
-        [Test]
-        public void returns_different_context_after_ShutDown()
-        {
-            var context = TestSession.SessionContext("foo");
-            TestSession.ShutDown();
-
-            Assert.That(context, Is.Not.SameAs(TestSession.SessionContext("foo")));
-        }
-    }
 }
