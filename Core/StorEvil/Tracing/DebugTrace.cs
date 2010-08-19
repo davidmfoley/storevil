@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using StorEvil.InPlace;
 
 namespace StorEvil.Interpreter
@@ -5,7 +6,7 @@ namespace StorEvil.Interpreter
     public static class DebugTrace
     {
         public static IDebugListener Listener { get; set; }
-
+        [DebuggerStepThrough]
         public static void Trace(string area, string message)
         {
             if (Listener != null)

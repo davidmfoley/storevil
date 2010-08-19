@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Reflection;
 using StorEvil.Context;
 using StorEvil.Core;
@@ -7,6 +8,7 @@ using StorEvil.Interpreter;
 
 namespace StorEvil.InPlace
 {
+    [DebuggerStepThrough]
     public class ScenarioLineExecuter
     {
         public ScenarioLineExecuter(ScenarioInterpreter scenarioInterpreter,
@@ -18,13 +20,13 @@ namespace StorEvil.InPlace
             _eventBus = eventBus;
         }
 
-     
         private readonly MemberInvoker _memberInvoker;
         private readonly ScenarioInterpreter _scenarioInterpreter;
         private readonly IEventBus _eventBus;
         private object _lastResult;
         private readonly ImplementationHelper _implementationHelper = new ImplementationHelper();
 
+        
         public LineStatus ExecuteLine(Scenario scenario, ScenarioContext storyContext, string line)
         {
             DebugTrace.Trace("ScenarioLineExecter.ExecuteLine", line);
@@ -46,6 +48,7 @@ namespace StorEvil.InPlace
             return LineStatus.Passed;
         }
 
+        
         private bool ExecuteChain(Scenario scenario, ScenarioContext storyContext, InvocationChain chain, string line)
         {
             string successPart = "";
@@ -84,6 +87,7 @@ namespace StorEvil.InPlace
             return true;
         }
 
+        
         private void InvokeContextMember(ScenarioContext scenarioContext, Invocation invocation)
         {
             MemberInfo info = invocation.MemberInfo;
@@ -92,6 +96,7 @@ namespace StorEvil.InPlace
             _lastResult = _memberInvoker.InvokeMember(info, invocation.ParamValues, context);
         }
 
+        
         private InvocationChain GetMatchingChain(ScenarioContext storyContext, string line)
         {
             var chain = _scenarioInterpreter.GetChain(storyContext, line);
@@ -99,6 +104,7 @@ namespace StorEvil.InPlace
             return chain;
         }
 
+        
         private static string GetExceptionMessage(Exception exception)
         {
             var ex = exception.InnerException ?? exception;

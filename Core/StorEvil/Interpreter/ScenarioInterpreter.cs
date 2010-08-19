@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using StorEvil.Context;
 using StorEvil.Events;
@@ -27,6 +28,7 @@ namespace StorEvil.Interpreter
             _resolver = resolver;
         }
 
+        [DebuggerStepThrough]
         public InvocationChain GetChain(ScenarioContext context, string line)
         {
             DebugTrace.Trace("Interpreting", line);
@@ -52,6 +54,7 @@ namespace StorEvil.Interpreter
                 
         }
 
+        [DebuggerStepThrough]
         private void Notify(InvocationChain chain)
         {
             foreach (var invocation in chain.Invocations)
@@ -65,6 +68,7 @@ namespace StorEvil.Interpreter
             _lastSignificantFirstWord = null;
         }
 
+        [DebuggerStepThrough]
         private IEnumerable<InvocationChain> GetSelectedChains(ScenarioContext context, string line)
         {
             foreach (var linePermutation in GetPermutations(line))
@@ -82,6 +86,7 @@ namespace StorEvil.Interpreter
             }
         }
 
+        [DebuggerStepThrough]
         private IEnumerable<string> GetPermutations(string line)
         { 
             if (line.ToLower().StartsWith("and "))

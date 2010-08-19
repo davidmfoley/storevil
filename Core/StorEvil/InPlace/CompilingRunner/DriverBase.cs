@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using StorEvil.Context;
 using StorEvil.Core;
@@ -10,6 +11,7 @@ using StorEvil.Parsing;
 
 namespace StorEvil.InPlace
 {
+    [DebuggerStepThrough]
     public abstract class DriverBase : MarshalByRefObject, IStoryHandler
     {
         protected JobResult Result = new JobResult();
@@ -30,21 +32,15 @@ namespace StorEvil.InPlace
             ParameterConverter.AddCustomConverters(assemblyRegistry);
         }
 
-        protected abstract IEnumerable<string> GetAssemblies();      
+        protected abstract IEnumerable<string> GetAssemblies();
 
+        
         protected object[] GetContexts()
         {
             return CurrentScenarioContext.Contexts.Values.ToArray();
         }
 
-        public object Contexts
-        {
-            get
-            {
-                return new ContextViewer().Create(CurrentScenarioContext.Contexts);
-            }
-        }
-
+        
         protected Scenario[] GetScenarios(Story story)
         {           
             return story.Scenarios.SelectMany(s=> new ScenarioPreprocessor().Preprocess(s)).ToArray();
@@ -54,6 +50,7 @@ namespace StorEvil.InPlace
 
         public abstract void HandleStory(Story story);
 
+        
         public JobResult HandleStories(IEnumerable<Story> stories)
         {
             foreach (var story in stories)
@@ -68,11 +65,13 @@ namespace StorEvil.InPlace
             return Result;
         }
 
+        
         public void Finished()
         {          
             CurrentStoryContext.Dispose();
         }
 
+        
         protected object[] ExecuteLine(string line)
         {
             if (LastStatus != LineStatus.Passed)
@@ -83,6 +82,7 @@ namespace StorEvil.InPlace
             return GetContexts();
         }
 
+        
         public JobResult GetResult()
         {
             return Result;  
@@ -91,7 +91,7 @@ namespace StorEvil.InPlace
         protected StoryContext CurrentStoryContext;
         private IEventBus _eventBus;
 
-
+        
         protected IDisposable StartScenario(Story story, Scenario scenario)
         {
             
@@ -107,11 +107,13 @@ namespace StorEvil.InPlace
             return CurrentScenarioContext;
         }
 
+     
         protected LineStatus LastStatus
         {
             get; set;
         }
 
+        
         protected bool ShouldContinue
         {
             get
@@ -120,6 +122,7 @@ namespace StorEvil.InPlace
             }
         }
 
+        
         protected void CollectScenarioResult()
         {
             if (LastStatus == LineStatus.Failed)
