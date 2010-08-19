@@ -54,6 +54,11 @@ namespace StorEvil.CodeGeneration
         {
             return TestSessionContextFactory.GetSessionContext(currentAssemblyLocation, _assemblies);
         }
+
+        public static StandardScenarioInterpreter GetInterpreter()
+        {
+           return  new StandardScenarioInterpreter(new AssemblyRegistry(_assemblies));
+        }
     }
 
     public class TestSessionContextFactory
