@@ -13,6 +13,8 @@ namespace StorEvil.MsBuild
 {
     public class StorEvilTask : Task
     {
+        private MsBuildTaskResultListener _resultListener;
+
         public override bool Execute()
         {
             var consoleMode = ParseConsoleMode();
@@ -30,7 +32,8 @@ namespace StorEvil.MsBuild
                                };
 
             StorEvilEvents.SetBus(new EventBus());
-
+             _resultListener = new MsBuildTaskResultListener();
+            StorEvilEvents.Bus.Register(_resultListener);
             var container = new Container();
             container.Register(settings);
 
@@ -39,11 +42,30 @@ namespace StorEvil.MsBuild
             var configurator = new InPlaceContainerConfigurator();
             configurator.ConfigureContainer(container, settings, executeSettings);
 
-          
             var job = container.Resolve<IStorEvilJob>();
 
-            return job.Run() == 0;
+            var result = job.Run() == 0;
+            
+            container.Dispose();
+
+            StorEvilEvents.ResetBus();
+
+            Passed = _resultListener.Passed.ToString();
+            Pending = _resultListener.Pending.ToString();
+            Failed = _resultListener.Failed.ToString();
+
+            return result;
+
         }
+
+        [Output]
+        public string Passed { get; set; }
+
+        [Output]
+        public string Pending { get; set; }
+
+        [Output]
+        public string Failed { get; set; }
 
         private ConsoleMode ParseConsoleMode()
         {
@@ -74,4 +96,34 @@ namespace StorEvil.MsBuild
 
         public bool DebugMode { get; set; }
     }
+
+    public class MsBuildTaskResultListener : IHandle<ScenarioFinished>
+    {
+        public void Handle(ScenarioFinished eventToHandle)
+        {
+            switch (eventToHandle.Status)
+            {
+                case ExecutionStatus.Pending:
+                case ExecutionStatus.CouldNotInterpret:
+                    Pending++;
+                    break;
+
+                case ExecutionStatus.Passed:
+                    Passed++;
+                    break;
+
+                case ExecutionStatus.Failed:
+                    Failed++;
+                    break;
+            }
+        }
+
+        public int Pending { get; set; }
+
+        public int Passed { get; set; }
+
+        public int Failed { get; set; }
+    }
+
+    
 }

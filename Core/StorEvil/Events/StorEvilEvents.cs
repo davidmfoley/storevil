@@ -14,5 +14,11 @@ namespace StorEvil.Events
         {
             _bus = eventBus;
         }
+
+        public static void ResetBus()
+        {
+            _bus.Dispose();
+            _bus = new EventBus();
+        }
     }
 }
