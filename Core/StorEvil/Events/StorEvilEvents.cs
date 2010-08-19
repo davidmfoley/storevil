@@ -1,11 +1,18 @@
-﻿namespace StorEvil.Events
+﻿using System;
+
+namespace StorEvil.Events
 {
     public class StorEvilEvents
     {    
-        static readonly EventBus _bus = new EventBus(); 
+        static  EventBus _bus = new EventBus(); 
         public static EventBus Bus
         {
             get { return _bus; }
+        }
+
+        public static void SetBus(EventBus eventBus)
+        {
+            _bus = eventBus;
         }
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.Build.Utilities;
 using StorEvil.Configuration;
 using StorEvil.Console;
 using StorEvil.Core;
+using StorEvil.Events;
 using StorEvil.InPlace;
 
 namespace StorEvil.MsBuild
@@ -28,6 +29,8 @@ namespace StorEvil.MsBuild
                                    Debug = DebugMode
                                };
 
+            StorEvilEvents.SetBus(new EventBus());
+
             var container = new Container();
             container.Register(settings);
 
@@ -36,6 +39,7 @@ namespace StorEvil.MsBuild
             var configurator = new InPlaceContainerConfigurator();
             configurator.ConfigureContainer(container, settings, executeSettings);
 
+          
             var job = container.Resolve<IStorEvilJob>();
 
             return job.Run() == 0;

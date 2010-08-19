@@ -37,8 +37,9 @@
         TaskParameter="ExitCode"
         ItemName="DebugExitCode" />
     </Exec>
+    
     <Exec
-       Command="copy $(MSBuildProjectDirectory)\Lib\Test\nunit.framework.dll $(OutputPath)\Examples\"/>
+       Command="copy /y $(MSBuildProjectDirectory)\Lib\Test\nunit.framework.dll $(OutputPath)\Examples\" ContinueOnError="true"/>
 
     <Exec
       WorkingDirectory="$(ExampleProjectDirectory)"

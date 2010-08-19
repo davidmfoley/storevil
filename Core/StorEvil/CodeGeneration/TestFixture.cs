@@ -23,7 +23,7 @@ namespace StorEvil.CodeGeneration
             _eventBus = StorEvilEvents.Bus;
 
             _sessionContext = TestSession.SessionContext(GetType().Assembly.Location).GetContextForStory();
-            _interpreter = TestSession.GetInterpreter();
+            _interpreter = TestSession.GetInterpreter(GetType().Assembly.Location);
           
             _scenarioLineExecuter = new ScenarioLineExecuter(_interpreter, _eventBus);
         }

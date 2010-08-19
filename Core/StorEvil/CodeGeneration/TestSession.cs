@@ -55,9 +55,11 @@ namespace StorEvil.CodeGeneration
             return TestSessionContextFactory.GetSessionContext(currentAssemblyLocation, _assemblies);
         }
 
-        public static StandardScenarioInterpreter GetInterpreter()
+        public static StandardScenarioInterpreter GetInterpreter(string currentAssemblyLocation)
         {
-           return  new StandardScenarioInterpreter(new AssemblyRegistry(_assemblies));
+            AssemblyRegistry assemblyRegistry = TestSessionContextFactory.GetAssemblyRegistry(currentAssemblyLocation, _assemblies);
+
+            return new StandardScenarioInterpreter(assemblyRegistry);
         }
     }
 
@@ -67,8 +69,20 @@ namespace StorEvil.CodeGeneration
 
         public virtual SessionContext GetSessionContext(string currentAssemblyLocation, IEnumerable<Assembly> assemblies)
         {
-            var configReader = new FilesystemConfigReader(new Filesystem(), new ConfigParser());
+            
 
+            AssemblyRegistry assemblyRegistry = GetAssemblyRegistry(currentAssemblyLocation, assemblies);
+
+            ParameterConverter.AddCustomConverters(assemblyRegistry);
+
+           
+            return new SessionContext(assemblyRegistry);
+            
+        }
+
+        public AssemblyRegistry GetAssemblyRegistry(string currentAssemblyLocation, IEnumerable<Assembly> assemblies)
+        {
+            var configReader = new FilesystemConfigReader(new Filesystem(), new ConfigParser());
             ConfigSettings settings = configReader.GetConfig(currentAssemblyLocation);
             if (!settings.AssemblyLocations.Any())
                 settings = configReader.GetConfig(Directory.GetCurrentDirectory());
@@ -76,19 +90,13 @@ namespace StorEvil.CodeGeneration
             if (!settings.AssemblyLocations.Any() && !assemblies.Any())
             {
                 var message = "No storevil assemblies were found.\r\nCurrent location:"
-                    + currentAssemblyLocation + "\r\nCurrent directory:"
-                    + Directory.GetCurrentDirectory();
+                              + currentAssemblyLocation + "\r\nCurrent directory:"
+                              + Directory.GetCurrentDirectory();
 
                 _nunitAssertWrapper.Ignore(message);
             }
 
-            var assemblyRegistry = new AssemblyRegistry(assemblies.Select(x => x.Location).Union(settings.AssemblyLocations));
-
-            ParameterConverter.AddCustomConverters(assemblyRegistry);
-
-            var extensionMethodHandler = new ExtensionMethodHandler(assemblyRegistry);
-            return new SessionContext(assemblyRegistry);
-            
+            return new AssemblyRegistry(assemblies.Select(x => x.Location).Union(settings.AssemblyLocations));
         }
     }
 }
