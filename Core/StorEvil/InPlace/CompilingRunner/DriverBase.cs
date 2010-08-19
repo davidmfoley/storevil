@@ -26,7 +26,7 @@ namespace StorEvil.InPlace
             //ResultListener = resultListener;
             _eventBus = eventBus;
             var assemblyRegistry = new AssemblyRegistry(GetAssemblies());
-            ScenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler(assemblyRegistry)), new MostRecentlyUsedContext());           
+            ScenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(assemblyRegistry), new MostRecentlyUsedContext());           
             LineExecuter = new ScenarioLineExecuter(ScenarioInterpreter, _eventBus);
             _context = new SessionContext(assemblyRegistry);
             ParameterConverter.AddCustomConverters(assemblyRegistry);

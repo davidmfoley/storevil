@@ -29,7 +29,7 @@ namespace StorEvil.NUnit
             FakeResolver = MockRepository.GenerateMock<IAmbiguousMatchResolver>();
 
             Generator =
-                new StubGenerator(new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler(new AssemblyRegistry())), FakeResolver),
+                new StubGenerator(new ScenarioInterpreter(new InterpreterForTypeFactory(new AssemblyRegistry()), FakeResolver),
                                   new ImplementationHelper(), FakeWriter, new FakeSessionContext());
 
             TestStory = new Story("foo", "", new[]

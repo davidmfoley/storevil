@@ -10,7 +10,17 @@ namespace StorEvil.Interpreter
     // should convert this to participate in the normal IoC and just be injected into every place that needs it!
     public class ExtensionMethodHandler
     {
-        private static void AddExtensionMethods(Type type)
+        private readonly List<MethodInfo> _allExtensionMethods = new List<MethodInfo>();
+
+        private readonly List<Type> _addedTypes = new List<Type>();
+
+        public ExtensionMethodHandler(AssemblyRegistry assemblyRegistry)
+        {
+            foreach (var type in assemblyRegistry.GetStaticClasses())
+                AddExtensionMethods(type);
+        }
+
+        private void AddExtensionMethods(Type type)
         {
             if (AlreadyAddedType(type))
                 return;
@@ -19,7 +29,6 @@ namespace StorEvil.Interpreter
             var publicStaticMethods = type.GetMethods(BindingFlags.Public | BindingFlags.Static);
             var extensionMethods =
                 publicStaticMethods.Where(methodInfo => methodInfo.IsStatic & methodInfo.GetParameters().Length > 0);
-
             
             foreach (var methodInfo in extensionMethods)
             {
@@ -28,25 +37,14 @@ namespace StorEvil.Interpreter
             }
         }
 
-        private static bool AlreadyAddedType(Type type)
+        private bool AlreadyAddedType(Type type)
         {
             return _addedTypes.Contains(type);
         }
 
-        private static readonly List<MethodInfo> _allExtensionMethods = new List<MethodInfo>();
-        private static readonly List<Type> _addedTypes = new List<Type>();
-
-        public ExtensionMethodHandler(AssemblyRegistry assemblyRegistry)
+        public IEnumerable<MethodInfo> GetExtensionMethodsFor(Type t)
         {
-            foreach (var type in assemblyRegistry.GetStaticClasses())
-            {
-                AddExtensionMethods(type);
-            }
-        }
-
-        public IEnumerable<MethodInfo> GetExtensionMethodsFor(Type _type)
-        {
-            return _allExtensionMethods.Where(m => m.GetParameters()[0].ParameterType.IsAssignableFrom(_type));
+            return _allExtensionMethods.Where(m => m.GetParameters()[0].ParameterType.IsAssignableFrom(t));
         }
 
         public void AddAssembly(Assembly assembly)

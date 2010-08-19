@@ -23,7 +23,7 @@ namespace StorEvil.Interpreter.Ambiguous_Match_Resolution
         {
             FakeResolver = MockRepository.GenerateMock<IAmbiguousMatchResolver>();
 
-            var factory = new InterpreterForTypeFactory(new ExtensionMethodHandler(new AssemblyRegistry()));
+            var factory = new InterpreterForTypeFactory(new AssemblyRegistry());
       
             ChainReturnedFromResolver = new InvocationChain();
             FakeResolver.Stub(x => x.ResolveMatch("", null)).IgnoreArguments().Return(ChainReturnedFromResolver);
@@ -57,7 +57,7 @@ namespace StorEvil.Interpreter.Ambiguous_Match_Resolution
         [TestFixtureSetUp]
         public void SetupContext()
         {
-            var interpreterForTypeFactory = new InterpreterForTypeFactory(new ExtensionMethodHandler(new AssemblyRegistry()));
+            var interpreterForTypeFactory = new InterpreterForTypeFactory(new AssemblyRegistry());
             var interpreter = new ScenarioInterpreterForType(typeof(AmbiguousTestClass), new MethodInfo[] {},interpreterForTypeFactory);
 
            Chains = interpreter.GetChains("Foo bar baz");

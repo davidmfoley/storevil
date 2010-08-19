@@ -11,7 +11,7 @@ namespace StorEvil.Interpreter
 {
     public class StandardScenarioInterpreter : ScenarioInterpreter
     {       
-        public StandardScenarioInterpreter() : base(new InterpreterForTypeFactory(new ExtensionMethodHandler(new AssemblyRegistry(new string[0]))), new MostRecentlyUsedContext())
+        public StandardScenarioInterpreter(AssemblyRegistry assemblyRegistry) : base(new InterpreterForTypeFactory(assemblyRegistry), new MostRecentlyUsedContext())
         {
         }
     }

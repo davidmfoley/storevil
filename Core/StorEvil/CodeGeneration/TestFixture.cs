@@ -8,7 +8,7 @@ namespace StorEvil.CodeGeneration
 {
     public class TestFixture
     {
-        private StoryContext _storyContext;
+        private StoryContext _sessionContext;
         private ScenarioContext _scenarioContext;
         private StandardScenarioInterpreter _interpreter;
         private ScenarioLineExecuter _scenarioLineExecuter;
@@ -22,21 +22,20 @@ namespace StorEvil.CodeGeneration
         {
             _eventBus = StorEvilEvents.Bus;
 
-            _storyContext = TestSession.SessionContext(GetType().Assembly.Location).GetContextForStory();
-            _interpreter = new StandardScenarioInterpreter();
+            _sessionContext = TestSession.SessionContext(GetType().Assembly.Location).GetContextForStory();
+            _interpreter = new StandardScenarioInterpreter(new AssemblyRegistry(new string[0]));
             _scenarioLineExecuter = new ScenarioLineExecuter(_interpreter, _eventBus);
         }
 
         protected void SetListener(object listener)
-        {
-            
+        {            
             StorEvilEvents.Bus.Register(listener);
            // _listener = listener;
         }
 
         protected void BeforeEach()
         {
-            _scenarioContext = _storyContext.GetScenarioContext();
+            _scenarioContext = _sessionContext.GetScenarioContext();
             _lastStatus = LineStatus.Passed;
         }
 
@@ -67,7 +66,7 @@ namespace StorEvil.CodeGeneration
         }
         protected void AfterAll()
         {
-            _storyContext.Dispose();
+            _sessionContext.Dispose();
 
             // hack for now
             TestSession.EndSession();

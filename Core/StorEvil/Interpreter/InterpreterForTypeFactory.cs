@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using StorEvil.Context;
 
 namespace StorEvil.Interpreter
 {
@@ -11,11 +12,11 @@ namespace StorEvil.Interpreter
     public class InterpreterForTypeFactory : IInterpreterForTypeFactory
     {
         private readonly ExtensionMethodHandler _extensionMethodHandler;
-        static readonly Dictionary<Type, ScenarioInterpreterForType> _interpreterCache = new Dictionary<Type, ScenarioInterpreterForType>();
+        private readonly Dictionary<Type, ScenarioInterpreterForType> _interpreterCache = new Dictionary<Type, ScenarioInterpreterForType>();
 
-        public InterpreterForTypeFactory(ExtensionMethodHandler extensionMethodHandler)
+        public InterpreterForTypeFactory(AssemblyRegistry assemblyRegistry)
         {
-            _extensionMethodHandler = extensionMethodHandler;
+            _extensionMethodHandler = new ExtensionMethodHandler(assemblyRegistry);
         }
 
         public ScenarioInterpreterForType GetInterpreterForType(Type t)
