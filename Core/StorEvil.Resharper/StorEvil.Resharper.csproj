@@ -113,6 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Debugging.txt" />
+    <Content Include="Installing_StorEvil_ReSharperPlugIn.txt" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

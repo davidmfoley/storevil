@@ -1,0 +1,6 @@
+﻿Copy these files to the following directory:
+
+C:\Users\{Your User Name}\AppData\Roaming\JetBrains\ReSharper\v5.1\vs10.0\Plugins\
+
+You must make sure that you are using the same version of StorEvil.Core.DLL that is referenced in your StorEvil C# project.
+
