@@ -83,22 +83,27 @@ namespace StorEvil.Assertions
 
         public static void ShouldBeGreaterThan<T>(this T actual, T expected) where T : IComparable
         {
-            Assert.That(actual.CompareTo(expected) > 0);
+            Assert.IsTrue(actual.CompareTo(expected) > 0, BuildComparisonMessage("greater than", actual, expected));       
         }
 
         public static void ShouldBeLessThan<T>(this T actual, T expected) where T : IComparable
         {
-            Assert.That(actual.CompareTo(expected) < 0);
+            Assert.IsTrue(actual.CompareTo(expected) < 0, BuildComparisonMessage("less than", actual, expected));       
         }
 
         public static void ShouldBeLessThanOrEqualTo<T>(this T actual, T expected) where T : IComparable
         {
-            Assert.That(actual.CompareTo(expected) <= 0);
+            Assert.IsTrue(actual.CompareTo(expected) <= 0, BuildComparisonMessage("less than or equal to", actual, expected));
         }
 
         public static void ShouldBeGreaterThanOrEqualTo<T>(this T actual, T expected) where T : IComparable
         {
-            Assert.That(actual.CompareTo(expected) >= 0);
+            Assert.IsTrue(actual.CompareTo(expected) >= 0, BuildComparisonMessage("greater than or equal to", actual, expected));
+        }
+
+        private static string BuildComparisonMessage(string comparison, IComparable actual, IComparable expected)
+        {
+            return "expected " + actual + " to be " + comparison + " " + expected;
         }
 
         public static void ShouldMatch(this string actual, string regex)
@@ -115,7 +120,13 @@ namespace StorEvil.Assertions
 
         public static void ShouldContain<T>(this IEnumerable<T> collection, T expected)
         {
-            collection.Contains(expected).ShouldBe(true);
+            Assert.IsTrue(collection.Contains(expected), BuildContainsMessage(expected, collection.Cast<object>()));
+        }
+
+        private static string BuildContainsMessage(object expected, IEnumerable<object> collection)
+        {
+            var collectionMembers = collection.Select(x => x.ToString()).ToArray();
+            return "Did not find the expected item in the collection:\r\nExpected: \r\n" + expected + "\r\nActual:\r\n" + string.Join("\r\n ", collectionMembers);
         }
     }
 
@@ -156,14 +167,10 @@ namespace StorEvil.Assertions
         {
             throw new AssertionException("Failed");
         }
-    }
 
-    [Serializable]
-    public class AssertionException : Exception
-    {
-        public AssertionException(string message) : base(message)
+        public static void That(bool b, string buildComparisonMessage)
         {
-            
+            throw new NotImplementedException();
         }
     }
 }

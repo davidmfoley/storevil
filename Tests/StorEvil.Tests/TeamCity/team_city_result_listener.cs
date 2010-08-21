@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Core;
 using StorEvil.Events;
+using StorEvil.Assertions;
 
 namespace StorEvil.TeamCity
 {
@@ -27,7 +28,7 @@ namespace StorEvil.TeamCity
         {
             listener.Handle(new StoryStarting() {Story = GetStory("Feature   : my \n summary")});
 
-            messageWriter.AssertWasCalled(mw => mw.Write("##teamcity[testSuiteStarted name='my summary']"));
+            WrittenMessagesShouldContain("##teamcity[testSuiteStarted name='my summary']");
         }
 
         [Test]
@@ -35,7 +36,7 @@ namespace StorEvil.TeamCity
         {
             listener.Handle(new StoryFinished() { Story = GetStory("Feature   : my \n summary \n    ")});
 
-            messageWriter.AssertWasCalled(mw => mw.Write("##teamcity[testSuiteFinished name='my summary']"));
+            WrittenMessagesShouldContain("##teamcity[testSuiteFinished name='my summary']");
         }
 
         [Test]
@@ -43,7 +44,7 @@ namespace StorEvil.TeamCity
         {
             listener.Handle(new ScenarioStarting() { Scenario = GetScenario("my scenario") });
 
-            messageWriter.AssertWasCalled(mw => mw.Write("##teamcity[testStarted name='my scenario']"));
+            WrittenMessagesShouldContain("##teamcity[testStarted name='my scenario']");
         }
 
         [Test]
@@ -51,7 +52,7 @@ namespace StorEvil.TeamCity
         {
             listener.Handle(new ScenarioFinished() { Scenario = GetScenario("my scenario"), Status = ExecutionStatus.Passed});
 
-            messageWriter.AssertWasCalled(mw => mw.Write("##teamcity[testFinished name='my scenario']"));
+           WrittenMessagesShouldContain("##teamcity[testFinished name='my scenario']");
         }
 
         [Test]
@@ -59,7 +60,13 @@ namespace StorEvil.TeamCity
         {
             listener.Handle(new LineExecuted() { Scenario = GetScenario("my scenario"), Status = ExecutionStatus.Failed, Message = "error message [ ] ' \r" });
 
-            messageWriter.AssertWasCalled(mw => mw.Write("##teamcity[testFailed name='my scenario' message='error message |[ |] |' |r' details='error message |[ |] |' |r']"));
+            WrittenMessagesShouldContain("##teamcity[testFailed name='my scenario' message='error message |[ |] |' |r' details='error message |[ |] |' |r']");
+        }
+
+        private void WrittenMessagesShouldContain(string teamCityMessage)
+        {
+            var writtenMessages = messageWriter.GetArgumentsForCallsMadeOn(x => x.Write(Arg<string>.Is.Anything));
+            writtenMessages.Select(x=>x[0]).ShouldContain(teamCityMessage);          
         }
 
         [Test]
@@ -69,6 +76,8 @@ namespace StorEvil.TeamCity
 
             messageWriter.AssertWasCalled(mw => mw.Write("##teamcity[testIgnored name='my scenario' message='my suggestion']"));
         }
+
+        
 
         private Scenario GetScenario(string name)
         {
