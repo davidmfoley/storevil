@@ -73,8 +73,7 @@ namespace StorEvil.InPlace
                             Status = ExecutionStatus.Failed,
                             SuccessPart = successPart.Trim(),
                             FailedPart = invocation.MatchedText, 
-                            Message = GetExceptionMessage(ex),
-                            Exception = GetRootException(ex)
+                            ExceptionInfo = GetExceptionMessage(ex)
                         });
                     }
 
@@ -109,7 +108,7 @@ namespace StorEvil.InPlace
         {
             var ex = exception.InnerException ?? exception;
 
-            var noStackTrace = ex.GetType().Name.Contains("Assertion");
+            var noStackTrace = false; // ex.GetType().Name.Contains("Assertion");
 
             return noStackTrace ? ex.Message : ex.Message + "\r\n" + ex;
         }

@@ -58,15 +58,9 @@ namespace StorEvil.TeamCity
         [Test]
         public void should_output_correct_team_city_message_when_a_scenario_execution_failed()
         {
-            listener.Handle(new LineExecuted() { Scenario = GetScenario("my scenario"), Status = ExecutionStatus.Failed, Message = "error message [ ] ' \r" });
+            listener.Handle(new LineExecuted() { Scenario = GetScenario("my scenario"), Status = ExecutionStatus.Failed, ExceptionInfo = "error message [ ] ' \r" });
 
             WrittenMessagesShouldContain("##teamcity[testFailed name='my scenario' message='error message |[ |] |' |r' details='error message |[ |] |' |r']");
-        }
-
-        private void WrittenMessagesShouldContain(string teamCityMessage)
-        {
-            var writtenMessages = messageWriter.GetArgumentsForCallsMadeOn(x => x.Write(Arg<string>.Is.Anything));
-            writtenMessages.Select(x=>x[0]).ShouldContain(teamCityMessage);          
         }
 
         [Test]
@@ -77,7 +71,11 @@ namespace StorEvil.TeamCity
             messageWriter.AssertWasCalled(mw => mw.Write("##teamcity[testIgnored name='my scenario' message='my suggestion']"));
         }
 
-        
+        private void WrittenMessagesShouldContain(string teamCityMessage)
+        {
+            var writtenMessages = messageWriter.GetArgumentsForCallsMadeOn(x => x.Write(Arg<string>.Is.Anything));
+            writtenMessages.Select(x => x[0]).ShouldContain(teamCityMessage);
+        }
 
         private Scenario GetScenario(string name)
         {

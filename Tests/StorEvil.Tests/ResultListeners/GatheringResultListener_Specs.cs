@@ -27,7 +27,7 @@ namespace StorEvil.ResultListeners.GatheringResultListener_Specs
         {
             var failureScenario = new Scenario();
             Listener.Handle(new ScenarioStarting { Scenario = failureScenario });
-            Listener.Handle(new LineExecuted {SuccessPart = "success part", FailedPart = "failed part", Message = "failure message", Status = ExecutionStatus.Failed});
+            Listener.Handle(new LineExecuted {SuccessPart = "success part", FailedPart = "failed part", ExceptionInfo = "failure message", Status = ExecutionStatus.Failed});
         }
 
         protected void SimulatePendingScenario()
@@ -161,7 +161,7 @@ namespace StorEvil.ResultListeners.GatheringResultListener_Specs
             var testScenario = new Scenario();
             Listener.Handle(new ScenarioStarting { Scenario = testScenario });
 
-            Listener.Handle(new LineExecuted { Status = ExecutionStatus.Failed, SuccessPart = "success-part", FailedPart = "failed-part",Message = "failure-message" });            
+            Listener.Handle(new LineExecuted { Status = ExecutionStatus.Failed, SuccessPart = "success-part", FailedPart = "failed-part",ExceptionInfo = "failure-message" });            
             Listener.Handle(new ScenarioFinished{Status = ExecutionStatus.Failed});
         }
 
@@ -263,7 +263,7 @@ namespace StorEvil.ResultListeners.GatheringResultListener_Specs
 
             var failedScenario = new Scenario();
             Listener.Handle(new ScenarioStarting { Scenario = failedScenario});
-            Listener.Handle(new LineExecuted {Status = ExecutionStatus.Failed, SuccessPart = "success-part", FailedPart = "failed-part", Message = "failure-message" });
+            Listener.Handle(new LineExecuted {Status = ExecutionStatus.Failed, SuccessPart = "success-part", FailedPart = "failed-part", ExceptionInfo = "failure-message" });
             Listener.Handle(new ScenarioFinished() { Status = ExecutionStatus.Failed });
             SimulateSuccessfulScenario("scenario-id", "scenario-name", new[] {"line1", "line2"});
         }

@@ -12,9 +12,8 @@ namespace StorEvil.Events
 
         public string SuccessPart = "";
         public string FailedPart = "";
-        public string Message = "";
+        public string ExceptionInfo = "";
         public string Suggestion = "";
-        public Scenario Scenario;
-        public Exception Exception;
+        public Scenario Scenario;       
     }
 }

@@ -49,9 +49,7 @@ namespace StorEvil.TeamCity
         {
             if (e.Status == ExecutionStatus.Failed)
             {
-                var exceptionMessage = e.Message + Environment.NewLine + (e.Exception != null ? e.Exception.ToString() : "");
-
-                var message = Format(TestFailedMessagePattern, e.Scenario.Name, exceptionMessage);
+                var message = Format(TestFailedMessagePattern, e.Scenario.Name, e.ExceptionInfo);
                 SendTeamCityServiceMessage(message);
             }
             else if (e.Status == ExecutionStatus.Pending)
