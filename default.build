@@ -5,10 +5,17 @@
     <ExamplesDirectory>$(MSBuildProjectDirectory)\Examples</ExamplesDirectory>
     <PackageDirectory>$(OutputPath)\Package</PackageDirectory>
 
-    <ResharperBinPath>C:\Program Files (x86)\JetBrains\ReSharper\v5.1\Bin</ResharperBinPath>
+    
     <JetBrainsLibPath>$(MSBuildProjectDirectory)\Lib\JetBrains</JetBrainsLibPath>
   </PropertyGroup>
-
+  
+  <PropertyGroup Condition="'$(ResharperBinPath)' == '' And Exists('C:\Program Files (x86)\JetBrains\ReSharper\v5.1\Bin')">
+    <ResharperBinPath>C:\Program Files (x86)\JetBrains\ReSharper\v5.1\Bin</ResharperBinPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(ResharperBinPath)' == '' And Exists('C:\Program Files\JetBrains\ReSharper\v5.1\Bin')">
+    <ResharperBinPath>C:\Program Files\JetBrains\ReSharper\v5.1\Bin</ResharperBinPath>
+  </PropertyGroup>
+  
   <Target Name="Default">
     <CallTarget Targets="CleanOutput" />
     <CallTarget Targets="BuildCore" />
@@ -83,8 +90,9 @@
   </Target>
 
   <Target Name="BuildReSharper" DependsOnTargets="BuildCore">
-    <Message Text="Checking for ReSharper binaries in: $(ReSharperBinPath) (you can change this using the ReSharperBinPath property) "/>
-    <CallTarget Targets ="CopyReSharperDlls"  Condition="Exists('$(ReSharperBinPath)\JetBrains.Platform.ReSharper.Metadata.dll')" />
+    <Message Text="Checking for ReSharper binaries in: $(ReSharperBinPath) (you can override this using the ReSharperBinPath property) " Condition="'$(ReSharperBinPath)' != ''"/>
+    <Message Text="Could not find ReSharper binaries! You can use the ReSharperBinPath property to specify the location." Condition="'$(ReSharperBinPath)' == ''"/>
+    <CallTarget Targets ="CopyReSharperDlls"  Condition="'$(ReSharperBinPath)' != '' And Exists('$(ReSharperBinPath)\JetBrains.Platform.ReSharper.Metadata.dll')" />
     <Message Text="Did not find ReSharper binaries in: $(ReSharperBinPath)"  Condition="!Exists('$(ReSharperBinPath)\JetBrains.Platform.ReSharper.Metadata.dll')" />
     <Message Text="Checking for existing ReSharper binaries in: $(JetBrainsLibPath)"  Condition="!Exists('$(ReSharperBinPath)\JetBrains.Platform.ReSharper.Metadata.dll')" />
     <Message Text="Skipping ReSharper build: can't find ReSharper assemblies. You can set the ReSharperBinPath property to fix this." Condition="!Exists('$(JetBrainsLibPath)\JetBrains.Platform.ReSharper.Metadata.dll')"/>
@@ -128,7 +136,7 @@
   </Target>
   
   <Target Name="CleanOutput">
-    <RemoveDir Directories="$(OutputPath)" Condition="Exists($(OutputPath))" />
+    <RemoveDir Directories="$(OutputPath)" Condition="Exists($(OutputPath))" ContinueOnError="true" />
 
     <MakeDir Directories="$(OutputPath)" />
 
