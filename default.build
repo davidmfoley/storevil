@@ -48,10 +48,14 @@
     <MakeDir Directories="$(PackageDirectory)\resharper-plugin" Condition="Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')"/>
     <Copy SourceFiles="$(OutputPath)\Core\StorEvil.Core.DLL" DestinationFolder="$(PackageDirectory)\resharper-plugin" Condition="Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')"/>
     <Copy SourceFiles="$(OutputPath)\ReSharper\StorEvil.ReSharper.DLL" DestinationFolder="$(PackageDirectory)\resharper-plugin" Condition="Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')" />
-
+    <Copy SourceFiles="$(OutputPath)\MsBuildTask\Funq.DLL" DestinationFolder="$(PackageDirectory)\resharper-plugin" Condition="Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')"/>
+    <Copy SourceFiles="$(OutputPath)\MsBuildTask\Spark.DLL" DestinationFolder="$(PackageDirectory)\resharper-plugin" Condition="Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')"/>
+    
     <Copy SourceFiles="$(OutputPath)\MsBuildTask\StorEvil.MsBuild.DLL" DestinationFolder="$(PackageDirectory)\msbuild-task" />
     <Copy SourceFiles="$(OutputPath)\MsBuildTask\StorEvil.Core.DLL" DestinationFolder="$(PackageDirectory)\msbuild-task" />
     <Copy SourceFiles="$(OutputPath)\MsBuildTask\Funq.DLL" DestinationFolder="$(PackageDirectory)\msbuild-task" />
+    <Copy SourceFiles="$(OutputPath)\MsBuildTask\Spark.DLL" DestinationFolder="$(PackageDirectory)\msbuild-task" />
+
 
     <Message Text="StorEvil binaries created:" />
     <Message Text="$(PackageDirectory)" />
