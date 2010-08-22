@@ -20,7 +20,7 @@ namespace StorEvil.NUnit
             _context = context;
         }
 
-        public void HandleStories(IEnumerable<Story> stories)
+        public JobResult HandleStories(IEnumerable<Story> stories)
         {
             foreach (var story in stories)
             {
@@ -28,6 +28,10 @@ namespace StorEvil.NUnit
 
                 TestFixtureWriter.WriteFixture(story.Id, sourceCode);
             }
+
+            Finished();
+
+            return GetResult();
         }
 
         public void Finished()

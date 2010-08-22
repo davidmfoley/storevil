@@ -6,7 +6,7 @@ using StorEvil.Events;
 namespace StorEvil.InPlace.Compiled
 {
     [TestFixture]
-    public class Chaining_results_that_should_result_in_Failure
+    public class Chaining_results_that_should_result_in_Failure_
         : StorEvil.InPlace.Chaining_results_that_should_result_in_Failure, UsingCompiledRunner { }
 
 }
@@ -14,12 +14,14 @@ namespace StorEvil.InPlace.Compiled
 namespace StorEvil.InPlace.NonCompiled
 {
     [TestFixture]
-    public class Chaining_results_that_should_result_in_Failure
+    public class Chaining_results_that_should_result_in_Failure_
         : StorEvil.InPlace.Chaining_results_that_should_result_in_Failure, UsingNonCompiledRunner { }
 
 }
+
 namespace StorEvil.InPlace
 {
+    [TestFixture]
     public abstract class Chaining_results_that_should_result_in_Failure : InPlaceRunnerSpec<InPlaceRunnerTestContext>
     {
         private readonly Scenario TestScenario = BuildScenario("test", new[] {"sub context property should be false"});
@@ -37,6 +39,5 @@ namespace StorEvil.InPlace
         {
             AssertWasRaised<LineExecuted>(x=>x.Status == ExecutionStatus.Failed);            
         }
-
     }
 }

@@ -15,9 +15,8 @@ namespace StorEvil.CodeGeneration
     {
         private static SessionContext _sessionContext;
         private static List<Assembly> _assemblies = new List<Assembly>();
-        private static ExtensionMethodHandler _extensionMethodHandler;
 
-        private static NUnitAssertWrapper _nunitAssertWrapper = new NUnitAssertWrapper();
+        public static TestSessionContextFactory TestSessionContextFactory = new TestSessionContextFactory();
 
         public static void ShutDown()
         {
@@ -53,30 +52,51 @@ namespace StorEvil.CodeGeneration
 
         private static SessionContext GetSessionContext(string currentAssemblyLocation)
         {
-           
-            var configReader = new FilesystemConfigReader(new Filesystem(), new ConfigParser());     
+            return TestSessionContextFactory.GetSessionContext(currentAssemblyLocation, _assemblies);
+        }
 
+        public static StandardScenarioInterpreter GetInterpreter(string currentAssemblyLocation)
+        {
+            AssemblyRegistry assemblyRegistry = TestSessionContextFactory.GetAssemblyRegistry(currentAssemblyLocation, _assemblies);
+
+            return new StandardScenarioInterpreter(assemblyRegistry);
+        }
+    }
+
+    public class TestSessionContextFactory
+    {
+        private static NUnitAssertWrapper _nunitAssertWrapper = new NUnitAssertWrapper();
+
+        public virtual SessionContext GetSessionContext(string currentAssemblyLocation, IEnumerable<Assembly> assemblies)
+        {
+            
+
+            AssemblyRegistry assemblyRegistry = GetAssemblyRegistry(currentAssemblyLocation, assemblies);
+
+            ParameterConverter.AddCustomConverters(assemblyRegistry);
+
+           
+            return new SessionContext(assemblyRegistry);
+            
+        }
+
+        public AssemblyRegistry GetAssemblyRegistry(string currentAssemblyLocation, IEnumerable<Assembly> assemblies)
+        {
+            var configReader = new FilesystemConfigReader(new Filesystem(), new ConfigParser());
             ConfigSettings settings = configReader.GetConfig(currentAssemblyLocation);
             if (!settings.AssemblyLocations.Any())
                 settings = configReader.GetConfig(Directory.GetCurrentDirectory());
 
-            if (!settings.AssemblyLocations.Any() && !_assemblies.Any())
+            if (!settings.AssemblyLocations.Any() && !assemblies.Any())
             {
                 var message = "No storevil assemblies were found.\r\nCurrent location:"
-                    + currentAssemblyLocation + "\r\nCurrent directory:"
-                    + Directory.GetCurrentDirectory();
+                              + currentAssemblyLocation + "\r\nCurrent directory:"
+                              + Directory.GetCurrentDirectory();
 
                 _nunitAssertWrapper.Ignore(message);
             }
 
-            var assemblyRegistry = new AssemblyRegistry(_assemblies.Select(x=>x.Location).Union(settings.AssemblyLocations));
-
-            ParameterConverter.AddCustomConverters(assemblyRegistry);
-
-            _sessionContext = new SessionContext(assemblyRegistry);
-            _extensionMethodHandler = new ExtensionMethodHandler(assemblyRegistry);
-
-            return _sessionContext;
+            return new AssemblyRegistry(assemblies.Select(x => x.Location).Union(settings.AssemblyLocations));
         }
     }
 }

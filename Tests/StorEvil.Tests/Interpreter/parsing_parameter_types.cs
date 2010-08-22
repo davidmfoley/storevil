@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 using StorEvil.Assertions;
 using StorEvil.Interpreter.ParameterConverters;
-using StorEvil.Utility;
 
 namespace StorEvil.Interpreter.ParameterConverter_Specs
 {

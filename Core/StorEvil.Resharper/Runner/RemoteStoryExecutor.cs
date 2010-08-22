@@ -29,9 +29,10 @@ namespace StorEvil.Resharper.Runner
             _sessionContext = new SessionContext(assemblyRegistry);
 
             _eventBus = new EventBus();
+
+            new EventBusAutoRegistrar(_assemblyRegistry).InstallTo(_eventBus);
             _listener = new ResharperResultListener(_server);
           
-
             _resolver = new MostRecentlyUsedContext();
             _runner = BuildInPlaceRunner(_resolver);
 
@@ -60,7 +61,6 @@ namespace StorEvil.Resharper.Runner
                     scenarioTasks.Add(scenarioTask);
                 }
 
-               
                 stories.Add(new Story(rst.Id, rst.Id, scenarios));
             }
 
@@ -104,14 +104,8 @@ namespace StorEvil.Resharper.Runner
         private IStoryHandler BuildInPlaceRunner(IAmbiguousMatchResolver resolver)
         {
             IScenarioPreprocessor preprocessor = new ScenarioPreprocessor();
-
-         
-            //var interpreterForTypeFactory = new InterpreterForTypeFactory(new ExtensionMethodHandler(_assemblyRegistry));
-
-            //var scenarioInterpreter = new ScenarioInterpreter(interpreterForTypeFactory, resolver);
-
-            //return new InPlaceStoryRunner(preprocessor, scenarioInterpreter, new IncludeAllFilter(), _sessionContext, _eventBus );
-            return new InPlaceCompilingStoryRunner(new RemoteHandlerFactory(new AssemblyGenerator(), _assemblyRegistry, new Filesystem()),  preprocessor, new IncludeAllFilter(), _sessionContext, _eventBus);
+            var sameDomainHandlerFactory = new SameDomainHandlerFactory(new AssemblyGenerator(), _assemblyRegistry,new Filesystem());
+            return new InPlaceCompilingStoryRunner(sameDomainHandlerFactory, preprocessor, new IncludeAllFilter(), _sessionContext, _eventBus);
         }
 
     }

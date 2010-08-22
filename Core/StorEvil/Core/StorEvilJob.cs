@@ -19,13 +19,8 @@ namespace StorEvil.Core
 
         public int Run()
         {       
-            Handler.HandleStories(StoryProvider.GetStories());
-            
-
-            Handler.Finished();
-            var results = Handler.GetResult();
-
-            return results.Failed;
+            return Handler.HandleStories(StoryProvider.GetStories()).Failed;
+           
         }
     }
 

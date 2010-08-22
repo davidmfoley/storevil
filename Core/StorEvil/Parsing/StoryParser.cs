@@ -83,9 +83,9 @@ namespace StorEvil.Parsing
                 return;
             }
 
-            if (IsTableRow(line.Text) && !_currentScenario.IsOutline)
+            if (IsTableRow(line.Text) && _currentScenario != null && !_currentScenario.IsOutline)
             {
-                if (_currentScenario != null && _currentScenario.Lines.Count > 0)
+                if ( _currentScenario.Lines.Count > 0)
                 {
                     var last = _currentScenario.Lines.Last();
                     _currentScenario.Lines = _currentScenario.Lines.GetRange(0, _currentScenario.Lines.Count() - 1);

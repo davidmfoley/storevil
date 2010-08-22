@@ -1,6 +1,4 @@
-﻿using System;
-using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
+﻿using NUnit.Framework;  
 using StorEvil;
 
 namespace Tutorial
@@ -14,7 +12,7 @@ namespace Tutorial
         {   
             _float = f;
         }
-
+ 
         public void And_the_result_should_be_between_a_and_b(decimal a, decimal b)
         {
             Assert.That(a, Is.LessThan(_float));

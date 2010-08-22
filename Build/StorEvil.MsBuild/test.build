@@ -1,0 +1,17 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5" DefaultTargets="Default">
+ <UsingTask TaskName="StorEvilTask" AssemblyFile="StorEvil.MsBuild.DLL"/>
+  
+  <PropertyGroup>
+    
+    <StoryPath></StoryPath>
+    <StoryExtensions>.feature</StoryExtensions>
+  </PropertyGroup>
+  
+  <Target Name="Default">
+    <StorEvilTask 
+      Assemblies="@(Assemblies)"
+      StoryPath="$(StoryPath)"
+      StoryExtensions="$(StoryExtensions)"
+     />
+  </Target>
+</Project>

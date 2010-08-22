@@ -1,0 +1,127 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5" DefaultTargets="Default">
+
+  <UsingTask TaskName="StorEvilTask" AssemblyFile="$(MSBuildProjectDirectory)\_build\MsBuildTask\StorEvil.MsBuild.DLL"/>
+
+  <PropertyGroup>
+    <BuildDir>_build</BuildDir>
+    <OutputPath>$(MSBuildProjectDirectory)\_build</OutputPath>
+    <ExamplesDirectory>$(MSBuildProjectDirectory)\Examples</ExamplesDirectory>
+    <PackageDirectory>$(OutputPath)\Package</PackageDirectory>
+
+    <ResharperBinPath>C:\Program Files (x86)\JetBrains\ReSharper\v5.1\Bin</ResharperBinPath>
+    <JetBrainsLibPath>$(MSBuildProjectDirectory)\Lib\JetBrains</JetBrainsLibPath>
+  </PropertyGroup>
+  
+  <!-- runs an example project in In-place, Debug, and NUnit modes-->
+  <Target Name="RunExample">
+    <PropertyGroup>
+      <ExpectedFailures Condition=" '$(ExpectedFailures)'=='' ">0</ExpectedFailures>
+      <ExpectedPending Condition=" '$(ExpectedPending)'=='' ">0</ExpectedPending>
+    </PropertyGroup>
+    <Message Text="RunExample $(ExampleProjectDirectory)/$(ExampleProject)"/>
+    <MSBuild
+			Projects="$(ExampleProjectDirectory)\$(ExampleProject)"
+			Properties="OutputPath=$(OutputPath)\Examples"
+        >
+      <Output
+                TaskParameter="TargetOutputs"
+                ItemName="ExampleAssembly" />
+    </MSBuild>
+
+    
+    <Message Text="Executing in debug mode: $(ExampleProjectDirectory)/$(ExampleProject)"/>
+    <Exec
+     WorkingDirectory="$(ExampleProjectDirectory)"
+     Command="$(MSBuildProjectDirectory)\_build\Core\StorEvil.exe debug -a @(ExampleAssembly) $(OutputPath)\Core\StorEvil.Assertions.dll"
+     IgnoreExitCode ="true"
+     >
+      <Output
+        TaskParameter="ExitCode"
+        ItemName="DebugExitCode" />
+    </Exec>
+    
+    <Exec
+       Command="copy /y $(MSBuildProjectDirectory)\Lib\Test\nunit.framework.dll $(OutputPath)\Examples\" ContinueOnError="true"/>
+
+    <Exec
+      WorkingDirectory="$(ExampleProjectDirectory)"
+      Command="copy $(ExampleProjectDirectory)\storevil.config $(OutputPath)\Examples\"/>
+
+    <Message Text="Executing in-place: $(ExampleProjectDirectory)/$(ExampleProject)"/>
+    <Exec
+     WorkingDirectory="$(ExampleProjectDirectory)"
+     Command="$(MSBuildProjectDirectory)\_build\Core\StorEvil.exe execute -a @(ExampleAssembly) $(OutputPath)\Core\StorEvil.Assertions.dll"
+     IgnoreExitCode ="true"
+     >
+      <Output
+        TaskParameter="ExitCode"
+        ItemName="InPlaceExitCode" />
+    </Exec>
+
+    <Message Text="Executing in NUnit: $(ExampleProjectDirectory)/$(ExampleProject)"/>
+
+    <Exec
+     WorkingDirectory="$(ExampleProjectDirectory)"
+     Command="$(MSBuildProjectDirectory)\_build\Core\StorEvil.exe nunit --destination $(OutputPath)\Examples\Temp.cs -a @(ExampleAssembly) $(OutputPath)\Core\StorEvil.Assertions.dll"/>
+
+    <CSC
+			Sources="$(MSBuildProjectDirectory)\_build\Examples\Temp.cs"
+			OutputAssembly="$(MSBuildProjectDirectory)\_build\Examples\Temp.dll"
+			EmitDebugInformation="true"
+			References="@(ExampleAssembly);$(MSBuildProjectDirectory)\Lib\Test\nunit.framework.dll;$(MSBuildProjectDirectory)\_build\Core\StorEvil.Core.dll;$(MSBuildProjectDirectory)\_build\Core\StorEvil.Assertions.dll"
+			TargetType="library"
+			/>
+
+   
+    
+    <Exec Command="$(MSBuildProjectDirectory)\Tools\NUnit\nunit-console.exe $(MSBuildProjectDirectory)\_build\Examples\Temp.dll /xml=$(MSBuildProjectDirectory)\_build\TestResults_$(ExampleProject).xml" IgnoreExitCode ="true">
+      <Output
+          TaskParameter="ExitCode"
+          ItemName="NUnitExitCode" />
+    </Exec>
+
+   
+    <Message Text="Executing using StorEvil MSBuild task: $(ExampleProjectDirectory)/$(ExampleProject)"/>
+
+    <CreateProperty Value="@(ExampleAssembly)">
+      <Output TaskParameter="Value" PropertyName="ExampleAssembly" />
+    </CreateProperty>
+    
+    <StorEvilTask
+      Assemblies="$(ExampleAssembly);$(MSBuildProjectDirectory)\_build\Core\StorEvil.Assertions.dll"
+      StoryPath="$(ExampleProjectDirectory)"
+      StoryExtensions=".feature"
+      ConsoleMode="NoColor"
+      ContinueOnError="True">
+      <Output
+          TaskParameter="Failed"
+          ItemName="MsBuildFailures" />
+      <Output
+          TaskParameter="Pending"
+          ItemName="MsBuildPending" />
+    </StorEvilTask>
+
+
+    <Error
+            Text="NUnit failures: Expected $(ExpectedFailures) but got @(NUnitExitCode)"
+            Condition="'$(ExpectedFailures)' != '@(NUnitExitCode)'" />
+
+    <Error
+           Text="In place failures: Expected $(ExpectedFailures) but got @(InPlaceExitCode)"
+           Condition="'$(ExpectedFailures)' != '@(InPlaceExitCode)'" />
+
+    <Error
+          Text="Debug mode failures: Expected $(ExpectedFailures) but got @(DebugExitCode)"
+          Condition="'$(ExpectedFailures)' != '@(DebugExitCode)'" />
+
+    <Error
+          Text="MsBuild mode pending: Expected $(ExpectedPending) but got @(MsBuildPending)"
+          Condition="'$(MsBuildPending)' != '@(ExpectedPending)'" />
+    
+    <Error
+         Text="MsBuild mode failures: Expected $(ExpectedFailures) but got @(MsBuildFailures)"
+         Condition="'@(ExpectedFailures)' != '$(MsBuildFailures)'" />
+
+   
+  </Target>
+</Project>

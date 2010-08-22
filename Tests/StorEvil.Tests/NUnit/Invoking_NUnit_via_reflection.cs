@@ -1,6 +1,5 @@
 ﻿using System;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 using StorEvil.CodeGeneration;
 
 namespace StorEvil.NUnit

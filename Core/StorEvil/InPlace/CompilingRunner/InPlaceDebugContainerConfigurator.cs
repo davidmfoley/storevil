@@ -14,7 +14,7 @@ namespace StorEvil.InPlace
         {
             container.EasyRegister<IStoryHandler, InPlaceCompilingStoryRunner>();
             container.EasyRegister<IStorEvilJob, StorEvilJob>();
-            container.EasyRegister<IRemoteHandlerFactory, RemoteHandlerFactory>();
+            container.EasyRegister<IRemoteHandlerFactory, SameDomainHandlerFactory>();
             container.EasyRegister<AssemblyGenerator>();
 
             container.Register<IStoryFilter>(new TagFilter(customSettings.Tags ?? new string[0]));

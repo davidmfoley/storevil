@@ -12,7 +12,7 @@ namespace StorEvil.Events
     }
 
     
-    public class EventBus : MarshalByRefObject, IEventBus
+    public class EventBus : MarshalByRefObject, IEventBus, IDisposable
     {      
         private Dictionary<Type, List<object>> _handlersByEvent = new Dictionary<Type, List<object>>();
         private readonly List<object> _handlers = new List<object>();
@@ -73,6 +73,17 @@ namespace StorEvil.Events
                 handler.Handle(e);
                 DebugTrace.Trace("EventBus", " ... handled by: " + handler.GetType().FullName);                
             }
+        }
+
+        public void Dispose()
+        {
+            foreach (var handler in Handlers)
+            {
+                if (handler is IDisposable)
+                    ((IDisposable)handler).Dispose();
+            }
+
+            _handlers.Clear();
         }
     }
 }

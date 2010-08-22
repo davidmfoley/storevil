@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace StorEvil.CodeGeneration
 {
+    [DebuggerNonUserCode]
     public class NUnitAssertWrapper
     {
         private readonly string _nunitAssemblyName;

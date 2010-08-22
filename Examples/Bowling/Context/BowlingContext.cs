@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
+﻿using NUnit.Framework;
 using StorEvil;
 
 namespace Bowling.Context

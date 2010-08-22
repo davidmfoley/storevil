@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 using StorEvil.Assertions;
 using StorEvil.Core;
 using StorEvil.InPlace;
-using StorEvil.Utility;
 
 namespace StorEvil.CodeGeneration
 {
@@ -28,7 +26,7 @@ namespace StorEvil.CodeGeneration
 
             Result = Generator.Generate(story, "test_namespace");
 
-            CompiledAssembly = new CodeCompiler().CompileInMemory(Result, new[] { typeof(Scenario).Assembly, typeof(TestFixtureAttribute).Assembly });
+            CompiledAssembly = new CodeCompiler().CompileInMemory(Result, new[] { typeof(Scenario).Assembly.Location, typeof(TestFixtureAttribute).Assembly.Location });
             TestFixtureType = CompiledAssembly.GetTypes().First();
             Instance = Activator.CreateInstance(TestFixtureType);
         }
@@ -97,26 +95,6 @@ namespace StorEvil.CodeGeneration
         {
             return TestFixtureType.GetMethods()
                 .Where(m => m.GetCustomAttributes(typeof (TestAttribute), true).Any());
-        }
-    }
-
-    [TestFixture]
-    public class TestSession_Behavior
-    {       
-        [Test]
-        public void returns_same_context_for_multiple_calls()
-        {
-            var context = TestSession.SessionContext("foo");
-            Assert.That(context, Is.SameAs(TestSession.SessionContext("foo")));
-        }
-
-        [Test]
-        public void returns_different_context_after_ShutDown()
-        {
-            var context = TestSession.SessionContext("foo");
-            TestSession.ShutDown();
-
-            Assert.That(context, Is.Not.SameAs(TestSession.SessionContext("foo")));
         }
     }
 }

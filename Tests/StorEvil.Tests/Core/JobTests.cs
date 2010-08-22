@@ -32,22 +32,26 @@ namespace StorEvil.Core
             var job = GetJobWithMockDependencies();
 
             job.StoryProvider.Stub(x => x.GetStories()).Return(new[] {story});
-            job.Handler.Stub(x => x.GetResult()).Return(new JobResult());
+            StubHandleStoriesReturn(job, new JobResult {});
             job.Run();
             job.Handler.AssertWasCalled(x => x.HandleStories( new [] {story}));
         }
 
         [Test]
-        public void Notifies_Handler_When_Finished()
+        public void returns_failure_count()
         {
             var job = GetJobWithMockDependencies();
-            job.Handler.Stub(x => x.GetResult()).Return(new JobResult());
+            StubHandleStoriesReturn(job, new JobResult{Failed = 42});
             job.StoryProvider.Stub(x => x.GetStories())
                 .Return(new[] {new Story("test context", "summary", new List<IScenario>())});
 
-            job.Run();
+            job.Run().ShouldBe(42);
 
-            job.Handler.AssertWasCalled(x => x.Finished());
+        }
+
+        private void StubHandleStoriesReturn(StorEvilJob job, JobResult result)
+        {
+            job.Handler.Stub(x => x.HandleStories(Arg<IEnumerable<Story>>.Is.Anything)).Return(result);
         }
 
         private StorEvilJob GetJobWithMockDependencies()

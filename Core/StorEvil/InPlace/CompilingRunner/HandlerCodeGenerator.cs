@@ -149,9 +149,11 @@ namespace StorEvilTestAssembly {{
            _bus = bus;
         }}
 
-        public void HandleStories(IEnumerable<Story> stories) {{
+        public JobResult HandleStories(IEnumerable<Story> stories) {{
             foreach(var story in stories)
                 HandleStory(story);
+
+            return GetResult();
         }}
 
         public void HandleStory(Story story) {{   

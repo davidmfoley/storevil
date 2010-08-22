@@ -29,7 +29,7 @@ namespace StorEvil.NUnit
             FakeResolver = MockRepository.GenerateMock<IAmbiguousMatchResolver>();
 
             Generator =
-                new StubGenerator(new ScenarioInterpreter(new InterpreterForTypeFactory(new ExtensionMethodHandler(new AssemblyRegistry())), FakeResolver),
+                new StubGenerator(new ScenarioInterpreter(new InterpreterForTypeFactory(new AssemblyRegistry()), FakeResolver),
                                   new ImplementationHelper(), FakeWriter, new FakeSessionContext());
 
             TestStory = new Story("foo", "", new[]
@@ -39,9 +39,8 @@ namespace StorEvil.NUnit
                                                       TestHelper.BuildScenario("", new[] { "this line's weird, punctuation! should be: handled"})
                                                  });
 
-            Generator.HandleStory(TestStory);
-            Generator.Finished();
-
+            Generator.HandleStories(new[] {TestStory});
+          
             Suggestions = (string) FakeWriter.GetArgumentsForCallsMadeOn(x => x.Write(Arg<string>.Is.Anything))[0][0];            
         }
 

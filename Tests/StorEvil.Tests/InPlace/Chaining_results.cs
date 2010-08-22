@@ -1,12 +1,6 @@
-using System;
-using System.Linq;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
-using Rhino.Mocks;
 using StorEvil.Core;
 using StorEvil.Events;
-using StorEvil.InPlace;
-using StorEvil.Utility;
 
 namespace StorEvil.InPlace.Compiled
 {
