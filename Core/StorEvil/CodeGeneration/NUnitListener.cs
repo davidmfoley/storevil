@@ -13,7 +13,7 @@ namespace StorEvil.CodeGeneration
                 Debug.Write(eventToHandle.SuccessPart);
                 Debug.WriteLine("{ " + eventToHandle.FailedPart + " -- FAILED }");
 
-                _assertWrapper.Fail(eventToHandle.Message);
+                _assertWrapper.Fail(eventToHandle.ExceptionInfo);
             }
             else if (eventToHandle.Status == ExecutionStatus.Passed)
             {

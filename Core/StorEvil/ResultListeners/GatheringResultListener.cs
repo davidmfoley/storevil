@@ -67,7 +67,7 @@ namespace StorEvil.ResultListeners
                 if (!string.IsNullOrEmpty(eventToHandle.SuccessPart))
                     CurrentScenario().AddLine(ExecutionStatus.Passed, eventToHandle.SuccessPart);
                 CurrentScenario().AddLine(ExecutionStatus.Failed, eventToHandle.FailedPart);
-                CurrentScenario().FailureMessage = eventToHandle.Message;
+                CurrentScenario().FailureMessage = eventToHandle.ExceptionInfo;
             }
             else if (eventToHandle.Status == ExecutionStatus.Passed)
             {

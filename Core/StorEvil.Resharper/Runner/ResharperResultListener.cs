@@ -62,9 +62,9 @@ namespace StorEvil.Resharper.Runner
             {
                 Output(eventToHandle.SuccessPart + " [" + eventToHandle.FailedPart + "] -- failed");
                 Output("----------");
-                Output(eventToHandle.Message);
+                Output(eventToHandle.ExceptionInfo);
 
-                _server.TaskException(_remoteTask, new[] { new TaskException("StorEvil failure", eventToHandle.Message, ""), });
+                _server.TaskException(_remoteTask, new[] { new TaskException("StorEvil failure", eventToHandle.ExceptionInfo, ""), });
                 Result = TaskResult.Exception;
                 return;
             }

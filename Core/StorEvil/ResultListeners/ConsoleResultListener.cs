@@ -57,7 +57,8 @@ namespace StorEvil.ResultListeners
             {
                 DoWrite(ConsoleColor.Yellow, eventToHandle.SuccessPart);
                 DoWrite(ConsoleColor.Red, " " + eventToHandle.FailedPart + "\r\nFAILED\r\n",
-                        eventToHandle.Message + "\r\n");
+                        eventToHandle.ExceptionInfo + "\r\n");
+                
             }
         }
     }

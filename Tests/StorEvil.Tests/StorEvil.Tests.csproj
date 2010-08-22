@@ -106,6 +106,7 @@
     <Compile Include="NUnit\Stub_generation_specs.cs" />
     <Compile Include="NUnit\FakeSessionContext.cs" />
     <Compile Include="Parsing\ScenarioLineParser_Specs.cs" />
+    <Compile Include="TeamCity\team_city_result_listener.cs" />
     <Compile Include="Utility\container_tests.cs" />
     <Compile Include="Configuration\FilesystemConfigReaderTests.cs" />
     <Compile Include="Parsing\Filtering_stories_by_file_extension.cs" />
@@ -157,6 +158,10 @@
     <ProjectReference Include="..\..\Core\StorEvil\StorEvil.Core.csproj">
       <Project>{B86235CA-045F-4222-997C-A65E966C6F9B}</Project>
       <Name>StorEvil.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\StorEvil.TeamCity\StorEvil.TeamCity.csproj">
+      <Project>{E2C420AC-F5AC-4AC2-AA31-B498F040EDB9}</Project>
+      <Name>StorEvil.TeamCity</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

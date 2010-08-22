@@ -70,7 +70,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
 
         protected void SimulateStoryFailed(Scenario scenario, string successPart, string failedPart, string message)
         {
-            Writer.Handle(new LineExecuted { FailedPart = failedPart, SuccessPart = successPart, Status = ExecutionStatus.Failed, Message = message });
+            Writer.Handle(new LineExecuted { FailedPart = failedPart, SuccessPart = successPart, Status = ExecutionStatus.Failed, ExceptionInfo = message });
             Writer.Handle(new ScenarioFinished { Scenario = scenario, Status = ExecutionStatus.Failed });
         }
 
