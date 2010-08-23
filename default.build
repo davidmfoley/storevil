@@ -4,24 +4,21 @@
     <OutputPath>$(MSBuildProjectDirectory)\_build</OutputPath>
     <ExamplesDirectory>$(MSBuildProjectDirectory)\Examples</ExamplesDirectory>
     <PackageDirectory>$(OutputPath)\Package</PackageDirectory>
-
-    
     <JetBrainsLibPath>$(MSBuildProjectDirectory)\Lib\JetBrains</JetBrainsLibPath>
   </PropertyGroup>
-  
+
   <PropertyGroup Condition="'$(ResharperBinPath)' == '' And Exists('C:\Program Files (x86)\JetBrains\ReSharper\v5.1\Bin')">
     <ResharperBinPath>C:\Program Files (x86)\JetBrains\ReSharper\v5.1\Bin</ResharperBinPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(ResharperBinPath)' == '' And Exists('C:\Program Files\JetBrains\ReSharper\v5.1\Bin')">
     <ResharperBinPath>C:\Program Files\JetBrains\ReSharper\v5.1\Bin</ResharperBinPath>
   </PropertyGroup>
-  
+
   <Target Name="Default">
     <CallTarget Targets="CleanOutput" />
     <CallTarget Targets="BuildCore" />
-    <CallTarget Targets="Tests" />   
+    <CallTarget Targets="Tests" />
   </Target>
-
 
   <Target Name="All">
     <CallTarget Targets="CleanOutput" />
@@ -31,11 +28,11 @@
     <CallTarget Targets="Package" />
   </Target>
 
-  <Target Name="Build">   
+  <Target Name="Build">
     <CallTarget Targets="BuildCore" />
     <CallTarget Targets="BuildReSharper" />
-    <CallTarget Targets="BuildTools" /> 
-    <CallTarget Targets="BuildMsBuildTask" /> 
+    <CallTarget Targets="BuildTools" />
+    <CallTarget Targets="BuildMsBuildTask" />
   </Target>
 
   <Target Name="Package" DependsOnTargets="CleanOutput;Build">
@@ -57,36 +54,35 @@
     <Copy SourceFiles="$(OutputPath)\ReSharper\StorEvil.ReSharper.DLL" DestinationFolder="$(PackageDirectory)\resharper-plugin" Condition="Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')" />
     <Copy SourceFiles="$(OutputPath)\MsBuildTask\Funq.DLL" DestinationFolder="$(PackageDirectory)\resharper-plugin" Condition="Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')"/>
     <Copy SourceFiles="$(OutputPath)\MsBuildTask\Spark.DLL" DestinationFolder="$(PackageDirectory)\resharper-plugin" Condition="Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')"/>
-    
+
     <Copy SourceFiles="$(OutputPath)\MsBuildTask\StorEvil.MsBuild.DLL" DestinationFolder="$(PackageDirectory)\msbuild-task" />
     <Copy SourceFiles="$(OutputPath)\MsBuildTask\StorEvil.Core.DLL" DestinationFolder="$(PackageDirectory)\msbuild-task" />
     <Copy SourceFiles="$(OutputPath)\MsBuildTask\Funq.DLL" DestinationFolder="$(PackageDirectory)\msbuild-task" />
     <Copy SourceFiles="$(OutputPath)\MsBuildTask\Spark.DLL" DestinationFolder="$(PackageDirectory)\msbuild-task" />
 
-
     <Message Text="StorEvil binaries created:" />
     <Message Text="$(PackageDirectory)" />
   </Target>
- 
+
   <Target Name="BuildCore">
     <MSBuild
-  Projects="Core\StorEvil\StorEvil.Core.csproj;Core\StorEvil.Assertions\StorEvil.Assertions.csproj;Core\StorEvil.Console\StorEvil.csproj"
-  Properties="OutputPath=$(OutputPath)\Core"
-        />
+      Projects="Core\StorEvil\StorEvil.Core.csproj;Core\StorEvil.Assertions\StorEvil.Assertions.csproj;Core\StorEvil.Console\StorEvil.csproj"
+      Properties="OutputPath=$(OutputPath)\Core"
+    />
   </Target>
 
   <Target Name="BuildTools">
     <MSBuild
-    Projects="Core\StorEvil\StorEvil.Core.csproj;Tools\StorEvil.TeamCity\StorEvil.TeamCity.csproj;Tools\StorEvil.CustomTool\StorEvil.CustomTool.csproj"
-    Properties="OutputPath=$(OutputPath)\Tools"
-        />
+      Projects="Core\StorEvil\StorEvil.Core.csproj;Tools\StorEvil.TeamCity\StorEvil.TeamCity.csproj;Tools\StorEvil.CustomTool\StorEvil.CustomTool.csproj"
+      Properties="OutputPath=$(OutputPath)\Tools"
+    />
   </Target>
 
   <Target Name="BuildMsBuildTask">
     <MSBuild
-    Projects="Build\StorEvil.MsBuild\StorEvil.MsBuild.csproj"
-    Properties="OutputPath=$(OutputPath)\MsBuildTask"
-        />
+      Projects="Build\StorEvil.MsBuild\StorEvil.MsBuild.csproj"
+      Properties="OutputPath=$(OutputPath)\MsBuildTask"
+    />
   </Target>
 
   <Target Name="BuildReSharper" DependsOnTargets="BuildCore">
@@ -96,19 +92,17 @@
     <Message Text="Did not find ReSharper binaries in: $(ReSharperBinPath)"  Condition="!Exists('$(ReSharperBinPath)\JetBrains.Platform.ReSharper.Metadata.dll')" />
     <Message Text="Checking for existing ReSharper binaries in: $(JetBrainsLibPath)"  Condition="!Exists('$(ReSharperBinPath)\JetBrains.Platform.ReSharper.Metadata.dll')" />
     <Message Text="Skipping ReSharper build: can't find ReSharper assemblies. You can set the ReSharperBinPath property to fix this." Condition="!Exists('$(JetBrainsLibPath)\JetBrains.Platform.ReSharper.Metadata.dll')"/>
-     
-        <CreateItem Include="$(OutputPath)\Core\StorEvil.Core.dll">
-          <Output TaskParameter="Include" ItemName="DllFiles" />
-        </CreateItem>
-        <MakeDir Directories="$(OutputPath)\ReSharper"/>
 
-        <MSBuild
+    <CreateItem Include="$(OutputPath)\Core\StorEvil.Core.dll">
+      <Output TaskParameter="Include" ItemName="DllFiles" />
+    </CreateItem>
+    <MakeDir Directories="$(OutputPath)\ReSharper"/>
+
+    <MSBuild
       Projects="Core/StorEvil.Resharper/StorEvil.Resharper.csproj"
       Properties="OutputPath=$(OutputPath)\Resharper"
       Condition="Exists('$(JetBrainsLibPath)\JetBrains.Platform.ReSharper.Metadata.dll')"
-        />
-    
-   
+    />
   </Target>
 
   <Target Name="CopyReSharperDlls">
@@ -123,23 +117,20 @@
     <Copy SourceFiles="$(ReSharperBinPath)\JetBrains.ReSharper.UnitTestFramework.dll" DestinationFolder="$(JetBrainsLibPath)" />
     <Copy SourceFiles="$(ReSharperBinPath)\JetBrains.Platform.ReSharper.UI.dll" DestinationFolder="$(JetBrainsLibPath)" />
     <Copy SourceFiles="$(ReSharperBinPath)\JetBrains.ReSharper.VS.dll" DestinationFolder="$(JetBrainsLibPath)" />
-
   </Target>
 
   <Target Name="Tests">
     <MSBuild
-  Projects="Tests\StorEvil.Tests\StorEvil.Tests.csproj"
-  Properties="OutputPath=$(OutputPath)\Tests"
-        />
+      Projects="Tests\StorEvil.Tests\StorEvil.Tests.csproj"
+      Properties="OutputPath=$(OutputPath)\Tests"
+    />
 
     <Exec Command="$(MSBuildProjectDirectory)\Tools\NUnit\nunit-console.exe $(MSBuildProjectDirectory)\_build\Tests\StorEvil.Tests.dll"	/>
   </Target>
-  
+
   <Target Name="CleanOutput">
     <RemoveDir Directories="$(OutputPath)" Condition="Exists($(OutputPath))" ContinueOnError="true" />
-
     <MakeDir Directories="$(OutputPath)" />
-
   </Target>
 
   <Target Name="RunExamples" DependsOnTargets="CleanOutput;Build">
@@ -148,7 +139,7 @@
       Targets="RunExample"
       Properties="ExampleProjectDirectory=$(ExamplesDirectory)\Pizza;ExampleProject=Pizza.csproj;ExpectedFailures=1"
         />
-    
+
     <MSBuild
         Projects="$(MSBuildProjectDirectory)\examples.build"
           Targets="RunExample"
@@ -174,6 +165,4 @@
         />
 
   </Target>
-
- 
 </Project>
