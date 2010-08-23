@@ -143,7 +143,7 @@
     <ReSharperPluginRoot>C:\Users\$(USERNAME)\AppData\Roaming\JetBrains\ReSharper\v5.1</ReSharperPluginRoot>
   </PropertyGroup>
   
-  <Target Name="InstallReSharperRunner" DependsOnTargets="BuildReSharper">
+  <Target Name="InstallReSharper" DependsOnTargets="BuildReSharper">
     <Error Condition="!(Exists('$(OutputPath)\Resharper\StorEvil.ReSharper.DLL'))" Label="No resharper binaries were built! Can't install."/>
 
     <MakeDir Directories="$(ReSharperPluginRoot)\vs9.0\Plugins\StorEvil" Condition="Exists('$(ReSharperPluginRoot)\vs9.0') And !Exists('$(ReSharperPluginRoot)\vs9.0\Plugins\StorEvil')" />
@@ -153,6 +153,11 @@
     <MakeDir Directories="$(ReSharperPluginRoot)\vs10.0\Plugins\StorEvil" Condition="Exists('$(ReSharperPluginRoot)\vs10.0') And !Exists('$(ReSharperPluginRoot)\vs10.0\Plugins\StorEvil')" />
     <Copy SourceFiles="$(OutputPath)\Resharper\StorEvil.ReSharper.DLL" DestinationFolder="$(ReSharperPluginRoot)\vs10.0\Plugins\StorEvil" Condition="Exists('$(ReSharperPluginRoot)\vs10.0')" />
     <Copy SourceFiles="$(OutputPath)\Resharper\StorEvil.Core.DLL" DestinationFolder="$(ReSharperPluginRoot)\vs10.0\Plugins\StorEvil" Condition="Exists('$(ReSharperPluginRoot)\vs10.0')" />
+  </Target>
+
+  <Target Name="UnInstallReSharper">  
+    <RemoveDir Directories="$(ReSharperPluginRoot)\vs9.0\Plugins\StorEvil" Condition="Exists('$(ReSharperPluginRoot)\vs9.0\Plugins\StorEvil')" />
+    <RemoveDir Directories="$(ReSharperPluginRoot)\vs10.0\Plugins\StorEvil" Condition="Exists('$(ReSharperPluginRoot)\vs10.0\Plugins\StorEvil')" />
   </Target>
 
   <Target Name="Tests">
