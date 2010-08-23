@@ -26,7 +26,7 @@ namespace StorEvil.InPlace
             //ResultListener = resultListener;
             _eventBus = eventBus;
             var assemblyRegistry = new AssemblyRegistry(GetAssemblies());
-            ScenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(assemblyRegistry), new MostRecentlyUsedContext());           
+            ScenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(assemblyRegistry), new MostRecentlyUsedContext(), new DefaultLanguageService());           
             LineExecuter = new ScenarioLineExecuter(ScenarioInterpreter, _eventBus);
             _context = new SessionContext(assemblyRegistry);
             ParameterConverter.AddCustomConverters(assemblyRegistry);
@@ -102,7 +102,7 @@ namespace StorEvil.InPlace
             CurrentScenarioContext = CurrentStoryContext.GetScenarioContext();
             CurrentScenario = scenario;
             LastStatus = LineStatus.Passed;
-            ScenarioInterpreter.NewScenario();
+            //ScenarioInterpreter.NewScenario();
 
             return CurrentScenarioContext;
         }

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using StorEvil.Context.Matchers;
 using StorEvil.Context.Matches;
 using StorEvil.Interpreter.ParameterConverters;
 
@@ -10,83 +9,26 @@ namespace StorEvil.Interpreter
 {
     public class ScenarioInterpreterForType
     {
-        private readonly Type _type;
+
         private readonly IInterpreterForTypeFactory _factory;
-        private readonly List<IMemberMatcher> _memberMatchers = new List<IMemberMatcher>();
-        private static readonly ParameterConverter _parameterConverter = new ParameterConverter();
+        private readonly ParameterConverter _parameterConverter;
+        private readonly ContextTypeWrapper _contextTypeWrapper;
 
-        public ScenarioInterpreterForType(Type type,
-                                          IEnumerable<MethodInfo> extensionMethodsForType,
-                                          IInterpreterForTypeFactory factory)
+        public ScenarioInterpreterForType(ContextTypeWrapper contextTypeWrapper,                                         
+                                          IInterpreterForTypeFactory factory,
+                                          ParameterConverter parameterConverter)
         {
-            _type = type;
+            _contextTypeWrapper = contextTypeWrapper;         
             _factory = factory;
-
-            DebugTrace.Trace(GetType().Name, "Building interpreter for: " + type);
-
-            const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public;
-
-            foreach (MemberInfo member in GetMembers(flags)) 
-                AddMatchers(member);
-
-           
-
-            foreach (var methodInfo in extensionMethodsForType)
-            {
-                DebugTrace.Trace(GetType().Name, "Added extension method matcher: " + methodInfo.Name);
-
-                _memberMatchers.Add(new MethodNameMatcher(methodInfo));
-            }
-        }
-
-        private MemberInfo[] GetMembers(BindingFlags flags)
-        {
-            var members = _type.GetMembers(flags);
-           
-
-            return FilterMembers(members);
-        }
-
-        private MemberInfo[] FilterMembers(MemberInfo[] members)
-        {
-            var ignore = new[] {"GetType", "ToString", "CompareTo", "GetTypeCode", "Equals", "GetHashCode"};
-            return members.Where(m => !(m.MemberType == MemberTypes.Constructor || m.MemberType == MemberTypes.NestedType || ignore.Contains(m.Name))).ToArray();
-        }
-
-        private void AddMatchers(MemberInfo member)
-        {
-            _memberMatchers.Add(GetMemberMatcher(member));
-
-            DebugTrace.Trace(GetType().Name, "Added reflection matcher: " + member.Name);
-
-            AddRegexMatchersIfAttributePresent(member);
-        }
-
-        private static IMemberMatcher GetMemberMatcher(MemberInfo member)
-        {
-            if (member is MethodInfo)
-                return new MethodNameMatcher((MethodInfo) member);
-            
-            return new PropertyOrFieldNameMatcher(member);
-        }
-
-        private void AddRegexMatchersIfAttributePresent(MemberInfo member)
-        {
-            var regexAttrs = member.GetCustomAttributes(typeof (ContextRegexAttribute), true);
-            foreach (var regexAttr in regexAttrs.Cast<ContextRegexAttribute>())
-            {
-                DebugTrace.Trace(GetType().Name, "Added regex matcher: " + member.Name + ", \"" + regexAttr.Pattern + "\"");
-
-                _memberMatchers.Add(new RegexMatcher(regexAttr.Pattern, member));
-            }
-        }
+            _parameterConverter = parameterConverter;
+        }      
 
         public IEnumerable<InvocationChain> GetChains(string line)
         {
-            DebugTrace.Trace(GetType().Name, "Interpreting '" + line + "' with type:" + _type.Name);
+            DebugTrace.Trace(GetType().Name, "Interpreting '" + line + "' with type:" + _contextTypeWrapper.WrappedType.Name);
               
             var partialMatches = new List<PartialMatch>();
-            foreach (var matcher in _memberMatchers)
+            foreach (var matcher in _contextTypeWrapper.MemberMatchers)
             {
                 foreach (var currentMatch in matcher.GetMatches(line) ?? new NameMatch[0])
                 {
@@ -128,7 +70,7 @@ namespace StorEvil.Interpreter
             return TryToRecursivelyExtendPartialMatch(partialChain, remainingLine, partialMatch);
         }
 
-        private static Invocation BuildInvocation(MemberInfo memberInfo, NameMatch currentMatch)
+        private Invocation BuildInvocation(MemberInfo memberInfo, NameMatch currentMatch)
         {
             if (memberInfo is MethodInfo)
                 return new Invocation(memberInfo, 
@@ -153,7 +95,7 @@ namespace StorEvil.Interpreter
             }
         }
 
-        private static IEnumerable<object> BuildParamValues(MethodBase member, Dictionary<string, object> paramValues)
+        private IEnumerable<object> BuildParamValues(MethodBase member, Dictionary<string, object> paramValues)
         {
             var parameters = member.GetParameters();
 
@@ -169,7 +111,7 @@ namespace StorEvil.Interpreter
             }
         }
 
-        private static IEnumerable<string> BuildRawParamValues(MethodBase member, Dictionary<string, object> paramValues)
+        private IEnumerable<string> BuildRawParamValues(MethodBase member, Dictionary<string, object> paramValues)
         {
             var parameters = member.GetParameters();
 
@@ -183,7 +125,7 @@ namespace StorEvil.Interpreter
             }
         }
 
-        private static object ConvertParam(string s, Type t)
+        private object ConvertParam(string s, Type t)
         {
             return _parameterConverter.Convert(s, t);
         }

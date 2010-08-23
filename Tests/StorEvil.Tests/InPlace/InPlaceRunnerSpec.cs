@@ -78,7 +78,7 @@ namespace StorEvil.InPlace
         {
             FakeEventBus = new CapturingEventBus();
             var assemblyRegistry = new AssemblyRegistry(new[] { typeof(TestExtensionMethods).Assembly });
-            var scenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(assemblyRegistry), MockRepository.GenerateStub<IAmbiguousMatchResolver>());
+            var scenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(assemblyRegistry), MockRepository.GenerateStub<IAmbiguousMatchResolver>(), new DefaultLanguageService());
             return new InPlaceStoryRunner(new ScenarioPreprocessor(),
                                           scenarioInterpreter,
                                           new IncludeAllFilter(), new FakeSessionContext(Context), FakeEventBus);

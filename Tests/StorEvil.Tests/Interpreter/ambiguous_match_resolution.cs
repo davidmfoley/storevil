@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Assertions;
 using StorEvil.Context;
+using StorEvil.Interpreter.ParameterConverters;
 using StorEvil.NUnit;
 using StorEvil.Utility;
 
@@ -28,7 +29,7 @@ namespace StorEvil.Interpreter.Ambiguous_Match_Resolution
             ChainReturnedFromResolver = new InvocationChain();
             FakeResolver.Stub(x => x.ResolveMatch("", null)).IgnoreArguments().Return(ChainReturnedFromResolver);
 
-            ScenarioInterpreter interpreter = new ScenarioInterpreter(factory, FakeResolver);
+            ScenarioInterpreter interpreter = new ScenarioInterpreter(factory, FakeResolver, new DefaultLanguageService());
 
             Result = interpreter.GetChain(
                 new ScenarioContext(new StoryContext(new FakeSessionContext()), new Type[] {typeof (AmbiguousTestClass)},
@@ -58,7 +59,8 @@ namespace StorEvil.Interpreter.Ambiguous_Match_Resolution
         public void SetupContext()
         {
             var interpreterForTypeFactory = new InterpreterForTypeFactory(new AssemblyRegistry());
-            var interpreter = new ScenarioInterpreterForType(typeof(AmbiguousTestClass), new MethodInfo[] {},interpreterForTypeFactory);
+            var typeWrapper = new ContextTypeWrapper(typeof(AmbiguousTestClass), new MethodInfo[] { });
+            var interpreter = new ScenarioInterpreterForType(typeWrapper, interpreterForTypeFactory, new ParameterConverter());
 
            Chains = interpreter.GetChains("Foo bar baz");
         }

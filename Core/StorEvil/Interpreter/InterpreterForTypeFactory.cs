@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using StorEvil.Context;
+using StorEvil.Interpreter.ParameterConverters;
 
 namespace StorEvil.Interpreter
 {
@@ -13,6 +14,7 @@ namespace StorEvil.Interpreter
     {
         private readonly ExtensionMethodHandler _extensionMethodHandler;
         private readonly Dictionary<Type, ScenarioInterpreterForType> _interpreterCache = new Dictionary<Type, ScenarioInterpreterForType>();
+        private ParameterConverter _parameterConverter = new ParameterConverter();
 
         public InterpreterForTypeFactory(AssemblyRegistry assemblyRegistry)
         {
@@ -22,7 +24,13 @@ namespace StorEvil.Interpreter
         public ScenarioInterpreterForType GetInterpreterForType(Type t)
         {
             if (!_interpreterCache.ContainsKey(t))
-                _interpreterCache[t] = new ScenarioInterpreterForType(t, _extensionMethodHandler.GetExtensionMethodsFor(t), this);
+            {
+                var typeWrapper = new ContextTypeWrapper(t, _extensionMethodHandler.GetExtensionMethodsFor(t));
+                _interpreterCache[t] = new ScenarioInterpreterForType(typeWrapper,
+                                                                      this,
+                                                                      _parameterConverter);
+            }
+            // _interpreterCache[t] = new ScenarioInterpreterForType(t, _extensionMethodHandler.GetExtensionMethodsFor(t), this);
 
             return _interpreterCache[t];
         }

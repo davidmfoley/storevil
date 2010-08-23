@@ -11,7 +11,7 @@ namespace StorEvil.Interpreter
 {
     public class StandardScenarioInterpreter : ScenarioInterpreter
     {       
-        public StandardScenarioInterpreter(AssemblyRegistry assemblyRegistry) : base(new InterpreterForTypeFactory(assemblyRegistry), new MostRecentlyUsedContext())
+        public StandardScenarioInterpreter(AssemblyRegistry assemblyRegistry) : base(new InterpreterForTypeFactory(assemblyRegistry), new MostRecentlyUsedContext(), new DefaultLanguageService())
         {
         }
     }
@@ -20,12 +20,14 @@ namespace StorEvil.Interpreter
     {
         private readonly IInterpreterForTypeFactory _interpreterFactory;
         private readonly IAmbiguousMatchResolver _resolver;
-        private string _lastSignificantFirstWord;
+        private readonly ILanguageService _languageService;
+      
 
-        public ScenarioInterpreter(IInterpreterForTypeFactory interpreterFactory, IAmbiguousMatchResolver resolver )
+        public ScenarioInterpreter(IInterpreterForTypeFactory interpreterFactory, IAmbiguousMatchResolver resolver, ILanguageService languageService )
         {
             _interpreterFactory = interpreterFactory;
             _resolver = resolver;
+            _languageService = languageService;
         }
 
         [DebuggerStepThrough]
@@ -63,15 +65,12 @@ namespace StorEvil.Interpreter
             }           
         }
 
-        public void NewScenario()
-        {
-            _lastSignificantFirstWord = null;
-        }
+       
 
         [DebuggerStepThrough]
         private IEnumerable<InvocationChain> GetSelectedChains(ScenarioContext context, string line)
         {
-            foreach (var linePermutation in GetPermutations(line))
+            foreach (var linePermutation in _languageService.GetPermutations(line))
             {
                 foreach (var type in context.ImplementingTypes)
                 {
@@ -86,9 +85,16 @@ namespace StorEvil.Interpreter
             }
         }
 
+       
+    }
+
+    public class DefaultLanguageService : ILanguageService
+    {
+        private string _lastSignificantFirstWord;
+
         [DebuggerStepThrough]
-        private IEnumerable<string> GetPermutations(string line)
-        { 
+        public IEnumerable<string> GetPermutations(string line)
+        {
             if (line.ToLower().StartsWith("and "))
             {
                 yield return line;
@@ -97,8 +103,13 @@ namespace StorEvil.Interpreter
             else
             {
                 _lastSignificantFirstWord = line.Split(' ').First().Trim();
-                yield return line;                
+                yield return line;
             }
         }
+    }
+
+    public interface ILanguageService
+    {
+        IEnumerable<string> GetPermutations(string line);
     }
 }

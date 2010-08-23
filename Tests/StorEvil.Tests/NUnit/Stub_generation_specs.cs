@@ -28,8 +28,9 @@ namespace StorEvil.NUnit
             FakeWriter = MockRepository.GenerateMock<ITextWriter>();
             FakeResolver = MockRepository.GenerateMock<IAmbiguousMatchResolver>();
 
+            var scenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new AssemblyRegistry()), FakeResolver, new DefaultLanguageService());
             Generator =
-                new StubGenerator(new ScenarioInterpreter(new InterpreterForTypeFactory(new AssemblyRegistry()), FakeResolver),
+                new StubGenerator(scenarioInterpreter,
                                   new ImplementationHelper(), FakeWriter, new FakeSessionContext());
 
             TestStory = new Story("foo", "", new[]

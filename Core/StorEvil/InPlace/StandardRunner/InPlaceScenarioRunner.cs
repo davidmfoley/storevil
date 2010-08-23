@@ -23,7 +23,7 @@ namespace StorEvil.InPlace
         public bool ExecuteScenario(Scenario scenario, ScenarioContext storyContext)
         {
             _eventBus.Raise(new ScenarioStarting { Scenario = scenario});
-            _scenarioInterpreter.NewScenario();
+            //_scenarioInterpreter.NewScenario();
 
             foreach (var line in (scenario.Background ?? new ScenarioLine[0]).Union(scenario.Body))
             {
