@@ -58,7 +58,7 @@ namespace StorEvil.TeamCity
         [Test]
         public void should_output_correct_team_city_message_when_a_scenario_execution_failed()
         {
-            listener.Handle(new LineExecuted() { Scenario = GetScenario("my scenario"), Status = ExecutionStatus.Failed, ExceptionInfo = "error message [ ] ' \r" });
+            listener.Handle(new LineFailed() { Scenario = GetScenario("my scenario"),ExceptionInfo = "error message [ ] ' \r" });
 
             WrittenMessagesShouldContain("##teamcity[testFailed name='my scenario' message='error message |[ |] |' |r' details='error message |[ |] |' |r']");
         }
@@ -66,7 +66,7 @@ namespace StorEvil.TeamCity
         [Test]
         public void should_output_correct_team_city_message_when_a_scenario_execution_is_inconclusive()
         {
-            listener.Handle(new LineExecuted() { Scenario = GetScenario("my scenario"), Status = ExecutionStatus.Pending, Suggestion = "my suggestion" });
+            listener.Handle(new LinePending() { Scenario = GetScenario("my scenario"), Suggestion = "my suggestion" });
 
             messageWriter.AssertWasCalled(mw => mw.Write("##teamcity[testIgnored name='my scenario' message='my suggestion']"));
         }

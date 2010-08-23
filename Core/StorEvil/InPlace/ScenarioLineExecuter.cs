@@ -36,14 +36,14 @@ namespace StorEvil.InPlace
             {
                 var suggestion = _implementationHelper.Suggest(line);
 
-                _eventBus.Raise(new LineExecuted {Scenario = scenario, Line = line, Status = ExecutionStatus.Pending, Suggestion = suggestion });
+                _eventBus.Raise(new LinePending {Scenario = scenario, Line = line, Suggestion = suggestion });
                 return LineStatus.Pending;
             }
 
             if (!ExecuteChain(scenario, storyContext, chain, line))
                 return LineStatus.Failed;
 
-            _eventBus.Raise(new LineExecuted { Scenario = scenario, Status = ExecutionStatus.Passed, Line = line });
+            _eventBus.Raise(new LinePassed { Scenario = scenario, Line = line });
 
             return LineStatus.Passed;
         }
@@ -65,15 +65,14 @@ namespace StorEvil.InPlace
                    
                     if (ex.InnerException is ScenarioPendingException)
                     {
-                        _eventBus.Raise(new LineExecuted { Scenario = scenario, Line = line, Status = ExecutionStatus.Pending });
+                        _eventBus.Raise(new LinePending { Scenario = scenario, Line = line });
                     }
                     else
                     {
-                        _eventBus.Raise(new LineExecuted
+                        _eventBus.Raise(new LineFailed
                         {
                             Scenario = scenario,
-                            Line = line, 
-                            Status = ExecutionStatus.Failed,
+                            Line = line,                          
                             SuccessPart = successPart.Trim(),
                             FailedPart = invocation.MatchedText, 
                             ExceptionInfo = GetExceptionMessage(ex)

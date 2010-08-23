@@ -70,7 +70,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
 
         protected void SimulateStoryFailed(Scenario scenario, string successPart, string failedPart, string message)
         {
-            Writer.Handle(new LineExecuted { FailedPart = failedPart, SuccessPart = successPart, Status = ExecutionStatus.Failed, ExceptionInfo = message });
+            Writer.Handle(new LineFailed { FailedPart = failedPart, SuccessPart = successPart, ExceptionInfo = message });
             Writer.Handle(new ScenarioFinished { Scenario = scenario, Status = ExecutionStatus.Failed });
         }
 
@@ -81,7 +81,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
 
         protected void SimulateSuccessfulLine(Scenario scenario, string line)
         {
-            Writer.Handle(new LineExecuted { Line = line, Status = ExecutionStatus.Passed});
+            Writer.Handle(new LinePassed { Line = line});
         }
 
         protected void SimulateScenarioStarting(Scenario scenario)
@@ -376,7 +376,7 @@ namespace StorEvil.ResultListeners.XmlReportListener_Specs
             SimulateScenarioStarting(scenario);
 
             SimulateSuccessfulLine(scenario, line);
-            Writer.Handle(new LineExecuted{Status = ExecutionStatus.Pending, Line = line});
+            Writer.Handle(new LinePending{Line = line});
             Writer.Handle(new ScenarioFinished{Scenario = scenario, Status = ExecutionStatus.Pending});
             Writer.Handle(new SessionFinished());
         }

@@ -7,6 +7,7 @@
     <JetBrainsLibPath>$(MSBuildProjectDirectory)\Lib\JetBrains</JetBrainsLibPath>
   </PropertyGroup>
 
+  <!-- look for R# binaries, whether 64- or 32-bit windows-->
   <PropertyGroup Condition="'$(ResharperBinPath)' == '' And Exists('C:\Program Files (x86)\JetBrains\ReSharper\v5.1\Bin')">
     <ResharperBinPath>C:\Program Files (x86)\JetBrains\ReSharper\v5.1\Bin</ResharperBinPath>
   </PropertyGroup>

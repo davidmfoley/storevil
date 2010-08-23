@@ -13,8 +13,8 @@ namespace StorEvil.ResultListeners
 
     public class GatheringResultListener : IHandle<ScenarioStarting>, 
                                             IHandle<SessionFinished>,
-                                            IHandle<ScenarioFinished>, 
-                                            IHandle<LineExecuted>,                                           
+                                            IHandle<ScenarioFinished>,
+                                             IHandle<LineFailed>, IHandle<LinePassed>, IHandle<LinePending>,                                         
                                            IHandle<StoryStarting>
     {
         protected readonly IGatheredResultHandler Handler;
@@ -58,32 +58,31 @@ namespace StorEvil.ResultListeners
                                       Summary = story.Summary
                                   };
             Result.Add(storyResult);
-        }
-
-        public void Handle(LineExecuted eventToHandle)
-        {
-            if (eventToHandle.Status == ExecutionStatus.Failed)
-            {
-                if (!string.IsNullOrEmpty(eventToHandle.SuccessPart))
-                    CurrentScenario().AddLine(ExecutionStatus.Passed, eventToHandle.SuccessPart);
-                CurrentScenario().AddLine(ExecutionStatus.Failed, eventToHandle.FailedPart);
-                CurrentScenario().FailureMessage = eventToHandle.ExceptionInfo;
-            }
-            else if (eventToHandle.Status == ExecutionStatus.Passed)
-            {
-                CurrentScenario().AddLine(ExecutionStatus.Passed, eventToHandle.Line);
-            }
-            else
-            {
-                CurrentScenario().AddLine(ExecutionStatus.Pending, eventToHandle.Line);
-                CurrentScenario().CouldNotInterpret = true;
-                CurrentScenario().Suggestion = eventToHandle.Suggestion ?? "";
-            }
-        }
+        }       
 
         public void Handle(ScenarioFinished eventToHandle)
         {
             CurrentScenario().Status = eventToHandle.Status;
+        }
+
+        public void Handle(LineFailed eventToHandle)
+        {
+            if (!string.IsNullOrEmpty(eventToHandle.SuccessPart))
+                CurrentScenario().AddLine(ExecutionStatus.Passed, eventToHandle.SuccessPart);
+            CurrentScenario().AddLine(ExecutionStatus.Failed, eventToHandle.FailedPart);
+            CurrentScenario().FailureMessage = eventToHandle.ExceptionInfo;
+        }
+
+        public void Handle(LinePassed eventToHandle)
+        {
+            CurrentScenario().AddLine(ExecutionStatus.Passed, eventToHandle.Line);
+        }
+
+        public void Handle(LinePending eventToHandle)
+        {
+            CurrentScenario().AddLine(ExecutionStatus.Pending, eventToHandle.Line);
+            CurrentScenario().CouldNotInterpret = true;
+            CurrentScenario().Suggestion = eventToHandle.Suggestion ?? "";
         }
     }
 
