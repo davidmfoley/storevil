@@ -1,6 +1,18 @@
-﻿Copy these files to the following directory:
+﻿
+Note: This plugin REQUIRES version 5.1 of ReSHarper.
 
-C:\Users\{Your User Name}\AppData\Roaming\JetBrains\ReSharper\v5.1\vs10.0\Plugins\
+Installing the StorEvil ReSharper plugin:
 
-You must make sure that you are using the same version of StorEvil.Core.DLL that is referenced in your StorEvil C# project.
+1. Make sure Visual Studio is not running.
+2. Copy the files in this directory to one or both of the following directories:
 
+Visual Studio 2008:
+C:\Users\{Your User Name}\AppData\Roaming\JetBrains\ReSharper\v5.1\vs9.0\Plugins\StorEvil
+
+Visual Studio 2010:
+C:\Users\{Your User Name}\AppData\Roaming\JetBrains\ReSharper\v5.1\vs10.0\Plugins\StorEvil
+
+To uninstall, delete the StorEvil directories you created above.
+
+For more information, see:
+http://wiki.github.com/davidmfoley/storevil/resharper-integration

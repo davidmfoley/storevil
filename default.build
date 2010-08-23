@@ -52,11 +52,12 @@
 
     <Message Text="No Resharper plug-in binaries found to package" Condition="!Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')" />
     <MakeDir Directories="$(PackageDirectory)\resharper-plugin" Condition="Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')"/>
-    <Copy SourceFiles="$(OutputPath)\Core\StorEvil.Core.DLL" DestinationFolder="$(PackageDirectory)\resharper-plugin" Condition="Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')"/>
+    <Copy SourceFiles="$(OutputPath)\ReSharper\StorEvil.Core.DLL" DestinationFolder="$(PackageDirectory)\resharper-plugin" Condition="Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')"/>
     <Copy SourceFiles="$(OutputPath)\ReSharper\StorEvil.ReSharper.DLL" DestinationFolder="$(PackageDirectory)\resharper-plugin" Condition="Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')" />
-    <Copy SourceFiles="$(OutputPath)\MsBuildTask\Funq.DLL" DestinationFolder="$(PackageDirectory)\resharper-plugin" Condition="Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')"/>
-    <Copy SourceFiles="$(OutputPath)\MsBuildTask\Spark.DLL" DestinationFolder="$(PackageDirectory)\resharper-plugin" Condition="Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')"/>
-
+    <Copy SourceFiles="$(OutputPath)\ReSharper\Funq.DLL" DestinationFolder="$(PackageDirectory)\resharper-plugin" Condition="Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')"/>
+    <Copy SourceFiles="$(OutputPath)\ReSharper\Spark.DLL" DestinationFolder="$(PackageDirectory)\resharper-plugin" Condition="Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\Core\StorEvil.ReSharper\Installing_StorEvil_ReSharperPlugIn.txt" DestinationFolder="$(PackageDirectory)\resharper-plugin" Condition="Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')"/>
+   
     <Copy SourceFiles="$(OutputPath)\MsBuildTask\StorEvil.MsBuild.DLL" DestinationFolder="$(PackageDirectory)\msbuild-task" />
     <Copy SourceFiles="$(OutputPath)\MsBuildTask\StorEvil.Core.DLL" DestinationFolder="$(PackageDirectory)\msbuild-task" />
     <Copy SourceFiles="$(OutputPath)\MsBuildTask\Funq.DLL" DestinationFolder="$(PackageDirectory)\msbuild-task" />
