@@ -1,5 +1,5 @@
 ﻿
-Note: This plugin REQUIRES version 5.1 of ReSHarper.
+Note: This plugin REQUIRES version 5.1 of ReSharper.
 
 Installing the StorEvil ReSharper plugin:
 
