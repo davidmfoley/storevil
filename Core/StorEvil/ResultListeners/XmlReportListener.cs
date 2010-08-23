@@ -1,14 +1,12 @@
 using System;
 using System.Xml;
-using StorEvil.Core;
 using StorEvil.Events;
 using StorEvil.Infrastructure;
-using StorEvil.InPlace;
 
 namespace StorEvil.ResultListeners
 {
     public class XmlReportListener : IHandle<SessionFinished>,
-        IHandle<LineExecuted>, IHandle<ScenarioStarting>
+          IHandle<LineFailed>, IHandle<LinePassed>, IHandle<LinePending>, IHandle<ScenarioStarting>
     {
 
         public class StatusNames
@@ -92,20 +90,7 @@ namespace StorEvil.ResultListeners
         public void Handle(SessionFinished eventToHandle)
         {
             _fileWriter.Write(_doc.OuterXml);
-        }
-       
-        public void Handle(LineExecuted eventToHandle)
-        {
-            if (eventToHandle.Status == ExecutionStatus.Passed)
-                AddLineToCurrentScenario(eventToHandle.Line, StatusNames.Success);
-            else if (eventToHandle.Status == ExecutionStatus.Failed)
-            {
-                AddLineToCurrentScenario(eventToHandle.SuccessPart, StatusNames.Success);
-                AddLineToCurrentScenario(eventToHandle.FailedPart, StatusNames.Failure);
-            }
-            else
-                AddLineToCurrentScenario(eventToHandle.Line, StatusNames.NotUnderstood);
-        }
+        }             
 
         public void Handle(ScenarioStarting eventToHandle)
         {
@@ -113,7 +98,22 @@ namespace StorEvil.ResultListeners
             _currentStoryElement.AppendChild(_currentScenarioElement);
         }
 
-       
+
+        public void Handle(LineFailed eventToHandle)
+        {
+            AddLineToCurrentScenario(eventToHandle.SuccessPart, StatusNames.Success);
+            AddLineToCurrentScenario(eventToHandle.FailedPart, StatusNames.Failure);
+        }
+
+        public void Handle(LinePassed eventToHandle)
+        {
+            AddLineToCurrentScenario(eventToHandle.Line, StatusNames.Success);
+        }
+
+        public void Handle(LinePending eventToHandle)
+        {
+            AddLineToCurrentScenario(eventToHandle.Line, StatusNames.NotUnderstood);
+        }
     }
 
     public class AutoRegisterForEvents

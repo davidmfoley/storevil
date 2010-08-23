@@ -116,8 +116,8 @@ namespace StorEvil.InPlace
 
         private int GetSuccessfulInvocationCount(string expectedLine)
         {
-            var interpretedEvents = FakeEventBus.CaughtEvents.OfType<LineExecuted>();
-            return interpretedEvents.Count(ev => ev.Line == expectedLine && ev.Status == ExecutionStatus.Passed);
+            var interpretedEvents = FakeEventBus.CaughtEvents.OfType<LinePassed>();
+            return interpretedEvents.Count(ev => ev.Line == expectedLine);
         }
 
         protected void AssertLineSuccess(string expectedLine, int count)

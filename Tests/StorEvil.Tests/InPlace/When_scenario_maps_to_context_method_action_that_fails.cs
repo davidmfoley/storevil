@@ -49,7 +49,7 @@ namespace StorEvil.InPlace
         [Test]
         public void Notifies_listener_of_failure()
         {
-            AssertEventRaised<LineExecuted>(x=>x.Status == ExecutionStatus.Failed);            
+            AssertEventRaised<LineFailed>();            
         }
 
         [Test]

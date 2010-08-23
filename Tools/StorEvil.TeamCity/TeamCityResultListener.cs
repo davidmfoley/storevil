@@ -10,7 +10,8 @@ namespace StorEvil.TeamCity
         IHandle<ScenarioStarting>,
         IHandle<ScenarioFinished>,
         IHandle<StoryFinished>,
-        IHandle<LineExecuted>
+        IHandle<LineFailed>, 
+        IHandle<LinePending> 
     {
         private ITeamCityMessageWriter messageWriter;
         private const string TeamCityMessagePattern = "##teamcity[{0}]";
@@ -45,19 +46,7 @@ namespace StorEvil.TeamCity
             SendTeamCityServiceMessage(message);
         }
 
-        public void Handle(LineExecuted e)
-        {
-            if (e.Status == ExecutionStatus.Failed)
-            {
-                var message = Format(TestFailedMessagePattern, e.Scenario.Name, e.ExceptionInfo);
-                SendTeamCityServiceMessage(message);
-            }
-            else if (e.Status == ExecutionStatus.Pending)
-            {
-                var message = Format(TestIgnoredMessagePattern, e.Scenario.Name, e.Suggestion);
-                SendTeamCityServiceMessage(message);
-            }
-        }
+      
 
         public void Handle(ScenarioFinished e)
         {
@@ -118,6 +107,18 @@ namespace StorEvil.TeamCity
 
             return Regex.Replace(summary, @"\s+", " ")
                         .Trim();
+        }
+
+        public void Handle(LineFailed e)
+        {
+            var message = Format(TestFailedMessagePattern, e.Scenario.Name, e.ExceptionInfo);
+            SendTeamCityServiceMessage(message);
+        }
+
+        public void Handle(LinePending e)
+        {
+            var message = Format(TestIgnoredMessagePattern, e.Scenario.Name, e.Suggestion);
+            SendTeamCityServiceMessage(message);
         }
     }
 }

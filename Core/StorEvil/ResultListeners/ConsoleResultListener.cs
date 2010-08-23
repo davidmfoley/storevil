@@ -8,7 +8,7 @@ namespace StorEvil.ResultListeners
 {
     public abstract class WriterListener :
         IHandle<ScenarioStarting>, IHandle<SessionFinished>, IHandle<ScenarioFinished>,
-        IHandle<LineExecuted>,
+        IHandle<LineFailed>, IHandle<LinePassed>, IHandle<LinePending> ,
         IHandle<StoryStarting>
     {
         protected abstract void DoWrite(ConsoleColor white, params string[] s);
@@ -19,9 +19,7 @@ namespace StorEvil.ResultListeners
         {
             var story = eventToHandle.Story;
             DoWrite(ConsoleColor.White, "\r\n" + "\r\nSTORY: " + story.Id + "\r\n" + story.Summary);
-        }
-
-      
+        } 
 
         public void Handle(ScenarioStarting eventToHandle)
         {
@@ -37,29 +35,24 @@ namespace StorEvil.ResultListeners
         {
             if (eventToHandle.Status == ExecutionStatus.Passed)
                 DoWrite(ConsoleColor.Green, "Scenario succeeded");
+        }       
+
+        public void Handle(LineFailed eventToHandle)
+        {
+            DoWrite(ConsoleColor.Yellow, eventToHandle.SuccessPart);
+            DoWrite(ConsoleColor.Red, " " + eventToHandle.FailedPart + "\r\nFAILED\r\n",
+                    eventToHandle.ExceptionInfo + "\r\n");
         }
 
-        public void Handle(LineExecuted eventToHandle)
+        public void Handle(LinePassed eventToHandle)
         {
-            if (eventToHandle.Status == ExecutionStatus.Pending)
-            {
-                DoWrite(ConsoleColor.Yellow, eventToHandle.Line + " -- Pending");
-            }
-            else if (eventToHandle.Status == ExecutionStatus.CouldNotInterpret) 
-            {
-                DoWrite(ConsoleColor.Yellow, eventToHandle.Line + " -- Could not interpret");
-            }
-            else if (eventToHandle.Status == ExecutionStatus.Passed)
-            {
-                DoWrite(ConsoleColor.Green, eventToHandle.Line);
-            }
-            else
-            {
-                DoWrite(ConsoleColor.Yellow, eventToHandle.SuccessPart);
-                DoWrite(ConsoleColor.Red, " " + eventToHandle.FailedPart + "\r\nFAILED\r\n",
-                        eventToHandle.ExceptionInfo + "\r\n");
-                
-            }
+            DoWrite(ConsoleColor.Green, eventToHandle.Line);
+        }
+
+        public void Handle(LinePending eventToHandle)
+        {
+            DoWrite(ConsoleColor.Yellow, eventToHandle.Line + " -- Pending");
+            //DoWrite(ConsoleColor.Yellow, eventToHandle.Line + " -- Could not interpret");
         }
     }
 

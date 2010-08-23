@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using StorEvil.Events;
 using StorEvil.Resharper.Tasks;
@@ -9,7 +7,7 @@ namespace StorEvil.Resharper.Runner
 {    
     internal class ResharperResultListener : 
         IHandle<StoryStarting>, IHandle<StoryFinished>,
-        IHandle<ScenarioStarting>, IHandle<ScenarioFinished>, IHandle<LineExecuted>
+        IHandle<ScenarioStarting>, IHandle<ScenarioFinished>, IHandle<LineFailed>, IHandle<LinePassed>, IHandle<LinePending> 
     {
         private readonly IRemoteTaskServer _server;
         private RemoteTask _remoteTask;
@@ -44,33 +42,6 @@ namespace StorEvil.Resharper.Runner
             }
         }
 
-        public void Handle(LineExecuted eventToHandle)
-        {
-            var line = eventToHandle.Line;
-
-            if (eventToHandle.Status == ExecutionStatus.Pending)
-            {
-                Output("Could not interpret:\r\n" + line);               
-
-                Output("You could try the following:");
-                Output(eventToHandle.Suggestion ?? "");
-            
-                return;
-            }
-
-            if (eventToHandle.Status == ExecutionStatus.Failed)
-            {
-                Output(eventToHandle.SuccessPart + " [" + eventToHandle.FailedPart + "] -- failed");
-                Output("----------");
-                Output(eventToHandle.ExceptionInfo);
-
-                _server.TaskException(_remoteTask, new[] { new TaskException("StorEvil failure", eventToHandle.ExceptionInfo, ""), });
-                Result = TaskResult.Exception;
-                return;
-            }
-
-            Output(line);
-        }
 
         private void Output(string message)
         {
@@ -128,6 +99,30 @@ namespace StorEvil.Resharper.Runner
         public void Handle(StoryFinished eventToHandle)
         {
             _server.TaskFinished(FindStoryTask(eventToHandle.Story.Id), "", TaskResult.Success);
+        }
+
+        public void Handle(LineFailed eventToHandle)
+        {
+            Output(eventToHandle.SuccessPart + " [" + eventToHandle.FailedPart + "] -- failed");
+            Output("----------");
+            Output(eventToHandle.ExceptionInfo);
+
+            _server.TaskException(_remoteTask,
+                                  new[] {new TaskException("StorEvil failure", eventToHandle.ExceptionInfo, ""),});
+            Result = TaskResult.Exception;
+        }
+
+        public void Handle(LinePassed eventToHandle)
+        {
+              Output(eventToHandle.Line);
+        }
+
+        public void Handle(LinePending eventToHandle)
+        {
+             Output("Could not interpret:\r\n" + eventToHandle.Line);               
+
+                Output("You could try the following:");
+                Output(eventToHandle.Suggestion ?? "");
         }
     }
 }
