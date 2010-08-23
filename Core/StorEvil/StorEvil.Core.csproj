@@ -110,7 +110,9 @@
     <Compile Include="Events\EventBus.cs" />
     <Compile Include="Events\EventBusAutoRegistrar.cs" />
     <Compile Include="Events\IHandle.cs" />
-    <Compile Include="Events\LineExecuted.cs" />
+    <Compile Include="Events\LinePending.cs" />
+    <Compile Include="Events\LineFailed.cs" />
+    <Compile Include="Events\LinePassed.cs" />
     <Compile Include="Events\MatchingMemberFound.cs" />
     <Compile Include="Events\ScenarioFinished.cs" />
     <Compile Include="Events\ScenarioStarting.cs" />
