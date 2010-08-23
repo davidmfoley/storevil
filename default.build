@@ -149,15 +149,19 @@
     <MakeDir Directories="$(ReSharperPluginRoot)\vs9.0\Plugins\StorEvil" Condition="Exists('$(ReSharperPluginRoot)\vs9.0') And !Exists('$(ReSharperPluginRoot)\vs9.0\Plugins\StorEvil')" />
     <Copy SourceFiles="$(OutputPath)\Resharper\StorEvil.ReSharper.DLL" DestinationFolder="$(ReSharperPluginRoot)\vs9.0\Plugins\StorEvil" Condition="Exists('$(ReSharperPluginRoot)\vs9.0')" />
     <Copy SourceFiles="$(OutputPath)\Resharper\StorEvil.Core.DLL" DestinationFolder="$(ReSharperPluginRoot)\vs9.0\Plugins\StorEvil" Condition="Exists('$(ReSharperPluginRoot)\vs9.0')" />
+    <Copy SourceFiles="$(OutputPath)\Resharper\Spark.DLL" DestinationFolder="$(ReSharperPluginRoot)\vs9.0\Plugins\StorEvil" Condition="Exists('$(ReSharperPluginRoot)\vs9.0')" />
+    <Copy SourceFiles="$(OutputPath)\Resharper\Funq.DLL" DestinationFolder="$(ReSharperPluginRoot)\vs9.0\Plugins\StorEvil" Condition="Exists('$(ReSharperPluginRoot)\vs9.0')" />
 
     <MakeDir Directories="$(ReSharperPluginRoot)\vs10.0\Plugins\StorEvil" Condition="Exists('$(ReSharperPluginRoot)\vs10.0') And !Exists('$(ReSharperPluginRoot)\vs10.0\Plugins\StorEvil')" />
     <Copy SourceFiles="$(OutputPath)\Resharper\StorEvil.ReSharper.DLL" DestinationFolder="$(ReSharperPluginRoot)\vs10.0\Plugins\StorEvil" Condition="Exists('$(ReSharperPluginRoot)\vs10.0')" />
     <Copy SourceFiles="$(OutputPath)\Resharper\StorEvil.Core.DLL" DestinationFolder="$(ReSharperPluginRoot)\vs10.0\Plugins\StorEvil" Condition="Exists('$(ReSharperPluginRoot)\vs10.0')" />
+    <Copy SourceFiles="$(OutputPath)\Resharper\Spark.DLL" DestinationFolder="$(ReSharperPluginRoot)\vs10.0\Plugins\StorEvil" Condition="Exists('$(ReSharperPluginRoot)\vs10.0')" />
+    <Copy SourceFiles="$(OutputPath)\Resharper\Funq.DLL" DestinationFolder="$(ReSharperPluginRoot)\vs10.0\Plugins\StorEvil" Condition="Exists('$(ReSharperPluginRoot)\vs10.0')" />
   </Target>
 
   <Target Name="UnInstallReSharper">  
     <RemoveDir Directories="$(ReSharperPluginRoot)\vs9.0\Plugins\StorEvil" Condition="Exists('$(ReSharperPluginRoot)\vs9.0\Plugins\StorEvil')" />
-    <RemoveDir Directories="$(ReSharperPluginRoot)\vs10.0\Plugins\StorEvil" Condition="Exists('$(ReSharperPluginRoot)\vs10.0\Plugins\StorEvil')" />
+    <RemoveDir Directories="$(ReSharperPluginRoot)\ vs10.0\Plugins\StorEvil" Condition="Exists('$(ReSharperPluginRoot)\vs10.0\Plugins\StorEvil')" />
   </Target>
 
   <Target Name="Tests">
