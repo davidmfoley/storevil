@@ -15,6 +15,7 @@
     <ResharperBinPath>C:\Program Files\JetBrains\ReSharper\v5.1\Bin</ResharperBinPath>
   </PropertyGroup>
 
+  
   <Target Name="Default">
     <CallTarget Targets="CleanOutput" />
     <CallTarget Targets="BuildCore" />
@@ -36,7 +37,7 @@
     <CallTarget Targets="BuildMsBuildTask" />
   </Target>
 
-  <Target Name="Package" DependsOnTargets="CleanOutput;Build">
+  <Target Name="Package" DependsOnTargets="CleanOutput;Build;Gem">
     <CreateItem Include="$(OutputPath)\Core\*.dll">
       <Output TaskParameter="Include" ItemName="DllFiles" />
     </CreateItem>
@@ -61,8 +62,26 @@
     <Copy SourceFiles="$(OutputPath)\MsBuildTask\Funq.DLL" DestinationFolder="$(PackageDirectory)\msbuild-task" />
     <Copy SourceFiles="$(OutputPath)\MsBuildTask\Spark.DLL" DestinationFolder="$(PackageDirectory)\msbuild-task" />
 
+    <CreateItem Include="$(OutputPath)\Gem\*.gem">
+      <Output TaskParameter="Include" ItemName="GemFile" />
+    </CreateItem>
+    <Copy  SourceFiles="@(GemFile)" DestinationFolder="$(PackageDirectory)\gem" />
+    
     <Message Text="StorEvil binaries created:" />
     <Message Text="$(PackageDirectory)" />
+  </Target>
+
+  <Target Name="Gem" DependsOnTargets="BuildCore">
+    <MakeDir Directories="$(OutputPath)\Gem"/>
+    <MakeDir Directories="$(OutputPath)\Gem\lib"/>
+
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\Gem\StorEvil.gemspec" DestinationFolder="$(OutputPath)\Gem"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\Gem\VERSION" DestinationFolder="$(OutputPath)\Gem"/>
+    <Copy SourceFiles="$(OutputPath)\Core\StorEvil.Core.DLL" DestinationFolder="$(OutputPath)\Gem\lib"/>
+    <Copy SourceFiles="$(OutputPath)\Core\StorEvil.exe" DestinationFolder="$(OutputPath)\Gem\lib"/>
+    <Copy SourceFiles="$(OutputPath)\MsBuildTask\Funq.DLL" DestinationFolder="$(OutputPath)\Gem\lib"/>
+
+    <Exec Command="gem build storevil.gemspec"  WorkingDirectory="$(OutputPath)\Gem"/>
   </Target>
 
   <Target Name="BuildCore">
