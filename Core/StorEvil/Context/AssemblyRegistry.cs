@@ -40,7 +40,7 @@ namespace StorEvil.Context
             throw new StorEvilException("Could not load assembly: " + location);
         }
 
-        public IEnumerable<Type> GetTypesWithCustomAttribute<T>()
+        public virtual IEnumerable<Type> GetTypesWithCustomAttribute<T>()
         {
             return _allTypes.Where(t => TypeHasCustomAttribute(t, typeof (T)));               
         }
