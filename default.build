@@ -161,7 +161,7 @@
 
   <Target Name="UnInstallReSharper">  
     <RemoveDir Directories="$(ReSharperPluginRoot)\vs9.0\Plugins\StorEvil" Condition="Exists('$(ReSharperPluginRoot)\vs9.0\Plugins\StorEvil')" />
-    <RemoveDir Directories="$(ReSharperPluginRoot)\ vs10.0\Plugins\StorEvil" Condition="Exists('$(ReSharperPluginRoot)\vs10.0\Plugins\StorEvil')" />
+    <RemoveDir Directories="$(ReSharperPluginRoot)\vs10.0\Plugins\StorEvil" Condition="Exists('$(ReSharperPluginRoot)\vs10.0\Plugins\StorEvil')" />
   </Target>
 
   <Target Name="Tests">
