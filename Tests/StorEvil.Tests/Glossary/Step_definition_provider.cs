@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Assertions;
 using StorEvil.Context;
 using StorEvil.Context.Matchers;
 using StorEvil.Core;
+using StorEvil.Interpreter;
 
 namespace StorEvil.Glossary
 {
@@ -14,12 +16,16 @@ namespace StorEvil.Glossary
     {
         private AssemblyRegistry FakeAssemblyRegistry;
         private StepProvider Provider;
+        private IExtensionMethodHandler FakeExtensionMethodHandler;
 
         [SetUp]
         public void SetUpContext()
         {
             FakeAssemblyRegistry = MockRepository.GenerateStub<AssemblyRegistry>();
-            Provider = new StepProvider(FakeAssemblyRegistry);
+            FakeExtensionMethodHandler = MockRepository.GenerateStub<IExtensionMethodHandler>();
+            FakeExtensionMethodHandler.Stub(x => x.GetExtensionMethodsFor(Arg<Type>.Is.Anything)).Return(new MethodInfo[0]);
+
+            Provider = new StepProvider(FakeAssemblyRegistry, new ContextWrapperFactory(FakeExtensionMethodHandler));
         }
 
         [Test]

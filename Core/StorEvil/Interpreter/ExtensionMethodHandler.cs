@@ -8,7 +8,7 @@ namespace StorEvil.Interpreter
 {
     // TODO! right now this depends on static variables to store the extensions methods
     // should convert this to participate in the normal IoC and just be injected into every place that needs it!
-    public class ExtensionMethodHandler
+    public class ExtensionMethodHandler : IExtensionMethodHandler
     {
         private readonly List<MethodInfo> _allExtensionMethods = new List<MethodInfo>();
 
@@ -42,18 +42,14 @@ namespace StorEvil.Interpreter
             return _addedTypes.Contains(type);
         }
 
-        public IEnumerable<MethodInfo> GetExtensionMethodsFor(Type t)
+        public  IEnumerable<MethodInfo> GetExtensionMethodsFor(Type t)
         {
             return _allExtensionMethods.Where(m => m.GetParameters()[0].ParameterType.IsAssignableFrom(t));
-        }
+        }     
+    }
 
-        public void AddAssembly(Assembly assembly)
-        {
-            var types = assembly.GetTypes().Where(type => type.IsAbstract && type.IsSealed);
-            foreach (var type in types)
-            {
-                AddExtensionMethods(type);
-            }
-        }
+    public interface IExtensionMethodHandler
+    {
+        IEnumerable<MethodInfo> GetExtensionMethodsFor(Type t);
     }
 }

@@ -49,7 +49,7 @@ namespace StorEvil
             container.EasyRegister<ScenarioInterpreter>();
             container.EasyRegister<IInterpreterForTypeFactory, InterpreterForTypeFactory>();
             container.EasyRegister<ILanguageService, DefaultLanguageService>();
-            container.EasyRegister<ExtensionMethodHandler>();
+            container.EasyRegister<IExtensionMethodHandler, ExtensionMethodHandler>();
 
             container.EasyRegister<IAmbiguousMatchResolver, MostRecentlyUsedContext>();
             

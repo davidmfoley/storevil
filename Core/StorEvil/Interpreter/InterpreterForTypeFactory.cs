@@ -12,7 +12,7 @@ namespace StorEvil.Interpreter
 
     public class InterpreterForTypeFactory : IInterpreterForTypeFactory
     {
-        private readonly ExtensionMethodHandler _extensionMethodHandler;
+        private readonly IExtensionMethodHandler _extensionMethodHandler;
         private readonly Dictionary<Type, ScenarioInterpreterForType> _interpreterCache = new Dictionary<Type, ScenarioInterpreterForType>();
         private ParameterConverter _parameterConverter = new ParameterConverter();
 
@@ -23,9 +23,12 @@ namespace StorEvil.Interpreter
 
         public ScenarioInterpreterForType GetInterpreterForType(Type t)
         {
+            
             if (!_interpreterCache.ContainsKey(t))
             {
-                var typeWrapper = new ContextTypeWrapper(t, _extensionMethodHandler.GetExtensionMethodsFor(t));
+                var factory = new ContextWrapperFactory(_extensionMethodHandler);
+
+                var typeWrapper = factory.GetWrapper(t);
                 _interpreterCache[t] = new ScenarioInterpreterForType(typeWrapper,
                                                                       this,
                                                                       _parameterConverter);

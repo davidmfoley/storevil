@@ -6,6 +6,20 @@ using StorEvil.Context.Matchers;
 
 namespace StorEvil.Interpreter
 {
+    public class ContextWrapperFactory
+    {
+        private IExtensionMethodHandler _extensionMethodHandler;
+
+        public ContextWrapperFactory(IExtensionMethodHandler extensionMethodHandler)
+        {
+            _extensionMethodHandler = extensionMethodHandler;
+        }
+
+        public ContextTypeWrapper GetWrapper(Type type)
+        {
+            return new ContextTypeWrapper(type, _extensionMethodHandler.GetExtensionMethodsFor(type));
+        }
+    }
     public class ContextTypeWrapper
     {
         private readonly Type _type;

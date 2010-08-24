@@ -1,5 +1,6 @@
 using Funq;
 using NUnit.Framework;
+using StorEvil.Assertions;
 using StorEvil.Utility;
 
 namespace StorEvil
@@ -13,7 +14,7 @@ namespace StorEvil
             var c = new Container();
             c.EasyRegister<IFoo, Foo>();
 
-            Assert.IsInstanceOfType(typeof (Foo), c.Resolve<IFoo>());
+             c.Resolve<IFoo>().GetType().ShouldEqual(typeof(Foo));
         }
 
         [Test]
