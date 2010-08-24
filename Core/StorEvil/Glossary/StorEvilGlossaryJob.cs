@@ -6,6 +6,7 @@ using Funq;
 using StorEvil.Configuration;
 using StorEvil.Context.Matchers;
 using StorEvil.Events;
+using StorEvil.Infrastructure;
 using StorEvil.Interpreter;
 using StorEvil.Utility;
 
@@ -31,7 +32,7 @@ namespace StorEvil.Core
                 .Select(x => _stepDescriber.Describe(x));
 
             foreach (var stepDescription in descriptions.OrderBy(x => x))
-                _bus.Raise(new GenericInformation {Text = stepDescription});
+                _bus.Raise(new GenericInformation { Text = stepDescription });
             return 0;
         }
     }
@@ -40,8 +41,6 @@ namespace StorEvil.Core
     {
         string Describe(StepDefinition stepDefinition);
     }
-
-    
 
     public class StepDefinition
     {
@@ -58,7 +57,7 @@ namespace StorEvil.Core
     }
 
 
-    public class GlossaryConfigurator : ContainerConfigurator<GlossarySettings>
+    public class GlossaryConfigurator : ContainerConfigurator<GlossaryConfigurator.GlossarySettings>
     {
         protected override void SetupCustomComponents(Container container, ConfigSettings configSettings, GlossarySettings customSettings)
         {
@@ -66,11 +65,48 @@ namespace StorEvil.Core
             container.EasyRegister<IStepDescriber, StepDescriber>();
             container.EasyRegister<IStepProvider, StepProvider>();
             container.EasyRegister<ContextTypeFactory>();
+
+            if (!(string.IsNullOrEmpty(customSettings.GlossaryTemplate)))
+            {
+                container.Register<IGlossaryFormatter>(new NoOpGlossaryFormatter());
+            }
+            else
+            {
+                container.Register<IGlossaryFormatter>(new SparkGlossaryFormatter());
+            }
         }
 
+        public class GlossarySettings
+        {
+            public string GlossaryTemplate { get; set; }
+        }
     }
 
-    public class GlossarySettings
+    public class NoOpGlossaryFormatter : IGlossaryFormatter
     {
+        public void Handle(Glossary glossary)
+        {
+
+        }
+    }
+
+    public interface IGlossaryFormatter
+    {
+        void Handle(Glossary glossary);
+    }
+
+    public class Glossary
+    {
+        public IEnumerable<StepDefinition> Steps { get; set; }
+    }
+
+    public class SparkGlossaryFormatter : IGlossaryFormatter
+    {
+       
+
+        public void Handle(Glossary glossary)
+        {
+
+        }
     }
 }

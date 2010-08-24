@@ -2,7 +2,6 @@ using System;
 using Funq;
 using StorEvil.Configuration;
 using StorEvil.Context;
-using StorEvil.Core;
 using StorEvil.Infrastructure;
 using StorEvil.InPlace;
 using StorEvil.Interpreter;
@@ -35,19 +34,6 @@ namespace StorEvil.Console
             SwitchParser.Parse(args, CustomSettings);
 
             _configurator.ConfigureContainer(container, configSettings, CustomSettings);
-        }
-    }
-
-    internal class GlossarySwitchConfigurator : ContainerSwitchConfigurator<GlossarySettings>
-    {
-        public GlossarySwitchConfigurator()
-            : base(new GlossaryConfigurator())
-        {
-        }
-
-        protected override void SetupSwitches(SwitchParser<GlossarySettings> parser)
-        {
-
         }
     }
 }

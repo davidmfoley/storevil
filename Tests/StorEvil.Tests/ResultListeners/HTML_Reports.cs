@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.IO;
 using NUnit.Framework;
 using StorEvil.Assertions;
+using StorEvil.Spark;
 using StorEvil.Utility;
 
 namespace StorEvil.ResultListeners.SparkReportGenerator_Specs
@@ -15,7 +16,7 @@ namespace StorEvil.ResultListeners.SparkReportGenerator_Specs
         public void When_template_file_does_not_exist_throws_a_sensible_exception()
         {
             var fakeFileWriter = new FakeTextWriter();
-            var generator = new SparkReportGenerator(fakeFileWriter, "C:\\this\\does\\not\\exist.spark");
+            var generator = new SparkResultReportGenerator(fakeFileWriter, "C:\\this\\does\\not\\exist.spark");
 
             Expect.ThisToThrow<TemplateNotFoundException>(() => generator.Handle(new GatheredResultSet()));
         }       
@@ -34,7 +35,7 @@ namespace StorEvil.ResultListeners.SparkReportGenerator_Specs
             File.WriteAllText(pathToTemplate, GetView());
             try
             {
-                var generator = new SparkReportGenerator(fakeFileWriter, pathToTemplate);
+                var generator = new SparkResultReportGenerator(fakeFileWriter, pathToTemplate);
 
                 generator.Handle(GetTestResult());
                 Result = fakeFileWriter.Result;

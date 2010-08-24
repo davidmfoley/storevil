@@ -150,6 +150,9 @@
     <EmbeddedResource Include="Resources\ExampleContext.cs" />
     <Compile Include="Parsing\FileExtensionFilter.cs" />
     <Compile Include="Parsing\SingleFileStoryReader.cs" />
+    <Compile Include="ResultListeners\SparkReportListener.cs" />
+    <Compile Include="ResultListeners\SparkResultReportGenerator.cs" />
+    <Compile Include="Spark\TemplateNotFoundException.cs" />
     <Compile Include="StubGeneration\StdOutWriter.cs" />
     <Compile Include="StubGeneration\StubGenerationSettings.cs" />
     <Compile Include="Tracing\IDebugListener.cs" />
@@ -182,7 +185,7 @@
     <Compile Include="Parsing\IStoryReader.cs" />
     <Compile Include="Parsing\StoryProvider.cs" />
     <Compile Include="ResultListeners\GatheringResultListener.cs" />
-    <Compile Include="ResultListeners\SparkReportGenerator.cs" />
+    <Compile Include="Spark\SparkReportGenerator.cs" />
     <Compile Include="StubGeneration\ClipboardWriter.cs" />
     <Compile Include="StubGeneration\StubGenerator.cs" />
     <Compile Include="Utility\FunqEasyRegistrationHelper.cs" />

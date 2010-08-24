@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContainerConfiguratorFactory.cs" />
+    <Compile Include="GlossarySwitchConfigurator.cs" />
     <Compile Include="JobFactory.cs" />
     <Compile Include="CommonSwitchParser.cs" />
     <Compile Include="Jobs\DisplayHelpJob.cs" />
