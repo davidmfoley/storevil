@@ -107,6 +107,7 @@
     <Compile Include="Context\StoryContext.cs" />
     <Compile Include="Core\JobResult.cs" />
     <Compile Include="Core\ScenarioOutline.cs" />
+    <Compile Include="Glossary\StorEvilGlossaryJob.cs" />
     <Compile Include="Events\EventBus.cs" />
     <Compile Include="Events\EventBusAutoRegistrar.cs" />
     <Compile Include="Events\IHandle.cs" />

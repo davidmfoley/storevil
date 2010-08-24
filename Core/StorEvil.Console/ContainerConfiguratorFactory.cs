@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using Funq;
 using StorEvil.Configuration;
+using StorEvil.Core;
+using StorEvil.Utility;
 
 namespace StorEvil.Console
 {
@@ -36,6 +38,9 @@ namespace StorEvil.Console
 
             if (command == "stub")
                 return new StubGeneratorContainerSwitchConfigurator();
+
+            if (command == "glossary")
+                return new GlossarySwitchConfigurator();
 
             return new HelpContainerConfigurator();
         }

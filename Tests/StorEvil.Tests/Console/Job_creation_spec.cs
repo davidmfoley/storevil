@@ -95,6 +95,14 @@ namespace StorEvil.Console
         }
 
         [Test]
+        public void can_create_glossary_job()
+        {
+            var result = Factory.ParseArguments(new[] { "glossary"});
+            result.ShouldBeOfType<StorEvilGlossaryJob>();
+            result.ShouldNotBeNull();
+        }
+
+        [Test]
         public void displays_usage_if_not_a_recognized_command()
         {
             var result =
