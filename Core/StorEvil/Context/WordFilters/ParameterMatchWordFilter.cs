@@ -134,6 +134,11 @@ namespace StorEvil.Context.WordFilters
             get { return ParamInfo.Name; }
         }
 
+        public Type ParameterType
+        {
+            get { return ParamInfo.ParameterType; }
+        }
+
         public abstract IEnumerable<WordMatch> GetMatches(string[] s);
     }
 }

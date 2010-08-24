@@ -94,6 +94,7 @@
     <Compile Include="Core\StorEvilEvents_Specs.cs" />
     <Compile Include="Expect.cs" />
     <Compile Include="Glossary\Glossary_specs.cs" />
+    <Compile Include="Glossary\Step_definition_provider.cs" />
     <Compile Include="InPlace\CapturingEventBus.cs" />
     <Compile Include="InPlace\ContextLifetime.cs" />
     <Compile Include="InPlace\executing_scenario_with_background.cs" />

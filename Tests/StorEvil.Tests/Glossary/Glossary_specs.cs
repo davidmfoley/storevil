@@ -5,8 +5,8 @@ using System.Reflection;
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Assertions;
-using StorEvil.Context;
 using StorEvil.Context.Matchers;
+using StorEvil.Context.WordFilters;
 using StorEvil.Core;
 using StorEvil.Interpreter;
 
@@ -57,83 +57,48 @@ namespace StorEvil.Glossary
     }
 
     [TestFixture]
-    public class Step_definition_provider
+    public class Step_describer
     {
-        private AssemblyRegistry FakeAssemblyRegistry;
-        private StepProvider Provider;
+        private StepDescriber Describer;
 
         [SetUp]
         public void SetUpContext()
         {
-            FakeAssemblyRegistry = MockRepository.GenerateStub<AssemblyRegistry>();
-            Provider = new StepProvider(FakeAssemblyRegistry);
+            Describer = new StepDescriber();
         }
 
         [Test]
-        public void returns_one_step_for_each_member()
+        public void can_describe_a_reflection_step()
         {
-            GivenContextTypes(typeof (TestContext));
+            string result = GetMethodNameMatcherResult("This_is_an_example");
 
-            Provider.GetSteps().Count().ShouldBe(1);
+            result.ShouldEqual("This is an example");
         }
 
         [Test]
-        public void step_has_type_set()
+        public void can_describe_a_reflection_step_with_a_parameter()
         {
-            GivenContextTypes(typeof(TestContext));
+            string result = GetMethodNameMatcherResult("This_is_an_example_with_a_parameter");
 
-            var step = Provider.GetSteps().First();
-            step.DeclaringType.ShouldEqual(typeof (TestContext));
+            result.ShouldEqual("This is an example with a <int parameter>");
         }
 
-        [Test]
-        public void step_has_matcher()
+        private string GetMethodNameMatcherResult(string methodName)
         {
-            GivenContextTypes(typeof(TestContext));
-
-            var step = Provider.GetSteps().First();
-            step.Matcher.ShouldBeOfType<MethodNameMatcher>();
-            step.Matcher.MemberInfo.Name.ShouldBe("Context_method_example");
+            var matcher = new MethodNameMatcher(typeof (ExampleContext).GetMethod(methodName));
+            var def = new StepDefinition {DeclaringType = typeof (ExampleContext), Matcher = matcher};
+            return Describer.Describe(def);
         }
 
-        private void GivenContextTypes(params Type[] contextTypes)
+        class ExampleContext
         {
-            FakeAssemblyRegistry.Stub(x => x.GetTypesWithCustomAttribute<ContextAttribute>())
-                .Return(contextTypes);
-        }
+            public void This_is_an_example() {}
 
-        class TestContext
-        {
-            public void Context_method_example()
+            public void This_is_an_example_with_a_parameter(int parameter)
             {
             }
         }
     }
 
-    public class StepProvider : IStepProvider
-    {
-        private readonly AssemblyRegistry _assemblyRegistry;
-
-        public StepProvider(AssemblyRegistry assemblyRegistry)
-        {
-            _assemblyRegistry = assemblyRegistry;
-        }
-
-        public IEnumerable<StepDefinition> GetSteps()
-        {
-            foreach (var type in _assemblyRegistry.GetTypesWithCustomAttribute<ContextAttribute>())
-            {
-                var wrapper = new ContextTypeWrapper(type, new MethodInfo[0]);
-                foreach (var memberMatcher in wrapper.MemberMatchers)
-                {
-                    yield return BuildStepDefinition(type, memberMatcher);
-                }
-            }
-        }
-
-        private StepDefinition BuildStepDefinition(Type declaringType, IMemberMatcher memberMatcher)
-        {
-           return new StepDefinition {DeclaringType  = declaringType, Matcher = memberMatcher};
-        }
-    }
+   
 }

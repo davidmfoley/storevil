@@ -20,6 +20,10 @@ namespace StorEvil.Context.Matchers
         private readonly List<WordFilter> _wordFilters = new List<WordFilter>();
         private readonly ScenarioLineParser _scenarioLineParser = new ScenarioLineParser();
 
+        public IEnumerable<WordFilter> WordFilters
+        {
+            get { return _wordFilters; }
+        }
         public MethodNameMatcher(MethodInfo methodInfo)
         {
             _methodInfo = methodInfo;
