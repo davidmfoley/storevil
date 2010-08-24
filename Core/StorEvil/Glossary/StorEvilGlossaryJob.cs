@@ -40,19 +40,19 @@ namespace StorEvil.Core
     public class StepProvider : IStepProvider
     {
         private readonly AssemblyRegistry _assemblyRegistry;
-        private readonly ContextWrapperFactory _wrapperFactory;
+        private readonly ContextTypeFactory _typeFactory;
 
-        public StepProvider(AssemblyRegistry assemblyRegistry, ContextWrapperFactory wrapperFactory)
+        public StepProvider(AssemblyRegistry assemblyRegistry, ContextTypeFactory typeFactory)
         {
             _assemblyRegistry = assemblyRegistry;
-            _wrapperFactory = wrapperFactory;
+            _typeFactory = typeFactory;
         }
 
         public IEnumerable<StepDefinition> GetSteps()
         {
             foreach (var type in _assemblyRegistry.GetTypesWithCustomAttribute<ContextAttribute>())
             {
-                var wrapper = _wrapperFactory.GetWrapper(type);
+                var wrapper = _typeFactory.GetWrapper(type);
                 foreach (var memberMatcher in wrapper.MemberMatchers)
                 {
                     yield return BuildStepDefinition(type, memberMatcher);
@@ -90,7 +90,7 @@ namespace StorEvil.Core
             container.EasyRegister<IStorEvilJob, StorEvilGlossaryJob>();
             container.EasyRegister<IStepDescriber, StepDescriber>();
             container.EasyRegister<IStepProvider, StepProvider>();
-            container.EasyRegister<ContextWrapperFactory>();
+            container.EasyRegister<ContextTypeFactory>();
         }
 
     }

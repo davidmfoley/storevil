@@ -58,11 +58,10 @@ namespace StorEvil.Interpreter.Ambiguous_Match_Resolution
         [TestFixtureSetUp]
         public void SetupContext()
         {
-            var interpreterForTypeFactory = new InterpreterForTypeFactory(new AssemblyRegistry());
-            var typeWrapper = new ContextTypeWrapper(typeof(AmbiguousTestClass), new MethodInfo[] { });
-            var interpreter = new ScenarioInterpreterForType(typeWrapper, interpreterForTypeFactory, new ParameterConverter());
+            var interpreterForTypeFactory = new InterpreterForTypeFactory(new AssemblyRegistry(new[] {this.GetType().Assembly}));
 
-           Chains = interpreter.GetChains("Foo bar baz");
+            var interpreter = interpreterForTypeFactory.GetInterpreterForType(typeof (AmbiguousTestClass));
+            Chains = interpreter.GetChains("Foo bar baz");
         }
 
         [Test]
@@ -71,7 +70,7 @@ namespace StorEvil.Interpreter.Ambiguous_Match_Resolution
            Chains.Count().ShouldEqual(2);
         }
     }
-
+    
     public class AmbiguousTestClass
     {
         public AmbiguousTestSubClass Foo()

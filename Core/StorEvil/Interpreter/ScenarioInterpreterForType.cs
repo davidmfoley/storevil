@@ -12,23 +12,23 @@ namespace StorEvil.Interpreter
 
         private readonly IInterpreterForTypeFactory _factory;
         private readonly ParameterConverter _parameterConverter;
-        private readonly ContextTypeWrapper _contextTypeWrapper;
+        private readonly ContextType _contextType;
 
-        public ScenarioInterpreterForType(ContextTypeWrapper contextTypeWrapper,                                         
+        public ScenarioInterpreterForType(ContextType contextType,                                         
                                           IInterpreterForTypeFactory factory,
                                           ParameterConverter parameterConverter)
         {
-            _contextTypeWrapper = contextTypeWrapper;         
+            _contextType = contextType;         
             _factory = factory;
             _parameterConverter = parameterConverter;
         }      
 
         public IEnumerable<InvocationChain> GetChains(string line)
         {
-            DebugTrace.Trace(GetType().Name, "Interpreting '" + line + "' with type:" + _contextTypeWrapper.WrappedType.Name);
+            DebugTrace.Trace(GetType().Name, "Interpreting '" + line + "' with type:" + _contextType.WrappedType.Name);
               
             var partialMatches = new List<PartialMatch>();
-            foreach (var matcher in _contextTypeWrapper.MemberMatchers)
+            foreach (var matcher in _contextType.MemberMatchers)
             {
                 foreach (var currentMatch in matcher.GetMatches(line) ?? new NameMatch[0])
                 {

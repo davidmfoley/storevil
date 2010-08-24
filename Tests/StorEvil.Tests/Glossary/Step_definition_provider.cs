@@ -25,7 +25,7 @@ namespace StorEvil.Glossary
             FakeExtensionMethodHandler = MockRepository.GenerateStub<IExtensionMethodHandler>();
             FakeExtensionMethodHandler.Stub(x => x.GetExtensionMethodsFor(Arg<Type>.Is.Anything)).Return(new MethodInfo[0]);
 
-            Provider = new StepProvider(FakeAssemblyRegistry, new ContextWrapperFactory(FakeExtensionMethodHandler));
+            Provider = new StepProvider(FakeAssemblyRegistry, new ContextTypeFactory(FakeExtensionMethodHandler));
         }
 
         [Test]
