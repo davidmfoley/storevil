@@ -137,6 +137,12 @@
     <Compile Include="InPlace\InPlaceSettings.cs" />
     <Compile Include="Events\StorEvilEvents.cs" />
     <Compile Include="Interpreter\ContextType.cs" />
+    <Compile Include="Interpreter\ContextTypes\ContextTypeFactory.cs" />
+    <Compile Include="Interpreter\ContextTypes\ExtensionMatcherFactory.cs" />
+    <Compile Include="Interpreter\ContextTypes\IMatcherFactory.cs" />
+    <Compile Include="Interpreter\ContextTypes\MemberReader.cs" />
+    <Compile Include="Interpreter\ContextTypes\ReflectionMatcherFactory.cs" />
+    <Compile Include="Interpreter\ContextTypes\RegExMatcherFactory.cs" />
     <Compile Include="Interpreter\IAmbiguousMatchResolver.cs" />
     <Compile Include="Nunit\NUnitContainerConfigurator.cs" />
     <EmbeddedResource Include="Resources\ExampleContext.cs" />
