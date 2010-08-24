@@ -51,6 +51,7 @@ namespace StorEvil.Context
         }
     }
 
+    // todo: merge with ContextType
     public class ContextInfo
     {
         public ContextLifetime Lifetime;

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -47,6 +48,8 @@ namespace StorEvil.Context.Matchers
 
             return GetMatchesRecursive(words, words, _wordFilters, paramValues);
         }
+
+        public Type ReturnType { get { return _methodInfo.ReturnType; } }
 
         private IEnumerable<NameMatch> GetMatchesRecursive(IEnumerable<string> allWords, IEnumerable<string> words, IEnumerable<WordFilter> filters,  Dictionary<string, object> paramValues)
         {

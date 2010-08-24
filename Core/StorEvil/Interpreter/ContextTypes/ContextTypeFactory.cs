@@ -19,8 +19,6 @@ namespace StorEvil.Interpreter
             var matchers = _matcherFactories.SelectMany(x => x.GetMatchers(type));
 
             return new ContextType(type, matchers);
-        }
-
-     
+        }     
     }
 }

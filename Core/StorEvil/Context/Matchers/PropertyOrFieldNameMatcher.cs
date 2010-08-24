@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -17,7 +18,19 @@ namespace StorEvil.Context.Matchers
         private readonly WordFilterFactory _wordFilterFactory = new WordFilterFactory();
 
         private readonly List<WordFilter> _wordFilters = new List<WordFilter>();
+
+        public IEnumerable<WordFilter> WordFilters { get { return _wordFilters; } }
         public MemberInfo MemberInfo { get; set; }
+        public Type ReturnType
+        {
+            get 
+            { 
+                if (MemberInfo is PropertyInfo) 
+                    return ((PropertyInfo)MemberInfo).PropertyType;
+                return ((FieldInfo)MemberInfo).FieldType;                
+            }
+        }
+
         public IEnumerable<NameMatch> GetMatches(string line)
         {
             return new[] { GetMatch(line) };  

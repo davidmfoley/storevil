@@ -5,7 +5,6 @@ namespace StorEvil.Context
 {
     public static class ContextAttributeHelper
     {
-
         public static ContextInfo GetContextInfo(this Type contextType)
         {
             var customAttrs = contextType.GetCustomAttributes(true);

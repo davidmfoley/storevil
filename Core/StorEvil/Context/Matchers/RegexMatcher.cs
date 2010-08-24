@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -15,6 +16,7 @@ namespace StorEvil.Context.Matchers
             MemberInfo = memberInfo;
 
             _regex = new Regex(pattern);
+            Pattern = pattern;
         }
 
         public MemberInfo MemberInfo
@@ -23,9 +25,24 @@ namespace StorEvil.Context.Matchers
             private set;
         }
 
+        public string Pattern { get; private set; }
+           
+
         public IEnumerable<NameMatch> GetMatches(string line)
         {
             return new[] { GetMatch(line) };  
+        }
+
+        public Type ReturnType
+        {
+            get
+            {
+                if (MemberInfo is PropertyInfo)
+                    return ((PropertyInfo)MemberInfo).PropertyType;
+                if (MemberInfo is FieldInfo)
+                    return ((FieldInfo)MemberInfo).FieldType;
+                return ((MethodInfo) MemberInfo).ReturnType;
+            }
         }
 
         public NameMatch GetMatch(string line)

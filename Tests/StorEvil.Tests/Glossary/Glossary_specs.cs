@@ -83,22 +83,160 @@ namespace StorEvil.Glossary
             result.ShouldEqual("This is an example with a <int parameter>");
         }
 
+        [Test]
+        public void can_describe_a_regex_step()
+        {
+            string result = GetRegexMatcherResult("RegExExample");
+
+            result.ShouldEqual("This is an example of a regex");
+        }
+
+        [Test]
+        public void can_describe_a_regex_step_with_parameter()
+        {
+            string result = GetRegexMatcherResult("RegExExampleWithParameter");
+
+            result.ShouldEqual("This is an example of a regex with a <string parameter>");
+        }
+
+        [Test]
+        public void can_describe_a_regex_step_with_embedded_parameter()
+        {
+            string result = GetRegexMatcherResult("RegExExampleWithEmbeddedParameter");
+
+            result.ShouldEqual("This is an example of a regex with a <int parameter> embedded");
+        }
+
+        [Test]
+        public void can_describe_a_property_step()
+        {
+            string result = GetPropertyMatcherResult("Example_property");
+
+            result.ShouldEqual("Example property");
+        }
+
+        [Test]
+        public void can_describe_a_step_with_a_child()
+        {
+            var childStep = new StepDefinition
+                                {
+                                    DeclaringType = typeof (ExampleChildContext),
+                                    Matcher =  new MethodNameMatcher(typeof (ExampleChildContext).GetMethod("Bar"))
+                                };
+
+            var step = new StepDefinition
+                           {
+                               Children = new[] {childStep},
+                               DeclaringType = typeof(ExampleParentContext),
+                               Matcher = new MethodNameMatcher(typeof (ExampleParentContext).GetMethod("Foo"))
+                           };
+
+            var result = Describer.Describe(step);
+            result.ShouldEqual("Foo\r\n    Bar");
+        }
+
+        [Test]
+        public void can_describe_a_step_with_multiple_levles_of_children()
+        {
+            var grandchildStep = new StepDefinition
+            {
+                DeclaringType = typeof(ExampleGrandChildContext),
+                Matcher = new MethodNameMatcher(typeof(ExampleGrandChildContext).GetMethod("Baz"))
+            };
+
+            var childStep = new StepDefinition
+            {
+                Children = new[] { grandchildStep },
+                DeclaringType = typeof(ExampleChildContext),
+                Matcher = new MethodNameMatcher(typeof(ExampleChildContext).GetMethod("Bar"))
+            };
+
+            var step = new StepDefinition
+            {
+                Children = new[] { childStep },
+                DeclaringType = typeof(ExampleParentContext),
+                Matcher = new MethodNameMatcher(typeof(ExampleParentContext).GetMethod("Foo"))
+            };
+
+            var result = Describer.Describe(step);
+            result.ShouldEqual("Foo\r\n    Bar\r\n        Baz");
+        }
+
+        public class ExampleParentContext
+        {
+            public ExampleChildContext Foo()
+            {
+                return null;
+            }
+        }
+
+        public class ExampleChildContext
+        {
+            public ExampleGrandChildContext Bar()
+            {
+                return null;
+            }
+        }
+
+
+        public class ExampleGrandChildContext
+        {
+            public void Baz()
+            {
+            }
+        }
+
+        private string GetPropertyMatcherResult(string propertyName)
+        {
+            var matcher = new PropertyOrFieldNameMatcher(typeof (ExampleContext).GetProperty(propertyName));
+            return Describe(matcher);
+        }
+
+        private string GetRegexMatcherResult(string methodName)
+        {
+            var matcher =
+                new RegExMatcherFactory()
+                    .GetMatchers(typeof (ExampleContext))
+                    .First(x => x.MemberInfo.Name == methodName);
+           
+            return Describe(matcher);
+        }
+
         private string GetMethodNameMatcherResult(string methodName)
         {
             var matcher = new MethodNameMatcher(typeof (ExampleContext).GetMethod(methodName));
+            return Describe(matcher);
+        }
+
+        private string Describe(IMemberMatcher matcher)
+        {
             var def = new StepDefinition {DeclaringType = typeof (ExampleContext), Matcher = matcher};
             return Describer.Describe(def);
         }
 
         class ExampleContext
         {
+            public string Example_property
+            {
+                get;
+                set;
+            }
+
             public void This_is_an_example() {}
 
             public void This_is_an_example_with_a_parameter(int parameter)
             {
             }
+
+            [ContextRegex("This is an example of a regex")]
+            public void RegExExample() {}
+
+            [ContextRegex("This is an example of a regex with a (.+)")]
+            public void RegExExampleWithParameter(string parameter) { }
+
+            [ContextRegex("This is an example of a regex with a (.+) embedded")]
+            public void RegExExampleWithEmbeddedParameter(int parameter) { }
         }
     }
 
-   
 }

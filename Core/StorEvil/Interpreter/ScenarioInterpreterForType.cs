@@ -9,7 +9,6 @@ namespace StorEvil.Interpreter
 {
     public class ScenarioInterpreterForType
     {
-
         private readonly IInterpreterForTypeFactory _factory;
         private readonly ParameterConverter _parameterConverter;
         private readonly ContextType _contextType;
@@ -54,10 +53,9 @@ namespace StorEvil.Interpreter
 
         private IEnumerable<InvocationChain> GetPartialMatchChains(string line, IEnumerable<PartialMatch> partialMatches)
         {
-            foreach (var partialMatch in partialMatches)
-                foreach (InvocationChain chain in GetChainsFromPartialMatch(partialMatch, line))
-                    if (chain != null)
-                        yield return chain;
+            return partialMatches
+                .SelectMany(pm => GetChainsFromPartialMatch(pm, line))
+                .Where(x => x != null);
         }
 
         private IEnumerable<InvocationChain> GetChainsFromPartialMatch(PartialMatch partialMatch, string line)

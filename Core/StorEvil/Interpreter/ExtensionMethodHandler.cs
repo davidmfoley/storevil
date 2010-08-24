@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using StorEvil.Context;
 
 namespace StorEvil.Interpreter
@@ -28,7 +29,7 @@ namespace StorEvil.Interpreter
 
             var publicStaticMethods = type.GetMethods(BindingFlags.Public | BindingFlags.Static);
             var extensionMethods =
-                publicStaticMethods.Where(methodInfo => methodInfo.IsStatic & methodInfo.GetParameters().Length > 0);
+                publicStaticMethods.Where(methodInfo => methodInfo.IsStatic & methodInfo.IsDefined(typeof (ExtensionAttribute), true));
             
             foreach (var methodInfo in extensionMethods)
             {
