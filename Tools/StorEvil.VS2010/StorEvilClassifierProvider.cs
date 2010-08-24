@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Utilities;
@@ -22,7 +23,15 @@ namespace StorEvil.VS2010
 
         public IClassifier GetClassifier(ITextBuffer buffer)
         {
-            return buffer.Properties.GetOrCreateSingletonProperty<StorEvilClassifier>(delegate { return new StorEvilClassifier(ClassificationRegistry); });
+            if (IsStorEvilFile(buffer))
+                return buffer.Properties.GetOrCreateSingletonProperty<StorEvilClassifier>(delegate { return new StorEvilClassifier(ClassificationRegistry); });
+            return null;
+        }
+
+        private bool IsStorEvilFile(ITextBuffer buffer)
+        {
+            //temp
+            return buffer.CurrentSnapshot.GetText().Contains("Scenario:");
         }
     }
 }
