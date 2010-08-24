@@ -9,7 +9,7 @@ namespace StorEvil.ResultListeners
     public abstract class WriterListener :
         IHandle<ScenarioStarting>, IHandle<SessionFinished>, IHandle<ScenarioFinished>,
         IHandle<LineFailed>, IHandle<LinePassed>, IHandle<LinePending> ,
-        IHandle<StoryStarting>
+        IHandle<StoryStarting>, IHandle<GenericInformation>
     {
         protected abstract void DoWrite(ConsoleColor white, params string[] s);
      
@@ -53,6 +53,11 @@ namespace StorEvil.ResultListeners
         {
             DoWrite(ConsoleColor.Yellow, eventToHandle.Line + " -- Pending");
             //DoWrite(ConsoleColor.Yellow, eventToHandle.Line + " -- Could not interpret");
+        }
+
+        public void Handle(GenericInformation eventToHandle)
+        {
+            DoWrite(ConsoleColor.White, eventToHandle.Text);
         }
     }
 

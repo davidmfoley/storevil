@@ -5,6 +5,7 @@ using System.Reflection;
 using Funq;
 using StorEvil.Configuration;
 using StorEvil.Context.Matchers;
+using StorEvil.Events;
 using StorEvil.Interpreter;
 using StorEvil.Utility;
 
@@ -14,11 +15,13 @@ namespace StorEvil.Core
     {
         private readonly IStepProvider _stepProvider;
         private readonly IStepDescriber _stepDescriber;
+        private readonly IEventBus _bus;
 
-        public StorEvilGlossaryJob(IStepProvider stepProvider, IStepDescriber stepDescriber)
+        public StorEvilGlossaryJob(IStepProvider stepProvider, IStepDescriber stepDescriber, IEventBus bus)
         {
             _stepProvider = stepProvider;
             _stepDescriber = stepDescriber;
+            _bus = bus;
         }
 
         public int Run()
@@ -28,9 +31,7 @@ namespace StorEvil.Core
                 .Select(x => _stepDescriber.Describe(x));
 
             foreach (var stepDescription in descriptions.OrderBy(x => x))
-            {
-               System.Console.WriteLine(stepDescription);                
-            }
+                _bus.Raise(new GenericInformation {Text = stepDescription});
             return 0;
         }
     }

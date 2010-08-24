@@ -8,6 +8,7 @@ using StorEvil.Assertions;
 using StorEvil.Context.Matchers;
 using StorEvil.Context.WordFilters;
 using StorEvil.Core;
+using StorEvil.Events;
 using StorEvil.Interpreter;
 
 namespace StorEvil.Glossary
@@ -24,7 +25,7 @@ namespace StorEvil.Glossary
         {
             _fakeStepProvider = MockRepository.GenerateStub<IStepProvider>();
             _fakeStepDescriber = MockRepository.GenerateStub<IStepDescriber>();
-            Job = new StorEvilGlossaryJob(_fakeStepProvider, _fakeStepDescriber);
+            Job = new StorEvilGlossaryJob(_fakeStepProvider, _fakeStepDescriber, new EventBus());
         }
 
         [Test]
