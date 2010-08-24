@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Funq;
 using StorEvil.Configuration;
+using StorEvil.Context.Matchers;
 using StorEvil.Utility;
 
 namespace StorEvil.Core
@@ -38,6 +40,9 @@ namespace StorEvil.Core
 
     public class StepDefinition
     {
+        public Type DeclaringType { get; set; }
+
+        public IMemberMatcher Matcher { get; set; }
     }
 
 
