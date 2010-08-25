@@ -7,6 +7,7 @@ using StorEvil.Assertions;
 using StorEvil.Configuration;
 using StorEvil.Core;
 using StorEvil.Events;
+using StorEvil.Glossary;
 using StorEvil.Infrastructure;
 using StorEvil.InPlace;
 using StorEvil.Interpreter;

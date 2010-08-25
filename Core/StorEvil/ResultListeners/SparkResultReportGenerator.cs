@@ -1,7 +1,8 @@
-﻿using StorEvil.Infrastructure;
-using StorEvil.ResultListeners;
+﻿using Spark;
+using StorEvil.Infrastructure;
+using StorEvil.Spark;
 
-namespace StorEvil.Spark
+namespace StorEvil.ResultListeners
 {
     public class SparkResultReportGenerator : IGatheredResultHandler
     {
@@ -19,5 +20,10 @@ namespace StorEvil.Spark
             var generator = new SparkReportGenerator<GatheredResultSetView>(_fileWriter, _pathToTemplateFile);
             generator.Handle(result);
         }
+    }
+
+    public abstract class GatheredResultSetView : AbstractSparkView
+    {
+        public GatheredResultSet Model { get; set; }
     }
 }

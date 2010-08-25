@@ -76,6 +76,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="glossary.spark" />
     <None Include="storevil.config">
       <SubType>Designer</SubType>
     </None>

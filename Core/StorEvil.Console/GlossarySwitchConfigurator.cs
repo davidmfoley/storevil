@@ -1,5 +1,6 @@
 ﻿using StorEvil.Configuration;
 using StorEvil.Core;
+using StorEvil.Glossary;
 
 namespace StorEvil.Console
 {

@@ -25,7 +25,7 @@ namespace StorEvil.Glossary
         {
             _fakeStepProvider = MockRepository.GenerateStub<IStepProvider>();
             _fakeStepDescriber = MockRepository.GenerateStub<IStepDescriber>();
-            Job = new StorEvilGlossaryJob(_fakeStepProvider, _fakeStepDescriber, new EventBus());
+            Job = new StorEvilGlossaryJob(_fakeStepProvider, _fakeStepDescriber, new EventBus(), new NoOpGlossaryFormatter());
         }
 
         [Test]
@@ -212,7 +212,7 @@ namespace StorEvil.Glossary
         private string Describe(IMemberMatcher matcher)
         {
             var def = new StepDefinition {DeclaringType = typeof (ExampleContext), Matcher = matcher};
-            return Describer.Describe(def);
+            return Describer.Describe(def).Description;
         }
 
         class ExampleContext

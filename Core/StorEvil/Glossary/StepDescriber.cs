@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Text.RegularExpressions;
 using StorEvil.Context.Matchers;
 using StorEvil.Context.WordFilters;
+using StorEvil.Glossary;
 using StorEvil.Interpreter;
 
 namespace StorEvil.Core
@@ -21,40 +21,47 @@ namespace StorEvil.Core
 
         Dictionary<Type, IStepDescriber> _describers = new Dictionary<Type, IStepDescriber>();
 
-        public string Describe(StepDefinition stepDefinition)
+        public StepDescription Describe(StepDefinition stepDefinition)
         {
             var matcherType = stepDefinition.Matcher.GetType();
             if (_describers.ContainsKey(matcherType))
             {
-                var description = _describers[matcherType].Describe(stepDefinition);
+                var description = _describers[matcherType].Describe(stepDefinition).Description;
+                var childDescription = "";
                 if (stepDefinition.Children.Any())
                 {
-                    var childDescriptions = stepDefinition.Children.Select(Describe).ToArray();
+                    var childDescriptions = stepDefinition.Children.Select(x=>Describe(x).Description).ToArray();
                     var joined = "\r\n" + string.Join("\r\n", childDescriptions);
-                    description +=  joined.Replace("\r\n", "\r\n    ");
+                    childDescription = joined.Replace("\r\n", "\r\n    ");
                 }
-                return description;
+                return new StepDescription { Description = description, ChildDescription = childDescription };
             }
-                       
-            return "";
+
+            return new StepDescription();
         }
+    }
+
+    public class StepDescription
+    {
+        public string Description = "";
+        public string ChildDescription = "";
     }
 
     public class PropertyOrFieldNameMatcherDescriber : IStepDescriber
     {
         private readonly WordFilterDescriber _wordFilterDescriber = new WordFilterDescriber();
        
-        public string Describe(StepDefinition stepDefinition)
+        public StepDescription Describe(StepDefinition stepDefinition)
         {
             var matcher = (PropertyOrFieldNameMatcher)stepDefinition.Matcher;
-            return _wordFilterDescriber.Describe(matcher.WordFilters);
+            return  _wordFilterDescriber.Describe(matcher.WordFilters);
         }
     }
 
     public class RegexMatcherDescriber : IStepDescriber
     {
         private readonly ParameterDescriber _parameterDescriber = new ParameterDescriber();
-        public string Describe(StepDefinition stepDefinition)
+        public StepDescription Describe(StepDefinition stepDefinition)
         {
             var matcher = (RegexMatcher) stepDefinition.Matcher;
             try
@@ -79,12 +86,12 @@ namespace StorEvil.Core
                     }
                 }
 
-                return sb.ToString();
+                return new StepDescription {Description = sb.ToString()};
             }
             catch(Exception ex)
             {
                 DebugTrace.Trace(this, "Error occurred describing Regex: " + ex);
-                return matcher.Pattern;
+                return new StepDescription { Description = matcher.Pattern };
             }
         }
 
@@ -132,7 +139,7 @@ namespace StorEvil.Core
     public class MethodNameMatcherDescriber : IStepDescriber
     {
         private readonly WordFilterDescriber _wordFilterDescriber = new WordFilterDescriber();
-        public string Describe(StepDefinition stepDefinition)
+        public StepDescription Describe(StepDefinition stepDefinition)
         {
 
 
@@ -147,12 +154,11 @@ namespace StorEvil.Core
     {
           private readonly ParameterDescriber _parameterDescriber = new ParameterDescriber();
       
-        public string Describe(IEnumerable<WordFilter> filters)
+        public StepDescription Describe(IEnumerable<WordFilter> filters)
         {            
-
             var filtersTranslated = filters.Select(TranslateWordFilter).ToArray();
 
-            return string.Join(" ", filtersTranslated);
+            return new StepDescription {Description = string.Join(" ", filtersTranslated)};
         }
 
         private string TranslateWordFilter(WordFilter wordFilter)

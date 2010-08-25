@@ -4,15 +4,13 @@ using System.Text;
 using Spark;
 using Spark.FileSystem;
 using StorEvil.Infrastructure;
+using StorEvil.Interpreter;
 using StorEvil.ResultListeners;
 using StorEvil.Utility;
 
 namespace StorEvil.Spark
 {
-    public abstract class GatheredResultSetView : AbstractSparkView
-    {
-        public GatheredResultSet Model { get; set; }       
-    }
+
 
     public class SparkReportGenerator<TView> where TView :ISparkView
     {
@@ -31,6 +29,9 @@ namespace StorEvil.Spark
             // Find the full path to the template file, 
             // using current directory if argument isn't fully qualified
             string templatePath = GetTemplatePath();
+
+            DebugTrace.Trace(this, "Rendering:" + templatePath);
+            DebugTrace.Trace(this, "Model:" + model.ToString());
 
             var templateName = Path.GetFileName(templatePath);
             var templateDirPath = Path.GetDirectoryName(templatePath);

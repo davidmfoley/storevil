@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using StorEvil.Context;
 using StorEvil.Context.Matchers;
+using StorEvil.Glossary;
 using StorEvil.Interpreter;
 
 namespace StorEvil.Core

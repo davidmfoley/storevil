@@ -1,0 +1,55 @@
+﻿<macro name="RenderStep" step="StorEvil.Glossary.StepViewModel">
+
+  <div class="step-description"><%=FormatDescription(step.Description)%></div>
+  <% foreach (var child in step.Children) { %>
+  <div class="step">
+    <%= RenderStep(child) %>
+  </div>
+  <% } %>
+</macro>
+<html>
+    <head>
+		<style type='text/css'>	
+		body {
+			background: #ddd;
+			font-family: Interstate, "Lucida Grande",  Verdana, Arial, helvetica, sans-serif;
+			font-size:13px;
+			color: black;			
+		}
+		
+		div  {
+			padding:2x;		
+			margin:0;	
+		}
+		.step {
+			padding-left:20px;
+			color:Black;
+		}
+
+		.step .step {
+			color:#222;
+		}
+		
+		.step .step .step{
+			color:#444;
+		}
+
+		.param {
+			font-weight:bold;
+			color:Green;
+		}
+
+		h1, h2, h3 {
+			padding:5px;
+			margin:0px;
+		}
+	
+	</style>
+    </head>
+    <body>
+        <h1>StorEvil Glossary</h1>
+		<div class="step" each="var step in Model.Steps">
+			${RenderStep(step)}
+		</div>
+    </body>
+</html>
