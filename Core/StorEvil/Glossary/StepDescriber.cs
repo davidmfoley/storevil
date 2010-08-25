@@ -27,14 +27,8 @@ namespace StorEvil.Core
             if (_describers.ContainsKey(matcherType))
             {
                 var description = _describers[matcherType].Describe(stepDefinition).Description;
-                var childDescription = "";
-                if (stepDefinition.Children.Any())
-                {
-                    var childDescriptions = stepDefinition.Children.Select(x=>Describe(x).Description).ToArray();
-                    var joined = "\r\n" + string.Join("\r\n", childDescriptions);
-                    childDescription = joined.Replace("\r\n", "\r\n    ");
-                }
-                return new StepDescription { Description = description, ChildDescription = childDescription };
+                
+                return new StepDescription { Description = description};
             }
 
             return new StepDescription();
