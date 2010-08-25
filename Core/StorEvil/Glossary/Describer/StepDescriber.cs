@@ -31,19 +31,11 @@ namespace StorEvil.Core
             var matcherType = stepDefinition.Matcher.GetType();
             if (_describers.ContainsKey(matcherType))
             {
-                var description = _describers[matcherType].Describe(stepDefinition).Description;
-                
-                return new StepDescription { Description = description};
+                return _describers[matcherType].Describe(stepDefinition);                
             }
 
             return new StepDescription();
         }
-    }
-
-    public class StepDescription
-    {
-        public string Description = "";
-        public string ChildDescription = "";
     }
 
     public class PropertyOrFieldNameMatcherDescriber : IStepDescriber
@@ -64,36 +56,36 @@ namespace StorEvil.Core
         {
             var matcher = (RegexMatcher) stepDefinition.Matcher;
             try
-            {
-                
+            {                
                 var pieces = Split(matcher.Pattern);
 
-                var sb = new StringBuilder();
-
+                List<StepSpan> spans = new List<StepSpan>();
+            
                 int currentParam = 0;
                 foreach (var piece in pieces)
                 {
                     if (piece.StartsWith("("))
                     {
-
-                        sb.Append(DescribeParameter(matcher, currentParam));
+                        var param = ((MethodInfo)matcher.MemberInfo).GetParameters().ElementAt(currentParam);
+                        spans.Add(new ParameterSpan(param.ParameterType, param.Name));
                         currentParam++;
                     }
                     else
                     {
-                        sb.Append(piece);
+                       spans.Add(new TextSpan(piece.Trim()));
                     }
                 }
 
-                return new StepDescription {Description = sb.ToString()};
+                return new StepDescription {Spans = spans};
             }
             catch(Exception ex)
             {
                 DebugTrace.Trace(this, "Error occurred describing Regex: " + ex);
-                return new StepDescription { Description = matcher.Pattern };
+                return new StepDescription {Spans = new StepSpan[] {new TextSpan(matcher.Pattern)}};
             }
         }
 
+       
         private string DescribeParameter(RegexMatcher matcher, int currentParam)
         {
             string s;
@@ -155,24 +147,24 @@ namespace StorEvil.Core
       
         public StepDescription Describe(IEnumerable<WordFilter> filters)
         {            
-            var filtersTranslated = filters.Select(TranslateWordFilter).ToArray();
+            var spans = filters.Select(TranslateWordFilter);
 
-            return new StepDescription {Description = string.Join(" ", filtersTranslated)};
+            return new StepDescription { Spans = spans };
         }
 
-        private string TranslateWordFilter(WordFilter wordFilter)
+        private StepSpan TranslateWordFilter(WordFilter wordFilter)
         {
             if (wordFilter is TextMatchWordFilter)
             {
-                return ((TextMatchWordFilter)wordFilter).Word;
+                return new TextSpan(((TextMatchWordFilter)wordFilter).Word);
             }
             if (wordFilter is ParameterMatchWordFilter)
             {
                 var paramMatch = ((ParameterMatchWordFilter)wordFilter);
-                return _parameterDescriber.DescribeParameter(paramMatch.ParameterType, paramMatch.ParameterName);
+                return new ParameterSpan(paramMatch.ParameterType, paramMatch.ParameterName);
             }
 
-            return "";
+            return new TextSpan("");
         }
     }
 

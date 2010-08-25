@@ -108,6 +108,7 @@
     <Compile Include="Core\JobResult.cs" />
     <Compile Include="Core\ScenarioOutline.cs" />
     <Compile Include="Glossary\Describer\StepDescriber.cs" />
+    <Compile Include="Glossary\Describer\StepDescription.cs" />
     <Compile Include="Glossary\Glossary.cs" />
     <Compile Include="Glossary\GlossaryConfigurator.cs" />
     <Compile Include="Glossary\Spark\GlossaryViewModel.cs" />

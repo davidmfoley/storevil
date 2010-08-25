@@ -9,15 +9,7 @@ namespace StorEvil.Glossary
 {
    
     public class Step_describer_spec
-    {
-        protected StepDescriber Describer;
-
-        [SetUp]
-        public void SetUpContext()
-        {
-            Describer = new StepDescriber();
-        }
-
+    {       
         protected StepDescription GetPropertyMatcherResult(string propertyName)
         {
             var matcher = new PropertyOrFieldNameMatcher(typeof(ExampleContext).GetProperty(propertyName));
@@ -43,7 +35,7 @@ namespace StorEvil.Glossary
         private StepDescription Describe(IMemberMatcher matcher)
         {
             var def = new StepDefinition { DeclaringType = typeof(ExampleContext), Matcher = matcher };
-            return Describer.Describe(def);
+            return new StepDescriber().Describe(def);
         }
 
         class ExampleContext
@@ -93,16 +85,34 @@ namespace StorEvil.Glossary
     }
 
     [TestFixture]
-    public class Describing_regex_step :Step_describer_spec
+    public class Describing_regex_step : Step_describer_spec
     {
+        private StepDescription Result;
+
+        [SetUp]
+        public void SetUpContext()
+        {
+            Result = GetRegexMatcherResult("RegExExample");
+        }
         [Test]
         public void can_describe_a_regex_step()
-        {
-            var result = GetRegexMatcherResult("RegExExample");
-
-            result.Description.ShouldEqual("This is an example of a regex");
+        {          
+            Result.Description.ShouldEqual("This is an example of a regex");
         }
 
+        [Test]
+        public void can_get_spans_for_a_regex_step()
+        {           
+            Result.Spans.Count().ShouldBe(1);
+            Result.Spans.First().ShouldBeOfType<TextSpan>();
+            Result.Spans.First().Text.ShouldBe("This is an example of a regex");
+        }
+    }
+
+   
+    [TestFixture]
+    public class Describing_regex_step_with_parameter : Step_describer_spec
+    {
         [Test]
         public void can_describe_a_regex_step_with_parameter()
         {
@@ -148,7 +158,7 @@ namespace StorEvil.Glossary
                                Matcher = new MethodNameMatcher(typeof (ExampleParentContext).GetMethod("Foo"))
                            };
 
-            var result = Describer.Describe(step);
+            var result = new StepDescriber().Describe(step);
             result.Description.ShouldEqual("Foo");
             result.ChildDescription.ShouldEqual("    Bar");
         }
@@ -176,7 +186,7 @@ namespace StorEvil.Glossary
                                Matcher = new MethodNameMatcher(typeof(ExampleParentContext).GetMethod("Foo"))
                            };
 
-            var result = Describer.Describe(step);
+            var result = new StepDescriber().Describe(step);
             result.Description.ShouldEqual("Foo");
             result.ChildDescription.ShouldEqual("    Bar\r\n        Baz");
         }
