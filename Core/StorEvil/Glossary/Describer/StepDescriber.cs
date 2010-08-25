@@ -10,6 +10,11 @@ using StorEvil.Interpreter;
 
 namespace StorEvil.Core
 {
+    public interface IStepDescriber
+    {
+        StepDescription Describe(StepDefinition stepDefinition);
+    }
+
     public class StepDescriber : IStepDescriber
     {
         public StepDescriber()
