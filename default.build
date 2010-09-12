@@ -96,6 +96,7 @@
     <MSBuild
       Projects="Core\StorEvil\StorEvil.Core.csproj;Tools\StorEvil.TeamCity\StorEvil.TeamCity.csproj;Tools\StorEvil.CustomTool\StorEvil.CustomTool.csproj"
       Properties="OutputPath=$(OutputPath)\Tools"
+	Condition=" '$(OS)' == 'Windows_NT' "
     />
   </Target>
 
@@ -171,11 +172,12 @@
       Properties="OutputPath=$(OutputPath)\Tests"
     />
 
-    <Exec Command="$(MSBuildProjectDirectory)\Tools\NUnit\nunit-console.exe $(MSBuildProjectDirectory)\_build\Tests\StorEvil.Tests.dll"	/>
+    <Exec Command="mono $(MSBuildProjectDirectory)\Tools\NUnit\nunit-console.exe $(MSBuildProjectDirectory)\_build\Tests\StorEvil.Tests.dll" Condition=" '$(OS)' != 'Windows_NT' "/>
+    <Exec Command="$(MSBuildProjectDirectory)\Tools\NUnit\nunit-console.exe $(MSBuildProjectDirectory)\_build\Tests\StorEvil.Tests.dll" Condition=" '$(OS)' == 'Windows_NT' "	/>
   </Target>
 
   <Target Name="CleanOutput">
-    <RemoveDir Directories="$(OutputPath)" Condition="Exists($(OutputPath))" ContinueOnError="true" />
+    <RemoveDir Directories="$(OutputPath)" Condition="Exists('$(OutputPath)')" ContinueOnError="true" />
     <MakeDir Directories="$(OutputPath)" />
   </Target>
 
