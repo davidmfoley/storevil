@@ -27,7 +27,7 @@ namespace StorEvil.Configuration
         [Test]
         public void when_config_present_in_same_folder_uses_it()
         {
-            ConfigFileExistsAt("c:\\test\\storevil.config");
+            ConfigFileExistsAt(GetPath("c:\\test\\storevil.config"));
 
             ShouldReturnConfigFileWhenCalledFrom("c:\\test");
         }
@@ -38,7 +38,7 @@ namespace StorEvil.Configuration
             // note: should make successive calls up the directory structure
             // first \test\foo\bar, then \test\foo, then \test
 
-            ConfigFileExistsAt("c:\\test\\storevil.config");
+            ConfigFileExistsAt(GetPath("c:\\test\\storevil.config"));
             ShouldReturnConfigFileWhenCalledFrom("c:\\test\\foo\\bar\\");
         }
 
@@ -48,7 +48,7 @@ namespace StorEvil.Configuration
 
             ParserReturnsConfigSettings(settings);
 
-            var result = FilesystemConfigReader.GetConfig(workingDirectory);
+            var result = FilesystemConfigReader.GetConfig(GetPath(workingDirectory));
 
             Assert.That(result, Is.SameAs(settings));
         }
@@ -59,7 +59,7 @@ namespace StorEvil.Configuration
             // note: should make successive calls up the directory structure
             // first \test\foo\bar, then \test\foo, then \test
 
-            string workingDirectory = "c:\\test\\foo\\";
+            string workingDirectory = GetPath("\\test\\foo\\");
             ConfigFileExistsAt(workingDirectory + "storevil.config");
             var settings = new ConfigSettings();
 
@@ -73,12 +73,18 @@ namespace StorEvil.Configuration
         [Test]
         public void when_no_config_present_in_tree_returns_default()
         {
-            const string path = "c:\\test\\storevil.config";
+            string path = GetPath("\\test\\storevil.config");
 
             var result = FilesystemConfigReader.GetConfig(path);
 
             result.ShouldNotBeNull();
         }
+		private string GetPath(string path) {
+			if (System.IO.Path.DirectorySeparatorChar != '\\') 
+				return "~" + path.Replace("\\", "/");
+			
+			return "c:" + path;
+		}
 
         private void ConfigFileExistsAt(string path)
         {

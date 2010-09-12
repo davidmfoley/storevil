@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -29,7 +29,7 @@ namespace StorEvil.Core
                 var description = _describers[matcherType].Describe(stepDefinition);
                 if (stepDefinition.Children.Any())
                 {
-                    var childDescriptions = stepDefinition.Children.Select(Describe).ToArray();
+                    var childDescriptions = stepDefinition.Children.Select(d=>Describe(d)).ToArray();
                     var joined = "\r\n" + string.Join("\r\n", childDescriptions);
                     description +=  joined.Replace("\r\n", "\r\n    ");
                 }
@@ -150,7 +150,7 @@ namespace StorEvil.Core
         public string Describe(IEnumerable<WordFilter> filters)
         {            
 
-            var filtersTranslated = filters.Select(TranslateWordFilter).ToArray();
+            var filtersTranslated = filters.Select(f=>TranslateWordFilter(f)).ToArray();
 
             return string.Join(" ", filtersTranslated);
         }

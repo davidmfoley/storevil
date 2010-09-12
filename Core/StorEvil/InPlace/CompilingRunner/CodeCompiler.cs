@@ -38,11 +38,14 @@ namespace StorEvil.InPlace
 
         private static void ThrowAndLogCompilerErrors(string sourceCode, CompilerResults results)
         {
-            
-            if (results.Errors.Count == 0)
+		     var errors = results.Errors
+				.Cast<CompilerError>()
+				.Where<CompilerError>(x => !x.IsWarning);
+			
+            if (errors.Count() == 0)
                 return;
 
-            foreach (var error in results.Errors)
+            foreach (var error in errors)
                 Debug.WriteLine(error);
 
             Debug.WriteLine(sourceCode);            

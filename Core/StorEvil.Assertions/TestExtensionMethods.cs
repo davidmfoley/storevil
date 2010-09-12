@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -34,7 +34,7 @@ namespace StorEvil.Assertions
                 return;
 
             if (actual == null)
-                Assert.Fail();
+                Assert.Fail("Expected: " + expected + "\r\nActual " + actual);
 
             object expectedConverted = ConvertToType(actual.GetType(), expected);
 
@@ -166,6 +166,11 @@ namespace StorEvil.Assertions
         public static void Fail()
         {
             throw new AssertionException("Failed");
+        }
+		
+		public static void Fail(string message)
+        {
+            throw new AssertionException(message);
         }
 
         public static void That(bool b, string buildComparisonMessage)

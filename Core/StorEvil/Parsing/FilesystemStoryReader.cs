@@ -36,7 +36,7 @@ namespace StorEvil.Parsing
             var stories = Filesystem
                 .GetFilesInFolder(path)
                 .Where(filter.IsValid)
-                .Select(GetStoryInfo)                       
+                .Select(f=>GetStoryInfo(f))                       
                 .ToList();
 
             foreach (var subPath in Filesystem.GetSubFolders(path))

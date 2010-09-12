@@ -1,0 +1,67 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" ctype="Workspace" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Tests/StorEvil.Tests/InPlace/When_scenario_maps_to_context_method_action_that_fails.cs" ctype="Workbench">
+    <Files>
+      <File FileName="Core/StorEvil/Configuration/switchParser.cs" Line="1" Column="1" />
+      <File FileName="Core/StorEvil/Context/AssemblyRegistry.cs" Line="1" Column="1" />
+      <File FileName="Core/StorEvil/Glossary/StepDescriber.cs" Line="1" Column="1" />
+      <File FileName="Core/StorEvil/Interpreter/IAmbiguousMatchResolver.cs" Line="1" Column="1" />
+      <File FileName="Core/StorEvil/Parsing/FilesystemStoryReader.cs" Line="1" Column="1" />
+      <File FileName="Tools/StorEvil.CustomTool/StorEvilCustomTool.cs" Line="1" Column="1" />
+      <File FileName="Tests/StorEvil.Tests/InPlace/When_scenario_maps_to_context_method_action_that_succeeds.cs" Line="16" Column="39" />
+      <File FileName="Tests/StorEvil.Tests/Configuration/FilesystemConfigReaderTests.cs" Line="33" Column="10" />
+      <File FileName="Tests/StorEvil.Tests/InPlace/executing_scenario_with_table.cs" Line="1" Column="1" />
+      <File FileName="Core/StorEvil.Assertions/TestExtensionMethods.cs" Line="1" Column="1" />
+      <File FileName="Core/StorEvil/Configuration/FilesystemConfigReader.cs" Line="1" Column="1" />
+      <File FileName="Tests/StorEvil.Tests/InPlace/Chaining_results.cs" Line="14" Column="2" />
+      <File FileName="Core/StorEvil/InPlace/CompilingRunner/CodeCompiler.cs" Line="45" Column="31" />
+      <File FileName="Core/StorEvil/Events/StoryStarting.cs" Line="13" Column="52" />
+      <File FileName="Tests/StorEvil.Tests/InPlace/CapturingEventBus.cs" Line="16" Column="45" />
+      <File FileName="Tests/StorEvil.Tests/InPlace/When_scenario_maps_to_context_method_action_that_fails.cs" Line="17" Column="5" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True" selected="True">
+          <Node name="Core" expanded="True">
+            <Node name="StorEvil.Assertions" expanded="True" />
+            <Node name="StorEvil.Core" expanded="True">
+              <Node name="Configuration" expanded="True" />
+              <Node name="Events" expanded="True" />
+              <Node name="InPlace" expanded="True">
+                <Node name="CompilingRunner" expanded="True" />
+              </Node>
+            </Node>
+          </Node>
+          <Node name="Tests" expanded="True">
+            <Node name="StorEvil.Tests" expanded="True">
+              <Node name="Configuration" expanded="True" />
+              <Node name="InPlace" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="ClassPad">
+        <State expanded="True" selected="True" />
+      </Pad>
+      <Pad Id="MonoDevelop.NUnit.TestPad">
+        <State expanded="True">
+          <Node name="Tests" expanded="True">
+            <Node name="StorEvil.Tests" expanded="True" selected="True">
+              <Node name="StorEvil" expanded="True">
+                <Node name="InPlace" expanded="True">
+                  <Node name="Compiled" expanded="True">
+                    <Node name="Chaining_results" expanded="True" />
+                  </Node>
+                </Node>
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <AuthorInfo Name="David M Foley" Email="davidmfoley@gmail.com" Copyright="David M Foley" ctype="AuthorInformation" />
+</Properties>

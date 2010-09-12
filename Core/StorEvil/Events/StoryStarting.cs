@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using StorEvil.Core;
 
 namespace StorEvil.Events
@@ -10,7 +10,7 @@ namespace StorEvil.Events
     }
 
     [Serializable]
-    public class StoryStarting
+    public class StoryStarting : MarshalByRefObject
     {
         public Story Story;
     }

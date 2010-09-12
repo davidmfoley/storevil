@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -24,7 +24,7 @@ namespace StorEvil.Context
         public AssemblyRegistry(IEnumerable<string> assemblyLocations)
         {
             _assemblyLocations = assemblyLocations;
-            _allTypes = assemblyLocations.Select(LoadAssembly).SelectMany(a => a.GetTypes());
+            _allTypes = assemblyLocations.Select(l=>LoadAssembly(l)).SelectMany(a => a.GetTypes());
         }
 
         private static Assembly LoadAssembly(string location)

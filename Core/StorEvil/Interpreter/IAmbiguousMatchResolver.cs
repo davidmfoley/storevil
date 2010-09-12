@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -105,7 +105,7 @@ namespace StorEvil.Interpreter
 
         private static string GetMessage(IEnumerable<InvocationChain> invocationChains)
         {
-            var names = invocationChains.Select(GetInvocationDescription);
+            var names = invocationChains.Select(c=>GetInvocationDescription(c));
             return "Could not select between\r\n -" + string.Join("\r\n -", names.ToArray());
         }
 

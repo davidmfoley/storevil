@@ -95,7 +95,7 @@ namespace StorEvil.Configuration
         public string GetUsage()
         {
             var switchDescriptions = Switches
-                .Select(Describe);
+                .Select(s=>Describe(s));
             return string.Join("\r\n\r\n", switchDescriptions.ToArray());
         }
 
