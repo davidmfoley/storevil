@@ -103,13 +103,15 @@ namespace StorEvil.Assertions
 
         private static string BuildComparisonMessage(string comparison, IComparable actual, IComparable expected)
         {
-            return "expected " + actual + " to be " + comparison + " " + expected;
+            return "expected " + Assert.Describe(actual) + " to be " + comparison + " " + Assert.Describe(expected);
         }
+
+       
 
         public static void ShouldMatch(this string actual, string regex)
         {
             bool isMatch = Regex.IsMatch(actual, regex, RegexOptions.Singleline);
-            Assert.IsTrue(isMatch, "Expected '" + actual + "' to match pattern: '" + regex + "'");
+            Assert.IsTrue(isMatch, "Expected '" + Assert.Describe(actual) + "' to match pattern: '" + regex + "'");
         }
 
         public static void ShouldNotMatch(this string actual, string regex)
@@ -132,6 +134,13 @@ namespace StorEvil.Assertions
 
     static class Assert
     {
+        internal static string Describe(object actual)
+        {
+            if (actual is string)
+                return "'" + actual + "'";
+
+            return actual.ToString();
+        }
         public static void IsTrue(bool isMatch, string message)
         {
             if (!isMatch)
@@ -150,7 +159,7 @@ namespace StorEvil.Assertions
 
         public static void AreEqual(object a, object b)
         {
-            IsTrue(a.Equals(b), "Not Equal!\r\n Actual: " + b + "\r\n Expected:" + a);
+            IsTrue(a.Equals(b), "Not Equal!\r\n Actual: " + Describe(b) + "\r\n Expected:" +Describe(a));
         }
 
         public static void IsNull(object actual)

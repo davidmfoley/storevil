@@ -208,6 +208,45 @@ namespace StorEvil.Context.Matching_method_names_with_reflection
         }
     }
 
+
+    public class Matching_words_with_embedded_numbers
+    {
+        private IEnumerable<NameMatch> Matches;
+
+        [SetUp]
+        public void SetupContext()
+        {
+            var matcher = MethodMatcherTestHelper.GetMethodNameMatcher<Embedded_number_test_context>("a_foo_with_bar");
+            Matches = matcher.GetMatches("a foobar1827 with bar");
+        }
+
+        [Test]
+        public void should_match()
+        {
+            Matches.ShouldNotBeNull();
+            Matches.Count().ShouldBe(1);
+        }
+
+        [Test]
+        public void should_be_exact_match()
+        {
+            Matches.First().ShouldBeOfType<ExactMatch>();
+        }
+
+        [Test]
+        public void should_have_parameter()
+        {
+            Matches.First().ParamValues.First().Value.ShouldEqual("foobar1827");
+        }
+
+        private class Embedded_number_test_context
+        {
+            public void a_foo_with_bar(string foo)
+            {
+            }
+        }
+    }
+
     public class Parsing_typed_tables
     {
         private object ParamValue;

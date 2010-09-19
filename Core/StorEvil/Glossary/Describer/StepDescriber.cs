@@ -144,25 +144,77 @@ namespace StorEvil.Core
         {
             if (filters.Count() > 1)
             {
-                var first = TranslateWordFilter(filters.First(), false, true);
-                var last = filters.Last();
-                var middle = filters.Skip(1).Take(filters.Count() -2).Select(TranslateWordFilter);
+                var first = TranslateWordFilter(filters.First());
+                var last = TranslateWordFilter(filters.Last());
+                var middle = filters.Skip(1).Take(filters.Count() - 2).SelectMany(x => TranslateWordFilter(x));
+
+                var spans = ProcessSpans(first.Union(middle).Union(last));
+
+                return new StepDescription {Spans = spans};
             }
-            return new StepDescription { Spans = spans };
+            return new StepDescription { };
         }
 
-        private StepSpan TranslateWordFilter(WordFilter wordFilter, bool leadingSpace, bool trailingSpace)
+        private IEnumerable<StepSpan> ProcessSpans(IEnumerable<StepSpan> stepSpans)
         {
-            if (wordFilter is TextMatchWordFilter)
-                return new TextSpan(((TextMatchWordFilter) wordFilter).Word + " ");
+            var a = InjectSpaces(stepSpans);
+            var joined = JoinAdjacentTextSpans(a);
+            return joined;
+        }
 
-            if (wordFilter is ParameterMatchWordFilter)
+        private IEnumerable<StepSpan> JoinAdjacentTextSpans(IEnumerable<StepSpan> stepSpans)
+        {
+            var current = new List<TextSpan>();
+
+            foreach (var stepSpan in stepSpans)
             {
-                var paramMatch = ((ParameterMatchWordFilter)wordFilter);
-                return new ParameterSpan(paramMatch.ParameterType, paramMatch.ParameterName);
+                if (stepSpan is TextSpan)
+                    current.Add((TextSpan)stepSpan);
+                else
+                {
+                    if (current.Any())
+                    {
+                        yield return TextSpan.Merge(current);
+                        current.Clear();
+                    }
+                    yield return stepSpan;
+                }
             }
 
-            return new TextSpan("");
+            if (current.Any())
+                yield return TextSpan.Merge(current);
+        }
+
+        private IEnumerable<StepSpan> InjectSpaces(IEnumerable<StepSpan> joined)
+        {
+            if (!joined.Any())
+                yield break;
+
+            yield return joined.First();
+
+            foreach (var stepSpan in joined.Skip(1))
+            {
+                yield return new TextSpan(" ");
+                yield return stepSpan;
+            }
+        }
+
+        private IEnumerable<StepSpan> TranslateWordFilter(WordFilter wordFilter)
+        {
+           
+            if (wordFilter is TextMatchWordFilter)
+            {
+                yield return new TextSpan(((TextMatchWordFilter)wordFilter).Word);
+            }
+            else if (wordFilter is ParameterMatchWordFilter)
+            {
+                var paramMatch = ((ParameterMatchWordFilter)wordFilter);
+                yield return new ParameterSpan(paramMatch.ParameterType, paramMatch.ParameterName);
+            }
+            else
+            {
+                yield return new TextSpan("");
+            }
         }
     }
 

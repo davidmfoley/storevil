@@ -4,6 +4,30 @@ using StorEvil;
 
 namespace StorEvilSpecs{
 
+[NUnit.Framework.TestFixtureAttribute] public class AltNet_feature : StorEvil.CodeGeneration.TestFixture {
+   public object Contexts { get { return base.GetContexts();}}    [NUnit.Framework.SetUpAttribute]
+    public void HandleSetUp() { base.BeforeEach(); }
+    [NUnit.Framework.TestFixtureSetUpAttribute]
+    public void HandleTestFixtureSetUp() { SetListener(new StorEvil.CodeGeneration.NUnitListener()); base.BeforeAll(); }
+    [NUnit.Framework.TearDownAttribute]
+    public void HandleTearDown() { base.AfterEach(); }
+    [NUnit.Framework.TestFixtureTearDownAttribute]
+    public void HandleTestFixtureTearDown() { base.AfterAll(); }
+  [NUnit.Framework.TestAttribute] public void Example() {
+#line 1  "AltNet.feature"
+#line hidden
+#line 2
+ExecuteLine(@"Given I have 5 cards in my hand");
+#line hidden
+
+#line 3
+ExecuteLine(@"And my name is Dave");
+#line hidden
+  }
+  }
+}
+namespace StorEvilSpecs{
+
 [NUnit.Framework.TestFixtureAttribute] public class AmbiguousMatches_feature : StorEvil.CodeGeneration.TestFixture {
    public object Contexts { get { return base.GetContexts();}}    [NUnit.Framework.SetUpAttribute]
     public void HandleSetUp() { base.BeforeEach(); }

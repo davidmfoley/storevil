@@ -61,8 +61,16 @@ namespace StorEvil.Core
             return t.Name;
         }        
     }
+
     public class TextSpan :StepSpan
     {
+        public static TextSpan Merge(IEnumerable<TextSpan> spans)
+        {
+            var words = spans.Select(x => x.Text).ToArray();
+            var joined = string.Join("", words);
+            return new TextSpan(joined);
+        }
+
         public TextSpan(string text)
         {
             Text = text;

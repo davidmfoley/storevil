@@ -80,7 +80,6 @@ namespace StorEvil.Glossary
             var result = GetMethodNameMatcherResult("This_is_an_example_with_a_parameter");
 
             result.Description.ShouldEqual("This is an example with a <int parameter>");
-
         }
     }
 
