@@ -107,8 +107,16 @@
     <Compile Include="Context\StoryContext.cs" />
     <Compile Include="Core\JobResult.cs" />
     <Compile Include="Core\ScenarioOutline.cs" />
+    <Compile Include="Glossary\Describer\MethodNameMatcherDescriber.cs" />
+    <Compile Include="Glossary\Describer\ParameterDescriber.cs" />
+    <Compile Include="Glossary\Describer\ParameterSpan.cs" />
+    <Compile Include="Glossary\Describer\PropertyOrFieldNameMatcherDescriber.cs" />
+    <Compile Include="Glossary\Describer\RegexMatcherDescriber.cs" />
     <Compile Include="Glossary\Describer\StepDescriber.cs" />
     <Compile Include="Glossary\Describer\StepDescription.cs" />
+    <Compile Include="Glossary\Describer\StepSpan.cs" />
+    <Compile Include="Glossary\Describer\TextSpan.cs" />
+    <Compile Include="Glossary\Describer\WordFilterDescriber.cs" />
     <Compile Include="Glossary\Glossary.cs" />
     <Compile Include="Glossary\GlossaryConfigurator.cs" />
     <Compile Include="Glossary\Spark\GlossaryViewModel.cs" />

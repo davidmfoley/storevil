@@ -17,13 +17,11 @@ namespace StorEvil.Configuration
 
         public ConfigSettings GetConfig(string directoryOrFile)
         {
-            var path = directoryOrFile.ToLower();
-            if (!path.EndsWith("\\"))
-                path = path + "\\";
+            string path = NormalizePath(directoryOrFile);
 
             var containingDirectory = path; // Path.GetDirectoryName(Path.GetFullPath(path));
 
-            while (containingDirectory.Length > Path.GetPathRoot(containingDirectory).Length)
+            while (IsNotRoot(containingDirectory))
             {
                 var configLocation = Path.Combine(containingDirectory, "storevil.config");
 
@@ -39,6 +37,19 @@ namespace StorEvil.Configuration
             }
 
             return ConfigSettings.Default();
+        }
+
+        private string NormalizePath(string directoryOrFile)
+        {
+            var path = directoryOrFile.ToLower();
+            if (!path.EndsWith("\\"))
+                path = path + "\\";
+            return path;
+        }
+
+        private bool IsNotRoot(string containingDirectory)
+        {
+            return containingDirectory.Length > Path.GetPathRoot(containingDirectory).Length;
         }
 
         private ConfigSettings BuildConfigSettings(string path, string configLocation)

@@ -29,7 +29,6 @@ namespace StorEvil
                 DebugTrace.Listener = new ConsoleDebugListener();
             }
 
-
             var bus = StorEvilEvents.Bus;
             container.Register<IEventBus>(bus);
 
