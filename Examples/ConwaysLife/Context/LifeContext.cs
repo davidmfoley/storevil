@@ -14,7 +14,7 @@ namespace ConwaysLife.Context
     public class LifeContext
     {
         private LifeBoard _board;
-
+        
         public void Given_the_following_Setup(string[][] table)
         {
             _board = new LifeBoard(TransformTableToBooleans(table));

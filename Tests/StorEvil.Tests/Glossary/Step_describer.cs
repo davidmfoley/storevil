@@ -109,27 +109,83 @@ namespace StorEvil.Glossary
         }
     }
 
-   
+
     [TestFixture]
     public class Describing_regex_step_with_parameter : Step_describer_spec
     {
+        private StepDescription Result;
+
+        [SetUp]
+        public void SetUpContext()
+        {
+            Result = GetRegexMatcherResult("RegExExampleWithParameter");
+        }
+
         [Test]
         public void can_describe_a_regex_step_with_parameter()
-        {
-            var result = GetRegexMatcherResult("RegExExampleWithParameter");
+        { 
+            Result.Description.ShouldEqual("This is an example of a regex with a <string parameter>");
+        }
 
-            result.Description.ShouldEqual("This is an example of a regex with a <string parameter>");
+        [Test]
+        public void Should_have_two_spans()
+        {
+            Result.Spans.Count().ShouldBe(2);
+        }
+    }
+
+
+    [TestFixture]
+    public class Describing_regex_step_with_embedded_parameter : Step_describer_spec
+    {
+        private StepDescription Result;
+
+        [SetUp]
+        public void SetUpContext()
+        {
+            Result = GetRegexMatcherResult("RegExExampleWithEmbeddedParameter");
         }
 
         [Test]
         public void can_describe_a_regex_step_with_embedded_parameter()
         {
-            var result = GetRegexMatcherResult("RegExExampleWithEmbeddedParameter");
-
-            result.Description.ShouldEqual("This is an example of a regex with a <int parameter> embedded");
-           
+            Result.Description.ShouldEqual("This is an example of a regex with a <int parameter> embedded");           
         }
 
+        [Test]
+        public void has_three_spans()
+        {
+            Result.Spans.Count().ShouldBe(3);   
+        }
+
+        [Test]
+        public void first_span_is_text()
+        {
+            var firstSpan = Result.Spans.First() as TextSpan;
+            firstSpan.Text.ShouldBe("This is an example of a regex with a ");
+        }
+
+        [Test]
+        public void second_span_is_parameter()
+        {
+            var secondSpan = Result.Spans.ElementAt(1) as ParameterSpan;
+            secondSpan.Name.ShouldBe("parameter");
+            secondSpan.ParameterType.ShouldBe(typeof(int));
+
+        }
+
+        [Test]
+        public void third_span_is_text()
+        {
+            var thirdSpan = Result.Spans.ElementAt(2) as TextSpan;
+            thirdSpan.Text.ShouldBe(" embedded");
+        }
+
+    }
+
+    [TestFixture]
+    public class Describing_property_step : Step_describer_spec
+    {
         [Test]
         public void can_describe_a_property_step()
         {

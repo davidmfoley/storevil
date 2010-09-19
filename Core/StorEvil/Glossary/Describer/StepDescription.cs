@@ -10,7 +10,7 @@ namespace StorEvil.Core
         {
             get { 
                 var spans = Spans.Select(x => x.Text).ToArray();
-                return string.Join(" ", spans);
+                return string.Join("", spans);
             }
         }
         public string ChildDescription = "";
@@ -24,20 +24,20 @@ namespace StorEvil.Core
 
     public class ParameterSpan : StepSpan
     {
-        private readonly Type _parameterType;
-        private readonly string _name;
+        public Type ParameterType { get; private set; }
+        public string Name { get; private set; }
 
         public ParameterSpan(Type parameterType, string name)
         {
-            _parameterType = parameterType;
-            _name = name;
+            ParameterType = parameterType;
+            Name = name;
         }
 
         public string Text
         {
             get
             {
-                return string.Format("<{0} {1}>", TranslateTypeName(_parameterType), _name);
+                return string.Format("<{0} {1}>", TranslateTypeName(ParameterType), Name);
         }}
 
         private string TranslateTypeName(Type t)

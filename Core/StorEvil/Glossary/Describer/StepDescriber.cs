@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using StorEvil.Context.Matchers;
 using StorEvil.Context.WordFilters;
 using StorEvil.Glossary;
@@ -72,7 +71,7 @@ namespace StorEvil.Core
                     }
                     else
                     {
-                       spans.Add(new TextSpan(piece.Trim()));
+                       spans.Add(new TextSpan(piece));
                     }
                 }
 
@@ -132,8 +131,6 @@ namespace StorEvil.Core
         private readonly WordFilterDescriber _wordFilterDescriber = new WordFilterDescriber();
         public StepDescription Describe(StepDefinition stepDefinition)
         {
-
-
             var methodNameMatcher = (MethodNameMatcher) stepDefinition.Matcher;
 
             return _wordFilterDescriber.Describe(methodNameMatcher.WordFilters);
@@ -142,22 +139,23 @@ namespace StorEvil.Core
     }
 
     internal class WordFilterDescriber
-    {
-          private readonly ParameterDescriber _parameterDescriber = new ParameterDescriber();
-      
+    {     
         public StepDescription Describe(IEnumerable<WordFilter> filters)
-        {            
-            var spans = filters.Select(TranslateWordFilter);
-
+        {
+            if (filters.Count() > 1)
+            {
+                var first = TranslateWordFilter(filters.First(), false, true);
+                var last = filters.Last();
+                var middle = filters.Skip(1).Take(filters.Count() -2).Select(TranslateWordFilter);
+            }
             return new StepDescription { Spans = spans };
         }
 
-        private StepSpan TranslateWordFilter(WordFilter wordFilter)
+        private StepSpan TranslateWordFilter(WordFilter wordFilter, bool leadingSpace, bool trailingSpace)
         {
             if (wordFilter is TextMatchWordFilter)
-            {
-                return new TextSpan(((TextMatchWordFilter)wordFilter).Word);
-            }
+                return new TextSpan(((TextMatchWordFilter) wordFilter).Word + " ");
+
             if (wordFilter is ParameterMatchWordFilter)
             {
                 var paramMatch = ((ParameterMatchWordFilter)wordFilter);
