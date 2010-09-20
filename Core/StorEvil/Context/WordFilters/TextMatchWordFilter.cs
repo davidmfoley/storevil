@@ -14,7 +14,10 @@ namespace StorEvil.Context.WordFilters
         public string Word { get; set; }
         public IEnumerable<WordMatch> GetMatches(string[] s)
         {
-            var isMatch = Word.ToLower() == s[0].ToLower().ToCSharpName();
+            var lowerWord    = Word.ToLower();
+            var lowerTarget = s[0].ToLower();
+
+            var isMatch = lowerWord == lowerTarget.ToCSharpName() || lowerWord == lowerTarget;
             if (!isMatch)
                 return WordMatch.NoMatch();
 

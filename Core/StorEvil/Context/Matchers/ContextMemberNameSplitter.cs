@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace StorEvil.Context.Matchers
@@ -19,13 +20,13 @@ namespace StorEvil.Context.Matchers
             var matches = SplitMemberNameRegex.Matches(name);
 
             foreach (Match m in matches)
-                if (!string.IsNullOrEmpty(m.Value))
-                    yield return m.Value;
+                if (!string.IsNullOrEmpty(m.Value.Trim()))
+                    yield return m.Value.Trim();
         }
 
         private static IEnumerable<string> SplitAtUnderscores(string name)
         {
-            return name.Split('_');
+            return name.Split('_').Select(x=> x.Trim()).Where( x=> !string.IsNullOrEmpty( x));
         }
     }
 }

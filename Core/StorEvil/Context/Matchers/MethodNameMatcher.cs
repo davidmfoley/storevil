@@ -91,7 +91,9 @@ namespace StorEvil.Context.Matchers
             var parameterInfos = GetMethodParameterInfos(_methodInfo);
             var paramNameMap = GetParameterNameToInfoMap(parameterInfos);
 
-            foreach (var word in _nameSplitter.SplitMemberName(MemberInfo.Name))
+            var words = _nameSplitter.SplitMemberName(MemberInfo.Name);
+
+            foreach (var word in words)
                 AddWordFilter(word, paramNameMap);
 
             AppendUnmatchedParameters(parameterInfos, paramNameMap);
@@ -154,7 +156,7 @@ namespace StorEvil.Context.Matchers
 
         private bool CanBeAPartialMatch()
         {
-            return ((MethodInfo) MemberInfo).ReturnType != null;
+            return ((MethodInfo) MemberInfo).ReturnType != typeof(void);
         }
     }
 }

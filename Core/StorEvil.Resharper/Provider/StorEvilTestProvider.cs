@@ -42,7 +42,7 @@ namespace StorEvil.Resharper
 
         public ProviderCustomOptionsControl GetCustomOptionsControl(ISolution solution)
         {
-            return null;
+            return null; 
         }
 
         public RemoteTaskRunnerInfo GetTaskRunnerInfo()

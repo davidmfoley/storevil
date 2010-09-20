@@ -210,33 +210,40 @@ namespace StorEvil.Context.Matching_method_names_with_reflection
 
 
     public class Matching_words_with_embedded_numbers
-    {
-        private IEnumerable<NameMatch> Matches;
+    {       
 
-        [SetUp]
-        public void SetupContext()
+        private IEnumerable<NameMatch> GetMatches(string text, string methodName)
         {
-            var matcher = MethodMatcherTestHelper.GetMethodNameMatcher<Embedded_number_test_context>("a_foo_with_bar");
-            Matches = matcher.GetMatches("a foobar1827 with bar");
+            var matcher = MethodMatcherTestHelper.GetMethodNameMatcher<Embedded_number_test_context>(methodName);
+            return matcher.GetMatches(text);
         }
 
         [Test]
         public void should_match()
         {
-            Matches.ShouldNotBeNull();
-            Matches.Count().ShouldBe(1);
+            var matches = GetMatches("a foobar1827 with bar", "a_foo_with_bar");
+            matches.ShouldNotBeNull();
+            matches.Count().ShouldBe(1);
         }
 
         [Test]
         public void should_be_exact_match()
         {
-            Matches.First().ShouldBeOfType<ExactMatch>();
+            GetMatches("a foobar1827 with bar", "a_foo_with_bar").First().ShouldBeOfType<ExactMatch>();
         }
 
         [Test]
         public void should_have_parameter()
         {
-            Matches.First().ParamValues.First().Value.ShouldEqual("foobar1827");
+            var matches = GetMatches("a foobar1827 with bar", "a_foo_with_bar");
+            matches.First().ParamValues.First().Value.ShouldEqual("foobar1827");
+        }
+
+        [Test]
+        public void can_match_method_where_first_word_is_number()
+        {
+            var matches = GetMatches("1 foo bar", "_1_foo_bar");
+            matches.Count().ShouldBe(1);
         }
 
         private class Embedded_number_test_context
@@ -244,6 +251,8 @@ namespace StorEvil.Context.Matching_method_names_with_reflection
             public void a_foo_with_bar(string foo)
             {
             }
+
+            public void _1_foo_bar() {}
         }
     }
 

@@ -14,21 +14,25 @@ namespace StorEvil.Core
     {
         public StepDescriber()
         {
-            _describers.Add(typeof(MethodNameMatcher), new MethodNameMatcherDescriber());
-            _describers.Add(typeof(RegexMatcher), new RegexMatcherDescriber());
-            _describers.Add(typeof(PropertyOrFieldNameMatcher), new PropertyOrFieldNameMatcherDescriber());
+            AddDescriber<MethodNameMatcher, MethodNameMatcherDescriber>();
+            AddDescriber<RegexMatcher, RegexMatcherDescriber>();
+            AddDescriber<PropertyOrFieldNameMatcher, PropertyOrFieldNameMatcherDescriber>();
         }
 
-        Dictionary<Type, IStepDescriber> _describers = new Dictionary<Type, IStepDescriber>();
+        readonly Dictionary<Type, IStepDescriber> _describers = new Dictionary<Type, IStepDescriber>();
+
+        private  void AddDescriber<TMatcher, TDescriber>() where TDescriber : IStepDescriber, new()
+        {
+            _describers.Add(typeof(TMatcher), new TDescriber());
+        }
 
         public StepDescription Describe(StepDefinition stepDefinition)
         {
             var matcherType = stepDefinition.Matcher.GetType();
             
-            if (_describers.ContainsKey(matcherType))
-                return _describers[matcherType].Describe(stepDefinition);
-
-            return new StepDescription();
+            return _describers.ContainsKey(matcherType) ? 
+                _describers[matcherType].Describe(stepDefinition) : 
+                new StepDescription();
         }
     }
 }
