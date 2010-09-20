@@ -386,8 +386,14 @@ namespace StorEvil.Context.Matching_method_names_with_reflection
 
     public class MultiWordTestContext
     {
-        public void Foo([MultipleWords] string param)
+        public MultiWordTestSubContext Foo([MultipleWords] string param)
         {
+            return new MultiWordTestSubContext();
+        }
+
+        public class MultiWordTestSubContext
+        {
+            public void Baz() {}
         }
     }
 
