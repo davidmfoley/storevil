@@ -28,7 +28,7 @@ namespace StorEvil.Core.Event_Handling
 
         public class FakeAssemblyRegistry : AssemblyRegistry
         {
-            public override IEnumerable<Type> GetTypesImplementing(Type t)
+            public override IEnumerable<Type> GetTypesImplementing(Type t, bool byName)
             {
                 return new[] { typeof(TestHandler) };
             }

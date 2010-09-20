@@ -7,6 +7,7 @@ using StorEvil.Events;
 using StorEvil.Infrastructure;
 using StorEvil.InPlace;
 using StorEvil.Interpreter;
+using StorEvil.Interpreter.ParameterConverters;
 using StorEvil.Parsing;
 using StorEvil.Resharper.Tasks;
 
@@ -38,6 +39,8 @@ namespace StorEvil.Resharper.Runner
 
             _eventBus.Register(_resolver);
             _eventBus.Register(_listener);
+
+            ParameterConverter.AddCustomConverters(_assemblyRegistry);
         }
 
         public ExecutionResult Execute(IEnumerable<TaskExecutionNode> storyNodes)

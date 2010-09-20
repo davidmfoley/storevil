@@ -16,7 +16,7 @@ namespace StorEvil.Events
 
         public void InstallTo(IEventBus bus)
         {
-            foreach (var type in _assemblyRegistry.GetTypesImplementing(typeof(IHandle<>)).Where(t=>t.Assembly != GetType().Assembly))
+            foreach (var type in _assemblyRegistry.GetTypesImplementing(typeof(IHandle<>), true).Where(t=>t.Assembly != GetType().Assembly))
             {
                 try
                 {

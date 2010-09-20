@@ -145,7 +145,7 @@ namespace StorEvil.Interpreter.ParameterConverters
 
         public static void AddCustomConverters(AssemblyRegistry registry)
         {
-            var converterTypes = registry.GetTypesImplementing(typeof(CustomParameterConverter));
+            var converterTypes = registry.GetTypesImplementing(typeof(CustomParameterConverter), true);
             foreach (var type in converterTypes)
             {
                 AddCustomConverter(type);
@@ -154,11 +154,51 @@ namespace StorEvil.Interpreter.ParameterConverters
 
         private static void AddCustomConverter(Type type)
         {
-            if (CustomConverters.Any(x => x.GetType() == type))
+            if (AlreadyHaveConverter(type))
                 return;
 
-            var converter = Activator.CreateInstance(type) as CustomParameterConverter;
-            CustomConverters.Add(converter);
+            var converter = Activator.CreateInstance(type);
+            CustomConverters.Add(GetConverter(converter));
+        }
+
+        private static bool AlreadyHaveConverter(Type type)
+        {
+            return CustomConverters.Any(x => GetConverterTypeName(x) == type);
+        }
+
+        private static Type GetConverterTypeName(CustomParameterConverter x)
+        {
+            if (x is ReflectionConverterWrapper)
+                return ((ReflectionConverterWrapper) x).WrappedConverterType;
+            return x.GetType();
+        }
+
+        private static CustomParameterConverter GetConverter(object converter)
+        {
+            if (converter is CustomParameterConverter)
+                return (CustomParameterConverter)converter;
+
+            return new ReflectionConverterWrapper(converter);
+        }
+    }
+
+    internal class ReflectionConverterWrapper : CustomParameterConverter
+    {
+        private readonly object _converter;
+        private MethodInfo _methodInfo;
+
+        public ReflectionConverterWrapper(object converter)
+        {
+            _converter = converter;
+            WrappedConverterType = _converter.GetType();
+            _methodInfo = WrappedConverterType.GetMethod("Convert");
+        }
+
+        public Type WrappedConverterType { get; set; }
+
+        public override object Convert(Type targetType, string asString)
+        {
+            return _methodInfo.Invoke(_converter, new object[] {targetType, asString});
         }
     }
 }

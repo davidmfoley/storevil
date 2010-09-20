@@ -51,9 +51,37 @@ namespace StorEvil.Context
             return t.GetCustomAttributes(true).Any(x => x.GetType().FullName == customAttribute.FullName);
         }
 
-        public virtual IEnumerable<Type> GetTypesImplementing(Type targetType)
+        public virtual IEnumerable<Type> GetTypesImplementing(Type targetType, bool byName)
         {
-            return _allTypes.Where(t => Implements(t, targetType));
+            if (byName)
+                return _allTypes.Where(t => t.IsPublic && ImplementsName(t, targetType));
+            return _allTypes.Where(t => t.IsPublic && Implements(t, targetType));
+        }
+
+        private bool ImplementsName(Type t, Type targetType)
+        {
+            var parentTypes = GetParentTypes(t).ToArray();
+            if (parentTypes.Any(x => x.FullName == targetType.FullName))
+                return true;
+
+            if (!targetType.IsInterface)
+                return false;
+
+            if (targetType.IsGenericType)
+                 return t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition().FullName == targetType.FullName);
+
+            return t.GetInterfaces().Any(x => x.FullName == targetType.FullName);
+        }
+
+        private IEnumerable<Type> GetParentTypes(Type type)
+        {
+            Type current = type.BaseType;
+
+            while (current != null && typeof(object) != current) 
+            {
+                yield return current;
+                current = current.BaseType;
+            }
         }
 
         private bool Implements(Type t, Type targetType)

@@ -53,7 +53,7 @@ namespace StorEvil.Events
         {
             var handlerType = typeof (IHandle<>);
             var allInterfaces = handler.GetType().GetInterfaces();
-            var handlerInterfaces = allInterfaces.Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == handlerType);
+            var handlerInterfaces = allInterfaces.Where(i => i.IsGenericType && i.GetGenericTypeDefinition().FullName == handlerType.FullName);
             return handlerInterfaces.Select(x => x.GetGenericArguments().First());
         }
 
