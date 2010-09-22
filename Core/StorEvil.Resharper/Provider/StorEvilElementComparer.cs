@@ -11,7 +11,7 @@ namespace StorEvil.Resharper.Provider
             if (element is StorEvilScenarioElement)
                 return elementKind == UnitTestElementKind.Test;
 
-            if (element is StorEvilStoryElement || element is StorEvilProjectElement)
+            if (element is StorEvilStoryElement || element is StorEvilProjectElement || element is StorEvilScenarioOutlineElement)
                 return elementKind == UnitTestElementKind.TestContainer;
 
             return false;
@@ -22,8 +22,8 @@ namespace StorEvil.Resharper.Provider
             if (x is StorEvilStoryElement && y is StorEvilStoryElement)
                 return ((StorEvilStoryElement)x).Id == ((StorEvilStoryElement)y).Id ? 0 : -1;
 
-            if (x is StorEvilScenarioElement && y is StorEvilScenarioElement)
-                return ((StorEvilScenarioElement)x).Scenario.Id.CompareTo(((StorEvilScenarioElement)y).Scenario.Id);
+            if (x is IStorEvilScenarioElement && y is IStorEvilScenarioElement)
+                return ((IStorEvilScenarioElement)x).Id.CompareTo(((IStorEvilScenarioElement)y).Id);
 
             if (x is StorEvilProjectElement && y is StorEvilProjectElement)
                 return x.GetNamespace().NamespaceName.CompareTo(y.GetNamespace().NamespaceName);
@@ -33,6 +33,7 @@ namespace StorEvil.Resharper.Provider
 
         public bool IsDeclaredElementOfKind(IDeclaredElement declaredElement, UnitTestElementKind elementKind)
         {
+            
             return false;
         }
     }

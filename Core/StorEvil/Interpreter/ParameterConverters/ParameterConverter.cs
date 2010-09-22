@@ -107,7 +107,7 @@ namespace StorEvil.Interpreter.ParameterConverters
             foreach (var customConverter in CustomConverters)
             {
                 object val = customConverter.Convert(type, paramValue);
-                if (! (val is CouldNotParseParameter))
+                if (! (val.GetType().FullName == typeof(CouldNotParseParameter).FullName))
                     return val;
             }
 

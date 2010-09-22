@@ -67,8 +67,31 @@ namespace StorEvil.Resharper.Provider
             if (scenario is Scenario)
                 consumer(new StorEvilScenarioElement(_provider, storyElement, project, scenario.Name, (Scenario)scenario));
             else
-                consumer(new StorEvilScenarioOutlineElement(_provider, storyElement, project, scenario.Name,
-                                                            (ScenarioOutline)scenario));
+            {
+                var outline = (ScenarioOutline) scenario;
+                var outlineElement = new StorEvilScenarioOutlineElement(_provider, storyElement, project, scenario.Name,
+                                                                                        outline);
+                consumer(outlineElement);
+                var i = 0;
+                foreach (var child in new ScenarioPreprocessor().Preprocess(scenario))
+                {                 
+                    consumer(new StorEvilScenarioElement(_provider, outlineElement, project, BuildExampleRowScenarioName(outline, i), child));
+                    i++;
+                }
+            }
+        }
+
+        private string BuildExampleRowScenarioName(ScenarioOutline outline, int index)
+        {
+            var examples = outline.Examples[index];
+            var nameParts = new string[examples.Length];
+           
+            for (int i = 0; i < examples.Length; i++)
+            {
+                nameParts[i] = outline.FieldNames.ElementAt(i) + "=" + examples[i];
+            }
+            return string.Join(", ", nameParts);
+            
         }
     }
 }

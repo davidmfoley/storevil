@@ -1,9 +1,5 @@
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using StorEvil.Core;
 using StorEvil.InPlace.CompilingRunner;
 
 namespace StorEvil.InPlace

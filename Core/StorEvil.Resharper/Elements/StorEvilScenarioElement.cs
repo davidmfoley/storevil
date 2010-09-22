@@ -1,13 +1,11 @@
 ﻿using System;
-using System.IO;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
-using JetBrains.Util;
 using StorEvil.Core;
 
 namespace StorEvil.Resharper.Elements
 {
-    public class StorEvilScenarioElement : StorEvilUnitTestElement
+    public class StorEvilScenarioElement : StorEvilUnitTestElement, IStorEvilScenarioElement
     {
         private readonly UnitTestNamespace _namespace;
         public readonly IScenario Scenario;
@@ -62,27 +60,17 @@ namespace StorEvil.Resharper.Elements
 
         public override UnitTestElementDisposition GetDisposition()
         {
-            var projectFile = GetProjectFile(Scenario.Location.Path);
-            var contents = File.ReadAllText(Scenario.Location.Path);
-            var range = new TextRange(LineToOffset(contents, Scenario.Location.FromLine), LineToOffset(contents, Scenario.Location.ToLine));
-            
-            return new UnitTestElementDisposition(this, projectFile, range, new TextRange(0));
+            return DispositionBuilder.BuildDisposition(this, Scenario.Location, GetProjectFile(Scenario.Location.Path));
         }
 
-        private int LineToOffset(string contents, int lineNumber)
+        public string Id
         {
-            var line = 1;
-
-            for (int i = 0; i < contents.Length; i++)
-            {
-                if (line >= lineNumber)
-                    return i;
-                
-                if (contents[i] == '\n')
-                    line++;
-            }
-
-            return 0;
+            get { return Scenario.Id; }
         }
+    }
+
+    public interface IStorEvilScenarioElement
+    {
+        string Id { get; }
     }
 }

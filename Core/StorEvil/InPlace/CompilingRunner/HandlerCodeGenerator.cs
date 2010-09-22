@@ -60,6 +60,7 @@ namespace StorEvil.InPlace.CompilingRunner
 
             scenarioCodeBuilder.AppendLine(GetScenarioPreamble(i, story));
 
+
             foreach (var line in GetLines(scenario))
                 scenarioCodeBuilder.AppendLine(BuildLine(line));
 

@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using JetBrains.ReSharper.UnitTestFramework;
 using StorEvil.Core;
+using StorEvil.Parsing;
 using StorEvil.Resharper.Elements;
 using StorEvil.Resharper.Tasks;
 
@@ -36,13 +38,34 @@ namespace StorEvil.Resharper
             }
 
             if (element is StorEvilScenarioElement)
+            {                
+                if (element.Parent is StorEvilScenarioOutlineElement)
+                {
+                    tasks.Add(GetProjectTask(element.Parent.Parent.Parent as StorEvilProjectElement, explicitElements));
+                    tasks.Add(GetStoryTask(element.Parent.Parent as StorEvilStoryElement, explicitElements));                    
+                    tasks.Add(GetScenarioOutlineTask(element.Parent, explicitElements));
+                    tasks.Add(GetScenarioTask(element, explicitElements));
+                }
+                else
+                {
+                    tasks.Add(GetProjectTask(element.Parent.Parent as StorEvilProjectElement, explicitElements));
+                    tasks.Add(GetStoryTask(element.Parent as StorEvilStoryElement, explicitElements));
+                    tasks.Add(GetScenarioTask(element, explicitElements));
+                }
+            }
+
+            if (element is StorEvilScenarioOutlineElement)
             {
                 tasks.Add(GetProjectTask(element.Parent.Parent as StorEvilProjectElement, explicitElements));
                 tasks.Add(GetStoryTask(element.Parent as StorEvilStoryElement, explicitElements));
-                tasks.Add(GetScenarioTask(element, explicitElements));
+                tasks.Add(GetScenarioOutlineTask(element, explicitElements));               
             }
+
+         
             return tasks;
         }
+
+        
 
         private UnitTestTask GetProjectTask(StorEvilProjectElement projectEl, IList<UnitTestElement> explicitElements)
         {
@@ -54,8 +77,16 @@ namespace StorEvil.Resharper
         private UnitTestTask GetScenarioTask(UnitTestElement element, IList<UnitTestElement> explicitElements)
         {
             return new UnitTestTask(element,
-                                    new RunScenarioTask(((StorEvilScenarioElement) element).Scenario,
+                                    new RunScenarioTask(((StorEvilScenarioElement) element).Scenario as Scenario,
                                                         explicitElements.Contains(element)));
+        }
+
+        private UnitTestTask GetScenarioOutlineTask(UnitTestElement element, IList<UnitTestElement> explicitElements)
+        {
+            
+            return new UnitTestTask(element,
+                                   new RunScenarioOutlineTask(((StorEvilScenarioOutlineElement)element).ScenarioOutline,
+                                                       explicitElements.Contains(element)));
         }
 
         private UnitTestTask GetStoryTask(StorEvilStoryElement storyEl, IList<UnitTestElement> explicitElements)

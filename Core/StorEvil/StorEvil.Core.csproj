@@ -153,6 +153,8 @@
     <Compile Include="InPlace\CompilingRunner\HandlerCodeGenerator.cs" />
     <Compile Include="InPlace\CompilingRunner\CodeCompiler.cs" />
     <Compile Include="InPlace\CompilingRunner\InPlaceDebugContainerConfigurator.cs" />
+    <Compile Include="InPlace\CompilingRunner\IRemoteHandlerFactory.cs" />
+    <Compile Include="InPlace\CompilingRunner\SameDomainHandlerFactory.cs" />
     <Compile Include="InPlace\InPlaceContainerConfigurator.cs" />
     <Compile Include="InPlace\InPlaceSettings.cs" />
     <Compile Include="Events\StorEvilEvents.cs" />

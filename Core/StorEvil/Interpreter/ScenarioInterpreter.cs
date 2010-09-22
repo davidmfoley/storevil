@@ -95,7 +95,8 @@ namespace StorEvil.Interpreter
         [DebuggerStepThrough]
         public IEnumerable<string> GetPermutations(string line)
         {
-            if (line.ToLower().StartsWith("and "))
+            var lower = line.ToLower();
+            if (lower.StartsWith("and ") ||  lower.StartsWith("but "))
             {
                 yield return line;
                 yield return line.ReplaceFirstWord(_lastSignificantFirstWord);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using StorEvil.Events;
@@ -40,6 +41,31 @@ namespace StorEvil.Resharper.Runner
                 Result = TaskResult.Skipped;
                 _server.TaskFinished(_remoteTask, "skipped", TaskResult.Skipped);
             }
+
+            if (_remoteTask == null)
+                return;
+
+            var outline = FindOutline(_remoteTask);
+
+            if (outline != null && outline.IsLastChild(((RunScenarioTask)_remoteTask).GetScenario().Id))            
+                _server.TaskFinished(outline, "", TaskResult.Success);
+
+        }
+
+        private RunScenarioOutlineTask FindOutline(RemoteTask remoteTask)
+        {
+            if (!(remoteTask is RunScenarioTask))
+                return null;
+
+            var id = ((RunScenarioTask) remoteTask).GetScenario().Id;
+
+            foreach (var scenarioTask in _scenarioTasks)
+            {
+                if (scenarioTask is RunScenarioOutlineTask)                    
+                    if (((RunScenarioOutlineTask)scenarioTask).HasChildWithId(id))
+                        return scenarioTask as RunScenarioOutlineTask;
+            }
+            return null;
         }
 
 
@@ -59,6 +85,15 @@ namespace StorEvil.Resharper.Runner
 
             _remoteTask = FindScenarioTask(id);
             _server.TaskStarting(_remoteTask);
+
+            if (_remoteTask == null)
+                return;
+
+            var outline = FindOutline(_remoteTask);
+
+            if (outline != null && outline.IsFirstChild(((RunScenarioTask)_remoteTask).GetScenario().Id))
+                _server.TaskStarting(outline);
+
         }
 
         public void SetScenarioTasks(IEnumerable<RemoteTask> storyTasks, IEnumerable<RemoteTask> scenarioTasks)
@@ -71,7 +106,7 @@ namespace StorEvil.Resharper.Runner
 
             foreach (var task in _scenarioTasks)
             {
-                if (((RunScenarioTask) task).GetScenario().Id == id)
+                if ( task is RunScenarioTask && ((RunScenarioTask) task).GetScenario().Id == id)
                     return task;
             }
 
