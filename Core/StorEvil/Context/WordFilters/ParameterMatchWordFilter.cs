@@ -13,7 +13,7 @@ namespace StorEvil.Context.WordFilters
             if (parameterInfo.ParameterType.IsEnum)
                 return new EnumParameterWordFilter(parameterInfo);
 
-            if (parameterInfo.GetCustomAttributes(typeof(MultipleWordsAttribute), false).Any())
+            if (parameterInfo.GetCustomAttributes(false).Any(x=>x.GetType().Name == typeof(MultipleWordsAttribute).Name))
                 return new MultipleWordsParameterWordFilter(parameterInfo);
             return new SimpleParameterMatchWordFilter(parameterInfo);
         }
