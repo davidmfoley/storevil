@@ -69,7 +69,7 @@ namespace StorEvil.Utility
             var fromPieces = SplitPath(from);
             var toPieces = SplitPath(to);
             
-            while (fromPieces.Any() && toPieces.Any() && fromPieces.First() == toPieces.First())
+            while (fromPieces.Any() && toPieces.Any() && fromPieces.First().ToLower() == toPieces.First().ToLower())
             {
                 fromPieces = fromPieces.Skip(1);
                 toPieces = toPieces.Skip(1);

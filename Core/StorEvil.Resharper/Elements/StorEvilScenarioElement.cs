@@ -2,6 +2,7 @@
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
 using StorEvil.Core;
+using StorEvil.Utility;
 
 namespace StorEvil.Resharper.Elements
 {
@@ -14,7 +15,10 @@ namespace StorEvil.Resharper.Elements
                                        string title, Scenario scenario)
             : base(provider, parent, project, title)
         {
-            _namespace = new UnitTestNamespace(project.Name);
+            var root = project.Location.ToDirectoryInfo().FullName;
+            var pathPieces = PathHelper.GetRelativePathPieces(root, scenario.Location.Path);
+            var pathJoined = project.Name + " " + string.Join(" - ", pathPieces);
+            _namespace = new UnitTestNamespace(pathJoined);
             Scenario = scenario;
         }
 

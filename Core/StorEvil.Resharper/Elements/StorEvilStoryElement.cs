@@ -1,9 +1,12 @@
+using System;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.Util;
+using StorEvil.Utility;
 
 namespace StorEvil.Resharper.Elements
 {
+    
     public class StorEvilStoryElement : StorEvilUnitTestElement
     {
         private readonly string _path;
@@ -14,9 +17,11 @@ namespace StorEvil.Resharper.Elements
             : base(provider, parent, project, title)
         {
             _path = path;
-            
 
-            _namespace = new UnitTestNamespace(project.Name + " " + title);
+            var root = project.Location.ToDirectoryInfo().FullName;
+            var pathPieces = PathHelper.GetRelativePathPieces(root, _path);
+            var pathJoined = project.Name + " " + string.Join(" - ", pathPieces);
+            _namespace = new UnitTestNamespace(pathJoined + title);
         }
 
         public override UnitTestNamespace GetNamespace()

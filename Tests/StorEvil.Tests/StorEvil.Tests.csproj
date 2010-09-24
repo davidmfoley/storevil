@@ -147,6 +147,7 @@
     <Compile Include="TestBase.cs" />
     <Compile Include="NUnit\TestContext.cs" />
     <Compile Include="NUnit\TestHelper.cs" />
+    <Compile Include="Utility\PathTree_Specs.cs" />
     <Compile Include="Utility\string_utilities.cs" />
   </ItemGroup>
   <ItemGroup>

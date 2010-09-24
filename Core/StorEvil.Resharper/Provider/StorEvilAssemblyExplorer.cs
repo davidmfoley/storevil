@@ -43,15 +43,16 @@ namespace StorEvil.Resharper.Provider
 
         private void AddStoriesToProject(IProject project, UnitTestElementConsumer consumer, StorEvilProjectElement projectElement, IEnumerable<Story> stories)
         {
-            var folders = new Dictionary<string, UnitTestElement>();
-            var root = project.ParentFolder.Name;
-
+            
             foreach (Story story in stories)
             {
-                var relatvePath = PathHelper.GetRelativePathPieces(root, story.Location);
                 AddStoryElement(story, project, consumer, projectElement);
             }
+
+          
+
         }
+
 
         private IEnumerable<Story> GetStoriesForProject(ConfigSettings config)
         {
@@ -62,7 +63,7 @@ namespace StorEvil.Resharper.Provider
         }
 
         private void AddStoryElement(Story story, IProject project,
-                                     UnitTestElementConsumer consumer, StorEvilProjectElement parent)
+                                     UnitTestElementConsumer consumer, UnitTestElement parent)
         {
             var storyElement = GetStoryElement(parent, project, story);
             consumer(storyElement);
@@ -73,6 +74,7 @@ namespace StorEvil.Resharper.Provider
 
         private StorEvilStoryElement GetStoryElement(UnitTestElement parent, IProject project, Story story)
         {
+
             return new StorEvilStoryElement(_provider, parent, project, story.Summary, story.Location);
         }
 
