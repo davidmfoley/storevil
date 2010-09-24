@@ -116,6 +116,22 @@ namespace StorEvil.Utility
         }
     }
 
+    public class DirectoryPathTree : PathTree
+    {
+        private readonly string _root;
+
+        public DirectoryPathTree(string root)
+        {
+            _root = root;
+        }
+
+        public void PutRelative(string path, object item)
+        {
+            var pieces = PathHelper.GetRelativePathPieces(_root, path);
+            Put(pieces, item);
+        }
+    }
+
     public class PathTreeTransformer
     {
         private readonly Func<string, object[], object> _buildBranch;

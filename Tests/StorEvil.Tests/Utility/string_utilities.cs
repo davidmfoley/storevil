@@ -166,13 +166,26 @@ namespace StorEvil
             return new KeyValuePair<string,object>(pathPiece, h);
 
         }
-
-        [Test]
-        public void can_transform()
-        {
-
-        }
     }
 
-   
+
+    [TestFixture]
+    public class DirectoryPathTree_Specs
+    {
+        private DirectoryPathTree Tree;
+
+        [SetUp]
+        public void SetUpContext()
+        {
+            Tree = new DirectoryPathTree("C:\\foo");
+        }
+
+        [Test]
+        public void Can_put_and_get()
+        {
+            Tree.PutRelative("C:\\foo\\bar\\baz", "foo\\bar\\baz");
+
+            Tree.Get(new[] {"bar", "baz"}).ShouldBe("foo\\bar\\baz");
+        }
+    } 
 }
