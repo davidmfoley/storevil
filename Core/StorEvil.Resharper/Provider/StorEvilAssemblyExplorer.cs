@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
@@ -7,6 +8,7 @@ using StorEvil.Core;
 using StorEvil.Infrastructure;
 using StorEvil.Parsing;
 using StorEvil.Resharper.Elements;
+using StorEvil.Utility;
 
 namespace StorEvil.Resharper.Provider
 {
@@ -34,8 +36,21 @@ namespace StorEvil.Resharper.Provider
             var projectElement = new StorEvilProjectElement(_provider, null, project, project.Name, config.AssemblyLocations);
             consumer(projectElement);
 
+            
+
+            AddStoriesToProject(project, consumer, projectElement, stories);
+        }
+
+        private void AddStoriesToProject(IProject project, UnitTestElementConsumer consumer, StorEvilProjectElement projectElement, IEnumerable<Story> stories)
+        {
+            var folders = new Dictionary<string, UnitTestElement>();
+            var root = project.ParentFolder.Name;
+
             foreach (Story story in stories)
+            {
+                var relatvePath = PathHelper.GetRelativePathPieces(root, story.Location);
                 AddStoryElement(story, project, consumer, projectElement);
+            }
         }
 
         private IEnumerable<Story> GetStoriesForProject(ConfigSettings config)
@@ -56,7 +71,7 @@ namespace StorEvil.Resharper.Provider
                 AddScenarioElement(project, consumer, storyElement, scenario);
         }
 
-        private StorEvilStoryElement GetStoryElement(StorEvilProjectElement parent, IProject project, Story story)
+        private StorEvilStoryElement GetStoryElement(UnitTestElement parent, IProject project, Story story)
         {
             return new StorEvilStoryElement(_provider, parent, project, story.Summary, story.Location);
         }
@@ -94,4 +109,6 @@ namespace StorEvil.Resharper.Provider
             
         }
     }
+
+
 }

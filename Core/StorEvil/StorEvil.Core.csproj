@@ -245,6 +245,7 @@
     <Compile Include="Core\Story.cs" />
     <Compile Include="Parsing\StoryParser.cs" />
     <Compile Include="Context\SessionContext.cs" />
+    <Compile Include="Utility\PathTree.cs" />
     <Compile Include="Utility\ReflectionExtensions.cs" />
     <Compile Include="Utility\StringUtility.cs" />
     <Compile Include="Context\WordFilters\TextMatchWordFilter.cs" />
