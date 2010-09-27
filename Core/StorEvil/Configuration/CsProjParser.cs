@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 
 namespace StorEvil.Configuration
@@ -16,21 +17,22 @@ namespace StorEvil.Configuration
             _doc.AliasNamespace("x", "http://schemas.microsoft.com/developer/msbuild/2003");
         }
 
-        public string GetAssemblyLocation()
+        public IEnumerable<string> GetAssemblyLocations()
         {
             var assemblyName = _doc.SelectElement("//x:PropertyGroup/x:AssemblyName").InnerText;
             var path = _doc.SelectElement("//x:PropertyGroup/x:OutputPath").InnerText;
-            return Path.Combine(path, assemblyName + ".dll");
+            yield return Path.Combine(path, assemblyName + ".dll");
+
+           // var refedAssys = _doc.SelectElement("//x:PropertyGroup/x:AssemblyName").InnerText;
+
+            
         }
 
         public IEnumerable<string> GetFilesWithTypeNone()
         {
             var nodes = _doc.SelectElements("//x:ItemGroup/x:None");
 
-            foreach (var node in nodes)
-            {
-                yield return node.GetAttribute("Include");
-            }
+            return nodes.Select(node => node.GetAttribute("Include"));
         }
     }
 }

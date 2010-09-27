@@ -32,11 +32,7 @@ namespace StorEvil.Configuration
                 var csproj = FindCsProj(containingDirectory);
                 if (csproj != null)
                 {
-                    var proj = new CsProjParser(_filesystem.GetFileText(csproj));
-                    var settings =  ConfigSettings.Default();
-                    settings.AssemblyLocations = new[] {proj.GetAssemblyLocation()};
-                    settings.StoryBasePath = containingDirectory;
-                    return settings;
+                    return GetConfigFromCsProj(containingDirectory, csproj);
                 }
 
                 var parent = Directory.GetParent(containingDirectory);
@@ -48,6 +44,15 @@ namespace StorEvil.Configuration
             }
 
             return ConfigSettings.Default();
+        }
+
+        private ConfigSettings GetConfigFromCsProj(string containingDirectory, string csproj)
+        {
+            var proj = new CsProjParser(_filesystem.GetFileText(csproj));
+            var settings =  ConfigSettings.Default();
+            settings.AssemblyLocations = proj.GetAssemblyLocations();
+            settings.StoryBasePath = containingDirectory;
+            return settings;
         }
 
         private string FindCsProj(string folder)

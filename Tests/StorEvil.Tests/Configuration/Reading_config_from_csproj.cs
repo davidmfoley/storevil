@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using NUnit.Framework;
 using StorEvil.Assertions;
@@ -22,7 +23,7 @@ namespace StorEvil.Configuration
         [Test]
         public void Finds_output_assembly()
         {            
-            _parser.GetAssemblyLocation().ToLower().ShouldEqual("bin\\debug\\Bowling.dll".ToLower());
+            _parser.GetAssemblyLocations().First().ToLower().ShouldEqual("bin\\debug\\Bowling.dll".ToLower());
         }
 
         [Test]
