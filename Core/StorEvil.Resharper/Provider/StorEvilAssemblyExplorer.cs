@@ -36,7 +36,6 @@ namespace StorEvil.Resharper.Provider
             var projectElement = new StorEvilProjectElement(_provider, null, project, project.Name, config.AssemblyLocations);
             consumer(projectElement);
 
-            
 
             AddStoriesToProject(project, consumer, projectElement, stories);
         }
@@ -48,9 +47,7 @@ namespace StorEvil.Resharper.Provider
             {
                 AddStoryElement(story, project, consumer, projectElement);
             }
-
           
-
         }
 
 

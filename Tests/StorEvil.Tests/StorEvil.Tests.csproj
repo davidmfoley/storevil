@@ -83,6 +83,7 @@
   <ItemGroup>
     <Compile Include="CodeGeneration\Generating_test_fixtures.cs" />
     <Compile Include="CodeGeneration\TestSession_Behavior.cs" />
+    <Compile Include="Configuration\Reading_config_from_csproj.cs" />
     <Compile Include="Console\Job_creation_spec.cs" />
     <Compile Include="Console\InitJob_Specs.cs" />
     <Compile Include="Context\Debugging_contexts.cs" />
