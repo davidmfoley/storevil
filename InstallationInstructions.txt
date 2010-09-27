@@ -1,6 +1,22 @@
-Installation Instructions:
-Put these files in a location (for example: C:\KillerTools\StorEvil)
-Add the location to your path
+Installation Instructions
 
-Test by opening a new command prompt and typing "storevil"
-You should see some help text. 
+Installing the lbrary and command-line runner:
+
+ Run the install_storevil.bat batch file, passing the directory to which to install, for example:
+
+ install_storevil.bat C:\StorEvil
+
+ To uninstall StorEvil, just delete the folder you installed it to.
+
+Installing the ReSharper runner:
+
+ run the install_resharper.bat batch file
+ 
+Uninstall the ReSharper runner:
+
+ run the uninstall_resharper.bat batch file
+
+Any questions? 
+
+ Check the github site or send me an email at davidmfoley at gmail dot com.
+ http://github.com/davidmfoley/storevil

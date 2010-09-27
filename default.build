@@ -44,25 +44,20 @@
     <MakeDir Directories="$(PackageDirectory)"/>
 
     <MakeDir Directories="$(PackageDirectory)\console-runner"/>
-    <Copy SourceFiles="$(OutputPath)\Core\StorEvil.exe" DestinationFolder="$(PackageDirectory)\console-runner" />
-    <Copy SourceFiles="@(DllFiles)" DestinationFolder="$(PackageDirectory)\console-runner" />
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\InstallationInstructions.txt" DestinationFolder="$(PackageDirectory)\console-runner" />
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\License.txt" DestinationFolder="$(PackageDirectory)\console-runner" />
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\ReleaseNotes.txt" DestinationFolder="$(PackageDirectory)\console-runner" />
-
+    <Copy SourceFiles="@(DllFiles)" DestinationFolder="$(PackageDirectory)" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\InstallationInstructions.txt" DestinationFolder="$(PackageDirectory)" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\License.txt" DestinationFolder="$(PackageDirectory)" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\ReleaseNotes.txt" DestinationFolder="$(PackageDirectory)" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\Scripts\install_storevil.bat" DestinationFolder="$(PackageDirectory)" />
+    
     <Message Text="No Resharper plug-in binaries found to package" Condition="!Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')" />
-    <MakeDir Directories="$(PackageDirectory)\resharper-plugin" Condition="Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')"/>
-    <Copy SourceFiles="$(OutputPath)\ReSharper\StorEvil.Core.DLL" DestinationFolder="$(PackageDirectory)\resharper-plugin" Condition="Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')"/>
-    <Copy SourceFiles="$(OutputPath)\ReSharper\StorEvil.ReSharper.DLL" DestinationFolder="$(PackageDirectory)\resharper-plugin" Condition="Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')" />
-    <Copy SourceFiles="$(OutputPath)\ReSharper\Funq.DLL" DestinationFolder="$(PackageDirectory)\resharper-plugin" Condition="Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')"/>
-    <Copy SourceFiles="$(OutputPath)\ReSharper\Spark.DLL" DestinationFolder="$(PackageDirectory)\resharper-plugin" Condition="Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')"/>
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\Core\StorEvil.ReSharper\Installing_StorEvil_ReSharperPlugIn.txt" DestinationFolder="$(PackageDirectory)\resharper-plugin" Condition="Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')"/>
+    <Copy SourceFiles="$(OutputPath)\ReSharper\StorEvil.ReSharper.DLL" DestinationFolder="$(PackageDirectory)" Condition="Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\Scripts\install_resharper.bat" DestinationFolder="$(PackageDirectory)" Condition="Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\Scripts\uninstall_resharper.bat" DestinationFolder="$(PackageDirectory)" Condition="Exists('$(OutputPath)\Resharper\StorEvil.Resharper.DLL')"/>
+      
+    <Copy SourceFiles="$(OutputPath)\Core\StorEvil.exe" DestinationFolder="$(PackageDirectory)" />
+    <Copy SourceFiles="$(OutputPath)\MsBuildTask\StorEvil.MsBuild.DLL" DestinationFolder="$(PackageDirectory)" />
    
-    <Copy SourceFiles="$(OutputPath)\MsBuildTask\StorEvil.MsBuild.DLL" DestinationFolder="$(PackageDirectory)\msbuild-task" />
-    <Copy SourceFiles="$(OutputPath)\MsBuildTask\StorEvil.Core.DLL" DestinationFolder="$(PackageDirectory)\msbuild-task" />
-    <Copy SourceFiles="$(OutputPath)\MsBuildTask\Funq.DLL" DestinationFolder="$(PackageDirectory)\msbuild-task" />
-    <Copy SourceFiles="$(OutputPath)\MsBuildTask\Spark.DLL" DestinationFolder="$(PackageDirectory)\msbuild-task" />
-
     <CreateItem Include="$(OutputPath)\Gem\*.gem">
       <Output TaskParameter="Include" ItemName="GemFile" />
     </CreateItem>
