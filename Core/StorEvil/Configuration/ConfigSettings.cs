@@ -36,7 +36,7 @@ namespace StorEvil.Configuration
         {
             return new ConfigSettings
                        {
-                           ScenarioExtensions = new string[0],
+                           ScenarioExtensions = new[] {".story", ".feature"},
                            AssemblyLocations = new string[0]
                        };
         }

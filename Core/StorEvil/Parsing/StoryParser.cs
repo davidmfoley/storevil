@@ -41,6 +41,9 @@ namespace StorEvil.Parsing
 
         public Story Parse(string storyText, string storyId, string storyPath)
         {
+            if (!storyText.Contains("Scenario"))
+                return null;
+
             _storyLocation = storyPath;
 
             InitializeParsing(storyId);

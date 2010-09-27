@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,11 +13,14 @@ namespace StorEvil.Parsing
     public class FilesystemStoryReader : IStoryReader
     {
         private readonly ConfigSettings _settings;
+        private FileExtensionFilter _filter;
 
         public FilesystemStoryReader(IFilesystem filesystem, ConfigSettings settings)
         {
             _settings = settings;
             Filesystem = filesystem;
+
+            _filter = new FileExtensionFilter(_settings);
         }
 
         public IFilesystem Filesystem { get; set; }
@@ -28,10 +32,8 @@ namespace StorEvil.Parsing
 
         private IEnumerable<StoryInfo> GetStoryInfos(string path)
         {
-            if (Filesystem.FileExists(path))
-            {
+            if (Filesystem.FileExists(path) && _filter.IsValid(path))
                 return new[] {GetStoryInfo(path)};
-            }
 
             var filesMatchingFilter = GetFilesMatchingFilter(path);
 
@@ -47,11 +49,9 @@ namespace StorEvil.Parsing
 
         private IEnumerable<string> GetFilesMatchingFilter(string path)
         {
-            var filter = new FileExtensionFilter(_settings);
-
             return Filesystem
                 .GetFilesInFolder(path)
-                .Where(filter.IsValid);
+                .Where(_filter.IsValid);
         }
 
         private StoryInfo GetStoryInfo(string file)
@@ -62,7 +62,5 @@ namespace StorEvil.Parsing
                            Text = Filesystem.GetFileText(file)
                        };
         }
-
-      
     }
 }
