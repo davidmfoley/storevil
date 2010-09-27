@@ -149,6 +149,7 @@
     <Compile Include="Init\InitContainerConfigurator.cs" />
     <Compile Include="Init\InitJob.cs" />
     <Compile Include="Init\InitSettings.cs" />
+    <Compile Include="Infrastructure\ResourceWriter.cs" />
     <Compile Include="InPlace\CompilingRunner\AssemblyGenerator.cs" />
     <Compile Include="InPlace\CompilingRunner\ContextViewer.cs" />
     <Compile Include="InPlace\CompilingRunner\DriverBase.cs" />

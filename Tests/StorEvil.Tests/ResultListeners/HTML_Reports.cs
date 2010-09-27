@@ -7,8 +7,6 @@ using StorEvil.Utility;
 
 namespace StorEvil.ResultListeners.SparkReportGenerator_Specs
 {
-    
-
     [TestFixture]
     public class Dealing_with_missing_template_file_setting
     {
@@ -20,6 +18,21 @@ namespace StorEvil.ResultListeners.SparkReportGenerator_Specs
 
             Expect.ThisToThrow<TemplateNotFoundException>(() => generator.Handle(new GatheredResultSet()));
         }       
+    }
+
+    [TestFixture]
+    public class When_no_template_is_Provided
+    {
+        [Test]
+        public void Loads_template_from_resource()
+        {
+            var fakeFileWriter = new FakeTextWriter();
+            var generator = new SparkResultReportGenerator(fakeFileWriter, "");
+
+            generator.Handle(new GatheredResultSet());
+
+            fakeFileWriter.Result.ShouldBeValidXml();
+        }
     }
 
     public abstract class HTML_Report
