@@ -57,7 +57,14 @@ namespace StorEvil.Configuration
 
         private string FindCsProj(string folder)
         {
-            return _filesystem.GetFilesInFolder(folder).FirstOrDefault(x => x.ToLower().EndsWith(".csproj"));            
+            try
+            {
+                return _filesystem.GetFilesInFolder(folder).FirstOrDefault(x => x.ToLower().EndsWith(".csproj"));
+            } 
+            catch(IOException)
+            {
+                return null;
+            }
         }
 
         private string NormalizePath(string directoryOrFile)
