@@ -211,6 +211,7 @@
     <Compile Include="Spark\SparkReportGenerator.cs" />
     <Compile Include="StubGeneration\ClipboardWriter.cs" />
     <Compile Include="StubGeneration\StubGenerator.cs" />
+    <Compile Include="Utility\EnumerableHelpers.cs" />
     <Compile Include="Utility\FunqEasyRegistrationHelper.cs" />
     <Compile Include="ResultListeners\ConsoleResultListener.cs" />
     <Compile Include="MultipleWordsAttribute.cs" />
@@ -228,7 +229,7 @@
     <Compile Include="Interpreter\InvocationChain.cs" />
     <Compile Include="Context\ISessionContext.cs" />
     <Compile Include="Nunit\NUnitFixtureGenerator.cs" />
-    <Compile Include="Utility\Helpers.cs" />
+    <Compile Include="Utility\StringHelpers.cs" />
     <Compile Include="Parsing\IStoryParser.cs" />
     <Compile Include="Core\IStoryProvider.cs" />
     <Compile Include="Nunit\IFixtureGenerator.cs" />
@@ -248,6 +249,7 @@
     <Compile Include="Core\Story.cs" />
     <Compile Include="Parsing\StoryParser.cs" />
     <Compile Include="Context\SessionContext.cs" />
+    <Compile Include="Utility\PathHelper.cs" />
     <Compile Include="Utility\PathTree.cs" />
     <Compile Include="Utility\ReflectionExtensions.cs" />
     <Compile Include="Utility\StringUtility.cs" />
