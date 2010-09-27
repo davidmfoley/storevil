@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using StorEvil.Infrastructure;
@@ -28,6 +29,16 @@ namespace StorEvil.Configuration
                 if (_filesystem.FileExists(configLocation))
                     return BuildConfigSettings(path, configLocation);
 
+                var csproj = FindCsProj(containingDirectory);
+                if (csproj != null)
+                {
+                    var proj = new CsProjParser(_filesystem.GetFileText(csproj));
+                    var settings =  ConfigSettings.Default();
+                    settings.AssemblyLocations = new[] {proj.GetAssemblyLocation()};
+                    settings.StoryBasePath = containingDirectory;
+                    return settings;
+                }
+
                 var parent = Directory.GetParent(containingDirectory);
                 
                 if (parent == null)
@@ -37,6 +48,11 @@ namespace StorEvil.Configuration
             }
 
             return ConfigSettings.Default();
+        }
+
+        private string FindCsProj(string folder)
+        {
+            return _filesystem.GetFilesInFolder(folder).FirstOrDefault(x => x.ToLower().EndsWith(".csproj"));            
         }
 
         private string NormalizePath(string directoryOrFile)

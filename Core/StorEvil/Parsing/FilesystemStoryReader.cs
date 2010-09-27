@@ -32,10 +32,10 @@ namespace StorEvil.Parsing
             {
                 return new[] {GetStoryInfo(path)};
             }
-            var filter = new FileExtensionFilter(_settings);
-            var stories = Filesystem
-                .GetFilesInFolder(path)
-                .Where(filter.IsValid)
+
+            var filesMatchingFilter = GetFilesMatchingFilter(path);
+
+            var stories = filesMatchingFilter
                 .Select(GetStoryInfo)                       
                 .ToList();
 
@@ -43,6 +43,15 @@ namespace StorEvil.Parsing
                 stories.AddRange(GetStoryInfos(subPath));
 
             return stories;
+        }
+
+        private IEnumerable<string> GetFilesMatchingFilter(string path)
+        {
+            var filter = new FileExtensionFilter(_settings);
+
+            return Filesystem
+                .GetFilesInFolder(path)
+                .Where(filter.IsValid);
         }
 
         private StoryInfo GetStoryInfo(string file)

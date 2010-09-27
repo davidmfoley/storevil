@@ -109,11 +109,12 @@
     <Compile Include="NUnit\Invoking_NUnit_via_reflection.cs" />
     <Compile Include="NUnit\Stub_generation_specs.cs" />
     <Compile Include="NUnit\FakeSessionContext.cs" />
+    <Compile Include="Parsing\ReadingFromDisk\Single_file_story_reader.cs" />
     <Compile Include="Parsing\ScenarioLineParser_Specs.cs" />
     <Compile Include="TeamCity\team_city_result_listener.cs" />
     <Compile Include="Utility\container_tests.cs" />
     <Compile Include="Configuration\FilesystemConfigReaderTests.cs" />
-    <Compile Include="Parsing\Filtering_stories_by_file_extension.cs" />
+    <Compile Include="Parsing\ReadingFromDisk\Filtering_stories_by_file_extension.cs" />
     <Compile Include="InPlace\Chaining_results.cs" />
     <Compile Include="InPlace\Chaining_results_that_should_result_in_Failure.cs" />
     <Compile Include="InPlace\executing_outlines_with_example_tables.cs" />

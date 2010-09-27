@@ -1,54 +1,45 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Assertions;
 using StorEvil.Configuration;
 using StorEvil.Infrastructure;
-using StorEvil.Utility;
 
 namespace StorEvil.Parsing
 {
-    [TestFixture]
-    public class Single_file_story_reader
+    [TestFixture, Ignore()]
+    public class Reading_stories_with_no_config
     {
         private const string BasePath = "C:\\foo\bar\\baz";
 
         private IFilesystem FakeFilesystem;
-        private SingleFileStoryReader Reader;
+
+        private FilesystemStoryReader Reader;
         private ConfigSettings Settings;
+
+        private string AStory = "Feature: FooBar\r\nScenario:\r\nFoo Bar";  
+        private string NotAStory = "fdsafdsaf fdsafdsa\r\nfgdsafdsafdsafd\r\nafdsafdsar";
 
         [SetUp]
         public void SetupContext()
         {
             FakeFilesystem = MockRepository.GenerateMock<IFilesystem>();
-            Settings = new ConfigSettings { StoryBasePath = BasePath };
-            Reader = new SingleFileStoryReader(FakeFilesystem, Settings, "foo.feature");
+            Settings = new ConfigSettings {StoryBasePath = BasePath, ScenarioExtensions = new string[] {}};
+            Reader = new FilesystemStoryReader(FakeFilesystem, Settings);
 
-            FakeFilesystem.Stub(x => x.GetFileText("foo.feature")).Return("foo");
+            FakeFilesystem.Stub(x => x.GetFilesInFolder(BasePath))
+                .Return(new[] { "ignore.txt", "feature.feature" });
+
+            FakeFilesystem.Stub(x => x.GetFileText(BasePath + "\\ignore.txt"))
+                .Return(NotAStory);
+            FakeFilesystem.Stub(x => x.GetFileText(BasePath + "\\feature.feature"))
+                .Return(AStory);
+          
+            FakeFilesystem.Stub(x => x.GetSubFolders(BasePath))
+                .Return(new string[0]);
         }
-
-        [Test]
-        public void when_extension_does_not_match_does_not_return_stories()
-        {
-            Settings.ScenarioExtensions = new[] {".foo"};
-
-            Reader.GetStoryInfos().Count().ShouldEqual(0);
-        }
-
-        [Test]
-        public void when_extension_matches_returns_story()
-        {
-            Settings.ScenarioExtensions = new[] { ".feature" };
-
-            var result = Reader.GetStoryInfos();
-            result.Count().ShouldEqual(1);
-        }
+ 
     }
-
-   
-
     [TestFixture]
     public class Filtering_stories_by_file_extension
     {

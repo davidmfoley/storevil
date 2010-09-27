@@ -87,11 +87,13 @@
     <Compile Include="CodeGeneration\TestFixture.cs" />
     <Compile Include="CodeGeneration\TestSession.cs" />
     <Compile Include="Configuration\ConfigParser.cs" />
+    <Compile Include="Configuration\CsProjParser.cs" />
     <Compile Include="Configuration\IConfigParser.cs" />
     <Compile Include="Configuration\IConfigSource.cs" />
     <Compile Include="Configuration\ListenerBuilder.cs" />
     <Compile Include="Configuration\SwitchInfo.cs" />
     <Compile Include="Configuration\switchParser.cs" />
+    <Compile Include="Configuration\XmlDocumentWrapper.cs" />
     <Compile Include="ContainerConfigurator.cs" />
     <Compile Include="ContextAttribute.cs" />
     <Compile Include="Context\AssemblyRegistry.cs" />

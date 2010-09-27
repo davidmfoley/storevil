@@ -13,7 +13,11 @@ namespace StorEvil.Parsing
         public Story Parse(string storyText, string storyPath)
         {
             var storyParsingJob = new StoryParsingJob();
-            return storyParsingJob.Parse(storyText, storyPath, storyPath);
+            var story = storyParsingJob.Parse(storyText, storyPath, storyPath);
+            if (story != null && story.Scenarios.Any())
+                return story;
+
+            return null;
         }
     }
 

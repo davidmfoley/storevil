@@ -21,6 +21,10 @@ namespace StorEvil.Configuration
             FakeFilesystem = MockRepository.GenerateMock<IFilesystem>();
             _fakeParser = MockRepository.GenerateMock<IConfigParser>();
 
+            FakeFilesystem
+                .Stub(x => x.GetFilesInFolder(Arg<string>.Is.Anything))
+                .Return(new string[0]);
+
             FilesystemConfigReader = new FilesystemConfigReader(FakeFilesystem, _fakeParser);
         }
 
