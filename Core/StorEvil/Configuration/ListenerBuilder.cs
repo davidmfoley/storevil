@@ -1,15 +1,11 @@
-using System;
 using System.Configuration;
-using StorEvil.Configuration;
 using StorEvil.Events;
 using StorEvil.Infrastructure;
-using StorEvil.InPlace;
 using StorEvil.ResultListeners;
 
-namespace StorEvil.Console
+namespace StorEvil.Configuration
 {
-    public class 
-        ListenerBuilder
+    public class ListenerBuilder
     {
         private readonly ConfigSettings _settings;
             
