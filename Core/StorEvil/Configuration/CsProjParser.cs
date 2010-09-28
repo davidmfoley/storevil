@@ -23,9 +23,7 @@ namespace StorEvil.Configuration
             var path = _doc.SelectElement("//x:PropertyGroup/x:OutputPath").InnerText;
             yield return Path.Combine(path, assemblyName + ".dll");
 
-           // var refedAssys = _doc.SelectElement("//x:PropertyGroup/x:AssemblyName").InnerText;
-
-            
+           // var refedAssys = _doc.SelectElement("//x:PropertyGroup/x:AssemblyName").InnerText; 
         }
 
         public IEnumerable<string> GetFilesWithTypeNone()

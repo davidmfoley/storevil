@@ -8,7 +8,8 @@ using StorEvil.ResultListeners;
 
 namespace StorEvil.Console
 {
-    public class ListenerBuilder
+    public class 
+        ListenerBuilder
     {
         private readonly ConfigSettings _settings;
             
@@ -18,30 +19,26 @@ namespace StorEvil.Console
         }        
 
         private void AddFileWritingListenerIfConfigured(EventBus bus)
-        {
-            if (string.IsNullOrEmpty(_settings.OutputFileFormat))
-                return;
-
+        {           
             if (string.IsNullOrEmpty(_settings.OutputFile))
-                return;
+                return;            
+           
+            bus.Register(GetWriterForOutputFormat());           
+        }
 
-            var outputFile = _settings.OutputFile;
+        private object GetWriterForOutputFormat()
+        {
+            var fileWriter = new FileWriter(_settings.OutputFile, true);
+            var lowerCase = (_settings.OutputFileFormat ?? "" ).ToLower();
+            
+            if (lowerCase == "xml")
+                return new XmlReportListener(fileWriter);
 
-            var fileWriter = new FileWriter(outputFile, true);
+            if (lowerCase == "spark" || lowerCase == "")
+                return new SparkReportListener(fileWriter, _settings.OutputFileTemplate);
 
-            switch (_settings.OutputFileFormat.ToLower())
-            {
-                case "xml":
-
-                    bus.Register(new XmlReportListener(fileWriter));
-                    break;
-                case "spark":
-                    bus.Register(new SparkReportListener(fileWriter, _settings.OutputFileTemplate));
-                    break;
-                default:
-                    throw new ConfigurationErrorsException(
-                        string.Format("'{0} is not a valid output file format.'", _settings.OutputFileFormat));
-            }
+            throw new ConfigurationErrorsException(
+                       string.Format("'{0} is not a valid output file format.'", _settings.OutputFileFormat));            
         }
 
         public void SetUpListeners(EventBus bus)

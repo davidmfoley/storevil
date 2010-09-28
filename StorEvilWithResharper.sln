@@ -9,7 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{5E256EA4-5
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		default.build = default.build
-		Scripts\install_resharper.bat = Scripts\install_resharper.bat
 		InstallationInstructions.txt = InstallationInstructions.txt
 		LICENSE.txt = LICENSE.txt
 		ReadMe.markdown = ReadMe.markdown
@@ -46,6 +45,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{1709AF8E-57D1-4934-B2A3-8DAACD7AAB3D}"
 	ProjectSection(SolutionItems) = preProject
 		Scripts\install_resharper.bat = Scripts\install_resharper.bat
+		Scripts\install_storevil.bat = Scripts\install_storevil.bat
 		Scripts\uninstall_resharper.bat = Scripts\uninstall_resharper.bat
 	EndProjectSection
 EndProject
