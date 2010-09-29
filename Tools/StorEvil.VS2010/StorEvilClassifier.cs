@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows.Media;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
@@ -11,11 +12,20 @@ namespace StorEvil.VS2010
     /// </summary>
     class StorEvilClassifier : IClassifier
     {
-        IClassificationType _classificationType;
+        IClassificationType _pending;
+        private IClassificationType _comment;
+        private IClassificationType _interpreted;
+        private IClassificationType _table;
+        private IClassificationType _scenarioStart;
 
+        private static int count = 0;
         internal StorEvilClassifier(IClassificationTypeRegistryService registry)
         {
-            _classificationType = registry.GetClassificationType("StorEvil.VS2010");
+            _pending = registry.GetClassificationType("StorEvil.VS2010.Pending");
+            _comment = registry.GetClassificationType("StorEvil.VS2010.Comment");
+            _interpreted = registry.GetClassificationType("StorEvil.VS2010.Interpreted");
+            _scenarioStart = registry.GetClassificationType("StorEvil.VS2010.ScenarioStart");
+            _table = registry.GetClassificationType("StorEvil.VS2010.Table");
         }
 
         /// <summary>
@@ -28,9 +38,41 @@ namespace StorEvil.VS2010
         {
             //create a list to hold the results
             List<ClassificationSpan> classifications = new List<ClassificationSpan>();
+
+            string msg = "Start:" + span.Start + " End:" + span.End + "\r\n" + span.GetText() + "\r\n";
+            Debug.WriteLine(msg);
+
+            var classificationType = _pending;
+            if (IsScenarioStart(span))
+                classificationType = _scenarioStart;
+            else if (IsComment(span))
+                classificationType = _comment;
+            else if (IsTable(span))
+                classificationType = _table;
+            else if (count++ % 2 == 0)
+                classificationType = _interpreted;
+
             classifications.Add(new ClassificationSpan(new SnapshotSpan(span.Snapshot, new Span(span.Start, span.Length)),
-                                                           _classificationType));
+                                                           classificationType));
             return classifications;
+        }
+
+        private bool IsTable(SnapshotSpan span)
+        {
+            var trimmed = span.GetText().Trim();
+
+            return trimmed.StartsWith("|") && trimmed.EndsWith("|");
+        }
+
+        private bool IsScenarioStart(SnapshotSpan span)
+        {
+            var start = span.GetText().TrimStart();
+            return start.StartsWith("Scenario:") || start.StartsWith("Scenario Outline:");
+        }
+
+        private bool IsComment(SnapshotSpan span)
+        {
+            return span.GetText().TrimStart().StartsWith("#");
         }
 
 #pragma warning disable 67

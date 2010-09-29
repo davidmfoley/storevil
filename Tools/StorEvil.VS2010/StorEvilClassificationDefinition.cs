@@ -6,11 +6,25 @@ namespace StorEvil.VS2010
 {
     internal static class StorEvilClassificationDefinition
     {
-        /// <summary>
-        /// Defines the "StorEvil.VS2010" classification type.
-        /// </summary>
+        
         [Export(typeof(ClassificationTypeDefinition))]
-        [Name("StorEvil.VS2010")]
-        internal static ClassificationTypeDefinition StorEvilVS2010Type = null;
+        [Name("StorEvil.VS2010.Pending")]
+        internal static ClassificationTypeDefinition StorEvilVS2010PendingType = null;
+
+        [Export(typeof(ClassificationTypeDefinition))]
+        [Name("StorEvil.VS2010.Interpreted")]
+        internal static ClassificationTypeDefinition StorEvilVS2010InterpretedType = null;
+
+        [Export(typeof(ClassificationTypeDefinition))]
+        [Name("StorEvil.VS2010.Comment")]
+        internal static ClassificationTypeDefinition StorEvilVS2010CommentType = null;
+
+        [Export(typeof(ClassificationTypeDefinition))]
+        [Name("StorEvil.VS2010.ScenarioStart")]
+        internal static ClassificationTypeDefinition StorEvilVS2010ScenarioStartType = null;
+
+        [Export(typeof(ClassificationTypeDefinition))]
+        [Name("StorEvil.VS2010.Table")]
+        internal static ClassificationTypeDefinition StorEvilVS2010TableType = null;
     }
 }

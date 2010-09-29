@@ -24,7 +24,11 @@ namespace StorEvil.VS2010
         public IClassifier GetClassifier(ITextBuffer buffer)
         {
             if (IsStorEvilFile(buffer))
-                return buffer.Properties.GetOrCreateSingletonProperty<StorEvilClassifier>(delegate { return new StorEvilClassifier(ClassificationRegistry); });
+            {
+                var factory = buffer.Properties.GetOrCreateSingletonProperty<StorEvilClassifierFactory>(
+                    () => new StorEvilClassifierFactory(ClassificationRegistry));
+                return factory.GetClassifier(buffer);
+            }
             return null;
         }
 
@@ -32,6 +36,21 @@ namespace StorEvil.VS2010
         {
             //temp
             return buffer.CurrentSnapshot.GetText().Contains("Scenario:");
+        }
+    }
+
+    internal class StorEvilClassifierFactory {
+        private readonly IClassificationTypeRegistryService _classificationRegistry;
+
+        public StorEvilClassifierFactory(IClassificationTypeRegistryService classificationRegistry)
+        {
+            _classificationRegistry = classificationRegistry;
+           
+        }
+
+        public IClassifier GetClassifier(ITextBuffer buffer)
+        {
+            return new StorEvilClassifier(_classificationRegistry);
         }
     }
 }
