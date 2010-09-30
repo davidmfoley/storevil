@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using StorEvil.Assertions;
 using StorEvil.Context;
+using StorEvil.Core;
 using StorEvil.Parsing;
 
 namespace StorEvil.Integration
@@ -44,12 +45,6 @@ This is an example line of a scenario";
         }
 
         [Test]
-        public void Has_one_line_per_line_in_the_story()
-        {
-            Result.Lines.Count().ShouldBe(4);
-        }
-
-        [Test]
         public void First_line_is_title()
         {
             var first = Result.Lines.First();
@@ -62,7 +57,13 @@ This is an example line of a scenario";
         {
             var scenarioTitleLine = Result.Lines.ElementAt(2);
             scenarioTitleLine.Type.ShouldBe(ClassificationTypes.ScenarioTitle);
+        }
 
+        [Test]
+        public void text_is_appropriately_classified()
+        {
+            var scenarioTextLine = Result.Lines.ElementAt(3);
+            scenarioTextLine.Type.ShouldBe(ClassificationTypes.ScenarioText);
         }
     }
 
@@ -87,15 +88,32 @@ This is an example line of a scenario";
         {
             var story = _parser.Parse(storyText, "ignore");
 
-           // var lines = story.Scenarios.SelectMany(x=>x.Background).Union(story.Scenarios.SelectMany(x=>x.))
-            
+            var bodyLines = story.Scenarios.SelectMany(x => x.Body);
+            var scenarioLines = story.Scenarios.First().Background.Union(bodyLines);
 
-            return storyText.Split(new[] {"\n", "\r\n"}, StringSplitOptions.None)
-                .Select(x => new ClassificationLine
-                                 {
-                                     Text = x,
-                                     Type = ClassificationTypes.Title
-                                 });
+            var allLines = new LineSplitter().Split(storyText);
+            foreach (var line in allLines)
+            {
+                yield return new ClassificationLine { Text = line.Text, Type = GetClassificationType(line, scenarioLines, story.Scenarios) };
+            }
+        }
+
+        private ClassificationTypes GetClassificationType(ScenarioLine line, IEnumerable<ScenarioLine> parsedLines, IEnumerable<IScenario> scenarios)
+        {
+            var parsed = parsedLines.FirstOrDefault(l=>l.LineNumber == line.LineNumber);
+            if (parsed != null)
+                return ClassificationTypes.ScenarioText;
+
+            if (LooksLikeAScenarioTitle(line))
+                return ClassificationTypes.ScenarioTitle;
+
+            return ClassificationTypes.Title;
+        }
+
+        private bool LooksLikeAScenarioTitle(ScenarioLine line)
+        {
+            var trimmed = line.Text.Trim();
+            return trimmed.StartsWith("Scenario:") || trimmed.StartsWith("Scenario Outline:");
         }
     }
 
@@ -114,6 +132,7 @@ This is an example line of a scenario";
     internal enum ClassificationTypes
     {
         Title,
-        ScenarioTitle
+        ScenarioTitle,
+        ScenarioText
     }
 }

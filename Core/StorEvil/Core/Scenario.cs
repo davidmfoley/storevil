@@ -35,8 +35,7 @@ namespace StorEvil.Core
             get
             {
                 var firstLine = Body.First().LineNumber;
-                var lastLine = Body.Last().LineNumber;
-                var path = _path;
+                var lastLine = Body.Last().LineNumber;              
 
                 return new ScenarioLocation { Path = _path, FromLine = firstLine, ToLine = lastLine };
             }
@@ -90,5 +89,9 @@ namespace StorEvil.Core
         public int FromLine { get; set; }
         public int ToLine { get; set; }
 
+        public bool IncludesLine(int lineNumber)
+        {
+            return lineNumber >= FromLine && lineNumber <= ToLine;
+        }
     }
 }
