@@ -104,6 +104,7 @@
     <Compile Include="InPlace\Filtering_by_tags.cs" />
     <Compile Include="InPlace\Inplace_assembly_generation.cs" />
     <Compile Include="Integration\Class1.cs" />
+    <Compile Include="Integration\Classifying_a_story.cs" />
     <Compile Include="Interpreter\Disallowing_ambiguous_matches.cs" />
     <Compile Include="Interpreter\ambiguous_match_resolution.cs" />
     <Compile Include="NUnit\Invoking_NUnit_via_reflection.cs" />

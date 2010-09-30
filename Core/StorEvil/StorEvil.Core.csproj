@@ -171,7 +171,12 @@
     <Compile Include="Interpreter\IAmbiguousMatchResolver.cs" />
     <Compile Include="Nunit\NUnitContainerConfigurator.cs" />
     <EmbeddedResource Include="Resources\ExampleContext.cs" />
+    <Compile Include="Parsing\Classification\Class1.cs" />
+    <Compile Include="Parsing\Classification\ClassificationLine.cs" />
+    <Compile Include="Parsing\Classification\ClassificationTypes.cs" />
+    <Compile Include="Parsing\Classification\Classifier.cs" />
     <Compile Include="Parsing\FileExtensionFilter.cs" />
+    <Compile Include="Parsing\LineSplitter.cs" />
     <Compile Include="Parsing\SingleFileStoryReader.cs" />
     <Compile Include="ResultListeners\SparkReportListener.cs" />
     <Compile Include="ResultListeners\SparkResultReportGenerator.cs" />
