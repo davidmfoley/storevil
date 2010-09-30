@@ -305,7 +305,7 @@ namespace StorEvil.Parsing
             {
                 var nextLinebreak = text.IndexOf('\n', currentPosition);
                 if (nextLinebreak == -1)
-                    nextLinebreak = text.Length - 1;
+                    nextLinebreak = text.Length;
 
                 var substring = text.Substring(currentPosition, nextLinebreak - currentPosition).TrimEnd('\r');
                

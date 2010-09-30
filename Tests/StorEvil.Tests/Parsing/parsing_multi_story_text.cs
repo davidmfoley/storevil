@@ -70,7 +70,7 @@ Then I should expect some other result
         [SetUp]
         public void SetUpContext()
         {
-            Result =  _splitter.Split("123\r\n4567\n8910\n\r\n");
+            Result =  _splitter.Split("123\r\n4567\n8910\n\r\nfoobar");
         }
         [Test]
         public void handles_single_line()
@@ -119,6 +119,15 @@ Then I should expect some other result
             fourth.StartPosition.ShouldBe(15);
             fourth.Length.ShouldBe(0);
             fourth.EndPosition.ShouldBe(15);
+        }
+
+        [Test]
+        public void handles_last_line_correctly()
+        {
+
+            var last = Result.Last();
+            last.Text.ShouldEqual("foobar");
+
         }
 
     }

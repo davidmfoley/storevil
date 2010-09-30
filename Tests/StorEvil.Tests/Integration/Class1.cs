@@ -5,6 +5,7 @@ using NUnit.Framework;
 using StorEvil.Assertions;
 using StorEvil.Context;
 using StorEvil.Core;
+using StorEvil.Interpreter;
 using StorEvil.Parsing;
 
 namespace StorEvil.Integration
@@ -27,7 +28,10 @@ namespace StorEvil.Integration
             @"This is a story
 
 Scenario: A scenario with title
-This is an example line of a scenario";
+This is an example line of a scenario that is interpreted
+This is an example line of a scenario that is not interpreted
+This is a table
+|foo|bar|";
 
         [SetUp]
         public void SetUpContext()
@@ -37,11 +41,24 @@ This is an example line of a scenario";
 
         private Classification Parse(string storyText)
         {
-            var assemblyRegistry = new AssemblyRegistry(new[] {GetType().Assembly});
+            var assemblyRegistry = new TestAssemblyRegistry();
 
             var classifier = new Classifier(assemblyRegistry);
 
             return classifier.Classify(storyText);
+        }
+
+        private class TestAssemblyRegistry : AssemblyRegistry
+        {
+            public override IEnumerable<Type> GetTypesWithCustomAttribute<T>()
+            {
+                return new[] {typeof (ClassificationTestContext)};
+            }
+
+            private class ClassificationTestContext
+            {
+                public void This_is_an_example_line_of_a_scenario_that_is_interpreted() {}
+            }
         }
 
         [Test]
@@ -60,26 +77,42 @@ This is an example line of a scenario";
         }
 
         [Test]
-        public void text_is_appropriately_classified()
+        public void interpreted_text_is_appropriately_classified()
         {
             var scenarioTextLine = Result.Lines.ElementAt(3);
             scenarioTextLine.Type.ShouldBe(ClassificationTypes.ScenarioText);
+        }
+
+        [Test]
+        public void pending_text_is_appropriately_classified()
+        {
+            var scenarioTextLine = Result.Lines.ElementAt(4);
+            scenarioTextLine.Type.ShouldBe(ClassificationTypes.PendingScenarioText);
+        }
+
+        [Test]
+        public void table_row_is_appropriately_classified()
+        {
+            var scenarioTextLine = Result.Lines.ElementAt(6);
+            scenarioTextLine.Type.ShouldBe(ClassificationTypes.Table);
         }
     }
 
     internal class Classifier
     {
         private StoryParser _parser;
+        private StandardScenarioInterpreter _scenarioInterpreter;
+        private ScenarioContext _context;
 
         public Classifier(AssemblyRegistry assemblyRegistry)
         {
             _parser = new StoryParser();
+            _scenarioInterpreter = new StandardScenarioInterpreter(assemblyRegistry);
+            _context = new SessionContext(assemblyRegistry).GetContextForStory().GetScenarioContext();
         }
 
         public Classification Classify(string storyText)
         {
-            
-
             ClassificationLine[] classificationLines = GetClassificationLines(storyText).ToArray();
             return new Classification {Lines = classificationLines};
         }
@@ -100,14 +133,27 @@ This is an example line of a scenario";
 
         private ClassificationTypes GetClassificationType(ScenarioLine line, IEnumerable<ScenarioLine> parsedLines, IEnumerable<IScenario> scenarios)
         {
+            
             var parsed = parsedLines.FirstOrDefault(l=>l.LineNumber == line.LineNumber);
             if (parsed != null)
-                return ClassificationTypes.ScenarioText;
+            {
+                var match = _scenarioInterpreter.GetChain(_context, parsed.Text);
+                return match != null ? ClassificationTypes.ScenarioText : ClassificationTypes.PendingScenarioText;
+            }
 
             if (LooksLikeAScenarioTitle(line))
                 return ClassificationTypes.ScenarioTitle;
 
+            if (LooksLikeATable(line))
+                return ClassificationTypes.Table;
+
             return ClassificationTypes.Title;
+        }
+
+        private bool LooksLikeATable(ScenarioLine line)
+        {
+            var trimmed = line.Text.Trim();
+            return trimmed.StartsWith("|") && trimmed.EndsWith("|");
         }
 
         private bool LooksLikeAScenarioTitle(ScenarioLine line)
@@ -133,6 +179,8 @@ This is an example line of a scenario";
     {
         Title,
         ScenarioTitle,
-        ScenarioText
+        ScenarioText,
+        PendingScenarioText,
+        Table
     }
 }
