@@ -29,7 +29,7 @@ namespace StorEvil.Core
         }
 
         public ScenarioLine[] Body { get; set; }
-
+        public ScenarioLine[] Background { get; set; }       
         public ScenarioLocation Location
         {
             get
@@ -68,8 +68,6 @@ namespace StorEvil.Core
         public string Id { get; set; }
         public IEnumerable<string> Tags { get; set; }
 
-        public ScenarioLine[] Background { get; set; }
-
        
     }
 
@@ -78,9 +76,10 @@ namespace StorEvil.Core
         string Name { get; }
         string Id { get; }
         IEnumerable<string> Tags { get; }
-        ScenarioLine[] Background { get; set; }
+        ScenarioLine[] Background { get; }
         ScenarioLocation Location { get;  }
         IEnumerable<Scenario> Preprocess();
+        ScenarioLine[] Body { get; }
     }
 
     [Serializable]

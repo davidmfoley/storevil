@@ -83,10 +83,7 @@ namespace StorEvil.StubGeneration
 
         private IEnumerable<string> GetLines(IScenario scenario)
         {
-            if (scenario is Scenario)
-                return ((Scenario) scenario).Body.Select(x=>x.Text);
-
-            return ((ScenarioOutline)scenario).Scenario.Body.Select(x => x.Text);
+            return scenario.Body.Select(x=>x.Text);
         }
 
         private void PrintSuggestions()

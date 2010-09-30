@@ -53,8 +53,6 @@ namespace StorEvil.Parsing
             
             AddScenarioOrOutlineIfExists();
 
-            FixEmptyScenarioNames();
-
             return GetStory();
         }
 
@@ -195,18 +193,25 @@ namespace StorEvil.Parsing
                 _currentScenario.RowData.Skip(1).Select(x => x.Take(count).ToArray()).ToArray();
 
             var scenarioOutline = new ScenarioOutline(_storyId + "- outline -" + _scenarios.Count,
-                                                      _currentScenario.Name,
+                                                      GetCurrentScenarioName(),
                                                       innerScenario,
                                                       fieldNames,
                                                       examples) { Tags = _currentScenario.Tags };
-            _scenarios.Add(
-                scenarioOutline);
+            _scenarios.Add(scenarioOutline);
+        }
+
+        private string GetCurrentScenarioName()
+        {
+            if (!string.IsNullOrEmpty( _currentScenario.Name))
+                return _currentScenario.Name;
+
+            return string.Join("\r\n", _currentScenario.Lines.Select(l => l.Text).ToArray());
         }
 
         private Scenario BuildScenario()
         {
             return new Scenario(_storyLocation, _storyId + "-" + _scenarios.Count,
-                                _currentScenario.Name,
+                                GetCurrentScenarioName(),
                                 _currentScenario.Lines.ToArray()) {
                 Tags = _currentScenario.Tags,
                 Background = _background.ToArray()};
@@ -251,26 +256,7 @@ namespace StorEvil.Parsing
                 _currentScenario.RowData.Add(line.Text.Split('|').Skip(1).Select(v=>v.Trim()));
         }
 
-        private void FixEmptyScenarioNames()
-        {
-            foreach (var scenario in _scenarios.Where(scenario => string.IsNullOrEmpty(scenario.Name)))
-                SetScenarioNameToDefault(scenario);
-        }
-
-        private static void SetScenarioNameToDefault(IScenario scenario)
-        {
-            if (scenario is Scenario)
-            {
-                var s = scenario as Scenario;
-                s.Name = string.Join("\r\n", s.Body.Select(l=>l.Text).ToArray());
-            }
-            else if (scenario is ScenarioOutline)
-            {
-                var s = scenario as ScenarioOutline;
-                s.Name = string.Join("\r\n", s.Scenario.Body.Select(l => l.Text).ToArray());
-            }
-        }
-
+    
         private static bool IsComment(string s)
         {
             return s.Trim().StartsWith("#");

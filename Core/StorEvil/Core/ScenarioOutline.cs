@@ -26,6 +26,11 @@ namespace StorEvil.Core
 
         public string[] FieldNames { get; set; }
 
+        public ScenarioLine[] Background
+        {
+            get { return Scenario.Background; }            
+        }
+
         public ScenarioLocation Location
         {
             get
@@ -47,6 +52,12 @@ namespace StorEvil.Core
                         Background = scenario.Background
                     };
             }
+        }
+
+        public ScenarioLine[] Body
+        {
+            get { return Scenario.Body; }
+            
         }
 
         private IEnumerable<ScenarioLine> PreprocessLines(IEnumerable<ScenarioLine> lines, IEnumerable<string> fieldNames,

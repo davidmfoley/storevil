@@ -110,8 +110,9 @@ namespace StorEvil.Resharper.Tasks
 
         internal IScenario GetScenario()
         {            
-            return new ScenarioOutline(Id, Name, new Scenario(Name, 
-                                                              XmlHelper.GetScenarioLines(Body)), FieldNames, Examples) { Background = XmlHelper.GetScenarioLines(Background) };            
+            return new ScenarioOutline(Id, Name, new Scenario(Name,
+                                                              XmlHelper.GetScenarioLines(Body)) { Background = XmlHelper.GetScenarioLines(Background) }, FieldNames, Examples) 
+                                                              ;            
         }
 
         private void SaveScenarioOutlineXml(XmlElement element)
