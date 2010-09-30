@@ -41,14 +41,24 @@ namespace StorEvil.Core
                 return new ScenarioLocation { Path = _path, FromLine = firstLine, ToLine = lastLine };
             }
         }
+
+        public IEnumerable<Scenario> Preprocess()
+        {
+            return new[] {this};
+        }
     }
 
     [Serializable]
     public class ScenarioLine
     {
+        public int Length { get { return Text.Length; } }
         public string Text { get; set; }
 
         public int LineNumber { get; set; }
+
+        public int StartPosition { get; set; }
+
+        public int EndPosition { get { return StartPosition + Length; } }
     }
 
     [Serializable]
@@ -70,6 +80,7 @@ namespace StorEvil.Core
         IEnumerable<string> Tags { get; }
         ScenarioLine[] Background { get; set; }
         ScenarioLocation Location { get;  }
+        IEnumerable<Scenario> Preprocess();
     }
 
     [Serializable]

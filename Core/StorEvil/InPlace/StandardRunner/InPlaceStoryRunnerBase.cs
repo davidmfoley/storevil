@@ -14,12 +14,10 @@ namespace StorEvil.InPlace
         private readonly IStoryFilter _filter;
         private readonly ISessionContext _context;
         protected readonly IEventBus EventBus;
-        private readonly IScenarioPreprocessor _preprocessor;
 
-        protected InPlaceStoryRunnerBase(IScenarioPreprocessor preprocessor, IStoryFilter filter, ISessionContext context, IEventBus eventBus)
+
+        protected InPlaceStoryRunnerBase(IStoryFilter filter, ISessionContext context, IEventBus eventBus)
         {
-           
-            _preprocessor = preprocessor;
             _filter = filter;
             _context = context;
             EventBus = eventBus;
@@ -66,7 +64,7 @@ namespace StorEvil.InPlace
 
         private IEnumerable<Scenario> GetScenarios(Story story)
         {
-            return story.Scenarios.SelectMany(scenario => _preprocessor.Preprocess(scenario)).ToArray();
+            return story.Scenarios.SelectMany(scenario => scenario.Preprocess()).ToArray();
         }
 
         public abstract void Finished();

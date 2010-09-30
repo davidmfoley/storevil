@@ -10,18 +10,16 @@ namespace StorEvil.InPlace
     public class InPlaceCompilingStoryRunner : IStoryHandler
     {
         private readonly IRemoteHandlerFactory _factory;
-        private readonly IScenarioPreprocessor _preprocessor;
         private readonly IStoryFilter _filter;
         private readonly IEventBus _eventBus;
         private JobResult _result = new JobResult();
 
 
-        public InPlaceCompilingStoryRunner(IRemoteHandlerFactory factory, IScenarioPreprocessor preprocessor, IStoryFilter filter, ISessionContext context, IEventBus eventBus)
+        public InPlaceCompilingStoryRunner(IRemoteHandlerFactory factory, IStoryFilter filter, IEventBus eventBus)
 
         {
             _factory = factory;
-            _preprocessor = preprocessor;
-            _filter = filter;
+             _filter = filter;
             _eventBus = eventBus;
         }
 
@@ -49,9 +47,8 @@ namespace StorEvil.InPlace
         {
             var filtered = story.Scenarios.Where(x => _filter.Include(story, x));
 
-            return filtered.SelectMany(x => _preprocessor.Preprocess(x)).Cast<IScenario>();
+            return filtered.SelectMany(x => x.Preprocess()).Cast<IScenario>();
         }
-
 
         public void Finished()
         {

@@ -13,9 +13,6 @@ namespace StorEvil.VS2010
     [Order(Before = Priority.Default)] //set the priority to be after the default classifiers
     internal sealed class StorEvilClassificationFormatPending : ClassificationFormatDefinition
     {
-        /// <summary>
-        /// Defines the visual format for the "StorEvil.VS2010" classification type
-        /// </summary>
         public StorEvilClassificationFormatPending()
         {
             this.DisplayName = "StorEvil.VS2010.Pending"; //human readable version of the name
@@ -31,9 +28,6 @@ namespace StorEvil.VS2010
     [Order(Before = Priority.Default)] //set the priority to be after the default classifiers
     internal sealed class StorEvilClassificationFormatComment : ClassificationFormatDefinition
     {
-        /// <summary>
-        /// Defines the visual format for the "StorEvil.VS2010" classification type
-        /// </summary>
         public StorEvilClassificationFormatComment()
         {
             this.DisplayName = "StorEvil.VS2010.Comment"; //human readable version of the name
@@ -49,9 +43,6 @@ namespace StorEvil.VS2010
     [Order(Before = Priority.Default)] //set the priority to be after the default classifiers
     internal sealed class StorEvilClassificationFormatScenarioStart : ClassificationFormatDefinition
     {
-        /// <summary>
-        /// Defines the visual format for the "StorEvil.VS2010" classification type
-        /// </summary>
         public StorEvilClassificationFormatScenarioStart()
         {
             this.DisplayName = "StorEvil.VS2010.ScenarioStart"; //human readable version of the name
@@ -67,10 +58,7 @@ namespace StorEvil.VS2010
     [Order(Before = Priority.Default)] //set the priority to be after the default classifiers
     internal sealed class StorEvilClassificationFormatTable : ClassificationFormatDefinition
     {
-        /// <summary>
-        /// Defines the visual format for the "StorEvil.VS2010" classification type
-        /// </summary>
-        public StorEvilClassificationFormatTable()
+        public StorEvilClassificationFormatTable()  
         {
             this.DisplayName = "StorEvil.VS2010.Table"; //human readable version of the name
             this.ForegroundColor = Colors.Gray;

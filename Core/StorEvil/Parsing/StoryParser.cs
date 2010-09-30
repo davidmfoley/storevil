@@ -28,14 +28,14 @@ namespace StorEvil.Parsing
     /// </summary>
     public class StoryParsingJob
     {
-        private readonly List<IScenario> scenarios = new List<IScenario>();
+        private readonly List<IScenario> _scenarios = new List<IScenario>();
         private readonly StringBuilder _storyName = new StringBuilder();
         private ScenarioBuildingInfo _currentScenario;
         private string _storyId;
-        private List<string> _tags =  new List<string>();
+        private readonly List<string> _tags =  new List<string>();
 
         private Action<ScenarioLine> _currentLineHandler;
-        private List<string> _storyTags = new List<string>();
+        private readonly List<string> _storyTags = new List<string>();
         private List<ScenarioLine> _background;
         private string _storyLocation;
 
@@ -48,9 +48,9 @@ namespace StorEvil.Parsing
 
             InitializeParsing(storyId);
 
-            foreach (var line in ParseLines(storyText))
-                HandleStoryTextLine(line);
-
+            var lines = ParseLines(storyText);
+            lines.Each(HandleStoryTextLine);
+            
             AddScenarioOrOutlineIfExists();
 
             FixEmptyScenarioNames();
@@ -158,7 +158,7 @@ namespace StorEvil.Parsing
                 _storyId = Guid.NewGuid().ToString();
 
             var id = _storyId.Length < 120 ? _storyId : _storyId.Substring(0, 120);
-            return new Story(id, _storyName.ToString().Trim(), scenarios) {Tags = _storyTags, Location = _storyLocation};
+            return new Story(id, _storyName.ToString().Trim(), _scenarios) {Tags = _storyTags, Location = _storyLocation};
         }
 
         private static bool IsNewScenarioOrOutline(string line)
@@ -194,18 +194,18 @@ namespace StorEvil.Parsing
             var examples =
                 _currentScenario.RowData.Skip(1).Select(x => x.Take(count).ToArray()).ToArray();
 
-            var scenarioOutline = new ScenarioOutline(_storyId + "- outline -" + scenarios.Count,
+            var scenarioOutline = new ScenarioOutline(_storyId + "- outline -" + _scenarios.Count,
                                                       _currentScenario.Name,
                                                       innerScenario,
                                                       fieldNames,
                                                       examples) { Tags = _currentScenario.Tags };
-            scenarios.Add(
+            _scenarios.Add(
                 scenarioOutline);
         }
 
         private Scenario BuildScenario()
         {
-            return new Scenario(_storyLocation, _storyId + "-" + scenarios.Count,
+            return new Scenario(_storyLocation, _storyId + "-" + _scenarios.Count,
                                 _currentScenario.Name,
                                 _currentScenario.Lines.ToArray()) {
                 Tags = _currentScenario.Tags,
@@ -231,7 +231,7 @@ namespace StorEvil.Parsing
 
         private void AddScenario()
         {
-            scenarios.Add(BuildScenario());
+            _scenarios.Add(BuildScenario());
         }
 
         private void HandleScenarioLine(ScenarioLine line)
@@ -253,7 +253,7 @@ namespace StorEvil.Parsing
 
         private void FixEmptyScenarioNames()
         {
-            foreach (var scenario in scenarios.Where(scenario => string.IsNullOrEmpty(scenario.Name)))
+            foreach (var scenario in _scenarios.Where(scenario => string.IsNullOrEmpty(scenario.Name)))
                 SetScenarioNameToDefault(scenario);
         }
 
@@ -303,8 +303,37 @@ namespace StorEvil.Parsing
 
         private static IEnumerable<ScenarioLine> ParseLines(string text)
         {
-            var lines = text.Split(new[] {"\r\n", "\r", "\n"}, StringSplitOptions.None);
-            return lines.Select((t, i) => new ScenarioLine {LineNumber = i + 1, Text = t.Trim()});
+            return new LineSplitter().Split(text);
+            
         }
     }
+
+    public class LineSplitter
+    {
+        public  IEnumerable<ScenarioLine> Split(string text)
+        {
+            var currentPosition = 0;
+            var lineNumber = 0;
+
+            while(currentPosition > -1 && currentPosition < text.Length)
+            {
+                var nextLinebreak = text.IndexOf('\n', currentPosition);
+                if (nextLinebreak == -1)
+                    nextLinebreak = text.Length - 1;
+
+                var substring = text.Substring(currentPosition, nextLinebreak - currentPosition).TrimEnd('\r');
+               
+                yield return
+                   new ScenarioLine
+                   {
+                       LineNumber = ++lineNumber,
+                       StartPosition = currentPosition,
+                       Text = substring
+                   };
+
+                currentPosition = nextLinebreak + 1;
+            }           
+        }
+    }
+
 }

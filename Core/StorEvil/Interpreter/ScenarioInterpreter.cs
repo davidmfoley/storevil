@@ -31,7 +31,7 @@ namespace StorEvil.Interpreter
         }
 
         [DebuggerStepThrough]
-        public InvocationChain GetChain(ScenarioContext context, string line)
+        public virtual InvocationChain GetChain(ScenarioContext context, string line)
         {
             DebugTrace.Trace("Interpreting", line);
             var chains = (GetSelectedChains(context, line) ?? new InvocationChain[0]).ToArray();

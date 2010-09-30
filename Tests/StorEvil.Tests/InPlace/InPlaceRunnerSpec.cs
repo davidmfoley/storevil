@@ -50,8 +50,7 @@ namespace StorEvil.InPlace
         }
         private void RunInCompilingRunner(Story story)
         {
-            var preprocessor = new ScenarioPreprocessor();
-
+           
             var configSettings = new ConfigSettings
                                      {
                                          AssemblyLocations = new[]
@@ -65,10 +64,9 @@ namespace StorEvil.InPlace
             var remoteHandlerFactory = new TestRemoteHandlerFactory(new AssemblyGenerator(), configSettings, new Filesystem() );
                                      
             var runner = new InPlaceCompilingStoryRunner(
-                remoteHandlerFactory,                                                
-                preprocessor,                                               
+                remoteHandlerFactory,                                                                                                    
                 new IncludeAllFilter(), 
-                new FakeSessionContext(Context), FakeEventBus);
+                FakeEventBus);
 
             runner.HandleStories(new[] { story});
             runner.Finished();
@@ -79,8 +77,7 @@ namespace StorEvil.InPlace
             FakeEventBus = new CapturingEventBus();
             var assemblyRegistry = new AssemblyRegistry(new[] { typeof(TestExtensionMethods).Assembly });
             var scenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(assemblyRegistry), MockRepository.GenerateStub<IAmbiguousMatchResolver>(), new DefaultLanguageService());
-            return new InPlaceStoryRunner(new ScenarioPreprocessor(),
-                                          scenarioInterpreter,
+            return new InPlaceStoryRunner(scenarioInterpreter,
                                           new IncludeAllFilter(), new FakeSessionContext(Context), FakeEventBus);
         }
 

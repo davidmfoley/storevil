@@ -137,9 +137,8 @@ namespace StorEvil.Resharper.Runner
 
         private IStoryHandler BuildInPlaceRunner(IAmbiguousMatchResolver resolver)
         {
-            IScenarioPreprocessor preprocessor = new ScenarioPreprocessor();
             var sameDomainHandlerFactory = new SameDomainHandlerFactory(new AssemblyGenerator(), _assemblyRegistry,new Filesystem());
-            return new InPlaceCompilingStoryRunner(sameDomainHandlerFactory, preprocessor, new IncludeAllFilter(), _sessionContext, _eventBus);
+            return new InPlaceCompilingStoryRunner(sameDomainHandlerFactory, new IncludeAllFilter(),  _eventBus);
         }
 
     }

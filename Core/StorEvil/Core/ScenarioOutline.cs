@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace StorEvil.Core
 {
@@ -29,6 +31,37 @@ namespace StorEvil.Core
             get
             {
                 return Scenario.Location;
+            }
+        }
+
+        public IEnumerable<Scenario> Preprocess()
+        {
+            var scenario = Scenario;
+            var count = 0;
+            foreach (var example in Examples)
+            {
+                yield return
+                    new Scenario(Location.Path, Id + " - " + (count++), scenario.Name,
+                                 PreprocessLines(scenario.Body, FieldNames, example).ToArray())
+                    {
+                        Background = scenario.Background
+                    };
+            }
+        }
+
+        private IEnumerable<ScenarioLine> PreprocessLines(IEnumerable<ScenarioLine> lines, IEnumerable<string> fieldNames,
+                                                    IEnumerable<string> example)
+        {
+            foreach (var line in lines)
+            {
+                var processed = line.Text;
+
+                for (var fieldIndex = 0; fieldIndex < fieldNames.ToArray().Length; fieldIndex++)
+                {
+                    var name = fieldNames.ToArray()[fieldIndex];
+                    processed = processed.Replace("<" + name + ">", example.ElementAtOrDefault(fieldIndex));
+                }
+                yield return new ScenarioLine { Text = processed, LineNumber = line.LineNumber, StartPosition = line.StartPosition };
             }
         }
     }

@@ -217,9 +217,7 @@
     <Compile Include="MultipleWordsAttribute.cs" />
     <Compile Include="Nunit\FixtureGenerationStoryHandler.cs" />
     <Compile Include="InPlace\StandardRunner\InPlaceStoryRunner.cs" />
-    <Compile Include="Parsing\IScenarioPreprocessor.cs" />
     <Compile Include="InPlace\MemberInvoker.cs" />
-    <Compile Include="Parsing\ScenarioPreprocessor.cs" />
     <Compile Include="Core\IStoryHandler.cs" />
     <Compile Include="Parsing\ScenarioLineParser.cs" />
     <Compile Include="Configuration\ConfigSettings.cs" />

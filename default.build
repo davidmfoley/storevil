@@ -136,7 +136,7 @@
   </Target>
 
   <PropertyGroup>
-    <ReSharperPluginRoot>C:\Users\$(USERNAME)\AppData\Roaming\JetBrains\ReSharper\v5.1</ReSharperPluginRoot>
+    <ReSharperPluginRoot>C:\Users\$(USERNAME)\AppData\Local\JetBrains\ReSharper\v5.1</ReSharperPluginRoot>
   </PropertyGroup>
   
   <Target Name="InstallReSharper" DependsOnTargets="BuildReSharper">

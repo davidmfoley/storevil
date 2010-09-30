@@ -44,7 +44,6 @@ namespace StorEvil
             container.EasyRegister<IStoryReader, FilesystemStoryReader>();
 
             container.EasyRegister<IFilesystem, Filesystem>();
-            container.EasyRegister<IScenarioPreprocessor, ScenarioPreprocessor>();
             container.EasyRegister<ScenarioInterpreter>();
             container.EasyRegister<IInterpreterForTypeFactory, InterpreterForTypeFactory>();
             container.EasyRegister<ILanguageService, DefaultLanguageService>();

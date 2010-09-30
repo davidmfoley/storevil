@@ -43,7 +43,7 @@ namespace StorEvil.InPlace
         
         protected Scenario[] GetScenarios(Story story)
         {           
-            return story.Scenarios.SelectMany(s=> new ScenarioPreprocessor().Preprocess(s)).ToArray();
+            return story.Scenarios.SelectMany(s=>s.Preprocess()).ToArray();
         }
 
         protected ScenarioInterpreter ScenarioInterpreter;

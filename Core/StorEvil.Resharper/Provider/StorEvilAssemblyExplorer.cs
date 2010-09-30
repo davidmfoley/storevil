@@ -87,7 +87,7 @@ namespace StorEvil.Resharper.Provider
                                                                                         outline);
                 consumer(outlineElement);
                 var i = 0;
-                foreach (var child in new ScenarioPreprocessor().Preprocess(scenario))
+                foreach (var child in scenario.Preprocess())
                 {                 
                     consumer(new StorEvilScenarioElement(_provider, outlineElement, project, BuildExampleRowScenarioName(outline, i), child));
                     i++;

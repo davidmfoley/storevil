@@ -23,7 +23,7 @@ namespace StorEvil.InPlace.Compiled
             EventBus eventBus = new EventBus();
             var fakeHandler = new FinishedTestHandler();
             eventBus.Register(fakeHandler);
-            var inPlaceRunner = new InPlaceCompilingStoryRunner(remoteHandlerFactory, new ScenarioPreprocessor(), new IncludeAllFilter(), new SessionContext(), eventBus);
+            var inPlaceRunner = new InPlaceCompilingStoryRunner(remoteHandlerFactory,new IncludeAllFilter(),  eventBus);
             inPlaceRunner.Finished();
             fakeHandler.FinishedWasCalled.ShouldEqual(true);
         }
@@ -53,7 +53,7 @@ namespace StorEvil.InPlace.NonCompiled
             FakeEventBus = MockRepository.GenerateStub<IEventBus>();
 
             var scenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new AssemblyRegistry()), MockRepository.GenerateStub<IAmbiguousMatchResolver>(), new DefaultLanguageService());
-            var inPlaceRunner = new InPlaceStoryRunner(new ScenarioPreprocessor(), scenarioInterpreter, new IncludeAllFilter(), new SessionContext(), FakeEventBus);
+            var inPlaceRunner = new InPlaceStoryRunner(scenarioInterpreter, new IncludeAllFilter(), new SessionContext(), FakeEventBus);
             inPlaceRunner.Finished();
         }
 
