@@ -16,7 +16,7 @@ namespace StorEvil.Parsing
                 if (nextLinebreak == -1)
                     nextLinebreak = text.Length;
 
-                var substring = text.Substring(currentPosition, nextLinebreak - currentPosition).TrimEnd('\r');
+                var substring = text.Substring(currentPosition, nextLinebreak - currentPosition).Trim();
                
                 yield return
                     new ScenarioLine
