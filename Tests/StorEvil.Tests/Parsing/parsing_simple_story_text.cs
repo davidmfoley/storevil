@@ -99,6 +99,44 @@ Given some condition
     }
 
     [TestFixture]
+    public class parsing_a_story_with_leading_white_space
+    {
+        private Story Result;
+
+        private const string testSingleStoryText =
+            @"
+ As a user I want to do something
+ Scenario: Doing something
+ Given some condition
+";
+
+        [SetUp]
+        public void SetupContext()
+        {
+            var parser = new StoryParser();
+            Result = parser.Parse(testSingleStoryText, null);
+        }
+
+        [Test]
+        public void Should_Parse_Summary()
+        {
+            Result.Summary.ShouldEqual("As a user I want to do something");
+        }
+
+        [Test]
+        public void Should_Parse_Scenario_Name()
+        {
+            ((Scenario)Result.Scenarios.First()).Name.ShouldEqual("Doing something");
+        }
+
+        [Test]
+        public void Should_Parse_1st_Scenario_Text()
+        {
+            ((Scenario)Result.Scenarios.First()).Body.First().Text.ShouldEqual("Given some condition");
+        }
+    }
+    
+    [TestFixture]
     public class parsing_tags
     {
         private Story Result;
