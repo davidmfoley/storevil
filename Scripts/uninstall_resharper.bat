@@ -1,4 +1,4 @@
-pushd "%~dp0"
+﻿pushd "%~dp0"
 
 set RSRoot=%USERPROFILE%\AppData\Local\JetBrains\ReSharper\v5.1
 

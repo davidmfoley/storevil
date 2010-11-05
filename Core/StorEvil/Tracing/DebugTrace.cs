@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using StorEvil.InPlace;
 
 namespace StorEvil.Interpreter

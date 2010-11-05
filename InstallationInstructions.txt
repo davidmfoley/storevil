@@ -1,4 +1,4 @@
-Installation Instructions
+﻿Installation Instructions
 
 Installing the lbrary and command-line runner:
 

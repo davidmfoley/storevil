@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using StorEvil.Events;

@@ -1,4 +1,4 @@
-using StorEvil.Core;
+﻿using StorEvil.Core;
 
 namespace StorEvil.Console
 {
