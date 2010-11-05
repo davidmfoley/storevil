@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Events;

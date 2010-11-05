@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using NUnit.Framework;
 using StorEvil.Assertions;
@@ -163,7 +163,7 @@ namespace StorEvil.ResultListeners.GatheringResultListener_Specs
             Listener.Handle(new ScenarioStarting { Scenario = testScenario });
 
             Listener.Handle(new LineFailed {SuccessPart = "success-part", FailedPart = "failed-part",ExceptionInfo = "failure-message" });            
-            Listener.Handle(new ScenarioFinished{Status = ExecutionStatus.Failed});
+            Listener.Handle(new ScenarioFailed());
         }
 
         [Test]
@@ -227,8 +227,8 @@ namespace StorEvil.ResultListeners.GatheringResultListener_Specs
             var testScenario = new Scenario();
             Listener.Handle(new ScenarioStarting { Scenario = testScenario });
 
-            Listener.Handle(new LinePending {Line = "foo bar baz", Suggestion = TestSuggestion}  );
-            Listener.Handle(new ScenarioFinished{Scenario = testScenario, Status = ExecutionStatus.Pending});
+            Listener.Handle(new LinePending { Line = "foo bar baz", Suggestion = TestSuggestion });
+            Listener.Handle(new ScenarioPending { Scenario = testScenario });
         }
 
         [Test]
@@ -260,12 +260,12 @@ namespace StorEvil.ResultListeners.GatheringResultListener_Specs
             var pendingScenario = new Scenario();
             Listener.Handle(new ScenarioStarting { Scenario = pendingScenario });
             Listener.Handle(new LinePending{Line= "foo bar baz"});
-            Listener.Handle(new ScenarioFinished() { Status = ExecutionStatus.Pending});
+            Listener.Handle(new ScenarioPending());
 
             var failedScenario = new Scenario();
             Listener.Handle(new ScenarioStarting { Scenario = failedScenario});
             Listener.Handle(new LineFailed {SuccessPart = "success-part", FailedPart = "failed-part", ExceptionInfo = "failure-message" });
-            Listener.Handle(new ScenarioFinished() { Status = ExecutionStatus.Failed });
+            Listener.Handle(new ScenarioFailed());
             SimulateSuccessfulScenario("scenario-id", "scenario-name", new[] {"line1", "line2"});
         }
 

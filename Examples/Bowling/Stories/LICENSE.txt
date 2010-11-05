@@ -1,4 +1,4 @@
-These stories (just the feature files themselves) were copied from TechTalk's SpecFlow project.
+﻿These stories (just the feature files themselves) were copied from TechTalk's SpecFlow project.
 
 The following license applies only to the .feature files in this folder. The rest of StorEvil is licensed under the WTFPL.
 

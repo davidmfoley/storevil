@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using StorEvil.Interpreter.ParameterConverters;
 
 namespace StorEvil.Utility

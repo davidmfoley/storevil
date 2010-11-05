@@ -1,3 +1,5 @@
+﻿pushd "%~dp0"
+
 ECHO OFF
 
 set dest=%1
@@ -19,3 +21,5 @@ copy StorEvil.Assertions.DLL %1\
 
 ECHO installed StorEvil to %1
 ECHO To uninstall StorEvil, delete this directory
+
+popd

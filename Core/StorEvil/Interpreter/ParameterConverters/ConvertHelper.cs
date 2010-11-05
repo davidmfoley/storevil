@@ -1,4 +1,4 @@
-namespace StorEvil.Interpreter.ParameterConverters
+﻿namespace StorEvil.Interpreter.ParameterConverters
 {
     public class ConvertHelper
     {

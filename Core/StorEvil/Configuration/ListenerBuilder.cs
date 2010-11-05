@@ -1,4 +1,4 @@
-using System.Configuration;
+﻿using System.Configuration;
 using StorEvil.Events;
 using StorEvil.Infrastructure;
 using StorEvil.ResultListeners;

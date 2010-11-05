@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using StorEvil.Core;
 using StorEvil.Events;
@@ -7,8 +7,9 @@ using StorEvil.InPlace;
 namespace StorEvil.ResultListeners
 {
     public abstract class WriterListener :
-        IHandle<ScenarioStarting>, IHandle<SessionFinished>, IHandle<ScenarioFinished>,
-        IHandle<LineFailed>, IHandle<LinePassed>, IHandle<LinePending> ,
+        IHandle<SessionFinished>,
+        IHandle<ScenarioStarting>, IHandle<ScenarioFailed>, IHandle<ScenarioPassed>, IHandle<ScenarioPending>,
+        IHandle<LineFailed>, IHandle<LinePassed>, IHandle<LinePending>,
         IHandle<StoryStarting>, IHandle<GenericInformation>
     {
         protected abstract void DoWrite(ConsoleColor white, params string[] s);
@@ -21,21 +22,34 @@ namespace StorEvil.ResultListeners
             DoWrite(ConsoleColor.White, "\r\n" + "\r\nSTORY: " + story.Id + "\r\n" + story.Summary);
         } 
 
+        public void Handle(SessionFinished eventToHandle)
+        {
+            DoWrite(ConsoleColor.Green, "Finished");
+        }
+
         public void Handle(ScenarioStarting eventToHandle)
         {
             DoWrite(ConsoleColor.White, "\r\nSCENARIO: " + eventToHandle.Scenario.Name);
         }
 
-        public void Handle(SessionFinished eventToHandle)
+        public void Handle(ScenarioPassed eventToHandle)
         {
-            DoWrite(ConsoleColor.Green, "Finished");
-        }             
+            DoWrite(ConsoleColor.Green, "Scenario succeeded");
+        }
 
-        public void Handle(ScenarioFinished eventToHandle)
+        public void Handle(ScenarioFailed eventToHandle)
         {
-            if (eventToHandle.Status == ExecutionStatus.Passed)
-                DoWrite(ConsoleColor.Green, "Scenario succeeded");
-        }       
+            DoWrite(ConsoleColor.Red, "Scenario failed");
+            if (!string.IsNullOrEmpty(eventToHandle.ExceptionInfo))
+            {
+                DoWrite(ConsoleColor.Red, Environment.NewLine + eventToHandle.ExceptionInfo);
+            }
+        }
+
+        public void Handle(ScenarioPending eventToHandle)
+        {
+            DoWrite(ConsoleColor.Yellow, "Scenario pending");
+        }
 
         public void Handle(LineFailed eventToHandle)
         {

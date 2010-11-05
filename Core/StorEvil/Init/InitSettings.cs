@@ -1,4 +1,4 @@
-namespace StorEvil.Console
+﻿namespace StorEvil.Console
 {
     public class InitSettings
     {

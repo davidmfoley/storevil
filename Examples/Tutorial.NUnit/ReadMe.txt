@@ -1,4 +1,4 @@
-A starter storevil.config file and some examples have been written to this directory. Check them out.
+﻿A starter storevil.config file and some examples have been written to this directory. Check them out.
 
 First steps to getting a working storevil project:
 
