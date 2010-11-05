@@ -1,9 +1,9 @@
-﻿using StorEvil.Core;
-using StorEvil.Utility;
+﻿using StorEvil;
+using StorEvil.Assertions;
 
 namespace Example
 {
-    [StorEvil.Context]
+    [Context]
     public class ExampleContext
     {
         private int _first;
