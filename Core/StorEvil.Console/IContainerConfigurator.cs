@@ -1,4 +1,4 @@
-using Funq;
+﻿using Funq;
 using StorEvil.Configuration;
 
 namespace StorEvil.Console

@@ -1,4 +1,4 @@
-Feature: Evolving a grid over multiple generations
+﻿Feature: Evolving a grid over multiple generations
   In order to create a functioning rules engine
   As a programmer of Conway's Game of Life
   I can evolve a grid over multiple generations

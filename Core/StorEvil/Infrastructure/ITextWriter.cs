@@ -1,4 +1,4 @@
-namespace StorEvil.Infrastructure
+﻿namespace StorEvil.Infrastructure
 {
     public interface ITextWriter
     {

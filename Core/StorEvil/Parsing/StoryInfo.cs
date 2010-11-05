@@ -1,4 +1,4 @@
-namespace StorEvil.Parsing
+﻿namespace StorEvil.Parsing
 {
     public class StoryInfo
     {

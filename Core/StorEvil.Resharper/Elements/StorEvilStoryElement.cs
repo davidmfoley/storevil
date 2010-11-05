@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.Util;

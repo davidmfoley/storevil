@@ -1,4 +1,4 @@
-REM runs all of the examples, outputs to console
+﻿REM runs all of the examples, outputs to console
 
 cd Examples/Pizza
 storevil execute

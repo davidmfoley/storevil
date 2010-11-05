@@ -1,4 +1,4 @@
-using JetBrains.ProjectModel;
+﻿using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
 using StorEvil.Core;
 using StorEvil.Resharper.Elements;

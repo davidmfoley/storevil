@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;

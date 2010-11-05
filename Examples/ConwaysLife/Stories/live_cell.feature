@@ -1,4 +1,4 @@
-Feature: Evolving a living cell
+﻿Feature: Evolving a living cell
   In order to create a functioning rules engine
   As a programmer of Conway's Game of Life
   I can evolve a single living cell

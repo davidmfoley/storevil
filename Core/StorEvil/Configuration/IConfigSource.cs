@@ -1,4 +1,4 @@
-namespace StorEvil.Configuration
+﻿namespace StorEvil.Configuration
 {
     public interface IConfigSource
     {

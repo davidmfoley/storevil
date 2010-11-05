@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Xml;
 using StorEvil.Events;
 using StorEvil.Infrastructure;

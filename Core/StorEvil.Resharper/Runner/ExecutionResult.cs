@@ -1,4 +1,4 @@
-using JetBrains.ReSharper.TaskRunnerFramework;
+﻿using JetBrains.ReSharper.TaskRunnerFramework;
 
 namespace StorEvil.Resharper.Runner
 {

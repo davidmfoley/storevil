@@ -1,4 +1,4 @@
-using Rhino.Mocks;
+﻿using Rhino.Mocks;
 
 namespace StorEvil
 {

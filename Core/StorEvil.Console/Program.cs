@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using StorEvil.Configuration;
 using StorEvil.Core;
 using StorEvil.Infrastructure;

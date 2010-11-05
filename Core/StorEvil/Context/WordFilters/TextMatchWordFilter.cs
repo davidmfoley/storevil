@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using StorEvil.Context.Matchers;
 using StorEvil.Utility;
 

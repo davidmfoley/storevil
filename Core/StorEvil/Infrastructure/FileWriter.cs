@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using StorEvil.Interpreter;
 
 namespace StorEvil.Infrastructure
