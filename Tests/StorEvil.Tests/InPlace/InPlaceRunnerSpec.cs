@@ -124,17 +124,17 @@ namespace StorEvil.InPlace
 
         protected void AssertScenarioSuccess()
         {
-            AssertEventRaised<ScenarioFinished>(x=>x.Status == ExecutionStatus.Passed);            
+            AssertEventRaised<ScenarioPassed>();            
         }
 
         protected void AssertAllScenariosSucceeded()
         {
-            FakeEventBus.CaughtEvents.OfType<ScenarioFinished>().Any(x=>x.Status != ExecutionStatus.Passed).ShouldBe(false);
+            FakeEventBus.CaughtEvents.OfType<ScenarioFailed>().Any().ShouldBe(false);
         }
 
         protected void AssertScenarioSuccessWithName(string name)
         {
-            AssertEventRaised<ScenarioFinished>(x => x.Status == ExecutionStatus.Passed && x.Scenario.Name == name);                   
+            AssertEventRaised<ScenarioPassed>(x => x.Scenario.Name == name);                   
         }
 
         protected void AssertEventRaised<TEvent>(Predicate<TEvent> matching)
@@ -145,6 +145,16 @@ namespace StorEvil.InPlace
         protected void AssertEventRaised<TEvent>()
         {
             AssertEventRaised<TEvent>(x => true);
+        }
+
+        protected void AssertEventNotRaised<TEvent>(Predicate<TEvent> matching)
+        {
+            FakeEventBus.CaughtEvents.OfType<TEvent>().Any(x => matching(x)).ShouldEqual(false);
+        }
+
+        protected void AssertEventNotRaised<TEvent>()
+        {
+            AssertEventNotRaised<TEvent>(x => true);
         }
     }
 

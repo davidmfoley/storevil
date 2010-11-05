@@ -50,9 +50,9 @@ namespace StorEvil.TeamCity
         [Test]
         public void should_output_correct_team_city_message_when_a_scenario_execution_passed()
         {
-            listener.Handle(new ScenarioFinished() { Scenario = GetScenario("my scenario"), Status = ExecutionStatus.Passed});
+            listener.Handle(new ScenarioPassed() { Scenario = GetScenario("my scenario") });
 
-           WrittenMessagesShouldContain("##teamcity[testFinished name='my scenario']");
+            WrittenMessagesShouldContain("##teamcity[testFinished name='my scenario']");
         }
 
         [Test]

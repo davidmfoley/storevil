@@ -27,8 +27,9 @@ namespace StorEvil.InPlace.CompilingRunner
                 driverBuilder.AppendLine(driverCode);
             }
 
-            return string.Format(_sourceCodeTemplate, "", driverBuilder, selectionBuilder);
-          
+            var _sourceCode = string.Format(_sourceCodeTemplate, "", driverBuilder, selectionBuilder);
+            return _sourceCode;
+
         }
 
         private string FormatStoryId(Story story)
@@ -71,7 +72,10 @@ namespace StorEvil.InPlace.CompilingRunner
 
         private string GetScenarioEnd()
         {
-            return "}\r\nCollectScenarioResult();";
+            return @"
+TryToDisposeScenarioContext();
+CollectScenarioResult();
+";
         }
 
         private string GetScenarioPreamble(int i, Story story)
@@ -79,7 +83,7 @@ namespace StorEvil.InPlace.CompilingRunner
             return @"
 scenario = scenarios[" + i + @"];
 
-using (StartScenario(story, scenario)) {
+StartScenario(story, scenario);
 
 #line 1  """ +
                    story.Id + @"""
