@@ -97,25 +97,21 @@ namespace StorEvil.MsBuild
         public bool DebugMode { get; set; }
     }
 
-    public class MsBuildTaskResultListener : IHandle<ScenarioFinished>
+    public class MsBuildTaskResultListener : IHandle<ScenarioFailed>, IHandle<ScenarioPassed>, IHandle<ScenarioPending>
     {
-        public void Handle(ScenarioFinished eventToHandle)
+        public void Handle(ScenarioFailed eventToHandle)
         {
-            switch (eventToHandle.Status)
-            {
-                case ExecutionStatus.Pending:
-                case ExecutionStatus.CouldNotInterpret:
-                    Pending++;
-                    break;
+            Failed++;
+        }
 
-                case ExecutionStatus.Passed:
-                    Passed++;
-                    break;
+        public void Handle(ScenarioPassed eventToHandle)
+        {
+            Passed++;
+        }
 
-                case ExecutionStatus.Failed:
-                    Failed++;
-                    break;
-            }
+        public void Handle(ScenarioPending eventToHandle)
+        {
+            Pending++;
         }
 
         public int Pending { get; set; }

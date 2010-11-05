@@ -26,11 +26,11 @@ namespace StorEvil.InPlace
         private object _lastResult;
         private readonly ImplementationHelper _implementationHelper = new ImplementationHelper();
 
-        
-        public LineStatus ExecuteLine(Scenario scenario, ScenarioContext storyContext, string line)
+
+        public LineStatus ExecuteLine(Scenario scenario, ScenarioContext scenarioContext, string line)
         {
             DebugTrace.Trace("ScenarioLineExecter.ExecuteLine", line);
-            InvocationChain chain = GetMatchingChain(storyContext, line);
+            InvocationChain chain = GetMatchingChain(scenarioContext, line);
 
             if (chain == null)
             {
@@ -40,7 +40,7 @@ namespace StorEvil.InPlace
                 return LineStatus.Pending;
             }
 
-            if (!ExecuteChain(scenario, storyContext, chain, line))
+            if (!ExecuteChain(scenario, scenarioContext, chain, line))
                 return LineStatus.Failed;
 
             _eventBus.Raise(new LinePassed { Scenario = scenario, Line = line });

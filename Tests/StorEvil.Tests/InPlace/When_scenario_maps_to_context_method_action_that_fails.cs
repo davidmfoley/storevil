@@ -55,7 +55,7 @@ namespace StorEvil.InPlace
         [Test]
         public void Does_not_Notify_listener_of_scenario_success()
         {
-            FakeEventBus.CaughtEvents.OfType<ScenarioFinished>().Any(x => x.Status == ExecutionStatus.Passed).ShouldBe(false);
+            FakeEventBus.CaughtEvents.OfType<ScenarioPassed>().Any().ShouldBe(false);
             
         }
     }

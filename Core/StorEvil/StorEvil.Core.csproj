@@ -109,6 +109,9 @@
     <Compile Include="Context\StoryContext.cs" />
     <Compile Include="Core\JobResult.cs" />
     <Compile Include="Core\ScenarioOutline.cs" />
+    <Compile Include="Events\ScenarioFailed.cs" />
+    <Compile Include="Events\ScenarioPassed.cs" />
+    <Compile Include="Events\ScenarioPending.cs" />
     <Compile Include="Glossary\Describer\MethodNameMatcherDescriber.cs" />
     <Compile Include="Glossary\Describer\ParameterDescriber.cs" />
     <Compile Include="Glossary\Describer\ParameterSpan.cs" />
@@ -137,7 +140,6 @@
     <Compile Include="Events\LineFailed.cs" />
     <Compile Include="Events\LinePassed.cs" />
     <Compile Include="Events\MatchingMemberFound.cs" />
-    <Compile Include="Events\ScenarioFinished.cs" />
     <Compile Include="Events\ScenarioStarting.cs" />
     <Compile Include="Events\SessionFinished.cs" />
     <Compile Include="Events\SessionStarting.cs" />

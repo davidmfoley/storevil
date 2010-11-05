@@ -8,7 +8,8 @@ namespace StorEvil.Resharper.Runner
 {    
     internal class ResharperResultListener : 
         IHandle<StoryStarting>, IHandle<StoryFinished>,
-        IHandle<ScenarioStarting>, IHandle<ScenarioFinished>, IHandle<LineFailed>, IHandle<LinePassed>, IHandle<LinePending> 
+        IHandle<ScenarioStarting>, IHandle<ScenarioFailed>, IHandle<ScenarioPassed>, IHandle<ScenarioPending>, 
+        IHandle<LineFailed>, IHandle<LinePassed>, IHandle<LinePending> 
     {
         private readonly IRemoteTaskServer _server;
         private RemoteTask _remoteTask;
@@ -22,35 +23,42 @@ namespace StorEvil.Resharper.Runner
             _server = server;           
         }
 
-        public void Handle(ScenarioFinished eventToHandle)
+        public void Handle(ScenarioPassed eventToHandle)
         {
-            if (eventToHandle.Status == ExecutionStatus.Passed)
-            {
-                Result = TaskResult.Success;
-                Output("... ok");
-                _server.TaskFinished(_remoteTask, "ok", TaskResult.Success);
-                
-            }          
-            else if (eventToHandle.Status == ExecutionStatus.Failed)
-            {
-                Result = TaskResult.Error;
-                _server.TaskFinished(_remoteTask, "failed", TaskResult.Exception);
-            }
-            else
-            {
-                Result = TaskResult.Skipped;
-                _server.TaskFinished(_remoteTask, "skipped", TaskResult.Skipped);
-            }
+            Result = TaskResult.Success;
+            Output("... ok");
+            _server.TaskFinished(_remoteTask, "ok", TaskResult.Success);
 
+            SignalOutlineFinished();
+        }
+
+        public void Handle(ScenarioFailed eventToHandle)
+        {
+            Result = TaskResult.Error;
+            _server.TaskFinished(_remoteTask, "failed", TaskResult.Exception);
+
+            SignalOutlineFinished();
+        }
+
+        public void Handle(ScenarioPending eventToHandle)
+        {
+            Result = TaskResult.Skipped;
+            _server.TaskFinished(_remoteTask, "skipped", TaskResult.Skipped);
+        
+            SignalOutlineFinished();
+        }
+
+        private void SignalOutlineFinished()
+        {
             if (_remoteTask == null)
                 return;
 
             var outline = FindOutline(_remoteTask);
 
-            if (outline != null && outline.IsLastChild(((RunScenarioTask)_remoteTask).GetScenario().Id))            
+            if (outline != null && outline.IsLastChild(((RunScenarioTask)_remoteTask).GetScenario().Id))
                 _server.TaskFinished(outline, "", TaskResult.Success);
-
         }
+
 
         private RunScenarioOutlineTask FindOutline(RemoteTask remoteTask)
         {

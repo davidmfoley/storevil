@@ -36,9 +36,7 @@ namespace StorEvil.InPlace
         [Test]
         public void Should_succeed()
         {
-            AssertEventRaised<ScenarioFinished>(x=>x.Status == ExecutionStatus.Passed);
-            //FakeEventBus.CaughtEvents.OfType<ScenarioSucceededEvent>().Any().ShouldEqual(true);
-            
+            AssertEventRaised<ScenarioPassed>();
         }
     } 
 }
@@ -49,6 +47,10 @@ namespace StorEvil.InPlace.Compiled
     public class Disposing_contexts_with_default_lifetime
         : StorEvil.InPlace.Disposing_contexts_with_default_lifetime, UsingCompiledRunner { }
 
+    [TestFixture]
+    public class Disposing_contexts_with_default_lifetime_that_throw_in_disposal
+        : StorEvil.InPlace.Disposing_contexts_with_default_lifetime_that_throw_in_disposal, UsingCompiledRunner { }
+    
     [TestFixture]
     public class Disposing_contexts_with_story_lifetime
         : StorEvil.InPlace.Disposing_contexts_with_story_lifetime, UsingCompiledRunner { }
@@ -61,6 +63,10 @@ namespace StorEvil.InPlace.NonCompiled
     public class Disposing_contexts_with_default_lifetime
         : StorEvil.InPlace.Disposing_contexts_with_default_lifetime, UsingNonCompiledRunner { }
 
+    [TestFixture]
+    public class Disposing_contexts_with_default_lifetime_that_throw_in_disposal
+        : StorEvil.InPlace.Disposing_contexts_with_default_lifetime_that_throw_in_disposal, UsingNonCompiledRunner { }
+    
     [TestFixture]
     public class Disposing_contexts_with_story_lifetime
         : StorEvil.InPlace.Disposing_contexts_with_story_lifetime, UsingNonCompiledRunner

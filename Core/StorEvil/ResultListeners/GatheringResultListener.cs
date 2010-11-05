@@ -11,10 +11,9 @@ namespace StorEvil.ResultListeners
         void Handle(GatheredResultSet result);
     }
 
-    public class GatheringResultListener : IHandle<ScenarioStarting>, 
-                                            IHandle<SessionFinished>,
-                                            IHandle<ScenarioFinished>,
-                                             IHandle<LineFailed>, IHandle<LinePassed>, IHandle<LinePending>,                                         
+    public class GatheringResultListener : IHandle<ScenarioStarting>, IHandle<ScenarioFailed>, IHandle<ScenarioPassed>, IHandle<ScenarioPending>,
+                                           IHandle<SessionFinished>,
+                                           IHandle<LineFailed>, IHandle<LinePassed>, IHandle<LinePending>,                                         
                                            IHandle<StoryStarting>
     {
         protected readonly IGatheredResultHandler Handler;
@@ -60,11 +59,21 @@ namespace StorEvil.ResultListeners
             Result.Add(storyResult);
         }       
 
-        public void Handle(ScenarioFinished eventToHandle)
+        public void Handle(ScenarioPassed eventToHandle)
         {
-            CurrentScenario().Status = eventToHandle.Status;
+            CurrentScenario().Status = ExecutionStatus.Passed;
         }
 
+        public void Handle(ScenarioFailed eventToHandle)
+        {
+            CurrentScenario().Status = ExecutionStatus.Failed;
+        }
+
+        public void Handle(ScenarioPending eventToHandle)
+        {
+            CurrentScenario().Status = ExecutionStatus.Pending;
+        }
+        
         public void Handle(LineFailed eventToHandle)
         {
             if (!string.IsNullOrEmpty(eventToHandle.SuccessPart))
@@ -228,5 +237,11 @@ namespace StorEvil.ResultListeners
         public string Text { get; set; }
     }
 
-
+    public enum ExecutionStatus
+    {
+        Passed,
+        Failed,
+        Pending,
+        CouldNotInterpret
+    }
 }
