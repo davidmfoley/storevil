@@ -3,7 +3,7 @@
 First steps to getting a working storevil project:
 
 1. Open the storevil.config file and read through its contents. There are a couple of things to set in there.
-2. Add a reference to StorEvil.Core to your C# project.
+2. Add a reference to StorEvil.Core and StorEvil.Assertions to your C# project.
 3. Add the file ExampleContext.cs to your C# project
 4. Execute the following command line to run storevil:
 	storevil execute
