@@ -1,4 +1,4 @@
-﻿pushd "%~dp0"
+pushd "%~dp0"
 
 msbuild default.build /t:Package %1
 

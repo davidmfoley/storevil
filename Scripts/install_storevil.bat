@@ -1,4 +1,4 @@
-﻿pushd "%~dp0"
+pushd "%~dp0"
 
 ECHO OFF
 
