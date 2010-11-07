@@ -1,3 +1,5 @@
+pushd "%~dp0"
+
 set RSRoot=%USERPROFILE%\AppData\Local\JetBrains\ReSharper\v5.1
 
 set RS10=%RSRoot%\vs10.0
@@ -26,3 +28,5 @@ copy StorEvil.ReSharper.dll "%StorEvilDest9%\"
 copy StorEvil.Core.dll "%StorEvilDest9%\"
 copy Spark.dll "%StorEvilDest9%\"
 copy Funq.dll "%StorEvilDest9%\"
+
+popd

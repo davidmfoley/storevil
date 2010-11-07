@@ -8,7 +8,9 @@ namespace StorEvil.TeamCity
     public class TeamCityResultListener :
         IHandle<StoryStarting>,
         IHandle<ScenarioStarting>,
-        IHandle<ScenarioFinished>,
+        IHandle<ScenarioFailed>,
+        IHandle<ScenarioPassed>,
+        IHandle<ScenarioPending>,
         IHandle<StoryFinished>,
         IHandle<LineFailed>, 
         IHandle<LinePending> 
@@ -46,11 +48,24 @@ namespace StorEvil.TeamCity
             SendTeamCityServiceMessage(message);
         }
 
-      
-
-        public void Handle(ScenarioFinished e)
+        public void Handle(ScenarioFailed e)
         {
-            var message = Format(TestFinishedMessagePattern, e.Scenario.Name);
+            SendScenarioFinishedMessage(e.Scenario.Name);
+        }
+
+        public void Handle(ScenarioPassed e)
+        {
+            SendScenarioFinishedMessage(e.Scenario.Name);
+        }
+
+        public void Handle(ScenarioPending e)
+        {
+            SendScenarioFinishedMessage(e.Scenario.Name);
+        }
+
+        private void SendScenarioFinishedMessage(string scenarioName)
+        {
+            var message = Format(TestFinishedMessagePattern, scenarioName);
             SendTeamCityServiceMessage(message);
         }
 

@@ -1,13 +1,18 @@
 ﻿
 using System;
+using System.Linq;
 using NUnit.Framework;
+using StorEvil.Assertions;
 using StorEvil.Core;
+using StorEvil.Events;
 
 namespace StorEvil.InPlace
 {
     public abstract class Disposing_contexts_with_default_lifetime : InPlaceRunnerSpec<InPlaceRunnerDisposalTestContext>
     {
-        private readonly Scenario TestScenario1 = BuildScenario("test", "when a disposable context is used");
+        // This story is intentionally broken up into two scenarios, with a static variable in the context, so we
+        // can easily check the behavior of the disposal
+        private readonly Scenario TestScenario1 = BuildScenario("test", "when a disposable context is used", "then it should be disposed");
         private readonly Scenario TestScenario2 = BuildScenario("test", "then it should be disposed");
 
         [SetUp]
@@ -26,6 +31,36 @@ namespace StorEvil.InPlace
         }
     }
 
+    public abstract class Disposing_contexts_with_default_lifetime_that_throw_in_disposal : InPlaceRunnerSpec<InPlaceRunnerDisposalThrowsTestContext>
+    {
+        private readonly Scenario TestScenario = BuildScenario("test", "when a disposable context that throws in dispose is used", "then it should not crash");
+
+        [SetUp]
+        public void SetupContext()
+        {
+            var story = new Story("test", "summary", new[] { TestScenario });
+
+            RunStory(story);
+        }
+
+        [Test]
+        public void Notifies_listener_of_failure()
+        {
+            AssertEventRaised<ScenarioFailed>();
+        }
+
+        [Test]
+        public void Notifies_listener_of_exception_text()
+        {
+            AssertEventRaised<ScenarioFailed>(e => !string.IsNullOrEmpty(e.ExceptionInfo));
+        }
+
+        [Test]
+        public void Does_not_Notify_listener_of_scenario_success()
+        {
+            AssertEventNotRaised<ScenarioPassed>();
+        }
+    }
 
 
     public abstract class Disposing_contexts_with_story_lifetime : InPlaceRunnerSpec<StoryLifetimeDisposalTestContext>
@@ -76,7 +111,7 @@ namespace StorEvil.InPlace
     public class InPlaceRunnerDisposalTestContext : IDisposable
     {
         private static int DisposeCalls = 0;
-        public void when_a_disposable_context_is_used() { }
+        public void when_a_disposable_context_is_used() {}
         public void then_it_should_be_disposed()
         {
             Assert.That(DisposeCalls, Is.GreaterThan(0));
@@ -85,6 +120,20 @@ namespace StorEvil.InPlace
         public void Dispose()
         {
             DisposeCalls++;
+        }
+    }
+
+    [Context]
+    public class InPlaceRunnerDisposalThrowsTestContext : IDisposable
+    {
+        public void when_a_disposable_context_that_throws_in_dispose_is_used() { }
+        public void then_it_should_not_crash()
+        {
+        }
+
+        public void Dispose()
+        {
+            throw new Exception("This is a context that throws an exception in its Dispose method");
         }
     }
 

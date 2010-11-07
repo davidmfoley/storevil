@@ -1,4 +1,4 @@
-using StorEvil.Context;
+﻿using StorEvil.Context;
 using StorEvil.Core;
 
 namespace StorEvil.NUnit

@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using StorEvil.Assertions;
 using StorEvil.Core;

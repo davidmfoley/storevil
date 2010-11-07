@@ -1,12 +1,14 @@
-using System;
+﻿using System;
 using System.Xml;
 using StorEvil.Events;
 using StorEvil.Infrastructure;
 
 namespace StorEvil.ResultListeners
 {
-    public class XmlReportListener : IHandle<SessionFinished>,
-          IHandle<LineFailed>, IHandle<LinePassed>, IHandle<LinePending>, IHandle<ScenarioStarting>
+    public class XmlReportListener :
+        IHandle<SessionFinished>,
+        IHandle<ScenarioStarting>, IHandle<ScenarioFailed>, IHandle<ScenarioPassed>, IHandle<ScenarioPending>,
+        IHandle<LineFailed>, IHandle<LinePassed>, IHandle<LinePending>
     {
 
         public class StatusNames
@@ -59,22 +61,21 @@ namespace StorEvil.ResultListeners
             element.SetAttribute(XmlNames.Status, status);
         }
 
-        public void Handle(ScenarioFinished eventToHandle)
+        public void Handle(ScenarioFailed eventToHandle)
         {
-            if (eventToHandle.Status == ExecutionStatus.Passed)
-            {
-                SetStatus(_currentScenarioElement, StatusNames.Success);
-            }
-            else if (eventToHandle.Status == ExecutionStatus.Failed)
-            {
-                SetStatus(_currentScenarioElement, StatusNames.Failure);
-                SetStatus(_currentStoryElement, StatusNames.Failure);
-            }
-            else
-            {
-                SetStatus(_currentScenarioElement, StatusNames.NotUnderstood);                
-                SetStatus(_currentStoryElement, StatusNames.Failure);
-            }
+            SetStatus(_currentScenarioElement, StatusNames.Failure);
+            SetStatus(_currentStoryElement, StatusNames.Failure);
+        }
+
+        public void Handle(ScenarioPassed eventToHandle)
+        {
+            SetStatus(_currentScenarioElement, StatusNames.Success);
+        }
+
+        public void Handle(ScenarioPending eventToHandle)
+        {
+            SetStatus(_currentScenarioElement, StatusNames.NotUnderstood);                
+            SetStatus(_currentStoryElement, StatusNames.Failure);
         }
 
         public void Handle(StoryStarting eventToHandle)

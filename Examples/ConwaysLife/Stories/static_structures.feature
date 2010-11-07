@@ -1,4 +1,4 @@
-Feature: Cell configurations that are static
+﻿Feature: Cell configurations that are static
   In order to create a functioning rules engine
   As a programmer of Conway's Game of Life
   I can see static structures surviving in my world

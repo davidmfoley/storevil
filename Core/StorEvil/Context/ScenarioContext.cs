@@ -9,6 +9,7 @@ namespace StorEvil.Context
     {
         private readonly Dictionary<Type, object> _cache = new Dictionary<Type, object>();
         private readonly StoryContext _parentContext;
+        private bool _isDisposed;
 
         public ScenarioContext(StoryContext parentContext, IEnumerable<Type> implementingTypes,
                                IDictionary<Type, object> outerContexts)
@@ -27,8 +28,18 @@ namespace StorEvil.Context
 
         public void Dispose()
         {
-            foreach (IDisposable context in _cache.Values.Where(ShouldBeDisposedAtScenarioLevel))
-                context.Dispose();
+            if (!_isDisposed)
+            {
+                try
+                {
+                    foreach (IDisposable context in _cache.Values.Where(ShouldBeDisposedAtScenarioLevel))
+                        context.Dispose();
+                }
+                finally
+                {
+                    _isDisposed = true;
+                }
+            }
         }
 
         private bool ShouldBeDisposedAtScenarioLevel(object context)

@@ -1,3 +1,4 @@
+﻿using System;
 using System.Linq;
 using StorEvil.Context;
 using StorEvil.Core;
@@ -10,8 +11,8 @@ namespace StorEvil.InPlace
     {
         private readonly IEventBus _eventBus;
         private readonly ScenarioInterpreter _scenarioInterpreter;
-
         private readonly ScenarioLineExecuter _lineExecuter;
+        private string _exceptionInfo;
 
         public InPlaceScenarioRunner(IEventBus eventBus, ScenarioInterpreter scenarioInterpreter)
         {
@@ -20,32 +21,74 @@ namespace StorEvil.InPlace
             _lineExecuter = new ScenarioLineExecuter(scenarioInterpreter, eventBus);
         }
 
-        public bool ExecuteScenario(Scenario scenario, ScenarioContext storyContext)
+        public bool ExecuteScenario(Scenario scenario, ScenarioContext scenarioContext)
         {
             _eventBus.Raise(new ScenarioStarting { Scenario = scenario});
             //_scenarioInterpreter.NewScenario();
 
+            var result = ExecutionStatus.Passed;
+
             foreach (var line in (scenario.Background ?? new ScenarioLine[0]).Union(scenario.Body))
             {
-                LineStatus status = _lineExecuter.ExecuteLine(scenario, storyContext, line.Text);
+                LineStatus status = _lineExecuter.ExecuteLine(scenario, scenarioContext, line.Text);
                 if (LineStatus.Failed == status)
                 {
-                    _eventBus.Raise(new ScenarioFinished { Scenario = scenario, Status = ExecutionStatus.Failed });
-                    return false;
+                    result = ExecutionStatus.Failed;
+                    break;
                 }
                 if (LineStatus.Pending == status)
                 {
-                    _eventBus.Raise(new ScenarioFinished { Scenario = scenario, Status = ExecutionStatus.Pending });
-             
-                    return true;
+                    result = ExecutionStatus.Pending;
+                    break;
                 }
             }
 
-            _eventBus.Raise(new ScenarioFinished { Scenario = scenario, Status = ExecutionStatus.Passed});
+            if (!TryToDisposeScenarioContext(scenarioContext))
+            {
+                result = ExecutionStatus.Failed;
+            }
 
-            //_eventBus.Raise(new ScenarioSucceededEvent { Scenario = scenario });
-            return true;
+            switch (result)
+            {
+                case ExecutionStatus.Failed:
+                {
+                    _eventBus.Raise(new ScenarioFailed { Scenario = scenario, ExceptionInfo = _exceptionInfo});
+                    return false;
+                }
+                case ExecutionStatus.Pending:
+                {
+                    _eventBus.Raise(new ScenarioPending { Scenario = scenario });
+                    return true;
+                }
+                default:
+                {
+                    _eventBus.Raise(new ScenarioPassed { Scenario = scenario });
+                    return true;
+                }
+            }
         }
+
+        private bool TryToDisposeScenarioContext(ScenarioContext scenarioContext)
+        {
+            try
+            {
+                scenarioContext.Dispose();
+                return true;
+            }
+            catch (Exception e)
+            {
+                _exceptionInfo = e.ToString();
+                return false;
+            }
+        }
+
+        private enum ExecutionStatus
+        {
+            Passed,
+            Failed,
+            Pending
+        }
+
     }
 
     

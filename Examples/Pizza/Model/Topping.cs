@@ -1,4 +1,4 @@
-namespace Pizza.Model
+﻿namespace Pizza.Model
 {
     public class Topping
     {

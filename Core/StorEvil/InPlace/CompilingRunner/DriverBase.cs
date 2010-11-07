@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -17,9 +17,14 @@ namespace StorEvil.InPlace
         protected JobResult Result = new JobResult();
         private readonly ScenarioLineExecuter LineExecuter;
         private readonly SessionContext _context;
+        private IEventBus _eventBus;
 
+        protected StoryContext CurrentStoryContext;
         private ScenarioContext CurrentScenarioContext;
         private Scenario CurrentScenario;
+
+        private string ExceptionInfo;
+        protected LineStatus LastStatus { get; set; }
         
         protected DriverBase(IEventBus eventBus)
         {
@@ -81,18 +86,13 @@ namespace StorEvil.InPlace
 
             return GetContexts();
         }
-
         
         public JobResult GetResult()
         {
             return Result;  
         }
-
-        protected StoryContext CurrentStoryContext;
-        private IEventBus _eventBus;
-
-        
-        protected IDisposable StartScenario(Story story, Scenario scenario)
+       
+        protected void StartScenario(Story story, Scenario scenario)
         {
             
             _eventBus.Raise(new ScenarioStarting {Scenario = scenario});
@@ -103,17 +103,8 @@ namespace StorEvil.InPlace
             CurrentScenario = scenario;
             LastStatus = LineStatus.Passed;
             //ScenarioInterpreter.NewScenario();
-
-            return CurrentScenarioContext;
         }
 
-     
-        protected LineStatus LastStatus
-        {
-            get; set;
-        }
-
-        
         protected bool ShouldContinue
         {
             get
@@ -122,24 +113,36 @@ namespace StorEvil.InPlace
             }
         }
 
+        protected void TryToDisposeScenarioContext()
+        {
+            try
+            {
+                CurrentScenarioContext.Dispose();
+            }
+            catch (Exception e)
+            {
+                LastStatus = LineStatus.Failed;
+                ExceptionInfo = e.ToString();
+            }
+        }
         
         protected void CollectScenarioResult()
         {
             if (LastStatus == LineStatus.Failed)
             {
                 Result.Failed++;
-                _eventBus.Raise(new ScenarioFinished() { Scenario = CurrentScenario, Status = ExecutionStatus.Failed });     
+                _eventBus.Raise(new ScenarioFailed() { Scenario = CurrentScenario, ExceptionInfo = ExceptionInfo});     
             } 
             else if (LastStatus == LineStatus.Pending)
             {
                 Result.Pending++;
-                _eventBus.Raise(new ScenarioFinished() { Scenario = CurrentScenario, Status = ExecutionStatus.Pending });     
+                _eventBus.Raise(new ScenarioPending() { Scenario = CurrentScenario });     
  
             } 
             else
             {
                 Result.Succeeded++;
-                _eventBus.Raise(new ScenarioFinished { Scenario = CurrentScenario, Status = ExecutionStatus.Passed });                
+                _eventBus.Raise(new ScenarioPassed { Scenario = CurrentScenario });                
             }
         }
     }
