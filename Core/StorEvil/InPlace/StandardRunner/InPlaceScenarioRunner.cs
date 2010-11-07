@@ -34,10 +34,12 @@ namespace StorEvil.InPlace
                 if (LineStatus.Failed == status)
                 {
                     result = ExecutionStatus.Failed;
+                    break;
                 }
                 if (LineStatus.Pending == status)
                 {
                     result = ExecutionStatus.Pending;
+                    break;
                 }
             }
 

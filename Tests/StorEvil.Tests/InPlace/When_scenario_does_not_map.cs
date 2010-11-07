@@ -56,7 +56,7 @@ namespace StorEvil.InPlace
 
     public abstract class When_scenario_step_is_pending : InPlaceRunnerSpec<InPlaceRunnerTestContext>
     {
-        private readonly Scenario TestScenario = BuildScenario("test", "Pending scenario step" );
+        private readonly Scenario TestScenario = BuildScenario("test", "Pending scenario step", "then some action was called should be false" );
 
         [SetUp]
         public void SetupContext()
@@ -70,7 +70,12 @@ namespace StorEvil.InPlace
         public void Notifies_listener()
         {
             AssertEventRaised<LinePending>();
-           
+        }
+
+        [Test]
+        public void Does_not_continue_running_steps()
+        {
+            AssertLineSuccess("then some action was called should be false", 0);
         }
     }
 }
