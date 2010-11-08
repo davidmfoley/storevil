@@ -12,10 +12,12 @@ namespace StorEvil.ResultListeners
         IHandle<LineFailed>, IHandle<LinePassed>, IHandle<LinePending>,
         IHandle<StoryStarting>, IHandle<GenericInformation>
     {
+        private int _passingScenarios;
+        private int _failedScenarios;
+        private int _pendingScenarios;
+
         protected abstract void DoWrite(ConsoleColor white, params string[] s);
      
-       
-
         public void Handle(StoryStarting eventToHandle)
         {
             var story = eventToHandle.Story;
@@ -24,7 +26,26 @@ namespace StorEvil.ResultListeners
 
         public void Handle(SessionFinished eventToHandle)
         {
-            DoWrite(ConsoleColor.Green, "Finished");
+            var color = GetSummaryColor();
+            var summary = string.Format(Environment.NewLine + "Finished - {0} passed, {1} failed, {2} pending", _passingScenarios, _failedScenarios, _pendingScenarios);
+
+            DoWrite(color, summary);
+        }
+
+        private ConsoleColor GetSummaryColor()
+        {
+            if (_failedScenarios > 0)
+            {
+                return ConsoleColor.Red;
+            }
+            else if (_pendingScenarios > 0)
+            {
+                return ConsoleColor.Yellow;
+            }
+            else
+            {
+                return ConsoleColor.Green;
+            }
         }
 
         public void Handle(ScenarioStarting eventToHandle)
@@ -34,11 +55,15 @@ namespace StorEvil.ResultListeners
 
         public void Handle(ScenarioPassed eventToHandle)
         {
+            _passingScenarios++;
+
             DoWrite(ConsoleColor.Green, "Scenario succeeded");
         }
 
         public void Handle(ScenarioFailed eventToHandle)
         {
+            _failedScenarios++;
+
             DoWrite(ConsoleColor.Red, "Scenario failed");
             if (!string.IsNullOrEmpty(eventToHandle.ExceptionInfo))
             {
@@ -48,6 +73,8 @@ namespace StorEvil.ResultListeners
 
         public void Handle(ScenarioPending eventToHandle)
         {
+            _pendingScenarios++;
+
             DoWrite(ConsoleColor.Yellow, "Scenario pending");
         }
 
@@ -66,7 +93,6 @@ namespace StorEvil.ResultListeners
         public void Handle(LinePending eventToHandle)
         {
             DoWrite(ConsoleColor.Yellow, eventToHandle.Line + " -- Pending");
-            //DoWrite(ConsoleColor.Yellow, eventToHandle.Line + " -- Could not interpret");
         }
 
         public void Handle(GenericInformation eventToHandle)
