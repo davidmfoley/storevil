@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using System;
 using StorEvil;
 
@@ -346,7 +346,7 @@ ExecuteLine(@"and Howard should be number 1");
 }namespace StorEvilSpecs { [SetUpFixture] public class SetupAndTearDown {
   [SetUp] public void SetUp() {
     var assemblyRegistry = new StorEvil.Context.AssemblyRegistry( new System.Reflection.Assembly[] {
-typeof(Tutorial.CustomParameterConversionContext).Assembly
+typeof(Tutorial.BackgroundContext).Assembly
     });
    var eh = new StorEvil.Interpreter.ExtensionMethodHandler(assemblyRegistry);
    // _sessionContext = new SessionContext();
