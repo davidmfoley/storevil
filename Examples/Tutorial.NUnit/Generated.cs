@@ -170,6 +170,13 @@ ExecuteLine(@"Given I am 42 years old");
 ExecuteLine(@"My age in one year should be 43");
 #line hidden
   }
+  [NUnit.Framework.TestAttribute] public void loading_config_values() {
+#line 1  "BasicGrammar.feature"
+#line hidden
+#line 25
+ExecuteLine(@"The configvalue should be storevil");
+#line hidden
+  }
   }
 }
 namespace StorEvilSpecs{

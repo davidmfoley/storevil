@@ -41,6 +41,7 @@
       <HintPath>..\..\Lib\Test\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -65,6 +66,9 @@
   <ItemGroup>
     <None Include="AltNet.feature">
       <Generator>Generates tests from StorEvil spec files</Generator>
+    </None>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
     </None>
     <None Include="BasicGrammar.feature" />
     <None Include="CustomParameterConversion.feature" />
