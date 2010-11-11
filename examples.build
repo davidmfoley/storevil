@@ -74,7 +74,7 @@
 
    
     
-    <Exec Command="$(MSBuildProjectDirectory)\Tools\NUnit\nunit-console.exe $(MSBuildProjectDirectory)\_build\Examples\Temp.dll /xml=$(MSBuildProjectDirectory)\_build\TestResults_$(ExampleProject).xml" IgnoreExitCode ="true">
+    <Exec Command="$(MSBuildProjectDirectory)\Tools\NUnit\nunit-console.exe $(MSBuildProjectDirectory)\_build\Examples\Temp.dll /xml=$(MSBuildProjectDirectory)\_build\TestResults_$(ExampleProject).xml /framework=net-4.0" IgnoreExitCode ="true">
       <Output
           TaskParameter="ExitCode"
           ItemName="NUnitExitCode" />
