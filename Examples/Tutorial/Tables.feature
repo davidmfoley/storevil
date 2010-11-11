@@ -12,6 +12,20 @@ You can also map name/value pairs (in a table with two columns) to:
 - A single instance of any type
 - A hashtable
 
+
+Scenario Outline: An example is a parameterized scenario that is run once for each example row
+
+	When team has a record of <wins> wins, <losses> losses and <draws> draws
+	Their point total should be <expected>
+	
+	Examples:
+	|wins|losses|draws|expected|
+	| 0  | 0    | 0   | 0      |
+	| 1  | 0    | 0   | 3      |
+	| 0  | 10   | 0   | 0      |
+	| 0  | 0    | 1   | 1      |
+	| 15 | 4    | 9   | 54     |
+
 Scenario: A table of data can map to a string[][]
 
 	Given the following competition groups:
@@ -64,3 +78,4 @@ Scenario: Using a hash table
 	and Beasley should be number 7
 	and Altidore should be number 12
 	and Howard should be number 1
+

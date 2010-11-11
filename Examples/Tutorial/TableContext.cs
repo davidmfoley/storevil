@@ -12,6 +12,7 @@ namespace Tutorial
         private string[][] _groups;
         private List<TeamInfo> _teams = new List<TeamInfo>();
         private Hashtable _roster;
+        
 
         public void Given_the_following_competition_groups(string[][] groupInfo)
         {
@@ -76,6 +77,19 @@ namespace Tutorial
             int expectedNumber)
         {
             _roster[expectedNumber.ToString()].ShouldEqual(playerName);
+        }
+
+
+        private int _pointTotal;
+
+        public void When_team_has_a_record_of_winCount_wins_lossCount_losses_and_drawCount_draws(int winCount, int lossCount, int drawCount)
+        {
+            _pointTotal = 3*winCount + drawCount;
+        }
+
+        public void their_point_total_should_be(int expected)
+        {
+            _pointTotal.ShouldEqual(expected);
         }
     }
 
