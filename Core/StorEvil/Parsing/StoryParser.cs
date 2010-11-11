@@ -192,7 +192,7 @@ namespace StorEvil.Parsing
             var examples =
                 _currentScenario.RowData.Skip(1).Select(x => x.Take(count).ToArray()).ToArray();
 
-            var scenarioOutline = new ScenarioOutline(_storyId + "- outline -" + _scenarios.Count,
+            var scenarioOutline = new ScenarioOutline(_storyId + "-" + _scenarios.Count,
                                                       GetCurrentScenarioName(),
                                                       innerScenario,
                                                       fieldNames,
