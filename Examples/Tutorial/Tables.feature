@@ -1,10 +1,16 @@
-﻿StorEvil has various different ways you can use tabular data to 
-drive a scenario. It supports mapping tables of data to parameters
-on your context methods depending on the type of parameter.
+﻿Tables: Using tabular data in StorEvil
+
+StorEvil has various different ways you can use tabular data to 
+drive a scenario. 
+
+Scenario Outlines allow you to run a scenario multiple times with different sets of data.
+
+You can also use tables of data within a scenario to pass structured sets of data.
 
 You can map tabular data to:
 - an array of arrays of any basic type that is supported by StorEvil 
 	- (int, decimal, string, as well as enum types)
+
 - an array of any type with public properties and fields
 	- top row of the table is used to determine the names of the fields
 

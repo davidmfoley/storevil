@@ -1,4 +1,7 @@
-﻿Custom conversion of parameters
+﻿Custom conversion of parameters based on types
+
+You can create your own parameter converters by subclassing StorEvil.Extensibility.CustomParameterConverter.
+This example converts floating point numbers.
 
 Scenario: custom float conversion
   We can parse floats like 3.14159265

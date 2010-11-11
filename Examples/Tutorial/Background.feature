@@ -1,4 +1,6 @@
-﻿StorEvil supports Background, which is run once for each scenario
+﻿Backgrounds support sharing common setup steps between scenarios. 
+
+The Background section is run once for each scenario
 
 Background:
 Run the background
