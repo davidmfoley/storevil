@@ -6,6 +6,7 @@ using StorEvil.Infrastructure;
 namespace StorEvil.ResultListeners
 {
     public class XmlReportListener :
+        IHandle<StoryStarting>,
         IHandle<SessionFinished>,
         IHandle<ScenarioStarting>, IHandle<ScenarioFailed>, IHandle<ScenarioPassed>, IHandle<ScenarioPending>,
         IHandle<LineFailed>, IHandle<LinePassed>, IHandle<LinePending>
