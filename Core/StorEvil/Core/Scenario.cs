@@ -35,7 +35,7 @@ namespace StorEvil.Core
             get
             {
                 if (!Body.Any())
-                    return new ScenarioLocation {Path = _path, FromLine = 0, ToLine = 0};
+                    return new ScenarioLocation {Path = _path, FromLine = 1, ToLine = 1};
                 var firstLine = Body.First().LineNumber;
                 var lastLine = Body.Last().LineNumber;              
 

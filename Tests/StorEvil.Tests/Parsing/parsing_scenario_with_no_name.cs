@@ -32,11 +32,11 @@ Scenario: Foo";
         }
 
         [Test]
-        public void Location_is_zero_for_now()
+        public void Location_is_line_1_for_now()
         {
             var location = Result.Scenarios.First().Location;
-            location.FromLine.ShouldBe(0);
-            location.ToLine.ShouldBe(0);
+            location.FromLine.ShouldBe(1);
+            location.ToLine.ShouldBe(1);
         }
     }
 
