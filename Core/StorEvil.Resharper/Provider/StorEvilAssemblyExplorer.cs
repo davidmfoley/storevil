@@ -33,6 +33,9 @@ namespace StorEvil.Resharper.Provider
 
             var stories = GetStoriesForProject(config);
 
+            if (new List<Story>(stories).Count == 0)
+                return;
+
             var projectElement = new StorEvilProjectElement(_provider, null, project, project.Name, config.AssemblyLocations);
             consumer(projectElement);
 
