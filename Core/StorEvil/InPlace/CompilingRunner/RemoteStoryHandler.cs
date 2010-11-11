@@ -85,7 +85,7 @@ namespace StorEvil.InPlace
             return _appDomain.CreateInstanceFrom(
                 _assemblyLocation,
                 "StorEvilTestAssembly.StorEvilDriver", true, 0, null, new object[] {_eventBus},
-                CultureInfo.CurrentCulture, new object[0], AppDomain.CurrentDomain.Evidence).Unwrap() as IStoryHandler;
+                CultureInfo.CurrentCulture, new object[0]).Unwrap() as IStoryHandler;
         }
 
         public void Dispose()

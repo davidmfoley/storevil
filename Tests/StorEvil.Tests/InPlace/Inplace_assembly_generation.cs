@@ -46,7 +46,7 @@ namespace StorEvil.InPlace.Compiled
         {
             var handle = Activator.CreateInstanceFrom(
                 GeneratedAssemblyPath,
-                "StorEvilTestAssembly.StorEvilDriver_foo", true, 0, null, new object[] {new CapturingEventBus()},CultureInfo.CurrentCulture, new object[0], AppDomain.CurrentDomain.Evidence );
+                "StorEvilTestAssembly.StorEvilDriver_foo", true, 0, null, new object[] {new CapturingEventBus()},CultureInfo.CurrentCulture, new object[0]);
 
             var driver = handle.Unwrap() as IStoryHandler;
 
