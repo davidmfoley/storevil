@@ -67,9 +67,6 @@
     <None Include="AltNet.feature">
       <Generator>Generates tests from StorEvil spec files</Generator>
     </None>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="BasicGrammar.feature" />
     <None Include="CustomParameterConversion.feature" />
     <None Include="default.spark" />
