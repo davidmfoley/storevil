@@ -7,6 +7,40 @@ using StorEvil.Utility;
 namespace StorEvil.Parsing
 {
     [TestFixture]
+    public class empty_scenario_is_parsed
+    {
+        private Story Result;
+
+        private const string testStoryText =
+           @"
+As a user I want to do something
+
+Scenario: Foo";
+
+        [SetUp]
+        public void SetupContext()
+        {
+            var parser = new StoryParser();
+
+            Result = parser.Parse(testStoryText, null);
+        }
+
+        [Test]
+        public void has_a_single_scenario()
+        {
+            Result.Scenarios.Count().ShouldBe(1);
+        }
+
+        [Test]
+        public void Location_is_zero_for_now()
+        {
+            var location = Result.Scenarios.First().Location;
+            location.FromLine.ShouldBe(0);
+            location.ToLine.ShouldBe(0);
+        }
+    }
+
+    [TestFixture]
     public class parsing_scenario_with_no_name
     {
         private Story Result;
