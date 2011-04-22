@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace StorEvil.Context
 {
@@ -43,11 +44,17 @@ namespace StorEvil.Context
 
         public void Dispose()
         {
-            foreach (var context in _cache.Values)
+            foreach (var context in  _cache.Values.Where(ShouldBeDisposedAtStoryLevel))
             {
                 if (context is IDisposable)
                     ((IDisposable)context).Dispose();
             }
+        }
+
+
+        private bool ShouldBeDisposedAtStoryLevel(object context)
+        {
+            return context is IDisposable && context.GetType().GetContextInfo().Lifetime == ContextLifetime.Story;
         }
     }
 

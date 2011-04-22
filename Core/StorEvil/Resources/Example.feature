@@ -2,7 +2,7 @@
 I want to see some examples
 So that I can learn how it works
 
-Scenario: Example passing scenario
+Scenario: Example passing scenario					
 	Given some condition
 	When I take an action
 	Then the state should be valid

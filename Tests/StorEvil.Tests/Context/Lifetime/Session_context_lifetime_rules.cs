@@ -8,14 +8,14 @@ namespace StorEvil.Context.Lifetime
     public class Session_context_lifetime_rules
     {
         private readonly Type TestContextType = typeof(TestSessionLifetimeMappingContext);
-        private SessionContext Mapper;
+        private SessionContext Context;
 
        
         [SetUp]
         public void SetupContext()
         {
-            Mapper = new SessionContext();
-            Mapper.AddContext<TestSessionLifetimeMappingContext>();
+            Context = new SessionContext();
+            Context.AddContext<TestSessionLifetimeMappingContext>();
         }
 
         [Test]
@@ -31,7 +31,7 @@ namespace StorEvil.Context.Lifetime
 
         private StoryContext GetStoryContext()
         {
-            return Mapper.GetContextForStory();
+            return Context.GetContextForStory();
         }
 
         [Test]
@@ -47,8 +47,20 @@ namespace StorEvil.Context.Lifetime
         public void Context_class_is_disposed_when_Session_ends()
         {
             GetStoryContext().GetScenarioContext().GetContext(TestContextType);
-            Mapper.Dispose();
+            Context.Dispose();
             TestSessionLifetimeMappingContext.WasDisposed.ShouldEqual(true);
+        }
+
+        [Test]
+        public void Context_class_is_not_disposed_until_Session_ends()
+        {
+            var storyContext = GetStoryContext();
+            var scenarioContext = storyContext.GetScenarioContext();
+            scenarioContext.GetContext(TestContextType);
+            scenarioContext.Dispose();
+            TestSessionLifetimeMappingContext.WasDisposed.ShouldEqual(false);
+            storyContext.Dispose();
+            TestSessionLifetimeMappingContext.WasDisposed.ShouldEqual(false);
         }
     }
 }
