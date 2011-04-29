@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text;
 using StorEvil.Core;
 using StorEvil.Utility;
@@ -11,6 +12,11 @@ namespace StorEvil.CodeGeneration
         {
             var stringBuilder = new StringBuilder();
             string fixtureName = GetFixtureName(story);
+
+#if DEBUG
+            System.Diagnostics.EventLog.WriteEntry("StorEvil", String.Concat("Generated Fixture Name: ", fixtureName));
+#endif
+
             stringBuilder.Append("namespace " + defaultNamespace + "{");
             var categories = string.Join("", (story.Tags ?? new string[0]).Select(t => string.Format(@"[Category(""{0}"")]", t)).ToArray());
             stringBuilder.AppendLine(categories);

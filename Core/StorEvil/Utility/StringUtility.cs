@@ -24,7 +24,7 @@ namespace StorEvil.Utility
 
         public static string ToCSharpName(this string s)
         {
-            var chars = s                
+            var chars = s
                 .Replace(' ', '_')
                 .ToCharArray()
                 .Where(c => char.IsLetterOrDigit(c) | c == '_').ToArray();
@@ -40,7 +40,7 @@ namespace StorEvil.Utility
                 .Select(c => char.IsLetterOrDigit(c) ? c : '_').ToArray();
 
             var name =  EnsureFirstCharacterLegal(chars);
-            return name.Length > 100 ? name.Substring(0, 100) : name;
+            return name.Length > 512 ? name.Substring(0, 512) : name;
         }
 
         private static string EnsureFirstCharacterLegal(char[] chars)
