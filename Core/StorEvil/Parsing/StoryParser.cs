@@ -155,7 +155,7 @@ namespace StorEvil.Parsing
             if (_storyId == null)
                 _storyId = Guid.NewGuid().ToString();
 
-            var id = _storyId.Length < 120 ? _storyId : _storyId.Substring(0, 120);
+            var id = _storyId.Length <= 512 ? _storyId : _storyId.Substring(0, 512);
             return new Story(id, _storyName.ToString().Trim(), _scenarios) {Tags = _storyTags, Location = _storyLocation};
         }
 
