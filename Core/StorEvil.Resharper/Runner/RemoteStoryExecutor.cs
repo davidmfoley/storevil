@@ -132,7 +132,7 @@ namespace StorEvil.Resharper.Runner
             _listener.SetCurrentTask(remoteTask);
             IStoryProvider provider = new SingleScenarioStoryProvider(scenario);
 
-            return new StorEvilJob(provider, _runner);
+            return new StorEvilJob(provider, _runner, _sessionContext);
         }
 
         private IStoryHandler BuildInPlaceRunner(IAmbiguousMatchResolver resolver)
