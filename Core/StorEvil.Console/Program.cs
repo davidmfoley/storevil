@@ -1,5 +1,7 @@
 ﻿using System;
+using Funq;
 using StorEvil.Configuration;
+using StorEvil.Context;
 using StorEvil.Core;
 using StorEvil.Infrastructure;
 

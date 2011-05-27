@@ -10,9 +10,9 @@ namespace StorEvil.Console
         private readonly IConfigSource _configSource;
         private ConfigSettings _settings;
 
-        public Container Container { get; private set; }
+        public Container Container { get; private set; }            
 
-        public JobFactory(IConfigSource source)
+        public  JobFactory(IConfigSource source)
         {
             _configSource = source;
 

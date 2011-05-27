@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using StorEvil.Assertions;
+using StorEvil.Context;
 using StorEvil.Utility;
 
 namespace StorEvil.Core
@@ -14,14 +15,26 @@ namespace StorEvil.Core
         {
             var storyProvider = Fake<IStoryProvider>();
             var testStoryHandler = Fake<IStoryHandler>();
-
-            var job = new StorEvilJob(storyProvider, testStoryHandler);
+            
+            var job = new StorEvilJob(storyProvider, testStoryHandler, Fake<ISessionContext>());
 
             job.StoryProvider
                 .ShouldEqual(storyProvider);
 
             job.Handler
                 .ShouldEqual(testStoryHandler);
+        }
+
+        [Test]
+        public void disposes_session_context_at_end()
+        {
+
+            var job = GetJobWithMockDependencies();
+
+            job.StoryProvider.Stub(x => x.GetStories()).Return(new Story[]{});
+            StubHandleStoriesReturn(job, new JobResult { });
+            job.Run();
+            job.SessionContext.AssertWasCalled(x=>x.Dispose());
         }
 
         [Test]
@@ -58,7 +71,8 @@ namespace StorEvil.Core
         {
             return new StorEvilJob(
                 Fake<IStoryProvider>(),
-                Fake<IStoryHandler>());
+                Fake<IStoryHandler>(),
+                Fake<ISessionContext>());
         }
     }
 

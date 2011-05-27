@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace StorEvil.Context
 {
-    public interface ISessionContext
+    public interface ISessionContext : IDisposable
     {
         StoryContext GetContextForStory();
         void SetContext(object context);

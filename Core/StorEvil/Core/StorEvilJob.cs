@@ -1,4 +1,5 @@
 ﻿using System;
+using StorEvil.Context;
 
 namespace StorEvil.Core
 {
@@ -9,20 +10,22 @@ namespace StorEvil.Core
     {
         public IStoryProvider StoryProvider { get; set; }
         public IStoryHandler Handler { get; set; }
+        public ISessionContext SessionContext { get; set; }
 
-        public StorEvilJob(
-            IStoryProvider storyProvider,
-            IStoryHandler handler)
-
+        public StorEvilJob(IStoryProvider storyProvider, IStoryHandler handler, ISessionContext sessionContext)
         {
             StoryProvider = storyProvider;
             Handler = handler;
+            SessionContext = sessionContext;
         }
 
         public int Run()
         {       
-            return Handler.HandleStories(StoryProvider.GetStories()).Failed;
-           
+            var failed =  Handler.HandleStories(StoryProvider.GetStories()).Failed;
+            // hack
+            SessionContext.Dispose();
+
+            return failed;
         }
     }
 

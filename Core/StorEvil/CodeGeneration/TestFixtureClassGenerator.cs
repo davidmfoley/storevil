@@ -11,14 +11,14 @@ namespace StorEvil.CodeGeneration
         public string Generate(Story story, string defaultNamespace)
         {
             var stringBuilder = new StringBuilder();
-            string fixtureName = GetFixtureName(story);
+            var fixtureName = GetFixtureName(story);
             stringBuilder.Append("namespace " + defaultNamespace + "{");
             var categories = string.Join("", (story.Tags ?? new string[0]).Select(t => string.Format(@"[Category(""{0}"")]", t)).ToArray());
             stringBuilder.AppendLine(categories);
         
             stringBuilder.Append("\r\n[NUnit.Framework.TestFixtureAttribute] public class " + fixtureName + " : StorEvil.CodeGeneration.TestFixture {\r\n ");
             stringBuilder.Append("  public object Contexts { get { return base.GetContexts();}}");
-            AddLifecycleHandlers(stringBuilder);
+            AddLifecycleHandlers(stringBuilder);    
             
             AddScenarios(story, stringBuilder);
             stringBuilder.Append("  }\r\n}");

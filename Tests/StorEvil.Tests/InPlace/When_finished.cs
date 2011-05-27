@@ -6,6 +6,7 @@ using StorEvil.Context;
 using StorEvil.Events;
 using StorEvil.InPlace;
 using StorEvil.Interpreter;
+using StorEvil.NUnit;
 using StorEvil.Parsing;
 using StorEvil.Utility;
 
@@ -46,14 +47,15 @@ namespace StorEvil.InPlace.NonCompiled
     public class When_finished_running_all_stories
     {
         private IEventBus FakeEventBus;
+        private FakeSessionContext FakeSessionContext;
 
         [SetUp]
         public void SetupContext()
         {
             FakeEventBus = MockRepository.GenerateStub<IEventBus>();
-
+            FakeSessionContext = new FakeSessionContext();
             var scenarioInterpreter = new ScenarioInterpreter(new InterpreterForTypeFactory(new AssemblyRegistry()), MockRepository.GenerateStub<IAmbiguousMatchResolver>(), new DefaultLanguageService());
-            var inPlaceRunner = new InPlaceStoryRunner(scenarioInterpreter, new IncludeAllFilter(), new SessionContext(), FakeEventBus);
+            var inPlaceRunner = new InPlaceStoryRunner(scenarioInterpreter, new IncludeAllFilter(), FakeSessionContext, FakeEventBus);
             inPlaceRunner.Finished();
         }
 
@@ -62,5 +64,7 @@ namespace StorEvil.InPlace.NonCompiled
         {
             FakeEventBus.AssertWasCalled(x => x.Raise(Arg<SessionFinished>.Is.Anything));
         }
+
+ 
     }
 }

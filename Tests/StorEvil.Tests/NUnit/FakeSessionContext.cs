@@ -9,6 +9,7 @@ namespace StorEvil.NUnit
     public class FakeSessionContext  : ISessionContext
     {
         private StoryContext _context;
+        public bool WasDisposed { get; set; }
 
         public FakeSessionContext()
         {
@@ -32,6 +33,11 @@ namespace StorEvil.NUnit
         public IEnumerable<Assembly> GetAllAssemblies()
         {
             return new Assembly[0];
+        }
+
+        public void Dispose()
+        {
+            WasDisposed = true;
         }
     }
 }

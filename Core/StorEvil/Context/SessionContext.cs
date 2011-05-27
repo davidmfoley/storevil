@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace StorEvil.Context
 {
-    public class SessionContext : ISessionContext, IDisposable
+    public class SessionContext : ISessionContext
     {
         private readonly List<Type> _contextTypes = new List<Type>();
         private readonly Dictionary<Type, object> _cache = new Dictionary<Type, object>();
